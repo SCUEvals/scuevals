@@ -1,0 +1,46 @@
+$backgroundColor: #F0F0F0;
+$searchbarBackground: #444;
+$searchbarHeight: 107px;
+$footerHeight: 35px;
+
+body {
+  background-color: $backgroundColor;
+}
+
+.searchBackground {
+  height: $searchbarHeight;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: $searchbarBackground;
+  text-align: center;
+  color: white;
+  form {
+    padding-top:5px;
+    label {
+      font-size: 1.25rem;
+    }
+  }
+}
+
+form {
+  padding: 25px;
+}
+
+.content {
+  z-index: -1;
+  box-shadow: 0 0 5px 2px rgba(0,0,0,0.1);
+  background-color: white;
+  margin-top: $searchbarHeight;
+  margin-bottom: $footerHeight;
+}
+
+footer {
+  color: white;
+  background-color: $searchbarBackground;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: $footerHeight;
+  line-height: 35px;
+}

@@ -1,0 +1,35 @@
+body {
+  background-color: #F0F0F0; }
+
+.searchBackground {
+  height: 107px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #444;
+  text-align: center;
+  color: white; }
+  .searchBackground form {
+    padding-top: 5px; }
+    .searchBackground form label {
+      font-size: 1.25rem; }
+
+form {
+  padding: 25px; }
+
+.content {
+  z-index: -1;
+  -webkit-box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  margin-top: 107px;
+  margin-bottom: 35px; }
+
+footer {
+  color: white;
+  background-color: #444;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 35px;
+  line-height: 35px; }

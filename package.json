@@ -1,0 +1,31 @@
+{
+  "name": "SCUevals",
+  "version": "1.0.0",
+  "description": "A web app for rating and reviewing classes and lecturers at SCU.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack-dev-server"
+  },
+  "author": "Joseph Théberge & Fredrik Blomqvist",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-react": "^6.23.0",
+    "html-webpack-plugin": "^2.29.0",
+    "webpack": "^2.3.2",
+    "webpack-dev-server": "^2.4.2"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "lodash": "^4.17.4",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-redux": "^5.0.5",
+    "react-router-dom": "^4.1.1",
+    "redux": "^3.6.0",
+    "redux-form": "^6.8.0",
+    "redux-promise": "^0.5.3"
+  }
+}
