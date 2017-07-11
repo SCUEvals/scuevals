@@ -1,8 +1,5 @@
 /node_modules
-bundle.js
+/build/transformed.js
+/build/index.html
 npm-debug.log
 .DS_Store
-
-# IntelliJ
-*.iml
-/.idea
