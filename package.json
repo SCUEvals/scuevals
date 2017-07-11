@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A web app for rating and reviewing classes and lecturers at SCU.",
   "main": "index.js",
+  "engines": {
+    "node": "7.10.0"
+  }
   "scripts": {
     "build": "webpack",
     "dev": "webpack-dev-server",
