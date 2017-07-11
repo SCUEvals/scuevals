@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { getSearchData } from '../actions';
+import { fetchSearch } from '../actions';
 
 class Searchbar extends Component {
 
@@ -35,8 +35,8 @@ class Searchbar extends Component {
 
   onSubmit(values) {
     //values is object with searchbar: <input>
-    //console.log(values);
-    this.props.getSearchData(values, () => {
+    console.log(values);
+    this.props.fetchSearch(values, () => {
       this.props.history.push('/');
     });
   }
@@ -70,5 +70,5 @@ export default reduxForm({
   validate,
   form: 'searchbar'
 })(
-  connect(null,{ getSearchData })(Searchbar)
+  connect(null,{ fetchSearch })(Searchbar)
 );

@@ -10,6 +10,7 @@ import Searchbar from './containers/searchbar';
 import SearchContent from './containers/searchContent';
 import About from './components/about';
 import Footer from './components/footer';
+import Home from './components/home';
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
@@ -20,8 +21,8 @@ ReactDOM.render(
         <BrowserRouter>
             <Switch>
               <Route path="/about" component={About} />
-              <Route path="/:id" component={SearchContent} />
-					    <Route path="/" component={SearchContent} />
+              <Route path="/search/:id" component={SearchContent} />
+					    <Route path="/" component={Home} />
 				    </Switch>
         </BrowserRouter>
         <Footer />

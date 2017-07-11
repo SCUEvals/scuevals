@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "start": "webpack-dev-server"
+    "dev": "webpack-dev-server",
+    "postinstall": "webpack -p",
+    "start": "node server.js"
   },
   "author": "Joseph Théberge & Fredrik Blomqvist",
   "license": "AGPL-3.0",
