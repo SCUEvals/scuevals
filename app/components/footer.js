@@ -5,7 +5,7 @@ const Footer = ()  => {
   return (
     <footer>
       <div className="container text-center">
-        <Link className="float-left" to="/about">
+        <Link className="float-left" to={{pathname: "/about", prevURL: window.location.pathname}}>
           About Us
         </Link>
         <div className="float-right">

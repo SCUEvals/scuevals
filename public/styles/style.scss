@@ -6,6 +6,8 @@ $SCUred: #b30738;
 $SCUdarkred: #97052e;
 $blue: #0275d8;
 
+$xs: 575px;
+
 @mixin button { //not to be used with <i> tags as buttons
   color: white;
   background-color: $SCUred;
@@ -98,4 +100,10 @@ a {
 
 .blueLink {
   color: $blue;
+}
+
+@media (max-width: $xs) {
+  [data-target|='#serverSideDesc'] {
+    margin-top: 3rem;
+  }
 }

@@ -1,13 +1,22 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+const About = (props) => {
+console.log(props);
 
-const About = () => {
+  function goBacktoPrevPage() { //if clicked from a prev webpage then go back to it, else go to index
+    if (props.location.prevURL && props.location.prevURL != '/about')
+      return props.location.prevURL;
+    return '/';
+  }
+
   return (
     <div className="container text-center">
       <div className="content">
         <div className="card">
           <h3 className="card-header">
             About Us
-            <i className="fa fa-window-close btn closeBtn"></i>
+
+            <Link to={goBacktoPrevPage()}><i className="fa fa-window-close btn closeBtn"></i></Link>
           </h3>
           <div className="card-block">
             <p>
@@ -20,12 +29,10 @@ const About = () => {
             <hr />
             <div className="row">
               <div className="col-sm-6">
-                <p>
                   <button className="btn" type="button" data-toggle="collapse" data-target="#clientSideDesc" aria-expanded="false" aria-controls="clientSideDesc">
-                    Web App Implementation <i className="fa fa-chevron-down"></i><br />
+                    Web App Info <i className="fa fa-chevron-down"></i><br />
                     <small>Joseph Théberge</small>
                   </button>
-                </p>
                 <div className="collapse" id="clientSideDesc">
                   <div className="card card-block">
                     Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
@@ -36,12 +43,10 @@ const About = () => {
               </div>
               <div className="col-sm-6">
 
-              <p>
                 <button className="btn" type="button" data-toggle="collapse" data-target="#serverSideDesc" aria-expanded="false" aria-controls="serverSideDesc">
-                  Database Implementation <i className="fa fa-chevron-down"></i><br />
+                  Database Info <i className="fa fa-chevron-down"></i><br />
                   <small>Fredrik Blomqvist</small>
                 </button>
-              </p>
               <div className="collapse" id="serverSideDesc">
                 <div className="card card-block">
                   Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
