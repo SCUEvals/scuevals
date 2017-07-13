@@ -1,3 +1,4 @@
+var path = require("path");
 var HTMLWebpackPlugin = require('html-webpack-plugin');
 var HTMLWebpackPLuginConfig = new HTMLWebpackPlugin({
   template: __dirname + '/app/index.html',
@@ -24,7 +25,8 @@ module.exports = {
   plugins: [HTMLWebpackPLuginConfig],
 
   devServer: {
-    historyApiFallback: true,
-    contentBase: './'
+    contentBase: './public',
+    compress: true,
+    historyApiFallback: true
   }
 };

@@ -4,7 +4,7 @@
   "description": "A web app for rating and reviewing classes and lecturers at SCU.",
   "main": "index.js",
   "engines": {
-    "node": "7.10.0"
+    "node": "^7.10.0"
   },
   "scripts": {
     "build": "webpack",

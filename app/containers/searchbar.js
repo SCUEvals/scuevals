@@ -16,13 +16,13 @@ class Searchbar extends Component {
           <input
             className="form-control"
             type="text"
-            placeholder='Search for lecturers or classes'
+            placeholder='Search for lecturer or class'
             {...field.input}
           />
           <div className="input-group-btn">
-            <button type="submit" className="btn btn-primary"><i className="fa fa-search" /></button>
+            <button type="submit" className="btn"><i className="fa fa-search" /></button>
           </div>
-          <div className="btn">
+          <div className="btn" id="myAccount">
             Sign in
           </div>
         </div>
@@ -48,7 +48,7 @@ class Searchbar extends Component {
       <div className="searchBackground">
       <form className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
-          label="Find or write SCU Evaluations"
+          label="Read &amp; write SCU Evaluations"
           name="searchbar" //responsible for object's key name for values
           component={this.renderField}
         />

@@ -1,7 +1,23 @@
-$backgroundColor: #F0F0F0;
+$backgroundColor: #F7F7F7;
 $searchbarBackground: #444;
 $searchbarHeight: 107px;
 $footerHeight: 35px;
+$SCUred: #b30738;
+$SCUdarkred: #97052e;
+$blue: #0275d8;
+
+@mixin button { //not to be used with <i> tags as buttons
+  color: white;
+  background-color: $SCUred;
+  cursor: pointer;
+  &:hover {
+    background-color: $SCUdarkred;
+  }
+}
+
+button {
+  @include button;
+}
 
 body {
   background-color: $backgroundColor;
@@ -9,28 +25,39 @@ body {
 
 .searchBackground {
   height: $searchbarHeight;
+  z-index: 1;
   position: fixed;
   top: 0;
   width: 100%;
   background-color: $searchbarBackground;
   text-align: center;
   color: white;
+  .input-group-btn > button {
+    @include button;
+  }
   form {
     padding-top:5px;
     label {
       font-size: 1.25rem;
+    }
+    #myAccount {
+      padding-right: 0;
     }
   }
 }
 
 form {
   padding: 25px;
+  .form-control {
+    border: 1px solid $backgroundColor;
+  }
 }
 
 .content {
-  z-index: -1;
-  box-shadow: 0 0 5px 2px rgba(0,0,0,0.1);
-  background-color: white;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+  background: white;
+
   margin-top: $searchbarHeight;
   margin-bottom: $footerHeight;
 }
@@ -43,4 +70,32 @@ footer {
   width: 100%;
   height: $footerHeight;
   line-height: 35px;
+}
+
+i.closeBtn {
+  float: right;
+  cursor: pointer;
+  padding: 0;
+  color: $SCUred;
+  &:hover {
+    color: $SCUdarkred;
+  }
+}
+
+a {
+  color: white;
+  text-decoration: none !important;
+  .content: {
+    color: $blue;
+  }
+  &:focus {
+    color: white;
+  }
+  &:hover {
+    color: $blue;
+  }
+}
+
+.blueLink {
+  color: $blue;
 }
