@@ -1,13 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-const About = (props) => {
-console.log(props);
-
-  function goBacktoPrevPage() { //if clicked from a prev webpage then go back to it, else go to index
-    if (props.location.prevURL && props.location.prevURL != '/about')
-      return props.location.prevURL;
-    return '/';
-  }
+const About = () => {
 
   return (
     <div className="container text-center">
@@ -15,8 +8,7 @@ console.log(props);
         <div className="card">
           <h3 className="card-header">
             About Us
-
-            <Link to={goBacktoPrevPage()}><i className="fa fa-window-close btn closeBtn"></i></Link>
+            <Link to={'/'}><i className="fa fa-window-close btn closeBtn"></i></Link>
           </h3>
           <div className="card-block">
             <p>
@@ -57,7 +49,7 @@ console.log(props);
           </div>
         </div>
       </div>
-      <h6 className="">Like what you see? Have ideas for change? <a className="blueLink" href="mailto:scuevalsteam@gmail.com">Email us at scuevalsteam@gmail.com!</a></h6>
+      <h6 id="aboutEnd">Like what you see? Have ideas for change? <a className="blueLink" href="mailto:scuevalsteam@gmail.com">Email us at scuevalsteam@gmail.com!</a></h6>
     </div>
   );
 }

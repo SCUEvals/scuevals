@@ -84,6 +84,16 @@ i.closeBtn {
   }
 }
 
+i.backBtn {
+  float: left;
+  cursor: pointer;
+  padding: 0;
+  color: $blue;
+  &:hover {
+    color: $blue;
+  }
+}
+
 a {
   color: white;
   text-decoration: none !important;
@@ -106,4 +116,8 @@ a {
   [data-target|='#serverSideDesc'] {
     margin-top: 3rem;
   }
+}
+
+#aboutEnd {
+  margin-bottom: 50px;
 }
