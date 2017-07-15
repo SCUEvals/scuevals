@@ -3,7 +3,7 @@ import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { fetchSearch } from '../actions';
 
-class Searchbar extends Component {
+class SearchBar extends Component {
 
   renderField(field) {
     const { meta: { touched, error } } = field;
@@ -34,8 +34,8 @@ class Searchbar extends Component {
   }
 
   onSubmit(values) {
-    //values is object with searchbar: <input>
-    console.log(values);
+    //values is object with searchBar: <input>
+    //console.log(values);
     this.props.fetchSearch(values, () => {
       this.props.history.push('/');
     });
@@ -49,7 +49,7 @@ class Searchbar extends Component {
       <form className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
           label="Read &amp; write SCU Evaluations"
-          name="searchbar" //responsible for object's key name for values
+          name="searchBar" //responsible for object's key name for values
           component={this.renderField}
         />
       </form>
@@ -60,15 +60,15 @@ class Searchbar extends Component {
 
 function validate(values) {
   const errors = {};
-  if (!values.searchbar || values.searchbar.length < 3) {
-    errors.searchbar = "Enter at least 3 characters";
+  if (!values.searchBar || values.searchBar.length < 3) {
+    errors.searchBar = "Enter at least 3 characters";
   }
   return errors;
 }
 
 export default reduxForm({
   validate,
-  form: 'searchbar'
+  form: 'searchBar'
 })(
-  connect(null,{ fetchSearch })(Searchbar)
+  connect(null,{ fetchSearch })(SearchBar)
 );

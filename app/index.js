@@ -6,11 +6,12 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import promise from 'redux-promise';
 
 import reducers from './reducers';
-import Searchbar from './containers/searchbar';
+import SearchBar from './containers/searchBar';
 import SearchContent from './containers/searchContent';
 import About from './components/about';
 import Footer from './components/footer';
 import Home from './components/home';
+import PostEval from './containers/postEval';
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
@@ -18,10 +19,11 @@ ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <BrowserRouter>
       <div>
-        <Searchbar />
+        <SearchBar />
         <Switch>
           <Route path="/about" component={About} />
-          <Route path="/search/:id" component={SearchContent} />
+          <Route path="/search" component={SearchContent} />
+          <Route path="/post" component={PostEval} />
   		    <Route path="/" component={Home} />
   	    </Switch>
         <Footer />

@@ -1,13 +1,13 @@
 import React from 'react';
 
-const Home = () => {
+const searchContent = () => {
   return (
     <div className="container">
       <div className="content">
-        Home
+        Homepage
       </div>
-    </div>
+  </div>
   );
 }
 
-export default Home;
+export default searchContent;

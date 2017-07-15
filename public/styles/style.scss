@@ -4,7 +4,9 @@ $searchbarHeight: 107px;
 $footerHeight: 35px;
 $SCUred: #b30738;
 $SCUdarkred: #97052e;
-$blue: #0275d8;
+$linkColor: $SCUred;
+$hoverLinkColor: $SCUdarkred;
+$hoverOverlayLinkColor: #ffb6ca;
 
 $xs: 575px;
 
@@ -12,6 +14,7 @@ $xs: 575px;
   color: white;
   background-color: $SCUred;
   cursor: pointer;
+  font-weight: 550;
   &:hover {
     background-color: $SCUdarkred;
   }
@@ -23,6 +26,7 @@ button {
 
 body {
   background-color: $backgroundColor;
+  text-align: center;
 }
 
 .searchBackground {
@@ -32,7 +36,6 @@ body {
   top: 0;
   width: 100%;
   background-color: $searchbarBackground;
-  text-align: center;
   color: white;
   .input-group-btn > button {
     @include button;
@@ -66,6 +69,16 @@ form {
 
 footer {
   color: white;
+  a {
+    font-weight: normal;
+    color: white; //added again for specificity because overwritten by a tag's default css
+    &:focus {
+      color:white;
+    }
+    &:hover {
+      color: $hoverOverlayLinkColor;
+    }
+  }
   background-color: $searchbarBackground;
   position: fixed;
   bottom: 0;
@@ -84,32 +97,19 @@ i.closeBtn {
   }
 }
 
-i.backBtn {
-  float: left;
-  cursor: pointer;
-  padding: 0;
-  color: $blue;
-  &:hover {
-    color: $blue;
-  }
-}
 
 a {
-  color: white;
+  transition: all .2s ease-in-out;
+  font-weight: bold;
   text-decoration: none !important;
-  .content: {
-    color: $blue;
-  }
-  &:focus {
-    color: white;
-  }
+  color: $linkColor;
   &:hover {
-    color: $blue;
+    color: $hoverLinkColor;
   }
 }
 
 .blueLink {
-  color: $blue;
+  color: $linkColor;
 }
 
 @media (max-width: $xs) {
