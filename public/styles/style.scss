@@ -10,6 +10,16 @@ $hoverOverlayLinkColor: #ffb6ca;
 
 $xs: 575px;
 
+@mixin absoluteCenter {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
 @mixin button { //not to be used with <i> tags as buttons
   color: white;
   background-color: $SCUred;
@@ -120,4 +130,17 @@ a {
 
 #aboutEnd {
   margin-bottom: 50px;
+}
+
+label.form-check-label {
+  transform: scale(1.25);
+}
+
+textarea {
+  width: 100%;
+}
+
+.loadingWrapper {
+ @include absoluteCenter;
+ color: $SCUred;
 }

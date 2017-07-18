@@ -38,7 +38,7 @@ const About = () => {
                       Router</a> is used. Because it is written with Javascript's new release ES6,
                       the web app uses <a href="https://babeljs.io">Babel</a> to translate ES6 into
                       ES5 for better compatibility between browsers, uses <a
-                      href="https://webpack.js.org">Webpack&nbsp;2</a> to run the code through Babel
+                      href="https://webpack.js.org">Webpack&nbsp;3</a> to run the code through Babel
                       for transformation, and uses <a href="https://expressjs.com">Express</a> to
                       configure the server. For managing packages, <a
                       href="https://www.npmjs.com/">npm</a> is used. For design purposes and browser

@@ -4,7 +4,7 @@
   "description": "A web app for rating and reviewing classes and lecturers at SCU.",
   "main": "index.js",
   "engines": {
-    "node": "^7.10.0"
+    "node": "^8.1.4"
   },
   "scripts": {
     "build": "webpack",
@@ -15,25 +15,26 @@
   "author": "Joseph Théberge & Fredrik Blomqvist",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "webpack-dev-server": "^2.4.2"
+    "webpack-dev-server": "^2.5.1"
   },
   "dependencies": {
     "axios": "^0.16.2",
     "babel-core": "^6.24.0",
-    "babel-loader": "^6.4.1",
+    "babel-loader": "^7.1.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.23.0",
     "express": "^4.15.3",
     "html-webpack-plugin": "^2.29.0",
     "lodash": "^4.17.4",
     "react": "^15.4.2",
-    "react-bootstrap-table": "^4.0.0-beta.7",
+    "react-bootstrap-table": "^4.0.0-beta.8",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.5",
-    "react-router-dom": "^4.1.1",
-    "redux": "^3.6.0",
-    "redux-form": "^6.8.0",
+    "react-router-dom": "^4.1.2",
+    "react-textarea-autosize": "^5.0.7",
+    "redux": "^3.7.2",
+    "redux-form": "^7.0.0",
     "redux-promise": "^0.5.3",
-    "webpack": "^2.3.2"
+    "webpack": "^3.3.0"
   }
 }

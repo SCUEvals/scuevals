@@ -1,4 +1,4 @@
-var path = require("path");
+var path = require('path');
 var HTMLWebpackPlugin = require('html-webpack-plugin');
 var HTMLWebpackPLuginConfig = new HTMLWebpackPlugin({
   template: __dirname + '/app/index.html',
@@ -8,6 +8,7 @@ var HTMLWebpackPLuginConfig = new HTMLWebpackPlugin({
 
 module.exports = {
   entry: __dirname + '/app/index.js',
+
   module: {
     loaders: [
       {
@@ -18,14 +19,16 @@ module.exports = {
     ]
   },
   output: {
-    filename: 'transformed.js',
-    path: __dirname + '/build'
+    filename: 'scripts/transformed.js',
+    path: __dirname + '/build',
+    publicPath: '/'
   },
+
 
   plugins: [HTMLWebpackPLuginConfig],
 
   devServer: {
-    contentBase: './public',
+    contentBase: path.join(__dirname, 'public'),
     compress: true,
     historyApiFallback: true
   }
