@@ -5,7 +5,7 @@ var ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 var HTMLWebpackPLuginConfig = new HTMLWebpackPlugin({
   template: __dirname + '/app/index.html',
   filename: 'index.html',
-  inject: 'body'
+  inject: 'head'
 });
 
 var ScriptExtHtmlWebpackPluginConfig = new ScriptExtHtmlWebpackPlugin({
@@ -24,7 +24,7 @@ module.exports = {
       }
     ]
   },
-  
+
   output: {
     filename: 'scripts/transformed.js',
     path: __dirname + '/build',
