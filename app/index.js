@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
@@ -12,22 +12,29 @@ import About from './components/about';
 import Footer from './components/footer';
 import Home from './components/home';
 import PostEval from './containers/postEval';
+import Privacy from './components/privacy';
+
+import GAListener from './components/gaListener';
+import ReactGA from 'react-ga';
+ReactGA.initialize('UA-102751367-1');
+
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <BrowserRouter>
-      <div>
+      <GAListener>
         <SearchBar />
         <Switch>
           <Route path="/about" component={About} />
-          <Route path="/search" component={SearchContent} />
-          <Route path="/post" component={PostEval} />
+          <Route path="/search/:search" component={SearchContent} />
+          <Route path="/post/" component={PostEval} />
+          <Route path="/privacy" component={Privacy} />
   		    <Route path="/" component={Home} />
   	    </Switch>
         <Footer />
-      </div>
+      </GAListener>
     </BrowserRouter>
   </Provider>,
 	document.getElementById('app')

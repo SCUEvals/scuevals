@@ -9,7 +9,9 @@ const Footer = ()  => {
           About Us
         </Link>
         <div className="float-right">
-          Contact Us
+          <Link className="float-left" to={"/privacy"}>
+            Privacy Policy
+          </Link>
         </div>
       </div>
     </footer>
