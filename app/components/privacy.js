@@ -12,10 +12,12 @@ const Privacy = () => {
           </h3>
           <div className="card-block">
             <p>
-              The only cookies in use on our site are for Google Analytics.
+              The only cookies in use on our site are for Google Analytics and Oauth 2.0 for Google.
               Google Analytics is a tool that helps us understand how visitors interact
-              with our website. We also use
-              Google Analytics' 3rd-party audience data such as age and gender to
+              with our website. Oauth 2.0 allows you to securely login through Google's services without
+              us managing or having access to passwords. We use this so we may ensure those who wish
+              to post reviews are from Santa Clara University while keeping you secure.
+              We also use Google Analytics' 3rd-party audience data such as age and gender to
               better understand the behavior of our users.
             </p>
             <p>
@@ -33,7 +35,7 @@ const Privacy = () => {
             <p>
               We reserve the right to change this policy to meet the changing needs of
               SCU Evals, or for any other reason.
-              Last revision: 23 July 2017.
+              Last revision: 24 July 2017.
             </p>
           </div>
         </div>

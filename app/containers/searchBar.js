@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { fetchSearch } from '../actions';
+import GoogleLogin from 'react-google-login';
 
 class SearchBar extends Component {
+
+  responseGoogle(response) {
+    console.log(response);
+  }
 
   renderField(field) {
     const { meta: { touched, error } } = field;
     const className = `input-group ${touched && error ? 'has-danger' : ''}`;
-
     return (
       <div>
         <label>{field.label}</label>
@@ -22,9 +26,14 @@ class SearchBar extends Component {
           <div className="input-group-btn">
             <button type="submit" className="btn"><i className="fa fa-search" /></button>
           </div>
-          <div className="btn" id="myAccount">
-            Sign in
-          </div>
+          <GoogleLogin
+            clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
+            buttonText="Sign in"
+            onSuccess={field.responseGoogle}
+            onFailure={field.responseGoogle}
+            style={{}}
+            className="oauth-btn"
+          />
         </div>
         <div className="text-help">
           {touched ? error : ''}
@@ -45,15 +54,16 @@ class SearchBar extends Component {
     const { handleSubmit } = this.props;
 
     return (
-      <div className="searchBackground">
+      <header className="searchBackground">
       <form className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
           label="Read &amp; write SCU Evaluations"
           name="searchBar" //responsible for object's key name for values
           component={this.renderField}
+          responseGoogle={this.responseGoogle}
         />
       </form>
-      </div>
+      </header>
     );
   }
 }

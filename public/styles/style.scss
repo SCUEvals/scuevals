@@ -1,5 +1,5 @@
 $backgroundColor: #F7F7F7;
-$searchbarBackground: #444;
+$overlayBackgroundground: #444;
 $searchbarHeight: 107px;
 $footerHeight: 35px;
 $SCUred: #b30738;
@@ -39,16 +39,27 @@ body {
   text-align: center;
 }
 
-.searchBackground {
+header {
   height: $searchbarHeight;
   z-index: 1;
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: $searchbarBackground;
+  background-color: $overlayBackgroundground;
   color: white;
+
   .input-group-btn > button {
     @include button;
+  }
+  .oauth-btn {
+    border: none;
+    background-color: transparent;
+    margin-left: 6px;
+    margin-right: -6px;
+    &:hover {
+      color: $hoverOverlayLinkColor;
+      background-color: transparent;
+    }
   }
   form {
     padding-top:5px;
@@ -89,7 +100,7 @@ footer {
       color: $hoverOverlayLinkColor;
     }
   }
-  background-color: $searchbarBackground;
+  background-color: $overlayBackgroundground;
   position: fixed;
   bottom: 0;
   width: 100%;
