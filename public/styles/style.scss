@@ -1,6 +1,6 @@
 $backgroundColor: #F7F7F7;
-$overlayBackgroundground: #444;
-$searchbarHeight: 107px;
+$overlayBackground: #444;
+$searchbarHeight: 128px;
 $footerHeight: 35px;
 $SCUred: #b30738;
 $SCUdarkred: #97052e;
@@ -45,16 +45,29 @@ header {
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: $overlayBackgroundground;
+  background-color: $overlayBackground;
   color: white;
+
+  .text-help {
+    position: absolute;
+    top: 37px;
+    background-color: $SCUred;
+    z-index: 2;
+    border-radius: 10px;
+    padding: 4px;
+    font-size: 13px;
+    box-shadow: 0 0 3px white;
+  }
 
   .input-group-btn > button {
     @include button;
   }
   .oauth-btn {
     border: none;
+    position: relative;
     background-color: transparent;
-    margin-left: 6px;
+    height: 32px;
+    padding: 3px;
     &:hover {
       color: $hoverOverlayLinkColor;
       background-color: transparent;
@@ -62,13 +75,14 @@ header {
   }
   .oauth-btn.withImg {
     margin-right: -43px;
-    padding-right: 48px;
+    padding-right: 45px;
     z-index: 1;
   }
   .oauth-img {
-    max-height: 38px;
+    height: 32px;
     border-radius: 50%;
-    margin-left: 5px;
+    margin-left: 8px;
+    margin-top: -2px;
   }
   form {
     padding-top:5px;
@@ -109,7 +123,7 @@ footer {
       color: $hoverOverlayLinkColor;
     }
   }
-  background-color: $overlayBackgroundground;
+  background-color: $overlayBackground;
   position: fixed;
   bottom: 0;
   width: 100%;

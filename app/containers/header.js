@@ -16,6 +16,7 @@ class Header extends Component {
     const { meta: { touched, error } } = field;
     const searchBarClass = `input-group ${touched && error ? 'has-danger' : ''}`;
     const oAuthClass = `oauth-btn ${field.userInfo.imageUrl ? 'withImg' : ''}`;
+    const textHelpClass = `${touched && error ? 'text-help' : ''}`;
     return (
       <div>
         <label>{field.label}</label>
@@ -29,7 +30,13 @@ class Header extends Component {
           <div className="input-group-btn">
             <button type="submit" className="btn"><i className="fa fa-search" /></button>
           </div>
+          <div className={textHelpClass}>
+            {touched ? error : ''}
+          </div>
+        </div>
+        <div style={{marginTop: "7px"}}>
           <GoogleLogin
+            hostedDomain="scu.edu"
             clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
             buttonText={field.userInfo.givenName}
             onSuccess={field.setInfo}
@@ -38,9 +45,6 @@ class Header extends Component {
             className={oAuthClass}
           />
           {field.checkImg(field.userInfo.imageUrl)}
-        </div>
-        <div className="text-help">
-          {touched ? error : ''}
         </div>
       </div>
     );
@@ -60,7 +64,7 @@ class Header extends Component {
       <header>
       <form className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
-          label="Read &amp; write SCU Evaluations"
+          label="Read &amp; Write SCU Evals"
           name="searchBar" //responsible for object's key name for values
           component={this.renderField}
           setInfo={setUserInfo}
@@ -76,10 +80,8 @@ class Header extends Component {
 
 function validate(values) {
   const errors = {};
-  if (values.searchBar) {
-    if (values.searchBar.length < 3) {
-      errors.searchBar = "Enter at least 3 characters";
-    }
+  if (values.searchBar && values.searchBar.length < 3) {
+    errors.searchBar = "Enter at least 3 characters";
   }
   return errors;
 }
