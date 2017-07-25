@@ -6,13 +6,20 @@ import GoogleLogin from 'react-google-login';
 
 class Header extends Component {
 
+  checkImg(url){
+    if (url) { return (
+    <img className="oauth-img" src={url} alt="Profile photo" />
+  )}
+    else return;
+  }
   renderField(field) {
     const { meta: { touched, error } } = field;
-    const className = `input-group ${touched && error ? 'has-danger' : ''}`;
+    const searchBarClass = `input-group ${touched && error ? 'has-danger' : ''}`;
+    const oAuthClass = `oauth-btn ${field.userInfo.imageUrl ? 'withImg' : ''}`;
     return (
       <div>
         <label>{field.label}</label>
-        <div className={className}>
+        <div className={searchBarClass}>
           <input
             className="form-control"
             type="text"
@@ -24,12 +31,13 @@ class Header extends Component {
           </div>
           <GoogleLogin
             clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
-            buttonText={field.userName}
+            buttonText={field.userInfo.givenName}
             onSuccess={field.setInfo}
             onFailure={field.setInfo}
             style={{}}
-            className="oauth-btn"
+            className={oAuthClass}
           />
+          {field.checkImg(field.userInfo.imageUrl)}
         </div>
         <div className="text-help">
           {touched ? error : ''}
@@ -56,7 +64,8 @@ class Header extends Component {
           name="searchBar" //responsible for object's key name for values
           component={this.renderField}
           setInfo={setUserInfo}
-          userName={userInfo.profileObj.name}
+          userInfo={userInfo}
+          checkImg={this.checkImg}
 
         />
       </form>
@@ -67,15 +76,15 @@ class Header extends Component {
 
 function validate(values) {
   const errors = {};
-  if (!values.searchBar || values.searchBar.length < 3) {
-    errors.searchBar = "Enter at least 3 characters";
+  if (values.searchBar) {
+    if (values.searchBar.length < 3) {
+      errors.searchBar = "Enter at least 3 characters";
+    }
   }
   return errors;
 }
 
 function mapStateToProps(state) {
-  // Whatever is returned will show up as props
-  // inside of BookList
   return {
     userInfo: state.userInfo
   };
