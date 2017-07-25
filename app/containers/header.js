@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { fetchSearch } from '../actions';
+import { fetchSearch, setUserInfo } from '../actions';
 import GoogleLogin from 'react-google-login';
 
-class SearchBar extends Component {
-
-  responseGoogle(response) {
-    console.log(response);
-  }
+class Header extends Component {
 
   renderField(field) {
     const { meta: { touched, error } } = field;
@@ -28,9 +24,9 @@ class SearchBar extends Component {
           </div>
           <GoogleLogin
             clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
-            buttonText="Sign in"
-            onSuccess={field.responseGoogle}
-            onFailure={field.responseGoogle}
+            buttonText={field.userName}
+            onSuccess={field.setInfo}
+            onFailure={field.setInfo}
             style={{}}
             className="oauth-btn"
           />
@@ -51,16 +47,17 @@ class SearchBar extends Component {
   }
 
   render() {
-    const { handleSubmit } = this.props;
-
+    const { handleSubmit, setUserInfo, userInfo } = this.props;
     return (
-      <header className="searchBackground">
+      <header>
       <form className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
           label="Read &amp; write SCU Evaluations"
           name="searchBar" //responsible for object's key name for values
           component={this.renderField}
-          responseGoogle={this.responseGoogle}
+          setInfo={setUserInfo}
+          userName={userInfo.profileObj.name}
+
         />
       </form>
       </header>
@@ -76,9 +73,17 @@ function validate(values) {
   return errors;
 }
 
+function mapStateToProps(state) {
+  // Whatever is returned will show up as props
+  // inside of BookList
+  return {
+    userInfo: state.userInfo
+  };
+}
+
 export default reduxForm({
   validate,
   form: 'searchBar'
 })(
-  connect(null,{ fetchSearch })(SearchBar)
+  connect(mapStateToProps,{ setUserInfo, fetchSearch })(Header)
 );

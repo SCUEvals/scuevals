@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import promise from 'redux-promise';
 
 import reducers from './reducers';
-import SearchBar from './containers/searchBar';
+import Header from './containers/header';
 import SearchContent from './containers/searchContent';
 import About from './components/about';
 import Footer from './components/footer';
@@ -22,10 +22,10 @@ ReactGA.initialize('UA-102751367-1');
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
+  <Provider store={createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
     <BrowserRouter>
       <GAListener>
-        <SearchBar />
+        <Header />
         <Switch>
           <Route path="/about" component={About} />
           <Route path="/search/:search" component={SearchContent} />
