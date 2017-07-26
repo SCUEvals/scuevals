@@ -21,11 +21,23 @@ ReactGA.initialize('UA-102751367-1');
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
+function changeIcon() {
+  var fullScreenBtn = document.getElementById("toggleFullscreenBtn");
+  if (fullScreenBtn.className === "fa fa-plus") fullScreenBtn.className = "fa fa-minus";
+  else fullScreenBtn.className = "fa fa-plus";
+}
+
+function toggleFullScreen() {
+    document.body.classList.toggle("fullscreen");
+    changeIcon();
+}
+
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
     <BrowserRouter>
       <GAListener>
         <Header />
+        <i onClick={toggleFullScreen} id="toggleFullscreenBtn" className="fa fa-minus"></i>
         <Switch>
           <Route path="/about" component={About} />
           <Route path="/search/:search" component={SearchContent} />
