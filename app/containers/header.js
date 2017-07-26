@@ -19,10 +19,10 @@ class Header extends Component {
     const textHelpClass = `${touched && error ? 'text-help' : ''}`;
     return (
       <div>
-        <label>{field.label}</label>
+        <label className="sr-only">{field.label}</label>
         <div className={searchBarClass}>
           <input
-            className="form-control"
+            className="col-md-8 offset-md-2 form-control"
             type="text"
             placeholder='Search for lecturer or class'
             {...field.input}
