@@ -2,11 +2,9 @@ import React from 'react';
 
 const searchContent = () => {
   return (
-    <div className="container">
-      <div className="content">
+      <div>
         Homepage
       </div>
-  </div>
   );
 }
 

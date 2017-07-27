@@ -21,30 +21,20 @@ ReactGA.initialize('UA-102751367-1');
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
-function changeIcon() {
-  var fullScreenBtn = document.getElementById("toggleFullscreenBtn");
-  if (fullScreenBtn.className === "fa fa-arrow-circle-down") fullScreenBtn.className = "fa fa-arrow-circle-up";
-  else fullScreenBtn.className = "fa fa-arrow-circle-down";
-}
-
-function toggleFullScreen() {
-    document.body.classList.toggle("fullscreen");
-    changeIcon();
-}
-
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
     <BrowserRouter>
       <GAListener>
         <Header />
-        <i onClick={toggleFullScreen} id="toggleFullscreenBtn" className="fa fa-arrow-circle-up"></i>
-        <Switch>
-          <Route path="/about" component={About} />
-          <Route path="/search/:search" component={SearchContent} />
-          <Route path="/post/" component={PostEval} />
-          <Route path="/privacy" component={Privacy} />
-  		    <Route path="/" component={Home} />
-  	    </Switch>
+        <div className="page-wrapper container">
+          <Switch>
+            <Route path="/about" component={About} />
+            <Route path="/search/:search" component={SearchContent} />
+            <Route path="/post/" component={PostEval} />
+            <Route path="/privacy" component={Privacy} />
+    		    <Route path="/" component={Home} />
+    	    </Switch>
+        </div>
         <Footer />
       </GAListener>
     </BrowserRouter>

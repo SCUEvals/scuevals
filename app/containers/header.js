@@ -3,6 +3,7 @@ import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { fetchSearch, setUserInfo } from '../actions';
 import GoogleLogin from 'react-google-login';
+import { Link } from 'react-router-dom';
 
 class Header extends Component {
 
@@ -35,6 +36,9 @@ class Header extends Component {
           </div>
         </div>
         <div style={{marginTop: "7px"}}>
+          <Link to={'/'}>
+            <i className="fa fa-home homeBtn"></i>
+          </Link>
           <GoogleLogin
             hostedDomain="scu.edu"
             clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"

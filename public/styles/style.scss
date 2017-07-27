@@ -37,14 +37,14 @@ button {
 body {
   background-color: $backgroundColor;
   text-align: center;
+  height: 100%;
 }
 
 header {
   padding-top: 15px;
   height: $headerHeight;
   z-index: 1;
-  position: fixed;
-  top: 0;
+  position: absolute;
   width: 100%;
   background-color: $overlayBackground;
   color: white;
@@ -102,8 +102,7 @@ form.content {
   border: 1px solid rgba(0,0,0,.125);
   border-radius: .25rem;
   background: white;
-  margin-top: $headerHeight;
-  margin-bottom: $footerHeight;
+  padding: ($headerHeight + 15px) 15px 0 15px;
 }
 
 footer {
@@ -119,19 +118,19 @@ footer {
     }
   }
   background-color: $overlayBackground;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+  position: relative;
+  margin-top: -$footerHeight;
   height: $footerHeight;
   line-height: 35px;
 }
 
-i.closeBtn {
-  float: right;
+i.homeBtn {
   cursor: pointer;
   padding: 0;
   color: $SCUred;
   font-size: 1.75rem;
+  position: absolute;
+  left: 15px;
   &:hover {
     color: $SCUdarkred;
   }
@@ -185,18 +184,19 @@ textarea {
   cursor: pointer;
 }
 
+html {
+  position: relative;
+  height: 100%;
+}
 
 
-body.fullscreen {
-  #toggleFullscreenBtn {
-    top: 15px;
-    opacity: .6;
-  }
-  header, footer {
-    visibility: hidden;
-    opacity: 0;
-  }
-  .content {
-    margin: 0;
-  }
+.page-wrapper {
+    min-height: 100%;
+    position: relative;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+#app, #app > div {
+  height: 100%;
 }
