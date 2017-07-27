@@ -59,9 +59,13 @@ header {
     font-size: 13px;
     border: 1px solid white;
   }
+input, input.form-control {
+  border-color: $backgroundColor;
+}
 
   .input-group-btn > button {
     @include button;
+    margin: 0 !important;
   }
   .oauth-btn {
     border: none;
@@ -173,16 +177,21 @@ textarea {
 
 #toggleFullscreenBtn {
   position: fixed;
-  top:9px;
+  top:64px;
   right: 15px;
   color: $SCUred;
   z-index: 1;
   font-size: 26px;
   cursor: pointer;
-  opacity: .8;
 }
 
+
+
 body.fullscreen {
+  #toggleFullscreenBtn {
+    top: 15px;
+    opacity: .6;
+  }
   header, footer {
     visibility: hidden;
     opacity: 0;

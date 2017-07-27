@@ -23,8 +23,8 @@ const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 function changeIcon() {
   var fullScreenBtn = document.getElementById("toggleFullscreenBtn");
-  if (fullScreenBtn.className === "fa fa-plus") fullScreenBtn.className = "fa fa-minus";
-  else fullScreenBtn.className = "fa fa-plus";
+  if (fullScreenBtn.className === "fa fa-arrow-circle-down") fullScreenBtn.className = "fa fa-arrow-circle-up";
+  else fullScreenBtn.className = "fa fa-arrow-circle-down";
 }
 
 function toggleFullScreen() {
@@ -37,7 +37,7 @@ ReactDOM.render(
     <BrowserRouter>
       <GAListener>
         <Header />
-        <i onClick={toggleFullScreen} id="toggleFullscreenBtn" className="fa fa-minus"></i>
+        <i onClick={toggleFullScreen} id="toggleFullscreenBtn" className="fa fa-arrow-circle-up"></i>
         <Switch>
           <Route path="/about" component={About} />
           <Route path="/search/:search" component={SearchContent} />
