@@ -59,17 +59,18 @@ header {
     font-size: 13px;
     border: 1px solid white;
   }
-input, input.form-control {
-  border-color: $backgroundColor;
-}
+
+  input, input.form-control {
+    border-color: $backgroundColor;
+  }
 
   .input-group-btn > button {
     @include button;
     margin: 0 !important;
   }
-  .oauth-btn {
+
+  .oauth-btn, .signOutBtn {
     border: none;
-    position: relative;
     background-color: transparent;
     height: 32px;
     padding: 3px;
@@ -78,11 +79,22 @@ input, input.form-control {
       background-color: transparent;
     }
   }
+
+  .oauth-btn {
+    position: relative;
+  }
+
+  .signOutBtn {
+    position: absolute;
+    right: 15px;
+  }
+
   .oauth-btn.withImg {
     margin-right: -43px;
     padding-right: 45px;
     z-index: 1;
   }
+  
   .oauth-img {
     height: 32px;
     border-radius: 50%;
@@ -126,14 +138,9 @@ footer {
 
 i.homeBtn {
   cursor: pointer;
-  padding: 0;
-  color: $SCUred;
   font-size: 1.75rem;
   position: absolute;
   left: 15px;
-  &:hover {
-    color: $SCUdarkred;
-  }
 }
 
 
@@ -142,6 +149,9 @@ a {
   font-weight: bold;
   text-decoration: none !important;
   color: $linkColor;
+  &:focus {
+    color: $linkColor;
+  }
   &:hover {
     color: $hoverLinkColor;
   }
