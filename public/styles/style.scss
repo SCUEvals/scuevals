@@ -94,7 +94,7 @@ header {
     padding-right: 45px;
     z-index: 1;
   }
-  
+
   .oauth-img {
     height: 32px;
     border-radius: 50%;
@@ -182,6 +182,7 @@ textarea {
 .loadingWrapper {
  @include absoluteCenter;
  color: $SCUred;
+ height: auto !important;
 }
 
 #toggleFullscreenBtn {
@@ -209,4 +210,42 @@ html {
 
 #app, #app > div {
   height: 100%;
+}
+
+
+#toast-container > .toast {
+  background-image: none !important;
+  text-align: initial;
+  width: 162px;
+  padding: 9px 15px 0 45px;
+  height: 42px;
+}
+
+#toast-container > .toast:before {
+  position: fixed;
+  font-family: FontAwesome;
+  font-size: 24px;
+  line-height: 18px;
+  float: left;
+  color: #FFF;
+  padding-right: 0.5em;
+  margin: auto 0.5em auto -1.5em;
+  top: 25px;
+}
+#toast-container > .toast-warning:before {
+  content: "\f003";
+}
+#toast-container > .toast-error:before {
+  content: "\f001";
+}
+#toast-container > .toast-info:before {
+  content: "\f005";
+}
+#toast-container > .toast-success:before {
+  content: "\f08b";
+}
+
+.toast-top-right {
+    top: 13px;
+    right: 13px;
 }

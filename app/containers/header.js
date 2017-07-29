@@ -4,14 +4,34 @@ import { connect } from 'react-redux';
 import { fetchSearch, setUserInfo, delUserInfo } from '../actions';
 import GoogleLogin from 'react-google-login';
 import { Link } from 'react-router-dom';
+import Toastr from 'toastr';
 
 class Header extends Component {
+  componentDidMount() {
+    Toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "2000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  }
+}
 
   displaySignedIn(userInfo, delUserInfo){
     if (userInfo) { return (
       <span>
         <img className="oauth-img" src={userInfo.imageUrl} alt="Profile photo" />
-        <button type="button" onClick={delUserInfo} className="signOutBtn">Sign Out</button>
+        <button type="button" onClick={() => {delUserInfo(); Toastr["success"]("Signed Out");}} className="signOutBtn">Sign Out</button>
       </span>
   )}
     else return;
@@ -19,10 +39,10 @@ class Header extends Component {
 
   renderField(field) {
     const { meta: { touched, error } } = field;
-    const searchBarClass = `col-md-8 mx-auto input-group ${touched && error ? 'has-danger' : ''}`;
+    const searchBarClass = `col-12 col-md-8 mx-auto input-group ${touched && error ? 'has-danger' : ''}`;
     const textHelpClass = `${touched && error ? 'text-help offset-md-2' : ''}`;
     return (
-      <div>
+      <div className="row">
         <label className="sr-only">{field.label}</label>
         <div className={searchBarClass}>
           <input
@@ -45,6 +65,8 @@ class Header extends Component {
   onSubmit(values) {
     //values is object with searchBar: <input>
     //console.log(values);
+    var d = $("#app");
+    console.log(d);
     this.props.fetchSearch(values, () => {
       this.props.history.push('/');
     });
