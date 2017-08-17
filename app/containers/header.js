@@ -40,7 +40,7 @@ class Header extends Component {
   renderField(field) {
     const { meta: { touched, error } } = field;
     const searchBarClass = `col-12 col-md-8 mx-auto input-group ${touched && error ? 'has-danger' : ''}`;
-    const textHelpClass = `${touched && error ? 'text-help offset-md-2' : ''}`;
+    const textHelpClass = `${touched && error ? 'text-help' : ''}`;
     return (
       <div className="row">
         <label className="sr-only">{field.label}</label>
@@ -86,7 +86,7 @@ class Header extends Component {
         />
       </form>
 
-      <div className="container" style={{marginTop: "7px"}}>
+      <div className="container " style={{marginTop: "7px", position: "relative"}}>
         <Link to={'/'}>
           <i className="fa fa-home homeBtn"></i>
         </Link>

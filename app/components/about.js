@@ -1,4 +1,5 @@
 import React from 'react';
+
 const About = () => {
 
   return (
@@ -19,13 +20,13 @@ const About = () => {
       <hr />
       <div className="row">
         <div className="col-sm-6">
-          <button className="btn" type="button" data-toggle="collapse" data-target="#clientSideDesc" aria-expanded="false" aria-controls="clientSideDesc">
+          <button className="btn" type="button" data-toggle="collapse" data-target="#webAppDesc" aria-expanded="false" aria-controls="webAppDesc">
             Web App Info <i className="fa fa-chevron-down"></i>
             <br />
             <small>Joseph Théberge</small>
           </button>
-          <div className="collapse" id="clientSideDesc">
-            <div className="card card-block">
+          <div className="collapse" id="webAppDesc">
+            <div className="card card-body">
               <p>
                 Developed by Joseph Théberge, SCU's class of 2018, the web app is built from
                 Facebook's <a href="https://facebook.github.io/react/">React</a>, combined
@@ -51,13 +52,13 @@ const About = () => {
           </div>
         </div>
         <div className="col-sm-6">
-          <button className="btn" type="button" data-toggle="collapse" data-target="#serverSideDesc" aria-expanded="false" aria-controls="serverSideDesc">
+          <button className="btn" type="button" data-toggle="collapse" data-target="#databaseDesc" aria-expanded="false" aria-controls="databaseDesc">
             Database Info <i className="fa fa-chevron-down"></i>
             <br />
             <small>Fredrik Blomqvist</small>
           </button>
-          <div className="collapse" id="serverSideDesc">
-            <div className="card card-block">
+          <div className="collapse" id="databaseDesc">
+            <div className="card card-body">
               Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
             </div>
           </div>
