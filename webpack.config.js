@@ -1,6 +1,6 @@
-var path = require('path');
-var HTMLWebpackPlugin = require('html-webpack-plugin');
-var ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const path = require('path');
+const HTMLWebpackPlugin = require('html-webpack-plugin');
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 
 var HTMLWebpackPLuginConfig = new HTMLWebpackPlugin({
   template: __dirname + '/app/index.html',
@@ -34,8 +34,12 @@ module.exports = {
   plugins: [HTMLWebpackPLuginConfig, ScriptExtHtmlWebpackPluginConfig],
 
   devServer: {
-    contentBase: path.join(__dirname, 'public'),
-    compress: true,
-    historyApiFallback: true
+    historyApiFallback: {
+      rewrites: [
+        {from: '/styles/react-bootstrap-table-all.min.css', to: '/react-bootstrap-table/dist/react-bootstrap-table-all.min.css'},
+      ],
+    },
+    contentBase: [path.join(__dirname, 'public'), path.join(__dirname, 'node_modules')],
+    compress: true
   }
 };

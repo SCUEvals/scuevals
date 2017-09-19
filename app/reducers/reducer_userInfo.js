@@ -1,6 +1,5 @@
 import { SET_USER_INFO, DEL_USER_INFO } from '../actions';
 
-
 export default function(state = null, action) {
   switch (action.type) {
   case SET_USER_INFO:
