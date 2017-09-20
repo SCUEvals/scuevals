@@ -68,19 +68,25 @@ class PostEval extends Component {
     const { handleSubmit } = this.props;
 
     return (
-      <div className="container">
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
-          <h6>Overall difficulty</h6>
-          {this.renderRadios("difficulty")}
-          <h6>Overall satisfaction with the course</h6>
-          {this.renderRadios("satisfaction")}
+          <h6>Handwriting</h6>
+          {this.renderRadios("handwriting")}
+          <h6>Easy to Understand</h6>
+          {this.renderRadios("clarity")}
+          <h6>Availability</h6>
+          {this.renderRadios("availability")}
+          <h6>Timeliness</h6>
+          {this.renderRadios("timeliness")}
+          <h6>Online Accessibility</h6>
+          {this.renderRadios("accessibility")}
+          <h6>Would you take this professor again?</h6>
+          {this.renderRadios("retakeability")}
           <h6>Comments</h6>
           <Field name="comments" onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
           <p>Max characters: {this.state.term.length} / 750</p>
           <hr />
           <button type="submit" className="btn">Submit</button>
         </form>
-      </div>
     );
   }
 }

@@ -55,9 +55,8 @@ header {
     background-color: $SCUred;
     z-index: 2;
     border-radius: 10px;
-    padding: 4px;
+    padding: 4px 8px;
     font-size: 13px;
-    border: 1px solid white;
   }
 
   input, input.form-control {
@@ -104,17 +103,18 @@ header {
 }
 
 form.content {
-  padding: 25px;
   .form-control {
     border: 1px solid $backgroundColor;
   }
 }
 
 .content {
-  border: 1px solid rgba(0,0,0,.125);
+  border: 1px solid rgba(0,0,0,.2);
   border-radius: .25rem;
   background: white;
-  padding: ($headerHeight + 15px) 15px 0 15px;
+  padding: ($headerHeight + 15px) 15px 15px 15px;
+  margin-bottom: $footerHeight;
+  overflow: auto;
 }
 
 footer {
