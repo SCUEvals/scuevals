@@ -18,9 +18,10 @@ const searchContent = () => {
   return (
     <div className="content">
       <BootstrapTable version='4' data={products} search={true} striped={true} hover={true}>
-          <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}>Product ID</TableHeaderColumn>
-          <TableHeaderColumn dataField="name" dataSort={true}>Product Name</TableHeaderColumn>
-          <TableHeaderColumn dataField="price" dataFormat={priceFormatter}>Product Price</TableHeaderColumn>
+          <TableHeaderColumn dataField="id" isKey={true} dataAlign="center" dataSort={true}>Class</TableHeaderColumn>
+          <TableHeaderColumn dataField="name" dataSort={true}>Description</TableHeaderColumn>
+
+          <TableHeaderColumn dataField="price" dataFormat={priceFormatter}>Rating</TableHeaderColumn>
       </BootstrapTable>
     </div>
   );

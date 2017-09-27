@@ -7,7 +7,11 @@ const app = express();
 app.use(compression());
 app.use(express.static(__dirname + '/build'));
 app.use(express.static(__dirname + '/public'));
-app.use('/styles', express.static(__dirname + '/node_modules/react-bootstrap-table/dist/react-bootstrap-table.min.css'));
+app.use('/styles', express.static(__dirname + '/node_modules/react-bootstrap-table/dist'));
+app.use('/styles', express.static(__dirname + '/node_modules/toastr/build'));
+app.use('/styles', express.static(__dirname + '/node_modules/rc-slider/dist'));
+app.use('/styles', express.static(__dirname + '/node_modules/rc-tooltip/assets'));
+
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'build/index.html'))

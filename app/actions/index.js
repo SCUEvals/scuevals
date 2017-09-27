@@ -6,7 +6,7 @@ export const POST_EVAL = 'post_eval';
 export const SET_USER_INFO = 'set_user_info';
 export const DEL_USER_INFO = 'del_user_info';
 
-const ROOT_URL = 'https://www.scu.edu/apps/ws/courseavail/search/';
+export const ROOT_URL = 'https://www.scu.edu/apps/ws/courseavail/search/';
 const FALL2017 = 3900;
 
 export function setUserInfo(info) {
@@ -22,14 +22,15 @@ export function delUserInfo() {
   };
 }
 
-const config = {headers: {
-  'Content-Type': 'application/x-www-form-urlencoded',
-  'Referer': 'https://www.scu.edu/apps/courseavail/?p=schedule'
+export const postConfig = {
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Referer': 'https://www.scu.edu/apps/courseavail/?p=schedule'
   }
 }
 
 export function fetchSearch(values) {
-  const request = axios.post(`${ROOT_URL}/${FALL2017}/all`, `q=${values.searchbar}`, config);
+  const request = axios.post(`${ROOT_URL}/${FALL2017}/all`, `q=${values.searchbar}`, postConfig);
 
   return {
     type: FETCH_EVALS,

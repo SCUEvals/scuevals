@@ -1,4 +1,4 @@
-$backgroundColor: #F7F7F7;
+$backgroundColor: #F0f0f0;
 $overlayBackground: #444;
 $headerHeight: 99px;
 $footerHeight: 35px;
@@ -112,8 +112,7 @@ form.content {
   border: 1px solid rgba(0,0,0,.2);
   border-radius: .25rem;
   background: white;
-  padding: ($headerHeight + 15px) 15px 15px 15px;
-  margin-bottom: $footerHeight;
+  padding: ($headerHeight + 15px) 15px ($footerHeight + 15px) 15px;
   overflow: auto;
 }
 
@@ -248,4 +247,171 @@ html {
 .toast-top-right {
     top: 13px;
     right: 13px;
+}
+
+
+body::after {
+  content: "";
+  background-image: url('/images/background.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.7;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  z-index: -1;
+}
+
+#searchBarResultsWrapper {
+  padding: 0;
+  margin-right: 41px;
+  position: relative;
+}
+
+#searchBarResults {
+  position: absolute;
+  background-color: $backgroundColor;
+  width: 100%;
+  z-index: 1;
+  text-align: left;
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 0;
+  border: 2px solid $backgroundColor;
+  border-radius: .25rem;
+  margin-top: -6px;
+  padding-top: 6px;
+  h6, li {
+    padding: 5px;
+  }
+  h6 {
+    font-weight: bold;
+    background-color: $overlayBackground;
+    color: white;
+    margin: 0;
+  }
+  li {
+    cursor: pointer;
+    border-bottom: 1px solid white;
+    color: $overlayBackground;
+    font-weight: bold;
+    &:hover {
+      color: $SCUdarkred;
+      background-color: white;
+    }
+  }
+  li:last-child {
+    border-bottom: none;
+  }
+}
+
+.rc-slider {
+  margin: 9px auto;
+  max-width: 300px;
+  height: 15px;
+  padding: 0;
+  .rc-slider-rail {
+    background-color: $overlayBackground;
+    height: 15px;
+  }
+  .rc-slider-step {
+    bottom: 0;
+    .rc-slider-dot {
+      border: 0;
+      bottom: 0;
+      width: 2px;
+      color: white;
+      border-radius: 0;
+      background-color: white;
+      height: 15px;
+    }
+    // .rc-slider-dot-active {
+    //   background-color: green;
+    // }
+  }
+}
+
+.rc-slider-dot:first-child, .rc-slider-dot:last-child {
+  display: none;
+}
+
+
+.track1 {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7c0000+0,fc0000+100 */
+  background: linear-gradient(to right, #7c0000 0%,#fc0000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+.track2 {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#d36200+0,ffa500+100 */
+  background: linear-gradient(to right, #d36200 0%,#ffa500 100%);
+
+}
+
+.track3 {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#edd500+0,3fff00+100 */
+  background: linear-gradient(to right, #edd500 0%,#3fff00 100%);
+}
+
+.track4 {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#46d300+0,00840d+100 */
+  background: linear-gradient(to right, #46d300 0%,#00840d 100%);
+}
+
+.rc-slider-tooltip-inner {
+  height: auto;
+  font-size: 14px;
+  max-width: 200px;
+}
+
+table {
+  text-align: left;
+}
+
+.infoTooltip {
+  z-index: 1071; //handle's default z-index is 1070, so display over it
+}
+
+.handleNum {
+  margin-top: 3px;
+  font-weight: bold;
+}
+
+form {
+  i {
+    font-size: 25px;
+    color: $SCUred;
+    cursor: pointer;
+    &:hover {
+      color: $SCUdarkred;
+    }
+  }
+  h6 {
+    margin-top: 50px;
+  }
+}
+
+header form i {
+  color: white;
+}
+
+textarea {
+  outline: 1px solid $overlayBackground;
+  max-width: 750px;
+  resize: none;
+  &:focus {
+    outline: 2px solid $SCUdarkred;
+  }
+}
+
+.postGuidelines {
+  text-align: left;
+  .card-header {
+    color: white;
+    font-weight: bold;
+    background-color: $SCUred;
+    text-align: center;
+  }
 }

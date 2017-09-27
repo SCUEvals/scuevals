@@ -1,31 +1,49 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { fetchSearch, setUserInfo, delUserInfo } from '../actions';
+import { fetchSearch, setUserInfo, delUserInfo, postConfig, ROOT_URL } from '../actions';
 import GoogleLogin from 'react-google-login';
 import { Link } from 'react-router-dom';
 import Toastr from 'toastr';
+import { debounce } from 'lodash';
+import axios from 'axios';
 
 class Header extends Component {
+
+  constructor(props) {
+    super(props);
+    this.getResponse = debounce(this.getResponse, 300);
+    this.state = {
+      searchBarResultsResponse: null
+    };
+  }
+
+  getResponse(newState, setState) {
+  //  const FALL2017 = 3900;
+    //const response = axios.post(`${ROOT_URL}/${FALL2017}/all`, `q=${newState}`, postConfig);
+    //if (response) console.log(response);
+    setState(newState);
+  }
+
   componentDidMount() {
     Toastr.options = {
-    "closeButton": true,
-    "debug": false,
-    "newestOnTop": false,
-    "progressBar": true,
-    "positionClass": "toast-top-right",
-    "preventDuplicates": false,
-    "onclick": null,
-    "showDuration": "300",
-    "hideDuration": "1000",
-    "timeOut": "2000",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut"
+      "closeButton": true,
+      "debug": false,
+      "newestOnTop": false,
+      "progressBar": true,
+      "positionClass": "toast-top-right",
+      "preventDuplicates": false,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "2000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    }
   }
-}
 
   displaySignedIn(userInfo, delUserInfo){
     if (userInfo) { return (
@@ -38,6 +56,12 @@ class Header extends Component {
   }
 
   renderField(field) {
+
+    if (field.searchBarResultsResponse !== field.input.value) {
+      if (field.input.value.length > 2) field.getResponse(field.input.value, field.setState);
+      else if (field.searchBarResultsResponse !== null) field.setSearchBarResultsNull();
+    }
+
     const { meta: { touched, error } } = field;
     const searchBarClass = `col-12 col-md-8 mx-auto input-group ${touched && error ? 'has-danger' : ''}`;
     const textHelpClass = `${touched && error ? 'text-help' : ''}`;
@@ -58,6 +82,26 @@ class Header extends Component {
             {touched ? error : ''}
           </div>
         </div>
+        {field.searchBarResultsResponse ? field.renderSearchBarResults() : ''}
+      </div>
+    );
+  }
+
+  renderSearchBarResults() {
+    return (
+      <div className='col-12 col-md-8 mx-auto'>
+        <div id='searchBarResultsWrapper'>
+            <ul id='searchBarResults'>
+              <h6>Classes</h6>
+              <li>COEN 10 - Introduction to Programming</li>
+              <li>COEN 11 - Advanced Programming</li>
+              <li>COEN 12 - Abstract Data Types & Structures</li>
+              <h6>Professors</h6>
+              <li>Darren Atkinson</li>
+              <li>Moe Amouzgar</li>
+              <li>Mona Musa</li>
+            </ul>
+        </div>
       </div>
     );
   }
@@ -65,8 +109,6 @@ class Header extends Component {
   onSubmit(values) {
     //values is object with searchBar: <input>
     //console.log(values);
-    var d = $("#app");
-    console.log(d);
     this.props.fetchSearch(values, () => {
       this.props.history.push('/');
     });
@@ -83,6 +125,11 @@ class Header extends Component {
           label="Read &amp; Write SCU Evals"
           name="searchBar" //responsible for object's key name for values
           component={this.renderField}
+          renderSearchBarResults={this.renderSearchBarResults}
+          getResponse={this.getResponse}
+          setState={(newState) => this.setState({searchBarResultsResponse: newState})}
+          searchBarResultsResponse={this.state.searchBarResultsResponse}
+          setSearchBarResultsNull={() => this.setState({searchBarResultsResponse: null})}
         />
       </form>
 
