@@ -6,8 +6,13 @@ export const POST_EVAL = 'post_eval';
 export const SET_USER_INFO = 'set_user_info';
 export const DEL_USER_INFO = 'del_user_info';
 
-export const ROOT_URL = 'https://www.scu.edu/apps/ws/courseavail/search/';
-const FALL2017 = 3900;
+export const ROOT_URL = 'http://api.scuevals.com';
+
+export const postConfig = {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+}
 
 export function setUserInfo(info) {
   return {
@@ -20,13 +25,6 @@ export function delUserInfo() {
   return {
     type: DEL_USER_INFO
   };
-}
-
-export const postConfig = {
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Referer': 'https://www.scu.edu/apps/courseavail/?p=schedule'
-  }
 }
 
 export function fetchSearch(values) {

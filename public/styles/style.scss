@@ -91,7 +91,6 @@ header {
   .oauth-btn.withImg {
     margin-right: -43px;
     padding-right: 45px;
-    z-index: 1;
   }
 
   .oauth-img {
@@ -273,6 +272,8 @@ body::after {
 
 #searchBarResults {
   position: absolute;
+  max-height: 213px;
+  overflow: auto;
   background-color: $backgroundColor;
   width: 100%;
   z-index: 1;
@@ -390,6 +391,7 @@ form {
   }
   h6 {
     margin-top: 50px;
+    margin-bottom: 20px;
   }
 }
 

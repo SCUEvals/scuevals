@@ -14,15 +14,51 @@ class Header extends Component {
     super(props);
     this.getResponse = debounce(this.getResponse, 300);
     this.state = {
-      searchBarResultsResponse: null
+      searchBarValue: null,
+      searchBarResponse: null
     };
   }
 
-  getResponse(newState, setState) {
-  //  const FALL2017 = 3900;
-    //const response = axios.post(`${ROOT_URL}/${FALL2017}/all`, `q=${newState}`, postConfig);
-    //if (response) console.log(response);
-    setState(newState);
+  getResponse(searchBarValue, setSearchBarResponseState) {
+  const options =
+    { params:
+      {
+        q: searchBarValue,
+        university_id: 1
+      }
+    };
+
+    axios.get(`${ROOT_URL}/search`, options, postConfig)
+    .then(response => {
+        setSearchBarResponseState(response.data);
+      }
+    )
+    .catch(function (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+      }
+      console.log(error.config);
+    });
+  }
+
+  shouldComponentUpdate(prevProps) {
+    if (prevProps.searchBarResponse !== this.state.searchBarResponse ||
+      (prevProps.searchBarResponse === null && this.state.searchBarResponse === null)) {
+      return true;
+    }
+    else return false;
   }
 
   componentDidMount() {
@@ -46,7 +82,7 @@ class Header extends Component {
   }
 
   displaySignedIn(userInfo, delUserInfo){
-    if (userInfo) { return (
+    if (userInfo) { return(
       <span>
         <img className="oauth-img" src={userInfo.imageUrl} alt="Profile photo" />
         <button type="button" onClick={() => {delUserInfo(); Toastr["success"]("Signed Out");}} className="signOutBtn">Sign Out</button>
@@ -56,11 +92,6 @@ class Header extends Component {
   }
 
   renderField(field) {
-
-    if (field.searchBarResultsResponse !== field.input.value) {
-      if (field.input.value.length > 2) field.getResponse(field.input.value, field.setState);
-      else if (field.searchBarResultsResponse !== null) field.setSearchBarResultsNull();
-    }
 
     const { meta: { touched, error } } = field;
     const searchBarClass = `col-12 col-md-8 mx-auto input-group ${touched && error ? 'has-danger' : ''}`;
@@ -82,24 +113,36 @@ class Header extends Component {
             {touched ? error : ''}
           </div>
         </div>
-        {field.searchBarResultsResponse ? field.renderSearchBarResults() : ''}
+        {field.searchBarResponse ? field.renderSearchBarResponse(field.searchBarResponse) : ''}
       </div>
     );
   }
 
-  renderSearchBarResults() {
+  renderSearchBarResponse(response) {
+    if (response.courses.length === 0 && response.professors.length === 0) return null;
+
     return (
       <div className='col-12 col-md-8 mx-auto'>
         <div id='searchBarResultsWrapper'>
             <ul id='searchBarResults'>
-              <h6>Classes</h6>
-              <li>COEN 10 - Introduction to Programming</li>
-              <li>COEN 11 - Advanced Programming</li>
-              <li>COEN 12 - Abstract Data Types & Structures</li>
-              <h6>Professors</h6>
-              <li>Darren Atkinson</li>
-              <li>Moe Amouzgar</li>
-              <li>Mona Musa</li>
+              {response.courses.length > 0 ? <h6>Classes</h6> : ''}
+              {response.courses.length > 0 ?
+                response.courses.map(course => {
+                  return(
+                    <li key={course.id}>{course.department} {course.number}: {course.title}</li>
+                  );
+                })
+                : ''
+              }
+              {response.professors.length > 0 ? <h6>Professors</h6> : ''}
+              {response.professors.length > 0 ?
+                response.professors.map(professor => {
+                  return(
+                    <li key={professor.id}>{professor.first_name} {professor.last_name}</li>
+                  );
+                })
+                : ''
+              }
             </ul>
         </div>
       </div>
@@ -125,11 +168,15 @@ class Header extends Component {
           label="Read &amp; Write SCU Evals"
           name="searchBar" //responsible for object's key name for values
           component={this.renderField}
-          renderSearchBarResults={this.renderSearchBarResults}
-          getResponse={this.getResponse}
-          setState={(newState) => this.setState({searchBarResultsResponse: newState})}
-          searchBarResultsResponse={this.state.searchBarResultsResponse}
-          setSearchBarResultsNull={() => this.setState({searchBarResultsResponse: null})}
+          renderSearchBarResponse={this.renderSearchBarResponse}
+          searchBarResponse={this.state.searchBarResponse}
+          onChange={
+            (change, newVal) => {
+              if (newVal.length > 2) {
+                this.getResponse(newVal, (response) => this.setState({searchBarResponse: response}));
+              } else if (this.state.searchBarResponse !== null) this.setState({searchBarResponse: null});
+            }
+          }
         />
       </form>
 
