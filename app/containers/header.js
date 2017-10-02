@@ -1,64 +1,95 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { fetchSearch, setUserInfo, delUserInfo, postConfig, ROOT_URL } from '../actions';
+import { fetchSearch, setUserInfo, delUserInfo, setSearchResults, postConfig, ROOT_URL } from '../actions';
 import GoogleLogin from 'react-google-login';
 import { Link } from 'react-router-dom';
 import Toastr from 'toastr';
 import { debounce } from 'lodash';
 import axios from 'axios';
+import { withRouter } from 'react-router';
 
 class Header extends Component {
 
   constructor(props) {
     super(props);
-    this.getResponse = debounce(this.getResponse, 300);
-    this.state = {
-      searchBarValue: null,
-      searchBarResponse: null
-    };
+    this.debouncedGetResponse = debounce(this.debouncedGetResponse, 300);
   }
 
-  getResponse(searchBarValue, setSearchBarResponseState) {
-  const options =
-    { params:
-      {
-        q: searchBarValue,
-        university_id: 1
-      }
-    };
+  debouncedGetResponse(searchVal, setSearchResults) {
+    if (searchVal && setSearchResults) {
 
-    axios.get(`${ROOT_URL}/search`, options, postConfig)
-    .then(response => {
-        setSearchBarResponseState(response.data);
-      }
-    )
-    .catch(function (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
-      }
-      console.log(error.config);
-    });
-  }
+    const options =
+      { params:
+        {
+          q: searchVal,
+          university_id: 1
+        }
+      };
 
-  shouldComponentUpdate(prevProps) {
-    if (prevProps.searchBarResponse !== this.state.searchBarResponse ||
-      (prevProps.searchBarResponse === null && this.state.searchBarResponse === null)) {
-      return true;
+      axios.get(`${ROOT_URL}/search`, options, postConfig)
+      .then(response => setSearchResults(response.data))
+      .catch(function (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
+      });
     }
-    else return false;
+  }
+
+  getResponseAndPushHistory(searchVal, setSearchResults, pushHistory) { //same as debouncedGetResponse but without delay and routes to page after submitted
+    if (searchVal && setSearchResults) {
+
+    const options =
+      { params:
+        {
+          q: searchVal,
+          university_id: 1
+        }
+      };
+
+      axios.get(`${ROOT_URL}/search`, options, postConfig)
+      .then(
+        response => {
+          setSearchResults(response.data);
+          pushHistory();
+          $('#searchBarResults').remove(); //remove results dropdown when submitting until new input entered after
+          setSearchResults(null); //set to null so if continuation in typing value after submission, ensures dropdown box reappears
+
+        }
+      )
+      .catch(function (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
+      })
+    }
   }
 
   componentDidMount() {
@@ -92,7 +123,7 @@ class Header extends Component {
   }
 
   renderField(field) {
-
+    console.log('field: ', field);
     const { meta: { touched, error } } = field;
     const searchBarClass = `col-12 col-md-8 mx-auto input-group ${touched && error ? 'has-danger' : ''}`;
     const textHelpClass = `${touched && error ? 'text-help' : ''}`;
@@ -113,12 +144,12 @@ class Header extends Component {
             {touched ? error : ''}
           </div>
         </div>
-        {field.searchBarResponse ? field.renderSearchBarResponse(field.searchBarResponse) : ''}
+        {field.searchResults && field.input.value.length > 2 ? field.renderSearchResults(field.searchResults) : ''}
       </div>
-    );
+    ); //searchResults can exist while value length < 3. Edge case: Old GET request still processing, but value length no longer > 2
   }
 
-  renderSearchBarResponse(response) {
+  renderSearchResults(response) {
     if (response.courses.length === 0 && response.professors.length === 0) return null;
 
     return (
@@ -151,10 +182,9 @@ class Header extends Component {
 
   onSubmit(values) {
     //values is object with searchBar: <input>
-    //console.log(values);
-    this.props.fetchSearch(values, () => {
-      this.props.history.push('/');
-    });
+    this.debouncedGetResponse(null, null); //cancel other responses in progress
+    this.getResponseAndPushHistory(values.searchBar, response => this.props.setSearchResults(response), () => this.props.history.push('/search/' + values.searchBar));
+    $('#searchBarResults').remove(); //remove results dropdown when submitting until new input entered after
   }
 
   render() {
@@ -168,13 +198,17 @@ class Header extends Component {
           label="Read &amp; Write SCU Evals"
           name="searchBar" //responsible for object's key name for values
           component={this.renderField}
-          renderSearchBarResponse={this.renderSearchBarResponse}
-          searchBarResponse={this.state.searchBarResponse}
+          renderSearchResults={this.renderSearchResults}
+          searchResults={this.props.searchResults}
+          setSearchResults={response => this.props.setSearchResults(response)}
           onChange={
             (change, newVal) => {
               if (newVal.length > 2) {
-                this.getResponse(newVal, (response) => this.setState({searchBarResponse: response}));
-              } else if (this.state.searchBarResponse !== null) this.setState({searchBarResponse: null});
+                this.debouncedGetResponse(newVal, (response) => this.props.setSearchResults(response));
+              } else {
+                this.debouncedGetResponse(null, null);//this cancels any previous calls still being debounced so function not called later
+                if (this.props.searchResults !== null) this.props.setSearchResults(null);
+              }
             }
           }
         />
@@ -210,13 +244,14 @@ function validate(values) {
 
 function mapStateToProps(state) {
   return {
-    userInfo: state.userInfo
+    userInfo: state.userInfo,
+    searchResults: state.searchResults
   };
 }
 
-export default reduxForm({
+export default withRouter(reduxForm({
   validate,
   form: 'searchBar'
 })(
-  connect(mapStateToProps,{ setUserInfo, delUserInfo, fetchSearch })(Header)
+  connect(mapStateToProps,{ setUserInfo, delUserInfo, setSearchResults, fetchSearch })(Header))
 );

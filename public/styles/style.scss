@@ -111,7 +111,7 @@ form.content {
   border: 1px solid rgba(0,0,0,.2);
   border-radius: .25rem;
   background: white;
-  padding: ($headerHeight + 15px) 15px ($footerHeight + 15px) 15px;
+  padding: ($headerHeight + 15px) 15px 15px 15px;
   overflow: auto;
 }
 
@@ -129,7 +129,7 @@ footer {
   }
   background-color: $overlayBackground;
   position: relative;
-  margin-top: -$footerHeight;
+  //margin-top: -$footerHeight;
   height: $footerHeight;
   line-height: 35px;
 }
@@ -200,7 +200,7 @@ html {
 
 
 .page-wrapper {
-    min-height: 100%;
+    min-height: calc(100% - #{$footerHeight});
     position: relative;
     padding-right: 0;
     padding-left: 0;
@@ -416,4 +416,9 @@ textarea {
     background-color: $SCUred;
     text-align: center;
   }
+}
+
+.content.results h4 {
+  text-align: left;
+  font-weight: bold;
 }

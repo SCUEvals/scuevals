@@ -5,6 +5,7 @@ export const FETCH_EVALS = 'fetch_evals';//from selecting choices shown after se
 export const POST_EVAL = 'post_eval';
 export const SET_USER_INFO = 'set_user_info';
 export const DEL_USER_INFO = 'del_user_info';
+export const SET_SEARCH_RESULTS = 'set_search_results';
 
 export const ROOT_URL = 'http://api.scuevals.com';
 
@@ -12,6 +13,13 @@ export const postConfig = {
   headers: {
     'Content-Type': 'application/json'
   }
+}
+
+export function setSearchResults(results) {
+  return {
+    type: SET_SEARCH_RESULTS,
+    payload: results
+  };
 }
 
 export function setUserInfo(info) {
