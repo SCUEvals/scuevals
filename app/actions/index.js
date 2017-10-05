@@ -23,6 +23,7 @@ export function setSearchResults(results) {
 }
 
 export function setUserInfo(info) {
+  axios.post(`${ROOT_URL}/auth`, {id_token: info.tokenObj.id_token}, postConfig).then(response => console.log(response)).catch(err => console.error('Failed to authenticate with back end. Error:', err));
   return {
     type: SET_USER_INFO,
     payload: info

@@ -147,7 +147,7 @@ class PostEval extends Component {
           <div className='col-12 col-md-6'>
             <div className='card'>
               <div className='card-header'>GUIDELINES TO FOLLOW</div>
-              <div className='card-body'>
+                <div className='card-body'>
                   <ul >
                     <li>Refer to the rating chart for each question</li>
                     <li>Remove unfair bias from your review</li>

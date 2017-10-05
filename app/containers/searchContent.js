@@ -63,13 +63,10 @@ class searchContent extends Component {
           }
           {this.props.searchResults.professors.length > 0 ?
             <div>
-              <br/>
               <h4>Professors</h4>
               <BootstrapTable version='4' data={this.props.searchResults.professors} striped={true} hover={true}>
                 <TableHeaderColumn dataFormat={nameFormatter} dataField="first_name" isKey={true} dataAlign="center" dataSort={true}>Name</TableHeaderColumn>
               </BootstrapTable>
-              <br/>
-              <br/>
             </div>
             : ''
           }
