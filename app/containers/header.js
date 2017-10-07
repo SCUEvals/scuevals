@@ -116,7 +116,14 @@ class Header extends Component {
     if (userInfo) { return(
       <span>
         <img className="oauth-img" src={userInfo.imageUrl} alt="Profile photo" />
-        <button type="button" onClick={() => {delUserInfo(); Toastr["success"]("Signed Out");}} className="signOutBtn">Sign Out</button>
+        <button type="button" onClick={() => {
+          delUserInfo();
+          localStorage.removeItem('jwt');
+          Toastr["success"]("Signed Out");}
+        }
+        className="signOutBtn">
+          Sign Out
+        </button>
       </span>
   )}
     else return;
@@ -190,47 +197,49 @@ class Header extends Component {
   render() {
     const { handleSubmit, setUserInfo, userInfo } = this.props;
     const oAuthClass = `oauth-btn ${userInfo != null ? 'withImg' : ''}`;
-    return (
-      <header>
+    if (localStorage.jwt) {
+      return (
+        <header>
 
-      <form className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-        <Field
-          label="Read &amp; Write SCU Evals"
-          name="searchBar" //responsible for object's key name for values
-          component={this.renderField}
-          renderSearchResults={this.renderSearchResults}
-          searchResults={this.props.searchResults}
-          setSearchResults={response => this.props.setSearchResults(response)}
-          onChange={
-            (change, newVal) => {
-              if (newVal.length > 2) {
-                this.debouncedGetResponse(newVal, (response) => this.props.setSearchResults(response));
-              } else {
-                this.debouncedGetResponse(null, null);//this cancels any previous calls still being debounced so function not called later
-                if (this.props.searchResults !== null) this.props.setSearchResults(null);
+        <form className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+          <Field
+            label="Read &amp; Write SCU Evals"
+            name="searchBar" //responsible for object's key name for values
+            component={this.renderField}
+            renderSearchResults={this.renderSearchResults}
+            searchResults={this.props.searchResults}
+            setSearchResults={response => this.props.setSearchResults(response)}
+            onChange={
+              (change, newVal) => {
+                if (newVal.length > 2) {
+                  this.debouncedGetResponse(newVal, response => this.props.setSearchResults(response));
+                } else {
+                  this.debouncedGetResponse(null, null);//this cancels any previous calls still being debounced so function not called later
+                  if (this.props.searchResults !== null) this.props.setSearchResults(null);
+                }
               }
             }
-          }
-        />
-      </form>
+          />
+        </form>
 
-      <div className="container " style={{marginTop: "7px", position: "relative"}}>
-        <Link to={'/'}>
-          <i className="fa fa-home homeBtn"></i>
-        </Link>
-        <GoogleLogin
-          hostedDomain="scu.edu"
-          clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
-          buttonText={userInfo ?  userInfo.givenName: 'Sign in with SCU Gmail'}
-          onSuccess={setUserInfo}
-          onFailure={setUserInfo}
-          style={{}}
-          className={oAuthClass}
-        />
-        {this.displaySignedIn(userInfo, this.props.delUserInfo)}
-      </div>
-      </header>
-    );
+        <div className="container " style={{marginTop: "7px", position: "relative"}}>
+          <Link to={'/'}>
+            <i className="fa fa-home homeBtn"></i>
+          </Link>
+          <GoogleLogin
+            hostedDomain="scu.edu"
+            clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
+            buttonText={userInfo ?  userInfo.givenName: 'Sign in with SCU Gmail'}
+            onSuccess={setUserInfo}
+            onFailure={setUserInfo}
+            style={{}}
+            className={oAuthClass}
+          />
+          {this.displaySignedIn(userInfo, this.props.delUserInfo)}
+        </div>
+        </header>
+      );
+    } else return null;
   }
 }
 
