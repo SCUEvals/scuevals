@@ -1,9 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const About = () => {
 
   return (
     <div className="content">
+      {localStorage.jwt ? '' :
+        <Link to={'/'}>
+          <i className="fa fa-home homeBtn" />
+        </Link>
+      }
       <h3>About Us</h3>
       <p>
         While registering for classes at Santa Clara University, we often wonder

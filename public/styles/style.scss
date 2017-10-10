@@ -45,7 +45,7 @@ header {
   padding-top: 15px;
   height: $headerHeight;
   z-index: 1;
-  position: absolute;
+  //position: absolute;
   width: 100%;
   background-color: $overlayBackground;
   color: white;
@@ -112,8 +112,13 @@ form.content {
   border: 1px solid rgba(0,0,0,.2);
   border-radius: .25rem;
   background: white;
-  padding: ($headerHeight + 15px) 15px 15px 15px;
+  padding: 15px;
   overflow: auto;
+  width: 100%;
+  position: relative;
+}
+.container {
+  width: 95%; //want image to be shown in background on mobile too
 }
 
 footer {
@@ -200,11 +205,13 @@ html {
 }
 
 
-.page-wrapper {
+#push-footer {
     min-height: calc(100% - #{$footerHeight});
     position: relative;
     padding-right: 0;
     padding-left: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 #app, #app > div {
@@ -235,13 +242,13 @@ html {
   content: "\f003";
 }
 #toast-container > .toast-error:before {
-  content: "\f001";
+  content: "\f08b";
 }
 #toast-container > .toast-info:before {
   content: "\f005";
 }
 #toast-container > .toast-success:before {
-  content: "\f08b";
+  content: "\f090"; //sign in
 }
 
 .toast-top-right {
@@ -250,19 +257,26 @@ html {
 }
 
 
-body::after {
-  content: "";
+// body::after {
+//   content: "";
+//   background-image: url('/images/background.jpg');
+//   background-repeat: no-repeat;
+//   background-position: center;
+//   background-size: cover;
+//   opacity: 0.7;
+//   top: 0;
+//   left: 0;
+//   bottom: 0;
+//   right: 0;
+//   position: fixed;
+//   z-index: -1;
+// }
+
+body {
   background-image: url('/images/background.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  opacity: 0.7;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: fixed;
-  z-index: -1;
 }
 
 #searchBarResultsWrapper {
@@ -419,10 +433,15 @@ textarea {
   }
 }
 
-.content.results h4 {
+.content.results {
+  h4 {
   margin-top: 35px;
   text-align: left;
   font-weight: bold;
+  }
+  h5 {
+    margin-bottom: 0;
+  }
 }
 
 .login {
@@ -463,8 +482,19 @@ textarea {
   }
 }
 
-.page-wrapper {
+.flex {
+  display: flex;
   justify-content: center;
   align-items: center;
-  display: flex;
+
+  div.container { //not footer's container, only div
+    width: initial;
+    padding: 15px; //adds top and bottom padding
+  }
+}
+
+.content { //not affecting col in header
+  .col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
+    padding: 15px;
+  }
 }

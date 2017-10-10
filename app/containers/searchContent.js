@@ -13,9 +13,12 @@ class searchContent extends Component {
 
   componentWillMount() {
     if (!this.props.searchResults && this.props.match.params.search.length > 2) { //if loading this component straight from GET request (rather than being routed with React Router)
-      const options =
-      { params:
-        {
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.jwt
+        },
+        params: {
           q: this.props.match.params.search,
           university_id: 1
         }

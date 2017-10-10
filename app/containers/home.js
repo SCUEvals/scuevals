@@ -5,6 +5,7 @@ import GoogleLogin from 'react-google-login';
 import { setUserInfo } from '../actions';
 
 class Home extends Component {
+
   render() {
     if (localStorage.jwt) {
       return (
@@ -26,11 +27,11 @@ class Home extends Component {
             onFailure={this.props.setUserInfo}
             className='oauth-btn'
           >
-          <div className='loginBtn'>
-            <img className='pull-left' src='/images/googleG.jpg' />
-            <div>Sign in with Google</div>
-          </div>
-        </GoogleLogin>
+            <div className='loginBtn'>
+              <img className='pull-left' src='/images/googleG.jpg' />
+              <div>Sign in with Google</div>
+            </div>
+          </GoogleLogin>
         </div>
       );
     }

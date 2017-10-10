@@ -11,7 +11,8 @@ export const ROOT_URL = 'http://api.scuevals.com';
 
 export const postConfig = {
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + localStorage.jwt
   }
 }
 
@@ -23,7 +24,7 @@ export function setSearchResults(results) {
 }
 
 export function setUserInfo(info, refresh) {
-  axios.post(`${ROOT_URL}/auth`, {id_token: info.tokenObj.id_token}, postConfig)
+  axios.post(`${ROOT_URL}/auth`, {id_token: info.tokenObj.id_token}, {headers: {'Content-Type': 'application/json'}})
   .then(response =>  {
     console.log('refresh,', refresh);
     localStorage.setItem("jwt", response.data.jwt);

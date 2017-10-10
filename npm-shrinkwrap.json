@@ -2926,11 +2926,6 @@
         "whatwg-fetch": "2.0.3"
       }
     },
-    "jquery": {
-      "version": "3.2.1",
-      "resolved": "https://registry.npmjs.org/jquery/-/jquery-3.2.1.tgz",
-      "integrity": "sha1-XE2d5lKvbNCncBVKYxu6ErAVx4c="
-    },
     "js-tokens": {
       "version": "3.0.2",
       "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-3.0.2.tgz",
@@ -4807,11 +4802,6 @@
       "version": "1.0.3",
       "resolved": "https://registry.npmjs.org/to-fast-properties/-/to-fast-properties-1.0.3.tgz",
       "integrity": "sha1-uDVx+k2MJbguIxsG46MFXeTKGkc="
-    },
-    "toastr": {
-      "version": "2.1.2",
-      "resolved": "https://registry.npmjs.org/toastr/-/toastr-2.1.2.tgz",
-      "integrity": "sha1-/WkGaudXilszV3JfycfDNem2gd8="
     },
     "toposort": {
       "version": "1.0.3",

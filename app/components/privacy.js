@@ -1,8 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 const Privacy = () => {
 
   return (
     <div className="content">
+      {localStorage.jwt ? '' :
+        <Link to={'/'}>
+          <i className="fa fa-home homeBtn" />
+        </Link>
+      }
       <h3>Privacy Policy</h3>
         <p>
           The only cookies in use on our site are for Google Analytics and Oauth 2.0 for Google.

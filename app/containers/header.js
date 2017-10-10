@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { fetchSearch, setUserInfo, delUserInfo, setSearchResults, postConfig, ROOT_URL } from '../actions';
-import GoogleLogin from 'react-google-login';
+import { setUserInfo, delUserInfo, setSearchResults, ROOT_URL } from '../actions';
 import { Link } from 'react-router-dom';
-import Toastr from 'toastr';
 import { debounce } from 'lodash';
 import axios from 'axios';
 import { withRouter } from 'react-router';
 
 class Header extends Component {
+
+  componentWillUpdate(nextProps) {
+    if (nextProps.searchResults === this.props.searchResults) {
+      var pushFooter = document.getElementById('push-footer');
+      if (localStorage.jwt) pushFooter.className = '';
+      else pushFooter.className = 'flex';
+    }
+  }
 
   constructor(props) {
     super(props);
@@ -20,14 +26,18 @@ class Header extends Component {
     if (searchVal && setSearchResults) {
 
     const options =
-      { params:
-        {
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.jwt
+        },
+        params: {
           q: searchVal,
           university_id: 1
         }
       };
 
-      axios.get(`${ROOT_URL}/search`, options, postConfig)
+      axios.get(`${ROOT_URL}/search`, options)
       .then(response => setSearchResults(response.data))
       .catch(function (error) {
         if (error.response) {
@@ -52,16 +62,18 @@ class Header extends Component {
 
   getResponseAndPushHistory(searchVal, setSearchResults, pushHistory) { //same as debouncedGetResponse but without delay and routes to page after submitted
     if (searchVal && setSearchResults) {
-
-    const options =
-      { params:
-        {
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.jwt
+        },
+        params: {
           q: searchVal,
           university_id: 1
         }
       };
 
-      axios.get(`${ROOT_URL}/search`, options, postConfig)
+      axios.get(`${ROOT_URL}/search`, options)
       .then(
         response => {
           setSearchResults(response.data);
@@ -92,45 +104,27 @@ class Header extends Component {
     }
   }
 
-  componentDidMount() {
-    Toastr.options = {
-      "closeButton": true,
-      "debug": false,
-      "newestOnTop": false,
-      "progressBar": true,
-      "positionClass": "toast-top-right",
-      "preventDuplicates": false,
-      "onclick": null,
-      "showDuration": "300",
-      "hideDuration": "1000",
-      "timeOut": "2000",
-      "extendedTimeOut": "1000",
-      "showEasing": "swing",
-      "hideEasing": "linear",
-      "showMethod": "fadeIn",
-      "hideMethod": "fadeOut"
-    }
-  }
 
-  displaySignedIn(userInfo, delUserInfo){
-    if (userInfo) { return(
+
+  displaySignedIn(userInfo, delUserInfo, refresh){
+    return (
       <span>
-        <img className="oauth-img" src={userInfo.imageUrl} alt="Profile photo" />
+        {userInfo ? <img className="oauth-img" src={userInfo.imageUrl} alt="Profile photo" /> : ''}
         <button type="button" onClick={() => {
+          //axios.post('https://accounts.google.com/o/oauth2/revoke', {token:...
           delUserInfo();
           localStorage.removeItem('jwt');
-          Toastr["success"]("Signed Out");}
+          refresh();
+        }
         }
         className="signOutBtn">
           Sign Out
         </button>
       </span>
-  )}
-    else return;
+    );
   }
 
   renderField(field) {
-    console.log('field: ', field);
     const { meta: { touched, error } } = field;
     const searchBarClass = `col-12 col-md-8 mx-auto input-group ${touched && error ? 'has-danger' : ''}`;
     const textHelpClass = `${touched && error ? 'text-help' : ''}`;
@@ -200,46 +194,37 @@ class Header extends Component {
     if (localStorage.jwt) {
       return (
         <header>
-
-        <form className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-          <Field
-            label="Read &amp; Write SCU Evals"
-            name="searchBar" //responsible for object's key name for values
-            component={this.renderField}
-            renderSearchResults={this.renderSearchResults}
-            searchResults={this.props.searchResults}
-            setSearchResults={response => this.props.setSearchResults(response)}
-            onChange={
-              (change, newVal) => {
-                if (newVal.length > 2) {
-                  this.debouncedGetResponse(newVal, response => this.props.setSearchResults(response));
-                } else {
-                  this.debouncedGetResponse(null, null);//this cancels any previous calls still being debounced so function not called later
-                  if (this.props.searchResults !== null) this.props.setSearchResults(null);
+          <form className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+            <Field
+              label="Read &amp; Write SCU Evals"
+              name="searchBar" //responsible for object's key name for values
+              component={this.renderField}
+              renderSearchResults={this.renderSearchResults}
+              searchResults={this.props.searchResults}
+              setSearchResults={response => this.props.setSearchResults(response)}
+              onChange={
+                (change, newVal) => {
+                  if (newVal.length > 2) {
+                    this.debouncedGetResponse(newVal, response => this.props.setSearchResults(response));
+                  } else {
+                    this.debouncedGetResponse(null, null);//this cancels any previous calls still being debounced so function not called later
+                    if (this.props.searchResults !== null) this.props.setSearchResults(null);
+                  }
                 }
               }
-            }
-          />
-        </form>
+            />
+          </form>
 
-        <div className="container " style={{marginTop: "7px", position: "relative"}}>
-          <Link to={'/'}>
-            <i className="fa fa-home homeBtn"></i>
-          </Link>
-          <GoogleLogin
-            hostedDomain="scu.edu"
-            clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
-            buttonText={userInfo ?  userInfo.givenName: 'Sign in with SCU Gmail'}
-            onSuccess={setUserInfo}
-            onFailure={setUserInfo}
-            style={{}}
-            className={oAuthClass}
-          />
-          {this.displaySignedIn(userInfo, this.props.delUserInfo)}
-        </div>
+          <div className="container " style={{marginTop: "7px", position: "relative"}}>
+            <Link to={'/'}>
+              <i className="fa fa-home homeBtn" />
+            </Link>
+            {this.displaySignedIn(userInfo, this.props.delUserInfo, () => this.props.history.push('/'))}
+          </div>
         </header>
       );
-    } else return null;
+    }
+    else return null;
   }
 }
 
@@ -262,5 +247,5 @@ export default withRouter(reduxForm({
   validate,
   form: 'searchBar'
 })(
-  connect(mapStateToProps,{ setUserInfo, delUserInfo, setSearchResults, fetchSearch })(Header))
+  connect(mapStateToProps, { setUserInfo, delUserInfo, setSearchResults })(Header))
 );
