@@ -19,7 +19,7 @@ import GAListener from './components/gaListener';
 
 import requireAuth from './components/requireAuth';
 
-import { ROOT_URL, postConfig } from './actions';
+import { ROOT_URL, requestConfig } from './actions';
 
 ReactGA.initialize('UA-102751367-1');
 
@@ -51,14 +51,14 @@ function renderDOM () {
 }
 
 if (localStorage.jwt) {
-  axios.post(`${ROOT_URL}/auth/validate`, {jwt: localStorage.jwt}, postConfig)
+  axios.post(`${ROOT_URL}/auth/validate`, {jwt: localStorage.jwt}, requestConfig)
   .then(response => {
     localStorage.jwt = response.data.jwt;
     renderDOM();
     //window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() for browser extension to work for development
   })
   .catch(function (error) {
-    if (error.response && error.response.status === 401) localStorage.removeItem('jwt');
+    localStorage.removeItem('jwt');
     renderDOM();
     if (error.response) {
       // The request was made and the server responded with a status code

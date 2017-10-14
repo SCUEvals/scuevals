@@ -39,6 +39,7 @@
     "react-google-login": "^2.9.3",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
+    "react-select": "^1.0.0-rc.10",
     "react-textarea-autosize": "^5.1.0",
     "redux": "^3.7.2",
     "redux-form": "^7.0.4",

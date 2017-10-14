@@ -9,10 +9,13 @@ export const SET_SEARCH_RESULTS = 'set_search_results';
 
 export const ROOT_URL = 'http://api.scuevals.com';
 
-export const postConfig = {
+export const requestConfig = {
   headers: {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer ' + localStorage.jwt
+  },
+  params: {
+    university_id: 1
   }
 }
 
@@ -44,7 +47,7 @@ export function delUserInfo() {
 }
 
 export function fetchSearch(values) {
-  const request = axios.post(`${ROOT_URL}/${FALL2017}/all`, `q=${values.searchbar}`, postConfig);
+  const request = axios.post(`${ROOT_URL}/${FALL2017}/all`, `q=${values.searchbar}`, requestConfig);
 
   return {
     type: FETCH_EVALS,

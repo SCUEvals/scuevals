@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import axios from 'axios';
-import { setSearchResults, postConfig, ROOT_URL } from '../actions';
+import { setSearchResults, requestConfig, ROOT_URL } from '../actions';
 
 class searchContent extends Component {
 
@@ -24,7 +24,7 @@ class searchContent extends Component {
         }
       };
 
-      axios.get(`${ROOT_URL}/search`, options, postConfig)
+      axios.get(`${ROOT_URL}/search`, options, requestConfig)
       .then(
         response => {
           console.log('response:', response);

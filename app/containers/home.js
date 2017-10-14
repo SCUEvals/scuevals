@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import GoogleLogin from 'react-google-login';
+import jwtDecode from 'jwt-decode';
 
 import { setUserInfo } from '../actions';
+import NewUser from './newUser'
 
 class Home extends Component {
 
   render() {
     if (localStorage.jwt) {
+      const subInfo = jwtDecode(localStorage.jwt).sub;
       return (
-        <div className="content">
-          Home
-        </div>
+        <NewUser firstName={subInfo.first_name} studentID={subInfo.id} />
       );
     }
     else {
@@ -24,7 +25,7 @@ class Home extends Component {
             clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
             buttonText=''
             onSuccess={props => this.props.setUserInfo(props, () => this.props.history.push('/'))}
-            onFailure={this.props.setUserInfo}
+            onFailure={err => console.error('Error: ', err)}
             className='oauth-btn'
           >
             <div className='loginBtn'>

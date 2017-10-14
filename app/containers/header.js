@@ -111,12 +111,10 @@ class Header extends Component {
       <span>
         {userInfo ? <img className="oauth-img" src={userInfo.imageUrl} alt="Profile photo" /> : ''}
         <button type="button" onClick={() => {
-          //axios.post('https://accounts.google.com/o/oauth2/revoke', {token:...
           delUserInfo();
           localStorage.removeItem('jwt');
           refresh();
-        }
-        }
+        }}
         className="signOutBtn">
           Sign Out
         </button>
@@ -133,9 +131,10 @@ class Header extends Component {
         <label className="sr-only">{field.label}</label>
         <div className={searchBarClass}>
           <input
-            className="form-control"
-            type="text"
+            className='form-control'
+            type='text'
             placeholder='Search for lecturer or class'
+            autoComplete='off'
             {...field.input}
           />
           <div className="input-group-btn">
