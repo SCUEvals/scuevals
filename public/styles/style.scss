@@ -110,7 +110,7 @@ form.content {
 
 .content {
   border: 1px solid rgba(0,0,0,.2);
-  border-radius: .25rem;
+  border-radius: 0 0 .25rem .25rem;
   background: white;
   padding: 15px;
   width: 100%;
@@ -501,6 +501,7 @@ label:not(:last-child) {
 
 .Select {
   text-align: left;
+  margin-bottom: 50px;
 }
 
 .Select--multi .Select-value {
@@ -521,4 +522,38 @@ label:not(:last-child) {
     color: $SCUdarkred;
     background-color: $backgroundColor;
   }
+}
+
+.banner {
+  background-color: $SCUred;
+  color: white;
+  font-weight: bold;
+  padding: 7px 0;
+  margin-bottom: 20px;
+}
+
+label {
+  margin-bottom: 0;
+}
+
+.Select-option {
+  &:hover {
+    background-color: $backgroundColor;
+    color: $SCUdarkred;
+  }
+  border-bottom: 1px solid $backgroundColor;
+  color: $overlayBackground;
+  font-weight: bold;
+}
+
+.Select-option.is-focused, .Select-option.is-selected {
+  &:hover {
+    background-color: $backgroundColor;
+    color: $SCUdarkred;
+  }
+  background-color: white;
+}
+
+.Select-option.is-selected {
+  color: $SCUred;
 }

@@ -64,7 +64,6 @@ class NewUser extends Component {
         simpleValue
         options={options}
         onChange={gradYear => {
-          console.log('gradYear', gradYear);
           setGradYear(gradYear);
           input.onChange(gradYear);
         }}
@@ -112,7 +111,6 @@ class NewUser extends Component {
 
   onSubmit(values) {
     var majorIDs = [];
-    console.log('props', this.props);
     values.majors.map(obj => majorIDs.push(obj.value));
     values.majors = majorIDs;
     console.log('submitting:', values);
@@ -142,34 +140,33 @@ class NewUser extends Component {
     const { handleSubmit } = this.props;
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
-        <h4>Welcome to SCU Evals, {this.props.firstName}!</h4>
-        <p>First we need a few things from you.</p>
+        <h4 className='banner'>Welcome to SCU Evals, {this.props.firstName}!</h4>
+        <p>Before we start, we need to know a few things about you.</p>
+        <small>*This information will help us analyze data for the types of students posting evaluations.</small>
         <hr/>
         <div className='row'>
           <div className='col-12 col-md-6 mx-auto'>
-          <h5>Major(s)</h5>
-          <Field
-            name='majors' //responsible for object's key name for values
-            component={this.renderMajor}
-            majors={this.state.majors}
-          />
-          <br/>
-          <h5>Expected Graduation Year</h5>
-          <Field
-            name='graduation_year'
-            component={this.renderGradYear}
-            setGradYear={gradYear => this.setState({gradYear})}
-            gradYear={this.state.gradYear}
-          />
-          <br/>
-          <h5>Gender</h5>
-          <Field
-            name='gender'
-            component={this.renderGender}
-          />
+            <h5>Major(s)</h5>
+            <Field
+              name='majors' //responsible for object's key name for values
+              component={this.renderMajor}
+              majors={this.state.majors}
+            />
+            <h5>Expected Graduation Year</h5>
+            <Field
+              name='graduation_year'
+              component={this.renderGradYear}
+              setGradYear={gradYear => this.setState({gradYear})}
+              gradYear={this.state.gradYear}
+            />
+            <h5>Gender</h5>
+            <Field
+              name='gender'
+              component={this.renderGender}
+            />
+          </div>
         </div>
-      </div>
-        <button type="submit" className="btn">Submit</button>
+        <button style={{marginTop: '35px'}} type="submit" className="btn">Submit</button>
       </form>
     );
   }
