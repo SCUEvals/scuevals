@@ -16,6 +16,7 @@ import Home from './containers/home';
 import PostEval from './containers/postEval';
 import Privacy from './components/privacy';
 import GAListener from './components/gaListener';
+import Profile from './containers/profile';
 
 import requireAuth from './components/requireAuth';
 
@@ -38,7 +39,8 @@ function renderDOM () {
                 <Route path="/search/:search" component={requireAuth(SearchContent)} />
                 <Route path="/post/" component={requireAuth(PostEval)} />
                 <Route path="/privacy" component={Privacy} />
-                  <Route path="/" component={Home} />
+                <Route path="/profile" component={Profile} />
+                <Route path="/" component={Home} />
               </Switch>
             </div>
           </div>

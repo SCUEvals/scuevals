@@ -116,9 +116,6 @@ form.content {
   width: 100%;
   position: relative;
 }
-.container {
-  width: 95%; //want image to be shown in background on mobile too
-}
 
 footer {
   color: white;
@@ -322,7 +319,8 @@ body {
 
 .rc-slider {
   margin: 9px auto;
-  max-width: 300px;
+  width: 300px;
+  max-width: 90%;
   height: 15px;
   padding: 0;
   .rc-slider-rail {
@@ -546,7 +544,7 @@ label {
   font-weight: bold;
 }
 
-.Select-option.is-focused, .Select-option.is-selected {
+.Select-option.is-selected {
   &:hover {
     background-color: $backgroundColor;
     color: $SCUdarkred;

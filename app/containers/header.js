@@ -188,7 +188,7 @@ class Header extends Component {
   }
 
   render() {
-    const { handleSubmit, setUserInfo, userInfo } = this.props;
+    const { handleSubmit, setUserInfo, delUserInfo, userInfo } = this.props;
     const oAuthClass = `oauth-btn ${userInfo != null ? 'withImg' : ''}`;
     if (localStorage.jwt) {
       return (
@@ -214,11 +214,11 @@ class Header extends Component {
             />
           </form>
 
-          <div className="container " style={{marginTop: "7px", position: "relative"}}>
+          <div className="container" style={{marginTop: "7px", position: "relative"}}>
             <Link to={'/'}>
               <i className="fa fa-home homeBtn" />
             </Link>
-            {this.displaySignedIn(userInfo, this.props.delUserInfo, () => this.props.history.push('/'))}
+            {this.displaySignedIn(userInfo, delUserInfo, () => this.props.history.push('/'))}
           </div>
         </header>
       );

@@ -26,12 +26,11 @@ export function setSearchResults(results) {
   };
 }
 
-export function setUserInfo(info, refresh) {
+export function setUserInfo(info, pushToProfilePage) {
   axios.post(`${ROOT_URL}/auth`, {id_token: info.tokenObj.id_token}, {headers: {'Content-Type': 'application/json'}})
   .then(response =>  {
-    console.log('refresh,', refresh);
     localStorage.setItem("jwt", response.data.jwt);
-    refresh();
+    pushToProfilePage();
   })
   .catch(err => console.error('Failed to authenticate with back end. Error:', err));
   return {
