@@ -555,3 +555,16 @@ label {
 .Select-option.is-selected {
   color: $SCUred;
 }
+
+
+.Select-value {
+  text-align: center;
+}
+
+.Select--multi .Select-value-icon, .Select--multi .Select-value-label {
+  display: inline;
+}
+
+.Select-value-icon {
+  float: left;
+}

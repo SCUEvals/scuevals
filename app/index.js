@@ -26,32 +26,6 @@ ReactGA.initialize('UA-102751367-1');
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
-function renderDOM () {
-  ReactDOM.render(
-    <Provider store={createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
-      <BrowserRouter>
-        <GAListener>
-          <div id='push-footer' className={`${localStorage.jwt ? '' : 'flex'}`}>
-            <Header />
-            <div className='container'>
-              <Switch>
-                <Route path="/about" component={About} />
-                <Route path="/search/:search" component={requireAuth(SearchContent)} />
-                <Route path="/post/" component={requireAuth(PostEval)} />
-                <Route path="/privacy" component={Privacy} />
-                <Route path="/profile" component={Profile} />
-                <Route path="/" component={Home} />
-              </Switch>
-            </div>
-          </div>
-          <Footer />
-        </GAListener>
-      </BrowserRouter>
-    </Provider>,
-    document.getElementById('app')
-  )
-}
-
 if (localStorage.jwt) {
   axios.post(`${ROOT_URL}/auth/validate`, {jwt: localStorage.jwt}, requestConfig)
   .then(response => {
@@ -81,4 +55,30 @@ if (localStorage.jwt) {
   });
 } else {
   renderDOM();
+}
+
+function renderDOM () {
+  ReactDOM.render(
+    <Provider store={createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
+      <BrowserRouter>
+        <GAListener>
+          <div id='push-footer' className={`${localStorage.jwt ? '' : 'flex'}`}>
+            <Header />
+            <div className='container'>
+              <Switch>
+                <Route path="/about" component={About} />
+                <Route path="/search/:search" component={requireAuth(SearchContent)} />
+                <Route path="/post/" component={requireAuth(PostEval)} />
+                <Route path="/privacy" component={Privacy} />
+                <Route path="/profile" component={Profile} />
+                <Route path="/" component={Home} />
+              </Switch>
+            </div>
+          </div>
+          <Footer />
+        </GAListener>
+      </BrowserRouter>
+    </Provider>,
+    document.getElementById('app')
+  )
 }

@@ -1,13 +1,11 @@
 import { SET_USER_INFO, DEL_USER_INFO } from '../actions';
+import jwtDecode from 'jwt-decode';
 
-export default function(state = null, action) {
+export default function(state = localStorage.jwt ? jwtDecode(localStorage.jwt) : null, action) {
   switch (action.type) {
-
+        
     case SET_USER_INFO:
-      if (action.payload.profileObj) {
-      console.log("reducer used, action: ", action.payload.profileObj);
-      return action.payload.profileObj;
-    }
+      return jwtDecode(action.payload);
 
     case DEL_USER_INFO:
       return null;

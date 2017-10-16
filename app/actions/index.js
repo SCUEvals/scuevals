@@ -19,23 +19,17 @@ export const requestConfig = {
   }
 }
 
+export function setUserInfo(jwt) {
+  return {
+    type: SET_USER_INFO,
+    payload: jwt
+  }
+}
+
 export function setSearchResults(results) {
   return {
     type: SET_SEARCH_RESULTS,
     payload: results
-  };
-}
-
-export function setUserInfo(info, pushToProfilePage) {
-  axios.post(`${ROOT_URL}/auth`, {id_token: info.tokenObj.id_token}, {headers: {'Content-Type': 'application/json'}})
-  .then(response =>  {
-    localStorage.setItem("jwt", response.data.jwt);
-    pushToProfilePage();
-  })
-  .catch(err => console.error('Failed to authenticate with back end. Error:', err));
-  return {
-    type: SET_USER_INFO,
-    payload: info
   };
 }
 
