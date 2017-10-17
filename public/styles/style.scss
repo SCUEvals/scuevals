@@ -69,37 +69,37 @@ header {
     margin: 0 !important;
   }
 
-  .oauth-btn, .signOutBtn {
-    border: none;
+
+.profileBtn, .signOutBtn {
+  color: white;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  border: none;
+  background-color: transparent;
+  padding: 0 5px;
+  &:focus {
+    color: white;
+  }
+  &:hover {
+    color: $hoverOverlayLinkColor;
     background-color: transparent;
-    height: 32px;
-    padding: 3px;
-    &:hover {
-      color: $hoverOverlayLinkColor;
-      background-color: transparent;
-    }
   }
+}
 
-  .oauth-btn {
-    position: relative;
-  }
-
-  .signOutBtn {
-    position: absolute;
+.signOutBtn {
+    height: 100%;
+    top: 0;
     right: 15px;
+    position: absolute;
   }
 
-  .oauth-btn.withImg {
-    margin-right: -43px;
-    padding-right: 45px;
-  }
-
-  .oauth-img {
-    height: 32px;
-    border-radius: 50%;
-    margin-left: 8px;
-    margin-top: -2px;
-  }
+.oauth-img {
+  height: 32px;
+  border-radius: 50%;
+  margin-left: 8px;
+}
 }
 
 form.content {
@@ -141,6 +141,11 @@ i.homeBtn {
   font-size: 1.75rem;
   position: absolute;
   left: 15px;
+  height: 100%;
+  padding: 0 5px;
+  top: 0;
+  align-items: center;
+  display: flex;
 }
 
 
@@ -567,4 +572,19 @@ label {
 
 .Select-value-icon {
   float: left;
+}
+
+header {
+  flex-flow: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-items {
+  position: relative;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }

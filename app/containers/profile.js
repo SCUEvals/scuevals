@@ -6,7 +6,7 @@ import Select from 'react-select';
 
 import { ROOT_URL, requestConfig } from '../actions';
 
-class NewUser extends Component {
+class Profile extends Component {
 
   componentWillMount() {
     const getMajors = () => {
@@ -140,7 +140,7 @@ class NewUser extends Component {
     const { handleSubmit } = this.props;
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
-        <h4 className='banner'>Welcome to SCU Evals, {this.props.firstName}!</h4>
+        <h4 className='banner'>Welcome to SCU Evals, {this.props.userInfo.first_name}!</h4>
         <p>Before we start, we need to know a few things about you.</p>
         <small>*This information will help us analyze data for the types of students posting evaluations.</small>
         <hr/>
@@ -183,7 +183,15 @@ function validate(values) {
 }
 
 
+function mapStateToProps(state) {
+  return {
+    userInfo: state.userInfo,
+  };
+}
+
 export default reduxForm({
   validate,
-  form: 'newUser'
-})(NewUser);
+  form: 'searchBar'
+})(
+  connect(mapStateToProps, null)(Profile)
+);

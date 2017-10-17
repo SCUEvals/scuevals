@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { setUserInfo, delUserInfo, setSearchResults, ROOT_URL } from '../actions';
+import { delUserInfo, setSearchResults, ROOT_URL } from '../actions';
 import { Link } from 'react-router-dom';
 import { debounce } from 'lodash';
 import axios from 'axios';
@@ -104,25 +104,7 @@ class Header extends Component {
     }
   }
 
-
-
-  displaySignedIn(userInfo, delUserInfo, refresh){
-    return (
-      <span>
-        {userInfo ? <img className="oauth-img" src={userInfo.imageUrl} alt="Profile photo" /> : ''}
-        <button type="button" onClick={() => {
-          delUserInfo();
-          localStorage.removeItem('jwt');
-          refresh();
-        }}
-        className="signOutBtn">
-          Sign Out
-        </button>
-      </span>
-    );
-  }
-
-  renderField(field) {
+  renderSearch(field) {
     const { meta: { touched, error } } = field;
     const searchBarClass = `col-12 col-md-8 mx-auto input-group ${touched && error ? 'has-danger' : ''}`;
     const textHelpClass = `${touched && error ? 'text-help' : ''}`;
@@ -189,7 +171,6 @@ class Header extends Component {
 
   render() {
     const { handleSubmit, setUserInfo, delUserInfo, userInfo } = this.props;
-    const oAuthClass = `oauth-btn ${userInfo != null ? 'withImg' : ''}`;
     if (localStorage.jwt) {
       return (
         <header>
@@ -197,7 +178,7 @@ class Header extends Component {
             <Field
               label="Read &amp; Write SCU Evals"
               name="searchBar" //responsible for object's key name for values
-              component={this.renderField}
+              component={this.renderSearch}
               renderSearchResults={this.renderSearchResults}
               searchResults={this.props.searchResults}
               setSearchResults={response => this.props.setSearchResults(response)}
@@ -214,11 +195,22 @@ class Header extends Component {
             />
           </form>
 
-          <div className="container" style={{marginTop: "7px", position: "relative"}}>
+          <div className="container header-items">
             <Link to={'/'}>
               <i className="fa fa-home homeBtn" />
             </Link>
-            {this.displaySignedIn(userInfo, delUserInfo, () => this.props.history.push('/'))}
+            <Link className='profileBtn' to={'/profile'}>
+              {userInfo.first_name}
+              <img className="oauth-img" src={userInfo.picture} alt="Profile picture" />
+            </Link>
+            <button type="button" onClick={() => {
+              localStorage.removeItem('jwt');
+              delUserInfo();
+              if (this.props.history.location.pathname !== '/') this.props.history.push('/');
+            }}
+            className="signOutBtn">
+              Sign Out
+            </button>
           </div>
         </header>
       );
@@ -246,5 +238,5 @@ export default withRouter(reduxForm({
   validate,
   form: 'searchBar'
 })(
-  connect(mapStateToProps, { setUserInfo, delUserInfo, setSearchResults })(Header))
+  connect(mapStateToProps, { delUserInfo, setSearchResults })(Header))
 );

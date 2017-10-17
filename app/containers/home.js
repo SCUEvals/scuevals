@@ -17,10 +17,13 @@ class Home extends Component {
     axios.post(`${ROOT_URL}/auth`, {id_token: token}, {headers: {'Content-Type': 'application/json'}})
     .then(response =>  {
       localStorage.setItem("jwt", response.data.jwt);
-      this.props.setUserInfo(response.data.jwt); //Note: setting user info and then setting load state to false causes rendering twice, causing an unnecessary render, but needed for loading symbol during async request
+      this.props.setUserInfo(response.data.jwt, response.data.status); //Note: setting user info and then setting load state to false causes rendering twice, causing an unnecessary render, but needed for loading symbol during async request
       this.setState({loading: false});
     })
-    .catch(err => console.error('Failed to authenticate with back end. Error:', err));
+    .catch(err => {
+      console.error('Failed to authenticate with back end. Error:', err);
+      this.setState({loading: false});
+    });
   }
 
   render() {

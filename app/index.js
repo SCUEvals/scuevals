@@ -10,11 +10,11 @@ import ReactGA from 'react-ga';
 import reducers from './reducers';
 import Header from './containers/header';
 import SearchContent from './containers/searchContent';
-import About from './components/about';
+import About from './containers/about';
 import Footer from './components/footer';
 import Home from './containers/home';
 import PostEval from './containers/postEval';
-import Privacy from './components/privacy';
+import Privacy from './containers/privacy';
 import GAListener from './components/gaListener';
 import Profile from './containers/profile';
 
@@ -70,7 +70,7 @@ function renderDOM () {
                 <Route path="/search/:search" component={requireAuth(SearchContent)} />
                 <Route path="/post/" component={requireAuth(PostEval)} />
                 <Route path="/privacy" component={Privacy} />
-                <Route path="/profile" component={Profile} />
+                <Route path="/profile" component={requireAuth(Profile)} />
                 <Route path="/" component={Home} />
               </Switch>
             </div>
