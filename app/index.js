@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import promise from 'redux-promise';
 import axios from 'axios';
 import ReactGA from 'react-ga';
+import jwtDecode from 'jwt-decode';
 
 import reducers from './reducers';
 import Header from './containers/header';
@@ -27,11 +28,14 @@ ReactGA.initialize('UA-102751367-1');
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 if (localStorage.jwt) {
-  axios.post(`${ROOT_URL}/auth/validate`, {jwt: localStorage.jwt}, requestConfig)
+  if (new Date().getTime() / 1000 > jwtDecode(localStorage.jwt).exp) { //if token expired, delete it
+    localStorage.removeItem('jwt');
+    renderDOM();
+  }
+  else axios.post(`${ROOT_URL}/auth/validate`, {jwt: localStorage.jwt}, requestConfig) //else verify with back end
   .then(response => {
     localStorage.jwt = response.data.jwt;
     renderDOM();
-    //window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() for browser extension to work for development
   })
   .catch(function (error) {
     localStorage.removeItem('jwt');
@@ -57,6 +61,7 @@ if (localStorage.jwt) {
   renderDOM();
 }
 
+//window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() is for browser's Redux DevTools add-on to work for development
 function renderDOM () {
   ReactDOM.render(
     <Provider store={createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>

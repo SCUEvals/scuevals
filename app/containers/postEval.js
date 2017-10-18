@@ -131,7 +131,7 @@ class PostEval extends Component {
              height: 33,
              width: 33,
              marginLeft: -14,
-             marginTop: -9,
+             marginTop: -9.5,
              backgroundColor: 'white',
           }}
           />

@@ -115,7 +115,7 @@ class Header extends Component {
           <input
             className='form-control'
             type='text'
-            placeholder='Search for lecturer or class'
+            placeholder='Search for professor or class'
             autoComplete='off'
             {...field.input}
           />
