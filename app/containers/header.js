@@ -137,12 +137,12 @@ class Header extends Component {
     return (
       <div className='col-12 col-md-8 mx-auto'>
         <div id='searchBarResultsWrapper'>
-            <ul id='searchBarResults'>
+            <ul className='dropdown-menu' id='searchBarResults'>
               {response.courses.length > 0 ? <h6>Classes</h6> : ''}
               {response.courses.length > 0 ?
                 response.courses.map(course => {
                   return(
-                    <li key={course.id}>{course.department} {course.number}: {course.title}</li>
+                    <li className='dropdown-item' key={course.id}>{course.department} {course.number}: {course.title}</li>
                   );
                 })
                 : ''

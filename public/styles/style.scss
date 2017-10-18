@@ -505,33 +505,51 @@ label:not(:last-child) {
 
 .Select {
   text-align: left;
+  margin: auto;
   margin-bottom: 50px;
-}
-
-.Select--multi .Select-value {
-  .Select-value-icon:hover {
-    background-color: $SCUdarkred;
-    color: white;
+  max-width: 350px;
+  .Select-value-icon {
+    width: 19px;
   }
-  color: white;
-  background-color: $SCUred;
-}
-
-.Select-clear-zone:hover {
-  color: $SCUdarkred;
-}
-
-.Select-menu-outer {
-  &:hover {
+  .Select-clear-zone:hover {
+    .Select-clear {
+      margin-left: 10px;
+      margin-top: 3px;
+    }
     color: $SCUdarkred;
-    background-color: $backgroundColor;
   }
+  .Select-menu-outer {
+    &:hover {
+      color: $SCUdarkred;
+      background-color: $backgroundColor;
+    }
+  }
+  .Select-arrow-zone, .Select-clear-zone {
+    vertical-align: top;
+  }
+}
+
+.Select.Select--multi .Select-multi-value-wrapper {
+  .Select-value {
+    .Select-value-icon:hover {
+      background-color: $SCUdarkred;
+      color: white;
+    }
+    margin-top: 4px;
+    margin-left: 4px;
+    height: 100%;
+    display: flex;
+    color: white;
+    background-color: $SCUred;
+  }
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .banner {
   background-color: $SCUred;
   color: white;
-  padding: 7px 0;
+  padding: 7px;
   margin-bottom: 20px;
 }
 
@@ -566,12 +584,17 @@ label {
   text-align: center;
 }
 
-.Select--multi .Select-value-icon, .Select--multi .Select-value-label {
-  display: inline;
+.Select--multi .Select-value-icon {
+  display: flex;
+  align-items: center;
 }
 
 .Select-value-icon {
   float: left;
+}
+
+.has-value.is-clearable.Select--single>.Select-control .Select-value {
+  padding: inherit;
 }
 
 header {
@@ -595,4 +618,8 @@ header {
 
 h6 {
   font-size: 1.1rem;
+}
+
+* {
+  text-overflow: ellipsis;
 }

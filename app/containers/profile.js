@@ -114,7 +114,7 @@ class Profile extends Component {
     values.majors.map(obj => majorIDs.push(obj.value));
     values.majors = majorIDs;
     console.log('submitting:', values);
-    axios.patch(`${ROOT_URL}/students/${this.props.studentID}`, values, requestConfig)
+    axios.patch(`${ROOT_URL}/students/${this.props.userInfo.jwt}`, values, requestConfig)
     //.then(this.props.history.push('/'))
     .catch(function (error) {
       if (error.response) {
