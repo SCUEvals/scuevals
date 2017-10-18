@@ -6,12 +6,14 @@ class Privacy extends Component {
   render() {
     return (
       <div className="content">
-        {this.props.userInfo ? '' :
-          <Link to={'/'}>
-            <i className="fa fa-home homeBtn" />
-          </Link>
-        }
-        <h3>Privacy Policy</h3>
+        <h3>
+          {this.props.userInfo ? '' :
+            <Link to={'/'}>
+              <i className="fa fa-home homeBtn" />
+            </Link>
+          }
+          Privacy Policy
+        </h3>
           <p>
             The only cookies in use on our site are for Google Analytics, Oauth 2.0 for Google, and a
             token which is deleted after signing out for serverside verification containing information
@@ -33,7 +35,7 @@ class Privacy extends Component {
             for more information on opting out of being tracked by Google Analytics across
             all websites you use, visit this Google page, <a href="https://tools.google.com/dlpage/gaoptout">https://tools.google.com/dlpage/gaoptout</a>.
           </p>
-
+          <hr />
             <h6>Changes to This Policy</h6>
           <p>
             We reserve the right to change this policy to meet the changing needs of

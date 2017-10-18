@@ -6,12 +6,15 @@ class About extends Component {
   render() {
     return (
       <div className="content">
-        {this.props.userInfo ? '' :
-          <Link to={'/'}>
-            <i className="fa fa-home homeBtn" />
-          </Link>
-        }
-        <h3>About Us</h3>
+
+        <h3>
+          {this.props.userInfo ? '' :
+            <Link to={'/'}>
+              <i className="fa fa-home homeBtn" />
+            </Link>
+          }
+          About Us
+        </h3>
         <p>
           While registering for classes at Santa Clara University, we often wonder
           what types of courses we're actually enrolling in. Sure, there are

@@ -89,9 +89,8 @@ header {
 }
 
 .signOutBtn {
-    height: 100%;
     top: 0;
-    right: 15px;
+    right: 10px; //+5px for padding = 15px
     position: absolute;
   }
 
@@ -140,7 +139,7 @@ i.homeBtn {
   cursor: pointer;
   font-size: 1.75rem;
   position: absolute;
-  left: 15px;
+  left: 10px; //+5px for padding = 15px
   height: 100%;
   padding: 0 5px;
   top: 0;
@@ -444,8 +443,7 @@ textarea {
 }
 
 .login {
-  font-weight: bold;
-  width: 270px;
+  width: 258px; //270px when font-weight is bold
   .loginBtn {
     &:hover {
       background-color: $SCUdarkred;
@@ -530,7 +528,6 @@ label:not(:last-child) {
 .banner {
   background-color: $SCUred;
   color: white;
-  font-weight: bold;
   padding: 7px 0;
   margin-bottom: 20px;
 }
@@ -587,4 +584,12 @@ header {
   justify-content: center;
   align-items: center;
   display: flex;
+}
+
+.flex h3 {
+  position: relative; //for home icon to sit inside h3 when signed out
+}
+
+h6 {
+  font-size: 1.1rem;
 }
