@@ -1,18 +1,26 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { delUserInfo, setSearchResults, ROOT_URL } from '../actions';
+import { delUserInfo, setSearchResults } from '../actions';
 import { Link } from 'react-router-dom';
 import { debounce } from 'lodash';
-import axios from 'axios';
 import { withRouter } from 'react-router';
 
+import API from '../../public/scripts/api_service';
+import { storeWithMiddleware } from '../index';
+
+
 class Header extends Component {
+  componentDidMount() {
+    let pushFooter = document.getElementById('push-footer');
+    if (this.props.userInfo && !this.props.userInfo.roles.includes(0)) pushFooter.className = '';
+    else pushFooter.className = 'flex';
+  }
 
   componentWillUpdate(nextProps) {
-    if (nextProps.searchResults === this.props.searchResults) {
-      var pushFooter = document.getElementById('push-footer');
-      if (localStorage.jwt) pushFooter.className = '';
+    if (nextProps.userInfo !== this.props.userInfo) {
+      let pushFooter = document.getElementById('push-footer');
+      if (nextProps.userInfo && !nextProps.userInfo.roles.includes(0)) pushFooter.className = '';
       else pushFooter.className = 'flex';
     }
   }
@@ -25,89 +33,43 @@ class Header extends Component {
   debouncedGetResponse(searchVal, setSearchResults) {
     if (searchVal && setSearchResults) {
 
-    const options =
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.jwt
-        },
+      const params = {
         params: {
-          q: searchVal,
-          university_id: 1
+          q: searchVal
         }
       };
 
-      axios.get(`${ROOT_URL}/search`, options)
-      .then(response => setSearchResults(response.data))
-      .catch(function (error) {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-        }
-        console.log(error.config);
-      });
+
+      let client = new API();
+      client.get('/search', responseData => setSearchResults(responseData), params);
     }
   }
 
   getResponseAndPushHistory(searchVal, setSearchResults, pushHistory) { //same as debouncedGetResponse but without delay and routes to page after submitted
     if (searchVal && setSearchResults) {
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.jwt
-        },
+
+      const params = {
         params: {
-          q: searchVal,
-          university_id: 1
+          q: searchVal
         }
       };
 
-      axios.get(`${ROOT_URL}/search`, options)
-      .then(
-        response => {
-          setSearchResults(response.data);
+      let client = new API();
+      client.get('/search', responseData => {
+          setSearchResults(responseData);
           pushHistory();
           $('#searchBarResults').remove(); //remove results dropdown when submitting until new input entered after
           setSearchResults(null); //set to null so if continuation in typing value after submission, ensures dropdown box reappears
-
-        }
-      )
-      .catch(function (error) {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-        }
-        console.log(error.config);
-      })
+        },
+        params
+      );
     }
   }
 
   renderSearch(field) {
-    const { meta: { touched, error } } = field;
+    const { meta: { error, submitFailed, touched } } = field;
     const searchBarClass = `col-12 col-md-8 mx-auto input-group ${touched && error ? 'has-danger' : ''}`;
-    const textHelpClass = `${touched && error ? 'text-help' : ''}`;
+    const textHelpClass = `${submitFailed && error ? 'text-help' : ''}`;
     return (
       <div className="row">
         <label className="sr-only">{field.label}</label>
@@ -122,9 +84,12 @@ class Header extends Component {
           <div className="input-group-btn">
             <button type="submit" className="btn"><i className="fa fa-search" /></button>
           </div>
-          <div className={textHelpClass}>
-            {touched ? error : ''}
-          </div>
+            {submitFailed && error ?
+              <div className='text-help'>
+                {error}
+              </div>
+              : ''
+            }
         </div>
         {field.searchResults && field.input.value.length > 2 ? field.renderSearchResults(field.searchResults) : ''}
       </div>
@@ -171,12 +136,11 @@ class Header extends Component {
 
   render() {
     const { handleSubmit, setUserInfo, delUserInfo, userInfo } = this.props;
-    if (localStorage.jwt) {
+    if (this.props.userInfo && !this.props.userInfo.roles.includes(0)) {
       return (
         <header>
           <form className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
             <Field
-              label="Read &amp; Write SCU Evals"
               name="searchBar" //responsible for object's key name for values
               component={this.renderSearch}
               renderSearchResults={this.renderSearchResults}

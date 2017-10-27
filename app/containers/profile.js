@@ -1,26 +1,27 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import axios from 'axios';
+import API from '../../public/scripts/api_service';
 import Select from 'react-select';
+import reducers from '../reducers';
 
-import { ROOT_URL, requestConfig } from '../actions';
+import { setUserInfo, delUserInfo } from '../actions';
 
 class Profile extends Component {
 
   componentWillMount() {
     const getMajors = () => {
-      axios.get(`${ROOT_URL}/majors`, requestConfig)
-      .then(response => {
-        for (var i = 0; i < response.data.length; i++) {
-          response.data[i].value = response.data[i].id;
-          delete response.data[i].id;
-          response.data[i].label = response.data[i].name;
-          delete response.data[i].name;
+      let client = new API();
+      client.get('/majors', responseData => {
+        for (var i = 0; i < responseData.length; i++) {
+          responseData[i].value = responseData[i].id;
+          delete responseData[i].id;
+          responseData[i].label = responseData[i].name;
+          delete responseData[i].name;
         }
-        this.setState({majors: response.data});
-      });
-    }
+        this.setState({majors: responseData});
+      })
+    };
     getMajors();
   }
 
@@ -35,10 +36,11 @@ class Profile extends Component {
 
   renderMajor(field) {
     const { input, majors } = field;
-    const { meta: { touched, error } } = field;
+    const { meta: {submitFailed, error} } = field;
     return (
       <Select
         name='majors'
+        className={error && submitFailed ? 'error' : ''}
         joinValues
         multi
         value={input.value}
@@ -52,7 +54,8 @@ class Profile extends Component {
   }
 
   renderGradYear(field) {
-    const { input, majors, gradYear, setGradYear, error } = field;
+    const { input, majors, gradYear, setGradYear } = field;
+    const { meta: {submitFailed, error} } = field;
     var options = [];
     const currentYear = new Date().getFullYear();
     for (var i = currentYear; i < currentYear + 6; i ++) {
@@ -60,6 +63,7 @@ class Profile extends Component {
     }
     return (
       <Select
+        className={error && submitFailed ? 'error' : ''}
         value={gradYear}
         simpleValue
         options={options}
@@ -74,9 +78,9 @@ class Profile extends Component {
   }
 
   renderGender(field) {
-    const { error } = field;
+    const { meta: {submitFailed, error} } = field;
     return (
-      <div>
+      <div className={`flex ${error && submitFailed ? 'error' : ''}`}>
         <label>
           <Field
             name="gender"
@@ -110,63 +114,64 @@ class Profile extends Component {
 
 
   onSubmit(values) {
+    console.log()
+    let client = new API();
     var majorIDs = [];
     values.majors.map(obj => majorIDs.push(obj.value));
     values.majors = majorIDs;
-    console.log('submitting:', values);
-    axios.patch(`${ROOT_URL}/students/${this.props.userInfo.jwt}`, values, requestConfig)
-    //.then(this.props.history.push('/'))
-    .catch(function (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
-      }
-      console.log(error.config);
-    })
+    client.patch(`/students/${this.props.userInfo.id}`, values, responseData => {
+      this.props.setUserInfo(responseData.jwt);
+      this.props.history.push('/');
+    });
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, history, delUserInfo, userInfo, submitting } = this.props;
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
-        <h4 className='banner'>Welcome to SCU Evals, {this.props.userInfo.first_name}!</h4>
-        <p>Before we start, we need to know a few things about you.</p>
-        <small>*This information will help us analyze data for the types of students posting evaluations.</small>
-        <hr/>
-        <div className='row'>
-          <div className='col-12 col-md-6 mx-auto'>
-            <h5>Major(s)</h5>
-            <Field
-              name='majors' //responsible for object's key name for values
-              component={this.renderMajor}
-              majors={this.state.majors}
-            />
-            <h5>Expected Graduation Year</h5>
-            <Field
-              name='graduation_year'
-              component={this.renderGradYear}
-              setGradYear={gradYear => this.setState({gradYear})}
-              gradYear={this.state.gradYear}
-            />
-            <h5>Gender</h5>
-            <Field
-              name='gender'
-              component={this.renderGender}
-            />
-          </div>
+          {userInfo && !userInfo.roles.includes(0) ?
+            <div>
+              <h4 className='banner'>{userInfo.first_name}'s Profile</h4>
+              <small>This information is kept anonymous from the public and is only used for statistical purposes.</small>
+            </div>
+            :
+            <div>
+            <h4 className='banner'>Welcome to SCU Evals, {userInfo.first_name}!</h4>
+            <p>Before we start, we need to know a few things about you.</p>
+            <small>This information is kept anonymous from the public and is only used for statistical purposes.<br/>
+            <button type="button" onClick={() => {
+              localStorage.removeItem('jwt');
+              delUserInfo();
+              history.push('/');
+              }}
+              className="signOutBtn">
+              Sign Out
+            </button>
+          </small>
         </div>
-        <button style={{marginTop: '35px'}} type="submit" className="btn">Submit</button>
+          }
+        <hr/>
+        <div className='form-container'>
+          <h5>Major(s)</h5>
+          <Field
+            name='majors' //responsible for object's key name for values
+            component={this.renderMajor}
+            majors={this.state.majors}
+          />
+          <h5>Expected Graduation Year</h5>
+          <Field
+            name='graduation_year'
+            component={this.renderGradYear}
+            setGradYear={gradYear => this.setState({gradYear})}
+            gradYear={this.state.gradYear}
+          />
+          <h5>Gender</h5>
+          <Field
+            name='gender'
+            component={this.renderGender}
+          />
+        </div>
+        <button disabled={submitting} style={{marginTop: '35px'}} type="submit" className="btn">{submitting ? 'Submitting...' : 'Submit'}</button>
       </form>
     );
   }
@@ -179,6 +184,7 @@ function validate(values) {
   if (!values.gender || (values.gender !== 'm' && values.gender !== 'f' && values.gender !=='o')) errors.gender = 'Not a valid gender input.';
   if (!values.graduation_year || (values.graduation_year < currentYear || values.graduation_year > currentYear + 5)) errors.graduation_year = 'Graduation year not in valid range.';
   if (!Array.isArray(values.majors) || values.majors.length < 1) errors.majors = 'Not a valid major selected.';
+  if (Array.isArray(values.majors) && values.majors.length > 3) errors.majors = 'To prevent spam, we only allow up to 3 majors declared. Sorry!';
   return errors;
 }
 
@@ -193,5 +199,5 @@ export default reduxForm({
   validate,
   form: 'searchBar'
 })(
-  connect(mapStateToProps, null)(Profile)
+  connect(mapStateToProps, { setUserInfo, delUserInfo })(Profile)
 );

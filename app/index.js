@@ -8,6 +8,8 @@ import axios from 'axios';
 import ReactGA from 'react-ga';
 import jwtDecode from 'jwt-decode';
 
+import Service from '../public/scripts/api_service';
+
 import reducers from './reducers';
 import Header from './containers/header';
 import SearchContent from './containers/searchContent';
@@ -25,7 +27,14 @@ import { ROOT_URL, requestConfig } from './actions';
 
 ReactGA.initialize('UA-102751367-1');
 
-const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
+export const storeWithMiddleware = createStore(
+  reducers,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), //for browser's Redux DevTools add-on to work for development
+  applyMiddleware(promise)
+);
+
+
+//const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 if (localStorage.jwt) {
   if (new Date().getTime() / 1000 > jwtDecode(localStorage.jwt).exp) { //if token expired, delete it
@@ -61,13 +70,12 @@ if (localStorage.jwt) {
   renderDOM();
 }
 
-//window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() is for browser's Redux DevTools add-on to work for development
 function renderDOM () {
   ReactDOM.render(
-    <Provider store={createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
+    <Provider store={storeWithMiddleware}>
       <BrowserRouter>
         <GAListener>
-          <div id='push-footer' className={`${localStorage.jwt ? '' : 'flex'}`}>
+          <div id='push-footer'>
             <Header />
             <div className='container'>
               <Switch>
@@ -76,7 +84,7 @@ function renderDOM () {
                 <Route path="/post/" component={requireAuth(PostEval)} />
                 <Route path="/privacy" component={Privacy} />
                 <Route path="/profile" component={requireAuth(Profile)} />
-                <Route path="/" component={Home} />
+                <Route path="/" component={requireAuth(Home)} />
               </Switch>
             </div>
           </div>

@@ -7,7 +7,7 @@ class Privacy extends Component {
     return (
       <div className="content">
         <h3>
-          {this.props.userInfo ? '' :
+          {this.props.userInfo && !this.props.userInfo.roles.includes(0) ? '' :
             <Link to={'/'}>
               <i className="fa fa-home homeBtn" />
             </Link>

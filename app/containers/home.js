@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { GoogleLogin } from 'react-google-login';
 import axios from 'axios';
+import jwtDecode from 'jwt-decode';
+import API from '../../public/scripts/api_service';
 
-import { setUserInfo, ROOT_URL } from '../actions';
+import { setUserInfo } from '../actions';
 
 class Home extends Component {
 
@@ -14,30 +16,27 @@ class Home extends Component {
 
   authWithBackEnd(token) {
     this.setState({loading: true});
-    axios.post(`${ROOT_URL}/auth`, {id_token: token}, {headers: {'Content-Type': 'application/json'}})
-    .then(response =>  {
-      localStorage.setItem("jwt", response.data.jwt);
-      this.props.setUserInfo(response.data.jwt, response.data.status); //Note: setting user info and then setting load state to false causes rendering twice, causing an unnecessary render, but needed for loading symbol during async request
+    let client = new API();
+    client.post('/auth', {id_token: token}, responseData =>  {
+      localStorage.setItem("jwt", responseData.jwt);
+      this.props.setUserInfo(responseData.jwt);
+      if (jwtDecode(responseData.jwt).sub.roles.includes(0)) this.props.history.push('/profile');
       this.setState({loading: false});
     })
-    .catch(err => {
-      console.error('Failed to authenticate with back end. Error:', err);
-      this.setState({loading: false});
-    });
   }
 
   render() {
-    if (this.props.userInfo) {
-      return(
-        <div className='content'>
-          Home
-        </div>
-      );
-    }
-    else if (this.state.loading) { //if Google login succeeded, and in process of sending to backend
+    if (!this.props.userInfo && this.state.loading) { //if Google login succeeded, and in process of sending to backend
       return (
         <div className="loadingWrapper">
           <i className="fa fa-spinner fa-spin fa-3x fa-fw" />
+        </div>
+      );
+    }
+    else if (this.props.userInfo) {
+      return(
+        <div className='content'>
+          Home
         </div>
       );
     }

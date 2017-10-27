@@ -68,37 +68,35 @@ header {
     @include button;
     margin: 0 !important;
   }
-
-
-.profileBtn, .signOutBtn {
-  color: white;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  font-weight: normal;
-  border: none;
-  background-color: transparent;
-  padding: 0 5px;
-  &:focus {
+  .profileBtn, .signOutBtn {
     color: white;
-  }
-  &:hover {
-    color: $hoverOverlayLinkColor;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    border: none;
     background-color: transparent;
+    padding: 0 5px;
+    &:focus {
+      color: white;
+    }
+    &:hover {
+      color: $hoverOverlayLinkColor;
+      background-color: transparent;
+    }
   }
-}
 
-.signOutBtn {
+  .signOutBtn {
     top: 0;
     right: 10px; //+5px for padding = 15px
     position: absolute;
   }
 
-.oauth-img {
-  height: 32px;
-  border-radius: 50%;
-  margin-left: 8px;
-}
+  .oauth-img {
+    height: 32px;
+    border-radius: 50%;
+    margin-left: 8px;
+  }
 }
 
 form.content {
@@ -114,6 +112,16 @@ form.content {
   padding: 15px;
   width: 100%;
   position: relative;
+  .signOutBtn {
+    font-weight: bold;
+    padding: 0;
+    color: $SCUred;
+    &:hover {
+      color: $SCUdarkred;
+    }
+    background-color: initial;
+    border: none;
+  }
 }
 
 footer {
@@ -511,12 +519,13 @@ label:not(:last-child) {
   .Select-value-icon {
     width: 19px;
   }
-  .Select-clear-zone:hover {
-    .Select-clear {
-      margin-left: 10px;
-      margin-top: 3px;
+  .Select-clear-zone {
+    position: absolute;
+    right: 25px;
+    top: 3px;
+    &:hover {
+      color: $SCUdarkred;
     }
-    color: $SCUdarkred;
   }
   .Select-menu-outer {
     &:hover {
@@ -530,6 +539,7 @@ label:not(:last-child) {
 }
 
 .Select.Select--multi .Select-multi-value-wrapper {
+  padding-right: 20px;
   .Select-value {
     .Select-value-icon:hover {
       background-color: $SCUdarkred;
@@ -579,7 +589,6 @@ label {
   color: $SCUred;
 }
 
-
 .Select-value {
   text-align: center;
 }
@@ -595,6 +604,10 @@ label {
 
 .has-value.is-clearable.Select--single>.Select-control .Select-value {
   padding: inherit;
+}
+
+.Select--single > .Select-control .Select-value, .Select-placeholder {
+  top: initial;
 }
 
 header {
@@ -622,4 +635,24 @@ h6 {
 
 * {
   text-overflow: ellipsis;
+}
+
+.error {
+  box-shadow: 0 0 0 2px $SCUred;
+  border-radius: 4px;
+}
+
+label {
+  display: flex;
+  align-items: center;
+}
+
+input[type="checkbox"], input[type="radio"] {
+  margin-right: 3px;
+}
+
+.form-container {
+  max-width: 350px;
+  margin-right: auto !important;
+  margin-left: auto !important;
 }

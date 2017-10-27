@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import { withRouter } from 'react-router';
+import jwtDecode from 'jwt-decode';
+import Profile from '../containers/profile';
+import Home from '../containers/home';
 
 export default function requireAuth(Component) {
 
@@ -10,15 +13,20 @@ export default function requireAuth(Component) {
     }
 
     checkAuth() {
-      if (!localStorage.jwt) this.props.history.push('/');
+      if (!localStorage.jwt) this.props.history.push('/')
+      else {
+        if (jwtDecode(localStorage.jwt).sub.roles.includes(0)) this.props.history.push('/profile');
+      }
     }
 
     render() {
-      return localStorage.jwt
-        ? <Component { ...this.props } />
-        : null;
+      return localStorage.jwt ?
+        jwtDecode(localStorage.jwt).sub.roles.includes(0) ?
+          Component === Profile ? <Component {...this.props} /> : null
+        :
+         <Component { ...this.props } />
+      : Component === Home ? <Component {...this.props} /> : null
     }
-
   }
 
   return withRouter(AuthenticatedComponent);

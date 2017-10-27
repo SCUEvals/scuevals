@@ -13,9 +13,6 @@ export const requestConfig = {
   headers: {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer ' + localStorage.jwt
-  },
-  params: {
-    university_id: 1
   }
 }
 
