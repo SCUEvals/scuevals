@@ -120,6 +120,7 @@ class Profile extends Component {
     values.majors.map(obj => majorIDs.push(obj.value));
     values.majors = majorIDs;
     client.patch(`/students/${this.props.userInfo.id}`, values, responseData => {
+      localStorage.jwt = responseData.jwt;
       this.props.setUserInfo(responseData.jwt);
       this.props.history.push('/');
     });

@@ -6,16 +6,17 @@ import { storeWithMiddleware } from '../../app/index';
 class API {
 
   constructor() {
-    var headers = {'Content-Type': 'application/json'};
-    if (storeWithMiddleware.getState().userInfo)
+    var headers = {'Content-Type': 'application/json'}; //Content-Type will be stripped in GET requests automatically by axios
+    if (storeWithMiddleware.getState().userInfo) { //userInfo initial state looks for localStorage and initializes with it if exists. Assume jwt exists if userInfo exists
       headers.Authorization = 'Bearer ' + storeWithMiddleware.getState().userInfo.jwt;
+      console.log(headers.Authorization);
+    }
 
     let api = axios.create({
       headers: headers,
       baseURL: 'http://api.scuevals.com',
       //timeout: 100
     });
-
     //api.interceptors.response.use(this.handleSuccess, this.handleError);
     this.api = api;
   }
@@ -63,9 +64,9 @@ class API {
     // }
   //  return Promise.reject(error)
 
-  redirectTo = (document, path) => {
-    document.location = path
-  }
+  // redirectTo = (document, path) => {
+  //   document.location = path
+  // }
 
   get(path, callback, params) { //params optional, may be null
     return this.api.get(path, params).then(response => callback(response.data)).catch(error => this.handleError(error));

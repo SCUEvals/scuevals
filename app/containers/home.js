@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { GoogleLogin } from 'react-google-login';
-import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import API from '../../public/scripts/api_service';
 
@@ -16,13 +15,13 @@ class Home extends Component {
 
   authWithBackEnd(token) {
     this.setState({loading: true});
-    let client = new API();
+    const client = new API();
     client.post('/auth', {id_token: token}, responseData =>  {
       localStorage.setItem("jwt", responseData.jwt);
       this.props.setUserInfo(responseData.jwt);
       if (jwtDecode(responseData.jwt).sub.roles.includes(0)) this.props.history.push('/profile');
       this.setState({loading: false});
-    })
+    });
   }
 
   render() {

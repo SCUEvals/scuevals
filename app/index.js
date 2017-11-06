@@ -4,11 +4,8 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import promise from 'redux-promise';
-import axios from 'axios';
 import ReactGA from 'react-ga';
 import jwtDecode from 'jwt-decode';
-
-import Service from '../public/scripts/api_service';
 
 import reducers from './reducers';
 import Header from './containers/header';
@@ -22,8 +19,7 @@ import GAListener from './components/gaListener';
 import Profile from './containers/profile';
 
 import requireAuth from './components/requireAuth';
-
-import { ROOT_URL, requestConfig } from './actions';
+import API from '../public/scripts/api_service';
 
 ReactGA.initialize('UA-102751367-1');
 
@@ -41,34 +37,17 @@ if (localStorage.jwt) {
     localStorage.removeItem('jwt');
     renderDOM();
   }
-  else axios.post(`${ROOT_URL}/auth/validate`, {jwt: localStorage.jwt}, requestConfig) //else verify with back end
-  .then(response => {
-    localStorage.jwt = response.data.jwt;
-    renderDOM();
-  })
-  .catch(function (error) {
-    localStorage.removeItem('jwt');
-    renderDOM();
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      console.error(error.response);
-      console.error(error.response.status);
-      console.error(error.response.headers);
-    } else if (error.request) {
-      // The request was made but no response was received
-      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-      // http.ClientRequest in node.js
-      console.error(error.request);
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      console.error('Error', error.message);
-    }
-    console.error(error.config);
-  });
-} else {
-  renderDOM();
+  else { //else verify with back end
+    const client = new API();
+    client.get('auth/validate', responseData => {
+      localStorage.jwt = responseData.jwt;
+      renderDOM();
+    });
+  }
 }
+else {
+  renderDOM();
+};
 
 function renderDOM () {
   ReactDOM.render(

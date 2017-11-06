@@ -8,15 +8,9 @@ export default function requireAuth(Component) {
 
   class AuthenticatedComponent extends Component {
 
-    componentWillMount() {
-      this.checkAuth();
-    }
-
-    checkAuth() {
-      if (!localStorage.jwt) this.props.history.push('/')
-      else {
-        if (jwtDecode(localStorage.jwt).sub.roles.includes(0)) this.props.history.push('/profile');
-      }
+    componentWillMount() { //check auth
+      if (!localStorage.jwt) this.props.history.push('/');
+      else if (jwtDecode(localStorage.jwt).sub.roles.includes(0)) this.props.history.push('/profile'); //if incomplete user
     }
 
     render() {

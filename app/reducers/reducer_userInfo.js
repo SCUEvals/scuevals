@@ -5,7 +5,13 @@ var obj = {};
 var initState;
 if (localStorage.jwt) {
   obj.jwt = localStorage.jwt;
-  initState = Object.assign(obj, jwtDecode(localStorage.jwt).sub);
+  try {
+    initState = Object.assign(obj, jwtDecode(localStorage.jwt).sub);
+  }
+  catch (e) { //will catch is jwtDecode fails. If jwtDecode fails, then falsy token exists (user probably manually entered non-decodable jwt)
+    localStorage.removeItem('jwt');
+    initState = null;
+  }
 } else initState = null;
 
 
