@@ -27,7 +27,7 @@ $xs: 575px;
   cursor: pointer;
   font-weight: 550;
   &:hover {
-    background-color: $SCUdarkred;
+    // background-color: $SCUdarkred;
   }
 }
 
@@ -284,26 +284,20 @@ body {
   background-attachment: fixed;
 }
 
-#searchBarResultsWrapper {
-  padding: 0;
-  margin-right: 41px;
-  position: relative;
-}
 
 #searchBarResults {
+  top: 31px;
   position: absolute;
+  width: calc(100% - 30px - 41px); //30px for  15px x2 padding, 40px for search button
   max-height: 212px;
   overflow: auto;
   background-color: white;
-  width: 100%;
   z-index: 1;
   text-align: left;
   list-style-type: none;
   padding-left: 0;
-  margin-bottom: 0;
   border: 2px solid $backgroundColor;
   border-radius: .25rem;
-  margin-top: -6px;
   padding-top: 6px;
   h6, li {
     padding: 5px;
@@ -319,7 +313,7 @@ body {
     border-bottom: 2px solid $backgroundColor;
     color: $overlayBackground;
     font-weight: bold;
-    &:hover {
+    &:hover, &:focus, {
       color: $SCUdarkred;
       background-color: $backgroundColor;
     }

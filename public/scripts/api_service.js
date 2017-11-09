@@ -7,10 +7,8 @@ class API {
 
   constructor() {
     var headers = {'Content-Type': 'application/json'}; //Content-Type will be stripped in GET requests automatically by axios
-    if (storeWithMiddleware.getState().userInfo) { //userInfo initial state looks for localStorage and initializes with it if exists. Assume jwt exists if userInfo exists
+    if (storeWithMiddleware.getState().userInfo) //userInfo initial state looks for localStorage and initializes with it if exists. Assume jwt exists if userInfo exists
       headers.Authorization = 'Bearer ' + storeWithMiddleware.getState().userInfo.jwt;
-      console.log(headers.Authorization);
-    }
 
     let api = axios.create({
       headers: headers,

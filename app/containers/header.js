@@ -27,19 +27,16 @@ class Header extends Component {
 
   constructor(props) {
     super(props);
-    this.debouncedGetResponse = debounce(this.debouncedGetResponse, 300);
+    this.debouncedGetResponse = debounce(this.debouncedGetResponse, 250);
   }
 
   debouncedGetResponse(searchVal, setSearchResults) {
     if (searchVal && setSearchResults) {
-
       const params = {
         params: {
           q: searchVal
         }
       };
-
-
       let client = new API();
       client.get('/search', responseData => setSearchResults(responseData), params);
     }
@@ -47,13 +44,11 @@ class Header extends Component {
 
   getResponseAndPushHistory(searchVal, setSearchResults, pushHistory) { //same as debouncedGetResponse but without delay and routes to page after submitted
     if (searchVal && setSearchResults) {
-
       const params = {
         params: {
           q: searchVal
         }
       };
-
       let client = new API();
       client.get('/search', responseData => {
           setSearchResults(responseData);
@@ -70,28 +65,55 @@ class Header extends Component {
     const { meta: { error, submitFailed, touched } } = field;
     const searchBarClass = `col-12 col-md-8 mx-auto input-group ${touched && error ? 'has-danger' : ''}`;
     const textHelpClass = `${submitFailed && error ? 'text-help' : ''}`;
+
+    function hideOnClickOutside(searchBar, searchBarResults) {
+     const outsideClickListener = (event) => {
+       if (!$(event.target).closest(searchBar).length) {
+         if ($(searchBarResults).is(':visible')) {
+           $(searchBarResults).hide();
+           removeClickListener();
+         }
+       }
+     }
+
+     const removeClickListener = () => {
+       document.removeEventListener('click', outsideClickListener);
+     }
+
+     document.addEventListener('click', outsideClickListener);
+    }
     return (
       <div className="row">
         <label className="sr-only">{field.label}</label>
-        <div className={searchBarClass}>
-          <input
-            className='form-control'
-            type='text'
-            placeholder='Search for professor or class'
-            autoComplete='off'
-            {...field.input}
-          />
-          <div className="input-group-btn">
-            <button type="submit" className="btn"><i className="fa fa-search" /></button>
-          </div>
+          <div id='searchBar' className={searchBarClass}>
+            <input
+              className='form-control'
+              type='text'
+              placeholder='Search for professor or class'
+              autoComplete='off'
+              {...field.input}
+              onFocus={event => {
+                field.input.onFocus(event);
+                hideOnClickOutside('#searchBar', '#searchBarResults');
+              }}
+              onClick={event => {
+                $('#searchBarResults').show(); //remove results dropdown unfocusing
+              }}
+
+            />
+            <div className="input-group-btn">
+              <button type="submit" className="btn"><i className="fa fa-search" /></button>
+            </div>
             {submitFailed && error ?
               <div className='text-help'>
                 {error}
               </div>
               : ''
             }
+          {field.searchResults && field.input.value.length > 2 ? field.renderSearchResults(field.searchResults)
+            : ''
+          }
         </div>
-        {field.searchResults && field.input.value.length > 2 ? field.renderSearchResults(field.searchResults) : ''}
       </div>
     ); //searchResults can exist while value length < 3. Edge case: Old GET request still processing, but value length no longer > 2
   }
@@ -100,30 +122,26 @@ class Header extends Component {
     if (response.courses.length === 0 && response.professors.length === 0) return null;
 
     return (
-      <div className='col-12 col-md-8 mx-auto'>
-        <div id='searchBarResultsWrapper'>
-            <ul className='dropdown-menu' id='searchBarResults'>
-              {response.courses.length > 0 ? <h6>Classes</h6> : ''}
-              {response.courses.length > 0 ?
-                response.courses.map(course => {
-                  return(
-                    <li className='dropdown-item' key={course.id}>{course.department} {course.number}: {course.title}</li>
-                  );
-                })
-                : ''
-              }
-              {response.professors.length > 0 ? <h6>Professors</h6> : ''}
-              {response.professors.length > 0 ?
-                response.professors.map(professor => {
-                  return(
-                    <li key={professor.id}>{professor.first_name} {professor.last_name}</li>
-                  );
-                })
-                : ''
-              }
-            </ul>
-        </div>
-      </div>
+      <ul id='searchBarResults'>
+        {response.courses.length > 0 ? <h6>Classes</h6> : ''}
+        {response.courses.length > 0 ?
+          response.courses.map(course => {
+            return(
+              <li tabIndex='0' key={course.id}>{course.department} {course.number}: {course.title}</li>
+            );
+          })
+          : ''
+        }
+        {response.professors.length > 0 ? <h6>Professors</h6> : ''}
+        {response.professors.length > 0 ?
+          response.professors.map(professor => {
+            return(
+              <li tabIndex='0' key={professor.id}>{professor.first_name} {professor.last_name}</li>
+            );
+          })
+          : ''
+        }
+      </ul>
     );
   }
 

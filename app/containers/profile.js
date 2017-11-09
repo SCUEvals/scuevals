@@ -19,7 +19,7 @@ class Profile extends Component {
           responseData[i].label = responseData[i].name;
           delete responseData[i].name;
         }
-        this.setState({majors: responseData});
+        this.setState({majorsList: responseData});
       })
     };
     getMajors();
@@ -27,15 +27,14 @@ class Profile extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
-      majors: null,
-      gradYear: null
+      majorsList: this.props.userInfo ? this.props.userInfo.majors : null,
+      gradYear: this.props.userInfo ? this.props.userInfo.graduation_year : null
     };
   }
 
-  renderMajor(field) {
-    const { input, majors } = field;
+  renderMajors(field) {
+    const { input, majorsList } = field;
     const { meta: {submitFailed, error} } = field;
     return (
       <Select
@@ -44,9 +43,9 @@ class Profile extends Component {
         joinValues
         multi
         value={input.value}
-        options={majors}
+        options={majorsList}
         onChange={val => input.onChange(val)}
-        isLoading={majors ? false : true}
+        isLoading={majorsList ? false : true}
         placeholder="Select your major(s)"
         onBlur={() => input.onBlur(input.value)}
       />
@@ -54,17 +53,17 @@ class Profile extends Component {
   }
 
   renderGradYear(field) {
-    const { input, majors, gradYear, setGradYear } = field;
+    const { input, majorsList, gradYear, setGradYear } = field;
     const { meta: {submitFailed, error} } = field;
     var options = [];
     const currentYear = new Date().getFullYear();
     for (var i = currentYear; i < currentYear + 6; i ++) {
       options.push({value: i, label: i});
     }
+
     return (
       <Select
         className={error && submitFailed ? 'error' : ''}
-        value={gradYear}
         simpleValue
         options={options}
         onChange={gradYear => {
@@ -114,8 +113,8 @@ class Profile extends Component {
 
 
   onSubmit(values) {
-    console.log()
-    let client = new API();
+    console.log('values:', values);
+    const client = new API();
     var majorIDs = [];
     values.majors.map(obj => majorIDs.push(obj.value));
     values.majors = majorIDs;
@@ -156,8 +155,8 @@ class Profile extends Component {
           <h5>Major(s)</h5>
           <Field
             name='majors' //responsible for object's key name for values
-            component={this.renderMajor}
-            majors={this.state.majors}
+            component={this.renderMajors}
+            majorsList={this.state.majorsList}
           />
           <h5>Expected Graduation Year</h5>
           <Field
@@ -172,7 +171,7 @@ class Profile extends Component {
             component={this.renderGender}
           />
         </div>
-        <button disabled={submitting} style={{marginTop: '35px'}} type="submit" className="btn">{submitting ? 'Submitting...' : 'Submit'}</button>
+        <button disabled={submitting} style={{marginTop: '35px'}} type="submit" className="btn">{submitting ? 'Saving...' : 'Save'}</button>
       </form>
     );
   }
@@ -193,12 +192,16 @@ function validate(values) {
 function mapStateToProps(state) {
   return {
     userInfo: state.userInfo,
-  };
+    initialValues: {
+      graduation_year: state.userInfo ? state.userInfo.graduation_year : null,
+      majors: state.userInfo ? state.userInfo.majors : null
+    }
+  }
 }
 
 export default reduxForm({
   validate,
-  form: 'searchBar'
+  form: 'profile'
 })(
   connect(mapStateToProps, { setUserInfo, delUserInfo })(Profile)
 );
