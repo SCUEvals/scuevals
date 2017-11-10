@@ -1,57 +1,32 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import axios from 'axios';
-import { setSearchResults, requestConfig, ROOT_URL } from '../actions';
+
+import { setSearchResults } from '../actions';
+import API from '../../public/scripts/api_service';
 
 class searchContent extends Component {
 
   shouldComponentUpdate(nextProps) {
-    if (this.props.searchResults !== nextProps.searchResults) return false; //don't update on new search results, only want 1st instance of it
+    if (this.props.searchResults !== nextProps.searchResults) return false; //don't update on new search results, only want 1st instance
     else return true;
   }
 
   componentWillMount() {
     if (!this.props.searchResults && this.props.match.params.search.length > 2) { //if loading this component straight from GET request (rather than being routed with React Router)
-      const options = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.jwt
-        },
+      const params = {
         params: {
-          q: this.props.match.params.search,
-          university_id: 1
+          q: this.props.match.params.search
         }
       };
-
-      axios.get(`${ROOT_URL}/search`, options, requestConfig)
-      .then(
-        response => {
-          console.log('response:', response);
-          this.props.setSearchResults(response.data);
-          console.log('search', this.props.searchResults);
+      let client = new API();
+      client.get('/search', responseData => {
+        this.props.setSearchResults(responseData);
           $('#searchBarResults').remove(); //remove results dropdown when submitting until new input entered after
           this.forceUpdate(); //passes shouldComponentUpdate, ensures that new state read by component
-        }
+        },
+        params
       )
-      .catch(function (error) {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-        }
-        console.log(error.config);
-      })
     }
   }
 

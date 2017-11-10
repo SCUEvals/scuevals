@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import API from '../../public/scripts/api_service';
 import Select from 'react-select';
-import reducers from '../reducers';
 
 import { setUserInfo, delUserInfo } from '../actions';
+import API from '../../public/scripts/api_service';
 
 class Profile extends Component {
 
@@ -28,7 +27,7 @@ class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      majorsList: this.props.userInfo ? this.props.userInfo.majors : null,
+      majorsList: null,
       gradYear: this.props.userInfo ? this.props.userInfo.graduation_year : null
     };
   }
@@ -55,7 +54,7 @@ class Profile extends Component {
   renderGradYear(field) {
     const { input, majorsList, gradYear, setGradYear } = field;
     const { meta: {submitFailed, error} } = field;
-    var options = [];
+    let options = [];
     const currentYear = new Date().getFullYear();
     for (var i = currentYear; i < currentYear + 6; i ++) {
       options.push({value: i, label: i});
@@ -63,6 +62,7 @@ class Profile extends Component {
 
     return (
       <Select
+        value={gradYear}
         className={error && submitFailed ? 'error' : ''}
         simpleValue
         options={options}

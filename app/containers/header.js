@@ -52,9 +52,8 @@ class Header extends Component {
       let client = new API();
       client.get('/search', responseData => {
           setSearchResults(responseData);
+          $('#searchBarResults').hide(); //hide results dropdown after new results in until new input entered after
           pushHistory();
-          $('#searchBarResults').remove(); //remove results dropdown when submitting until new input entered after
-          setSearchResults(null); //set to null so if continuation in typing value after submission, ensures dropdown box reappears
         },
         params
       );
@@ -68,48 +67,45 @@ class Header extends Component {
 
     function hideOnClickOutside(searchBar, searchBarResults) {
      const outsideClickListener = (event) => {
-       if (!$(event.target).closest(searchBar).length) {
-         if ($(searchBarResults).is(':visible')) {
-           $(searchBarResults).hide();
-           removeClickListener();
+       const searchBarDOM = $(searchBar);
+       const searchBarResultsDOM = $(searchBarResults);
+       if (searchBarResultsDOM === 0) document.removeEventListener('click', outsideClickListener); //if results empty
+       else if (!$(event.target).closest(searchBarDOM).length) {
+         if ($(searchBarResultsDOM).is(':visible')) {
+           $(searchBarResultsDOM).hide();
+           document.removeEventListener('click', outsideClickListener);
          }
        }
      }
-
-     const removeClickListener = () => {
-       document.removeEventListener('click', outsideClickListener);
-     }
-
      document.addEventListener('click', outsideClickListener);
     }
+
     return (
       <div className="row">
         <label className="sr-only">{field.label}</label>
-          <div id='searchBar' className={searchBarClass}>
-            <input
-              className='form-control'
-              type='text'
-              placeholder='Search for professor or class'
-              autoComplete='off'
-              {...field.input}
-              onFocus={event => {
-                field.input.onFocus(event);
-                hideOnClickOutside('#searchBar', '#searchBarResults');
-              }}
-              onClick={event => {
-                $('#searchBarResults').show(); //remove results dropdown unfocusing
-              }}
+        <div id='searchBar' className={searchBarClass}>
+          <input
+            className='form-control'
+            type='text'
+            placeholder='Search for professor or class'
+            autoComplete='off'
+            {...field.input}
+            onFocus={ event => {
+              $('#searchBarResults').show();
+              field.input.onFocus(event);
+              hideOnClickOutside('#searchBar', '#searchBarResults');
+            }}
 
-            />
-            <div className="input-group-btn">
-              <button type="submit" className="btn"><i className="fa fa-search" /></button>
+          />
+          <div className="input-group-btn">
+            <button type="submit" className="btn"><i className="fa fa-search" /></button>
+          </div>
+          {submitFailed && error ?
+            <div className='text-help'>
+              {error}
             </div>
-            {submitFailed && error ?
-              <div className='text-help'>
-                {error}
-              </div>
-              : ''
-            }
+            : ''
+          }
           {field.searchResults && field.input.value.length > 2 ? field.renderSearchResults(field.searchResults)
             : ''
           }
@@ -123,20 +119,20 @@ class Header extends Component {
 
     return (
       <ul id='searchBarResults'>
-        {response.courses.length > 0 ? <h6>Classes</h6> : ''}
-        {response.courses.length > 0 ?
-          response.courses.map(course => {
-            return(
-              <li tabIndex='0' key={course.id}>{course.department} {course.number}: {course.title}</li>
-            );
-          })
-          : ''
-        }
         {response.professors.length > 0 ? <h6>Professors</h6> : ''}
         {response.professors.length > 0 ?
           response.professors.map(professor => {
             return(
               <li tabIndex='0' key={professor.id}>{professor.first_name} {professor.last_name}</li>
+            );
+          })
+          : ''
+        }
+        {response.courses.length > 0 ? <h6>Classes</h6> : ''}
+        {response.courses.length > 0 ?
+          response.courses.map(course => {
+            return(
+              <li tabIndex='0' key={course.id}>{course.department} {course.number}: {course.title}</li>
             );
           })
           : ''
@@ -147,9 +143,9 @@ class Header extends Component {
 
   onSubmit(values) {
     //values is object with searchBar: <input>
+    $('#searchBarResults').hide();
     this.debouncedGetResponse(null, null); //cancel other responses in progress
     this.getResponseAndPushHistory(values.searchBar, response => this.props.setSearchResults(response), () => this.props.history.push('/search/' + values.searchBar));
-    $('#searchBarResults').remove(); //remove results dropdown when submitting until new input entered after
   }
 
   render() {
