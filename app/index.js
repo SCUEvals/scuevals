@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import promise from 'redux-promise';
 import ReactGA from 'react-ga';
 import jwtDecode from 'jwt-decode';
@@ -60,10 +60,11 @@ function renderDOM () {
               <Switch>
                 <Route path="/about" component={About} />
                 <Route path="/search/:search" component={requireAuth(SearchContent)} />
-                <Route path="/post/" component={requireAuth(PostEval)} />
+                <Route path="/post/:role/:id" component={requireAuth(PostEval)} />
                 <Route path="/privacy" component={Privacy} />
                 <Route path="/profile" component={requireAuth(Profile)} />
-                <Route path="/" component={requireAuth(Home)} />
+                <Route exact path="/" component={requireAuth(Home)} />
+                <Redirect to="/" />
               </Switch>
             </div>
           </div>

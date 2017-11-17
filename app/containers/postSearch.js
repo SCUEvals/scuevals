@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 
+import { storeWithMiddleware } from '../index';
 import API from '../../public/scripts/api_service';
 
 
@@ -55,7 +56,12 @@ class PrePostEval extends Component {
             input.onChange(newQuarter);
             let client = new API();
             setQuarterSelected(newQuarter ? true : false);
-            if (!newQuarter) setCourseSelected(false);
+            if (!newQuarter) {
+              storeWithMiddleware.dispatch(change('postSearch', 'course', ''));
+              storeWithMiddleware.dispatch(change('postSearch', 'professor', ''));
+              setCourseSelected(false);
+            }
+
             setCoursesList(null);
             client.get('/courses', coursesList => {
               coursesList.map(course => {
@@ -75,10 +81,6 @@ class PrePostEval extends Component {
   renderCourses(field) {
     const { input, coursesList, quarterSelected, setProfessorsList, setCourseSelected } = field;
     const { meta: {submitFailed, error} } = field;
-  //  console.log('input:', input);
-    console.log('quarterSelected:', quarterSelected);
-    if (!quarterSelected || !coursesList) input.value = '';
-    console.log('input.value:', input.value);
 
     return (
       <div>
@@ -93,6 +95,7 @@ class PrePostEval extends Component {
           isLoading={coursesList || !quarterSelected ? false : true}
           onChange={newCourse => {
             setCourseSelected(newCourse ? true : false);
+            if (!newCourse) storeWithMiddleware.dispatch(change('postSearch', 'professor', ''));
             setProfessorsList(null);
             input.onChange(newCourse);
             let client = new API();
@@ -117,7 +120,7 @@ class PrePostEval extends Component {
 
     return (
       <div>
-        <h4>{courseSelected && !professorsList ? 'Loading professors...' : 'Choose professors'}</h4>
+        <h4>{courseSelected && !professorsList ? 'Loading professors...' : 'Choose professor'}</h4>
         <Select
           disabled={!courseSelected || !professorsList}
           value={input.value}
@@ -127,7 +130,6 @@ class PrePostEval extends Component {
           options={professorsList}
           isLoading={professorsList || !courseSelected ? false : true}
           onChange={newClass => {
-            console.log('prof onchange:', newClass);
             input.onChange(newClass);
           }}
           placeholder="Select your professor"
@@ -143,7 +145,7 @@ class PrePostEval extends Component {
     const { handleSubmit } = this.props;
 
     return (
-      <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
+      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
           name="quarter" //responsible for object's key name for values
           component={this.renderQuarters}
