@@ -12,8 +12,8 @@ class API {
 
     let api = axios.create({
       headers: headers,
-      baseURL: 'http://api.scuevals.com',
-      //timeout: 100
+      baseURL: 'https://api.scuevals.com',
+      timeout: 30000
     });
     //api.interceptors.response.use(this.handleSuccess, this.handleError);
     this.api = api;
