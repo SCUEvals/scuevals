@@ -45,11 +45,10 @@ class searchContent extends Component {
           }
           {this.props.searchResults.courses.length > 0 ?
           <div>
-            <h4>Classes</h4>
+            <h4>Courses</h4>
             <BootstrapTable version='4' data={this.props.searchResults.courses} striped={true} hover={true}>
-              <TableHeaderColumn dataField="department" dataAlign="center" dataSort={true}>Department</TableHeaderColumn>
-              <TableHeaderColumn dataField="number" dataSort={true}>Number</TableHeaderColumn>
-              <TableHeaderColumn dataField="title" isKey={true} dataSort={true}>Title</TableHeaderColumn>
+              <TableHeaderColumn dataFormat={courseNumberFormatter} dataField="number" dataSort={true} dataAlign="center">Course</TableHeaderColumn>
+              <TableHeaderColumn dataFormat={courseTitleFormatter} dataField="title" isKey={true} dataSort={true} dataAlign="center">Title</TableHeaderColumn>
             </BootstrapTable>
           </div>
           : ''
@@ -74,7 +73,15 @@ class searchContent extends Component {
 }
 
 function nameFormatter(cell, row) {
-  return row.first_name + ' ' + row.last_name;
+  return '<a href="/professor/' + row.id + '">' + row.first_name + ' ' + row.last_name + '</a>';
+}
+
+function courseNumberFormatter(cell, row) {
+  return  '<a href="/course/' + row.id + '">' + row.department + ' ' + row.number + '</a>';
+}
+
+function courseTitleFormatter(cell, row) {
+  return  '<a href="/course/' + row.id + '">' + row.title + '</a>';
 }
 
 function mapStateToProps(state) {

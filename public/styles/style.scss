@@ -27,7 +27,7 @@ $xs: 575px;
   cursor: pointer;
   font-weight: 550;
   &:hover {
-    // background-color: $SCUdarkred;
+     background-color: $SCUdarkred;
   }
 }
 
@@ -656,4 +656,24 @@ input[type="checkbox"], input[type="radio"] {
   text-overflow: ellipsis;
   overflow: hidden;
   margin: 0 10px;
+}
+
+.react-bs-table-container {
+  tr {
+    &:hover {
+      a {
+      color: $SCUdarkred;
+    }
+    }
+  }
+  td {
+    padding: 0;
+    a {
+      padding: .75rem;
+      display: block;
+      &:hover {
+        transition: none;
+      }
+    }
+  }
 }

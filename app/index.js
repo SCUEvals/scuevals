@@ -60,7 +60,7 @@ function renderDOM () {
               <Switch>
                 <Route path="/about" component={About} />
                 <Route path="/search/:search" component={requireAuth(SearchContent)} />
-                <Route path="/post/:role/:id" component={requireAuth(PostEval)} />
+                <Route path="/post/:quarter/:course/:professor" component={requireAuth(PostEval)} />
                 <Route path="/privacy" component={Privacy} />
                 <Route path="/profile" component={requireAuth(Profile)} />
                 <Route exact path="/" component={requireAuth(Home)} />

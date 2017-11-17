@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm, change } from 'redux-form';
 import { connect } from 'react-redux';
 import Select from 'react-select';
+import { withRouter } from 'react-router'; //because not a direct route, needs access to this.props.history
 
 import { storeWithMiddleware } from '../index';
 import API from '../../public/scripts/api_service';
@@ -35,13 +36,12 @@ class PrePostEval extends Component {
   }
 
   onSubmit(values) {
-    console.log('values:', values);
+    this.props.history.push('/post/' + values.quarter + '/' + values.course + '/' + values.professor);
   }
 
   renderQuarters(field) {
     const { input, quartersList, setCoursesList, setQuarterSelected, setCourseSelected } = field;
     const { meta: {submitFailed, error} } = field;
-
     return (
       <div>
         <h4>{quartersList ? 'Choose quarter' : 'Loading quarters...'}</h4>
@@ -81,7 +81,6 @@ class PrePostEval extends Component {
   renderCourses(field) {
     const { input, coursesList, quarterSelected, setProfessorsList, setCourseSelected } = field;
     const { meta: {submitFailed, error} } = field;
-
     return (
       <div>
         <h4>{quarterSelected && !coursesList ? 'Loading courses...' : 'Choose course'}</h4>
@@ -117,7 +116,6 @@ class PrePostEval extends Component {
   renderProfessors(field) {
     const { input, professorsList, courseSelected } = field;
     const { meta: {submitFailed, error} } = field;
-
     return (
       <div>
         <h4>{courseSelected && !professorsList ? 'Loading professors...' : 'Choose professor'}</h4>
@@ -143,7 +141,6 @@ class PrePostEval extends Component {
 
   render() {
     const { handleSubmit } = this.props;
-
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
@@ -174,9 +171,17 @@ class PrePostEval extends Component {
   }
 }
 
+function validate(values) {
+  const errors = {};
+  if (!values.quarter) errors.quarter = 'No quarter input.';
+  if (!values.course) errors.course = 'No course input.';
+  if (!values.professor) errors.professor = 'No course professor.';
+  return errors;
+}
 
-export default reduxForm({
+export default withRouter(reduxForm({
+  validate,
   form: 'postSearch'
 })(
-  connect(null, null )(PrePostEval)
+  connect(null, null )(PrePostEval))
 );
