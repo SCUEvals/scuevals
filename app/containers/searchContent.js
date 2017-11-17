@@ -14,18 +14,13 @@ class searchContent extends Component {
 
   componentWillMount() {
     if (!this.props.searchResults && this.props.match.params.search.length > 2) { //if loading this component straight from GET request (rather than being routed with React Router)
-      const params = {
-        params: {
-          q: this.props.match.params.search
-        }
-      };
       let client = new API();
       client.get('/search', responseData => {
         this.props.setSearchResults(responseData);
           $('#searchBarResults').remove(); //remove results dropdown when submitting until new input entered after
           this.forceUpdate(); //passes shouldComponentUpdate, ensures that new state read by component
         },
-        params
+        {q: this.props.match.params.search}
       )
     }
   }

@@ -113,7 +113,6 @@ class Profile extends Component {
 
 
   onSubmit(values) {
-    console.log('values:', values);
     const client = new API();
     var majorIDs = [];
     values.majors.map(obj => majorIDs.push(obj.value));

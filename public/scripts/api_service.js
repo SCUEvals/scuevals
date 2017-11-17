@@ -66,8 +66,8 @@ class API {
   //   document.location = path
   // }
 
-  get(path, callback, params) { //params optional, may be null
-    return this.api.get(path, params).then(response => callback(response.data)).catch(error => this.handleError(error));
+  get(path, callback, passedParams) { //passedParams optional, may be null
+    return this.api.get(path, {params: passedParams}).then(response => callback(response.data)).catch(error => this.handleError(error));
   }
 
   patch(path, payload, callback) {

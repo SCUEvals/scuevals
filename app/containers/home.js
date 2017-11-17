@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { GoogleLogin } from 'react-google-login';
 import jwtDecode from 'jwt-decode';
+
 import API from '../../public/scripts/api_service';
 
+import PostSearch from './postSearch.js';
 import { setUserInfo } from '../actions';
 
 class Home extends Component {
@@ -36,6 +38,7 @@ class Home extends Component {
       return(
         <div className='content'>
           Home
+          <PostSearch />
         </div>
       );
     }

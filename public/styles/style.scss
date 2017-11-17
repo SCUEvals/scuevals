@@ -650,3 +650,10 @@ input[type="checkbox"], input[type="radio"] {
   margin-right: auto !important;
   margin-left: auto !important;
 }
+
+.Select-value {
+  max-width: 302px !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin: 0 10px;
+}

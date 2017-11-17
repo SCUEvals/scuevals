@@ -32,30 +32,20 @@ class Header extends Component {
 
   debouncedGetResponse(searchVal, setSearchResults) {
     if (searchVal && setSearchResults) {
-      const params = {
-        params: {
-          q: searchVal
-        }
-      };
       let client = new API();
-      client.get('/search', responseData => setSearchResults(responseData), params);
+      client.get('/search', responseData => setSearchResults(responseData), {q: searchVal});
     }
   }
 
   getResponseAndPushHistory(searchVal, setSearchResults, pushHistory) { //same as debouncedGetResponse but without delay and routes to page after submitted
     if (searchVal && setSearchResults) {
-      const params = {
-        params: {
-          q: searchVal
-        }
-      };
       let client = new API();
       client.get('/search', responseData => {
           setSearchResults(responseData);
           $('#searchBarResults').hide(); //hide results dropdown after new results in until new input entered after
           pushHistory();
         },
-        params
+        {q: searchVal}
       );
     }
   }
