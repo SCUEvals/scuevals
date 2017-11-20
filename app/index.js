@@ -17,6 +17,7 @@ import PostEval from './containers/postEval';
 import Privacy from './containers/privacy';
 import GAListener from './components/gaListener';
 import Profile from './containers/profile';
+import ViewEvals from './containers/viewEvals';
 
 import requireAuth from './components/requireAuth';
 import API from '../public/scripts/api_service';
@@ -61,6 +62,7 @@ function renderDOM () {
                 <Route path="/about" component={About} />
                 <Route path="/search/:search" component={requireAuth(SearchContent)} />
                 <Route path="/post/:quarter/:course/:professor" component={requireAuth(PostEval)} />
+                <Route path="/view/:quarter/:course/:professor" component={requireAuth(ViewEvals)} />
                 <Route path="/privacy" component={Privacy} />
                 <Route path="/profile" component={requireAuth(Profile)} />
                 <Route exact path="/" component={requireAuth(Home)} />

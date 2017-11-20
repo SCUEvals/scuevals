@@ -83,6 +83,10 @@ const handle = (props, textProps) => {
 
 class PostEval extends Component {
 
+  componentWillMount() {
+    console.log('params:', this.props.match.params);
+  }
+
   constructor(props) {
     super(props);
 
