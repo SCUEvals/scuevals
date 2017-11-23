@@ -54,6 +54,18 @@ const Footer = ()  => {
                 4.2
               </div>
           </div>
+          <div className='scoreBlock col-sm-4 col-md-2'>
+            <div className='scoreTitle'>Easiness</div>
+              <div className='scoreNum'>
+                4.2
+              </div>
+          </div>
+          <div className='scoreBlock col-sm-4 col-md-2'>
+            <div className='scoreTitle'>Easiness</div>
+              <div className='scoreNum'>
+                4.2
+              </div>
+          </div>
         </div>
         <div className='comment'>
           <div className='commentQuote'>

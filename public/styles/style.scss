@@ -39,6 +39,7 @@ body {
   background-color: $backgroundColor;
   text-align: center;
   height: 100%;
+  min-height: 100vh;
 }
 
 header {
@@ -222,7 +223,7 @@ html {
   height: 100%;
 }
 
-body::after {
+#app::after {
   content: "";
   background-image: url('/images/background.jpg');
   background-repeat: no-repeat;
@@ -234,8 +235,10 @@ body::after {
   bottom: 0;
   right: 0;
   position: fixed;
+  height: 100vh;
   z-index: -1;
 }
+
 
 #searchBarResults {
   top: 31px;
@@ -304,28 +307,6 @@ body::after {
 
 .rc-slider-dot:first-child, .rc-slider-dot:last-child {
   display: none;
-}
-
-
-.track1 {
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7c0000+0,fc0000+100 */
-  background: linear-gradient(to right, #7c0000 0%,#fc0000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-}
-
-.track2 {
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#d36200+0,ffa500+100 */
-  background: linear-gradient(to right, #d36200 0%,#ffa500 100%);
-
-}
-
-.track3 {
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#edd500+0,3fff00+100 */
-  background: linear-gradient(to right, #edd500 0%,#3fff00 100%);
-}
-
-.track4 {
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#46d300+0,00840d+100 */
-  background: linear-gradient(to right, #46d300 0%,#00840d 100%);
 }
 
 .rc-slider-tooltip-inner {
@@ -680,6 +661,7 @@ $voteWidth: 40px;
     margin: 0;
     color: white;
     height: 78px;
+    position: relative;
     overflow: auto;
     .scoreBlock {
       padding: 5px 0;
@@ -714,4 +696,39 @@ $voteWidth: 40px;
       cursor: pointer;
     }
   }
+}
+
+
+$handleTransition: all 0.25s ease 0s;
+.rc-slider-handle {
+  transition: $handleTransition;
+}
+
+.rc-slider-track {
+  background-color: $overlayBackground;
+  transition: $handleTransition;
+}
+
+.track1 {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7c0000+0,fc0000+100 */
+  //background: linear-gradient(to right, #7c0000 0%,#fc0000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  background-color: red;
+}
+
+.track2 {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#d36200+0,ffa500+100 */
+  //background: linear-gradient(to right, #d36200 0%,#ffa500 100%);
+  background-color: orange;
+}
+
+.track3 {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#edd500+0,3fff00+100 */
+  //background: linear-gradient(to right, #edd500 0%,#3fff00 100%);
+  background-color: greenyellow;
+}
+
+.track4 {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#46d300+0,00840d+100 */
+  //background: linear-gradient(to right, #46d300 0%,#00840d 100%);
+  background-color: green;
 }
