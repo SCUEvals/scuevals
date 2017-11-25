@@ -223,7 +223,7 @@ html {
   height: 100%;
 }
 
-#app::after {
+body::after {
   content: "";
   background-image: url('/images/background.jpg');
   background-repeat: no-repeat;
@@ -383,18 +383,25 @@ textarea {
 .login {
   width: 258px; //270px when font-weight is bold
   .loginBtn {
+    padding: 0;
+    border: 0;
     &:hover {
       background-color: $SCUdarkred;
     }
-    div {
+    img {
+      cursor: pointer;
+      height: 100%;
+      padding: 2px;
+      border-radius: $defaultBorderRadius;
+    }
+    span {
       cursor: pointer;
       font-size: 19px;
       justify-content: center;
       align-items: center;
       display: flex;
-      width: 100%;
+      height: 100%;
     }
-    display: flex;
     color: white;
     border-radius: $defaultBorderRadius;
     background-color: $SCUred;
@@ -408,12 +415,6 @@ textarea {
     color: white;
     font-family: 'Roboto', sans-serif;
     font-size: 3rem;
-  }
-  img {
-    cursor: pointer;
-    height: 100%;
-    padding: 2px;
-    border-radius: $defaultBorderRadius;
   }
 }
 

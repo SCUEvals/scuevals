@@ -19,7 +19,11 @@ class Home extends Component {
     this.setState({loading: true});
     const client = new API();
     client.post('/auth', {id_token: token}, responseData =>  {
-      localStorage.setItem("jwt", responseData.jwt);
+      try {
+        localStorage.setItem("jwt", responseData.jwt);
+      } catch(err) {
+        console.error("Cannot execute localStorage.setItem (using private mode?), err:", err);
+      }
       this.props.setUserInfo(responseData.jwt);
       if (jwtDecode(responseData.jwt).sub.roles.includes(0)) this.props.history.push('/profile');
       this.setState({loading: false});
@@ -47,18 +51,15 @@ class Home extends Component {
         <div className="login">
           <h1>SCU Evals</h1>
           <GoogleLogin
-            tag='div'
             hostedDomain="scu.edu"
             clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
             buttonText=''
             onSuccess={info => this.authWithBackEnd(info.tokenObj.id_token)}
             onFailure={err => console.error('Google Login Error: ', err)}
-            className='oauth-btn'
+            className='loginBtn'
           >
-            <div className='loginBtn'>
               <img className='pull-left' alt='Google "G" logo' src='/images/googleG.jpg' />
-              <div>Sign in with Google</div>
-            </div>
+              <span>Sign in with Google</span>
           </GoogleLogin>
         </div>
       );
