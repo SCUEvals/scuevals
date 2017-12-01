@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import { Link } from 'react-router-dom'
 
 import { setSearchResults } from '../actions';
 import API from '../../public/scripts/api_service';
@@ -73,15 +74,15 @@ class searchContent extends Component {
 }
 
 function nameFormatter(cell, row) {
-  return '<a href="/professors/' + row.id + '">' + row.first_name + ' ' + row.last_name + '</a>';
+  return <Link to={`/professors/${row.id}`}>{`${row.first_name} ${row.last_name}`}</Link>;
 }
 
 function courseNumberFormatter(cell, row) {
-  return  '<a href="/courses/' + row.id + '">' + row.department + ' ' + row.number + '</a>';
+  return  <Link to={`/courses/${row.id}`}>{`${row.department} ${row.number}`}</Link>;
 }
 
 function courseTitleFormatter(cell, row) {
-  return  '<a href="/course/' + row.id + '">' + row.title + '</a>';
+  return  <Link to={`/courses/${row.id}`}>{row.title}</Link>;
 }
 
 function mapStateToProps(state) {
