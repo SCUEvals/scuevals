@@ -113,7 +113,7 @@ class Header extends Component {
         {response.professors.length > 0 ?
           response.professors.map(professor => {
             return(
-              <li tabIndex='0' key={professor.id}>{professor.first_name} {professor.last_name}</li>
+              <Link key={professor.id} to={`/courses/${professor.id}`}><li tabIndex='0'>{professor.first_name} {professor.last_name}</li></Link>
             );
           })
           : ''
@@ -122,7 +122,7 @@ class Header extends Component {
         {response.courses.length > 0 ?
           response.courses.map(course => {
             return(
-              <li tabIndex='0' key={course.id}>{course.department} {course.number}: {course.title}</li>
+              <Link key={course.id} to={`/courses/${course.id}`}><li tabIndex='0'>{course.department} {course.number}: {course.title}</li></Link>
             );
           })
           : ''
