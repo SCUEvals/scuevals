@@ -28,7 +28,6 @@ class Profile extends Component {
     super(props);
     this.state = {
       majorsList: null,
-      gradYear: this.props.userInfo ? this.props.userInfo.graduation_year : null
     };
   }
 
@@ -43,7 +42,7 @@ class Profile extends Component {
         multi
         value={input.value}
         options={majorsList}
-        onChange={val => input.onChange(val)}
+        onChange={newMajors => input.onChange(newMajors)}
         isLoading={majorsList ? false : true}
         placeholder="Select your major(s)"
         onBlur={() => input.onBlur(input.value)}
@@ -52,7 +51,7 @@ class Profile extends Component {
   }
 
   renderGradYear(field) {
-    const { input, majorsList, gradYear, setGradYear } = field;
+    const { input, majorsList } = field;
     const { meta: {submitFailed, error} } = field;
     let options = [];
     const currentYear = new Date().getFullYear();
@@ -62,14 +61,11 @@ class Profile extends Component {
 
     return (
       <Select
-        value={gradYear}
+        value={input.value}
         className={error && submitFailed ? 'error' : ''}
         simpleValue
         options={options}
-        onChange={gradYear => {
-          setGradYear(gradYear);
-          input.onChange(gradYear);
-        }}
+        onChange={newGradYear => input.onChange(newGradYear)}
         placeholder="Select your expected graduation year"
         onBlur={() => input.onBlur(input.value)}
       />
@@ -111,12 +107,13 @@ class Profile extends Component {
     );
   }
 
-
   onSubmit(values) {
     const client = new API();
-    var majorIDs = [];
-    values.majors.map(obj => majorIDs.push(obj.value));
-    values.majors = majorIDs;
+    if (values.majors[0].value) { //on initialValues, first submit won't have .value, so check if submitting with initialValues
+      let majorsIDs = [];
+      values.majors.map(obj => majorsIDs.push(obj.value));
+      values.majors = majorsIDs;
+    }
     client.patch(`/students/${this.props.userInfo.id}`, values, responseData => {
       localStorage.jwt = responseData.jwt;
       this.props.setUserInfo(responseData.jwt);
@@ -161,8 +158,6 @@ class Profile extends Component {
           <Field
             name='graduation_year'
             component={this.renderGradYear}
-            setGradYear={gradYear => this.setState({gradYear})}
-            gradYear={this.state.gradYear}
           />
           <h5>Gender</h5>
           <Field
@@ -183,24 +178,25 @@ function validate(values) {
   if (!values.gender || (values.gender !== 'm' && values.gender !== 'f' && values.gender !=='o')) errors.gender = 'Not a valid gender input.';
   if (!values.graduation_year || (values.graduation_year < currentYear || values.graduation_year > currentYear + 5)) errors.graduation_year = 'Graduation year not in valid range.';
   if (!Array.isArray(values.majors) || values.majors.length < 1) errors.majors = 'Not a valid major selected.';
-  if (Array.isArray(values.majors) && values.majors.length > 3) errors.majors = 'To prevent spam, we only allow up to 3 majors declared. Sorry!';
+  if (Array.isArray(values.majors) && values.majors.length > 3) errors.majors = 'Only allowed to declare up to 3 majors.';
   return errors;
 }
-
 
 function mapStateToProps(state) {
   return {
     userInfo: state.userInfo,
     initialValues: {
       graduation_year: state.userInfo ? state.userInfo.graduation_year : null,
-      majors: state.userInfo ? state.userInfo.majors : null
+      majors: state.userInfo ? state.userInfo.majors : null,
+      gender: state.userInfo ? state.userInfo.gender : null,
     }
   }
 }
 
-export default reduxForm({
-  validate,
-  form: 'profile'
-})(
-  connect(mapStateToProps, { setUserInfo, delUserInfo })(Profile)
-);
+export default connect(
+  mapStateToProps, { setUserInfo, delUserInfo }
+)
+(reduxForm({
+    validate,
+    form:'profile'
+})(Profile));

@@ -413,7 +413,6 @@ textarea {
     border-radius: $defaultBorderRadius;
     background-color: $SCUred;
     color: white;
-    font-family: 'Roboto', sans-serif;
     font-size: 3rem;
   }
 }
@@ -473,8 +472,7 @@ label:not(:last-child) {
       background-color: $SCUdarkred;
       color: white;
     }
-    margin-top: 4px;
-    margin-left: 4px;
+    margin: 4px 0 0 4px;
     height: 100%;
     display: flex;
     color: white;
@@ -563,6 +561,7 @@ h6 {
 
 * {
   text-overflow: ellipsis;
+  font-family: 'Roboto', sans-serif;
 }
 
 .error {

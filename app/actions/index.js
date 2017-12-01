@@ -53,13 +53,3 @@ export function fetchEvals(id) {
     payload: request
   };
 }
-
-export function postEval(values, callback) {
-  const request = axios.post(`${ROOT_URL}/${FALL2017}/all`, values)
-    .then(() => callback());
-
-  return {
-    type: POST_EVAL,
-    payload: request
-  };
-}

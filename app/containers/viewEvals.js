@@ -3,8 +3,13 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Eval from '../components/eval';
+import API from '../../public/scripts/api_service';
 
 class ViewEvals extends Component {
+  componentWillMount() {
+    let client = new API();
+    client.get('/' + this.props.type + '/' + this.props.match.params.course_id, response => console.log(response));
+  }
   render() {
     return (
       <div className="content">

@@ -4,7 +4,7 @@ import jwtDecode from 'jwt-decode';
 import Profile from '../containers/profile';
 import Home from '../containers/home';
 
-export default function requireAuth(Component) {
+export default function requireAuth(Component, extraProps={}) {
 
   class AuthenticatedComponent extends Component {
 
@@ -16,10 +16,10 @@ export default function requireAuth(Component) {
     render() {
       return localStorage.jwt ?
         jwtDecode(localStorage.jwt).sub.roles.includes(0) ?
-          Component === Profile ? <Component {...this.props} /> : null
+          Component === Profile ? <Component {...this.props} {...extraProps} /> : null
         :
-         <Component { ...this.props } />
-      : Component === Home ? <Component {...this.props} /> : null
+         <Component { ...this.props }  {...extraProps} />
+      : Component === Home ? <Component {...this.props} {...extraProps} /> : null
     }
   }
 

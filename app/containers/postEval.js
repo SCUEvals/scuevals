@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { postEval } from '../actions';
 import TextareaAutoSize from 'react-textarea-autosize';
 import Slider from 'rc-slider';
 import Tooltip from 'rc-tooltip';
+
+import API from '../../public/scripts/api_service';
 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Handle = Slider.Handle;
@@ -89,17 +90,15 @@ class PostEval extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = { term: '' };
   }
 
   onSubmit(values) {
-    //values is object with searchBar: <input>
-    console.log(values);
-    this.props.postEval(values, () => {
-      this.props.history.push('/');
-    });
-  }
+    this.props.match.params.evaluation = values; //typically don't want to alter params, but submission redirects after post so OK. No need to make deep copy to preserve params
+    let client = new API();
+    client.post('/evaluations', this.props.match.params, () => this.props.history.push('/'));
+  };
+
 
   renderTextArea(field) {
     return (
@@ -177,20 +176,22 @@ class PostEval extends Component {
             </div>
           </div>
         </div>
-        <h6>Handwriting {infoTooltip(textOptions.placehold.info)}</h6>
-        <Field name='handwriting' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
+        <h6>Attitude {infoTooltip(textOptions.placehold.info)}</h6>
+        <Field name='attitude' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
+        <h6>Availability {infoTooltip(textOptions.placehold.info)}</h6>
+        <Field name='availability' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
         <h6>Clarity {infoTooltip(textOptions.placehold.info)}</h6>
         <Field name='clarity' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
+        <h6>Handwriting {infoTooltip(textOptions.placehold.info)}</h6>
+        <Field name='handwriting' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.availability} component={this.renderSlider} />
         <h6>Timeliness {infoTooltip(textOptions.placehold.info)}</h6>
         <Field name='timeliness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
-        <h6>Availability {infoTooltip(textOptions.availability.info)}</h6>
-        <Field name='availability' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.availability} component={this.renderSlider} />
-        <h6>Online Accessibility {infoTooltip(textOptions.placehold.info)}</h6>
-        <Field name='online_accessibility' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
-        <h6>Would you take this professor again? {infoTooltip(textOptions.placehold.info)}</h6>
-        <Field name='retakeability' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
+        <h6>Workload {infoTooltip(textOptions.availability.info)}</h6>
+        <Field name='workload' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
+        <h6>Would you recommend this course with this professor? {infoTooltip(textOptions.placehold.info)}</h6>
+        <Field name='recommended' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
         <h6>Comments {infoTooltip(textOptions.placehold.info)}</h6>
-        <Field name="comments" onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
+        <Field name="comment" onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
         <p>Max characters: {this.state.term.length} / 750</p>
         <br />
         <button type="submit" className="btn">Submit</button>
@@ -203,5 +204,5 @@ class PostEval extends Component {
 export default reduxForm({
   form: 'postEval'
 })(
-  connect(null,{ postEval })(PostEval)
+  connect(null, null )(PostEval)
 );

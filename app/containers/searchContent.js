@@ -73,11 +73,11 @@ class searchContent extends Component {
 }
 
 function nameFormatter(cell, row) {
-  return '<a href="/professor/' + row.id + '">' + row.first_name + ' ' + row.last_name + '</a>';
+  return '<a href="/professors/' + row.id + '">' + row.first_name + ' ' + row.last_name + '</a>';
 }
 
 function courseNumberFormatter(cell, row) {
-  return  '<a href="/course/' + row.id + '">' + row.department + ' ' + row.number + '</a>';
+  return  '<a href="/courses/' + row.id + '">' + row.department + ' ' + row.number + '</a>';
 }
 
 function courseTitleFormatter(cell, row) {

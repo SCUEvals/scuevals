@@ -2,18 +2,16 @@ import { SET_USER_INFO, DEL_USER_INFO } from '../actions';
 import jwtDecode from 'jwt-decode';
 
 var obj = {};
-var initState;
+var initState = null;
 if (localStorage.jwt) {
   obj.jwt = localStorage.jwt;
   try {
     initState = Object.assign(obj, jwtDecode(localStorage.jwt).sub);
   }
-  catch (e) { //will catch is jwtDecode fails. If jwtDecode fails, then falsy token exists (user probably manually entered non-decodable jwt)
+  catch (e) { //will catch if jwtDecode fails (jwt not properly encoded, user probably manually entered non-decodable jwt)
     localStorage.removeItem('jwt');
-    initState = null;
   }
-} else initState = null;
-
+}
 
 export default function(state = initState, action) {
   switch (action.type) {
