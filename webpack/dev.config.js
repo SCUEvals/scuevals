@@ -2,6 +2,8 @@ const merge = require('webpack-merge');
 const baseConfig = require('./base.config.js');
 const path = require('path');
 
+prjRoot = path.join(__dirname, '..');
+
 module.exports = merge(baseConfig, {
 
   devtool: 'eval',
@@ -15,7 +17,7 @@ module.exports = merge(baseConfig, {
         {from: '/styles/react-select.min.css', to: '/react-select/dist/react-select.min.css'}
       ],
     },
-    contentBase: [path.join(__dirname, 'public'), path.join(__dirname, 'node_modules')],
-      compress: true
+    contentBase: [path.join(prjRoot, 'public'), path.join(prjRoot, 'node_modules')],
+    compress: true
   },
 });

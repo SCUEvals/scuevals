@@ -7,6 +7,8 @@ import promise from 'redux-promise';
 import ReactGA from 'react-ga';
 import jwtDecode from 'jwt-decode';
 
+import style from '../public/styles/style.scss';
+
 import reducers from './reducers';
 import Header from './containers/header';
 import SearchContent from './containers/searchContent';
@@ -48,7 +50,7 @@ if (localStorage.jwt) {
 }
 else {
   renderDOM();
-};
+}
 
 function renderDOM () {
   ReactDOM.render(

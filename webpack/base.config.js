@@ -1,34 +1,58 @@
+const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-var HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
+const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
   template: './app/index.html',
   filename: 'index.html',
   inject: 'head'
 });
 
-var ScriptExtHtmlWebpackPluginConfig = new ScriptExtHtmlWebpackPlugin({
+const ScriptExtHtmlWebpackPluginConfig = new ScriptExtHtmlWebpackPlugin({
   defaultAttribute: 'async'
+});
+
+const ExtractSass = new ExtractTextPlugin({
+  allChunks: true,
+  filename: "[name].[contenthash].css",
 });
 
 module.exports = {
   entry: './app/index.js',
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+        }
+      },
+      {
+        test: /\.scss$/,
+        use: ExtractSass.extract({
+          use: [{
+            loader: "css-loader", options: {
+              sourceMap: true
+            }
+          }, {
+            loader: "sass-loader", options: {
+              sourceMap: true
+            }
+          }],
+          fallback: 'style-loader',
+        })
       }
     ]
   },
 
   output: {
     filename: 'scripts/transformed.js',
-    path: __dirname + '/build',
+    path: path.join(__dirname, '..', 'build'),
     publicPath: '/'
   },
 
-  plugins: [HTMLWebpackPluginConfig, ScriptExtHtmlWebpackPluginConfig],
+  plugins: [HTMLWebpackPluginConfig, ScriptExtHtmlWebpackPluginConfig, ExtractSass],
 };
