@@ -3,11 +3,10 @@ import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import TextareaAutoSize from 'react-textarea-autosize';
 import Slider from 'rc-slider';
-import Tooltip from 'rc-tooltip';
+import { Manager, Target, Popper, Arrow } from 'react-popper';
 
 import API from '../../public/scripts/api_service';
 
-const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Handle = Slider.Handle;
 
 const textOptions = {
@@ -29,64 +28,49 @@ const textOptions = {
 
 const infoTooltip = (info) => {
   return (
-    <Tooltip
-      mouseLeaveDelay={0}
-      overlayClassName='infoTooltip'
-      placement='top'
-      trigger={['click', 'hover']}
-      overlay={
-        <span>{info}</span>
-      }
-    >
+    <Manager className='tooltip-manager'>
+      <Target className='tooltip-target'>
       <i className='fa fa-question-circle'/>
-    </Tooltip>
+      </Target>
+      <Popper placement="top" className="tooltip">
+        {info}
+        <Arrow className="popper__arrow"/>
+      </Popper>
+    </Manager>
   );
 }
 
 const handle = (props, textProps) => {
   const { value, dragging, ...restProps } = props;
+  let managerStyle = {};
+  managerStyle.left = props.offset + '%'; //to fix transitions with popper
+  managerStyle.position = 'absolute';
+
+  let popperStyle = {};
+  if (value === 0) {
+    popperStyle.opacity = '0';
+  }
+
   return (
-    <Tooltip
-      mouseLeaveDelay={0}
-      overlay={<table className="table table-sm">
-        <thead>
-          <tr>
-            <th>Score</th>
-            <th>Criteria</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th className='track1' scope="row">1</th>
-            <td>{textProps.one}</td>
-          </tr>
-          <tr>
-            <th className='track2' scope="row">2</th>
-            <td>{textProps.two}</td>
-          </tr>
-          <tr>
-            <th className='track3' scope="row">3</th>
-            <td colSpan="2">{textProps.three}</td>
-          </tr>
-          <tr>
-            <th className='track4' scope="row">4</th>
-            <td colSpan="2">{textProps.four}</td>
-          </tr>
-        </tbody>
-      </table>}
-      trigger={['focus']}
-      placement="top"
-    >
-      <Handle value={value} {...restProps} ><div className='handleNum'>{value !== 0 ? value : ''}</div></Handle>
-    </Tooltip>
+    <Manager style={managerStyle} className='popper-manager'>
+      <Target>
+        {({ targetProps }) => (
+          <Handle value={value} {...restProps}>
+            <div {...targetProps} className='handleNum'>
+              {value !== 0 ? value : ''}
+            </div>
+          </Handle>
+        )}
+      </Target>
+      <Popper style={popperStyle} placement="top" className="popper">
+        {value === 0 || value === 1 ? textProps.one : value === 2 ? textProps.two : value === 3 ? textProps.three : value === 4 ? textProps.four : ''}
+        <Arrow className="popper__arrow"/>
+      </Popper>
+    </Manager>
   );
 };
 
 class PostEval extends Component {
-
-  componentWillMount() {
-    console.log('params:', this.props.match.params);
-  }
 
   constructor(props) {
     super(props);
@@ -107,7 +91,6 @@ class PostEval extends Component {
   }
 
   renderSlider(props) {
-    const createSliderWithTooltip = Slider.createSliderWithTooltip;
     var track = $('.' + props.input.name + ' .rc-slider-track');
 
     if (track.length === 1) {
@@ -119,7 +102,6 @@ class PostEval extends Component {
     }
     return (
         <Slider
-          id='test'
           onBeforeChange={() => $('.' + props.input.name + ' div[role="slider"]').focus()}
           className={props.input.name} //used to change track colors on changes
           name={props.input.name}
@@ -133,7 +115,7 @@ class PostEval extends Component {
              borderColor: 'black',
              height: 33,
              width: 33,
-             marginLeft: -14,
+             marginLeft: -18,
              marginTop: -9.5,
              backgroundColor: 'white',
           }}

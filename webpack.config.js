@@ -39,7 +39,8 @@ module.exports = {
         {from: '/styles/react-bootstrap-table-all.min.css', to: '/react-bootstrap-table/dist/react-bootstrap-table-all.min.css'},
         {from: '/styles/rc-slider.min.css', to: '/rc-slider/dist/rc-slider.min.css'},
         {from: '/styles/bootstrap.css', to: '/rc-tooltip/assets/bootstrap.css'},
-        {from: '/styles/react-select.min.css', to: 'react-select/dist/react-select.min.css'}
+        {from: '/styles/react-select.min.css', to: '/react-select/dist/react-select.min.css'},
+        {from: '/scripts/popper.min.js', to: '/popper.js/dist/umd/popper.min.js'}
       ],
     },
     contentBase: [path.join(__dirname, 'public'), path.join(__dirname, 'node_modules')],

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 import { setSearchResults } from '../actions';
 import API from '../../public/scripts/api_service';

@@ -20,8 +20,8 @@ app.use(express.static(__dirname + '/build'));
 app.use(express.static(__dirname + '/public'));
 app.use('/styles', express.static(__dirname + '/node_modules/react-bootstrap-table/dist'));
 app.use('/styles', express.static(__dirname + '/node_modules/rc-slider/dist'));
-app.use('/styles', express.static(__dirname + '/node_modules/rc-tooltip/assets'));
 app.use('/styles', express.static(__dirname + '/node_modules/react-select/dist'));
+app.use('/scripts', express.static(__dirname + '/node_modules/popper.jd/dist/umd/popper.min.js'));
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'build/index.html'))

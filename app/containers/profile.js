@@ -188,7 +188,7 @@ function mapStateToProps(state) {
     initialValues: {
       graduation_year: state.userInfo ? state.userInfo.graduation_year : null,
       majors: state.userInfo ? state.userInfo.majors : null,
-      gender: state.userInfo ? state.userInfo.gender : null,
+      gender: state.userInfo ? state.userInfo.gender : null
     }
   }
 }
