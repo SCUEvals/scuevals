@@ -7,8 +7,6 @@ import promise from 'redux-promise';
 import ReactGA from 'react-ga';
 import jwtDecode from 'jwt-decode';
 
-import style from '../public/styles/style.scss';
-
 import reducers from './reducers';
 import Header from './containers/header';
 import SearchContent from './containers/searchContent';
@@ -23,6 +21,12 @@ import ViewEvals from './containers/viewEvals';
 
 import requireAuth from './components/requireAuth';
 import API from '../public/scripts/api_service';
+
+import '../public/styles/style.scss'
+import '../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
+import '../node_modules/rc-slider/dist/rc-slider.min.css'
+import '../node_modules/react-select/dist/react-select.min.css'
+
 
 ReactGA.initialize('UA-102751367-1');
 

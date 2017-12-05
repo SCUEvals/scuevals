@@ -7,8 +7,8 @@
     "node": "^8.1.4"
   },
   "scripts": {
-    "build": "NODE_ENV=production webpack --config webpack/prod.config.js",
-    "dev": "NODE_ENV=development webpack-dev-server --config webpack/dev.config.js",
+    "build": "webpack -p --config webpack/prod.config.js",
+    "dev": "webpack-dev-server --config webpack/dev.config.js",
     "postinstall": "webpack -p --config webpack/prod.config.js",
     "start": "node server.js"
   },
