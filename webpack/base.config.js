@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
@@ -16,11 +15,6 @@ const ScriptExtHtmlWebpackPluginConfig = new ScriptExtHtmlWebpackPlugin({
 
 const ExtractStyle = new ExtractTextPlugin({
   filename: 'styles.min.css'
-});
-
-const UglifyJS = new webpack.optimize.UglifyJsPlugin({
-  include: /\.min\.js$/,
-  minimize: true
 });
 
 module.exports = {
