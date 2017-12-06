@@ -9,7 +9,7 @@ var sslRedirect = function(environments, status) {
   status = status || 302;
   return function(req, res, next) {
     if (environments.indexOf(process.env.NODE_ENV) >= 0 && req.headers['x-forwarded-proto'] != 'https')
-      res.redirect(status, 'https://' + req.hostname + req.originalUrl);
+      res.redirect(status, 'https://www.' + req.hostname + req.originalUrl);
     else next();
   }
 };
@@ -18,10 +18,7 @@ app.use(sslRedirect());
 app.use(compression());
 app.use(express.static(__dirname + '/build'));
 app.use(express.static(__dirname + '/public'));
-app.use('/styles', express.static(__dirname + '/node_modules/react-bootstrap-table/dist'));
-app.use('/styles', express.static(__dirname + '/node_modules/rc-slider/dist'));
-app.use('/styles', express.static(__dirname + '/node_modules/react-select/dist'));
-app.use('/scripts', express.static(__dirname + '/node_modules/popper.jd/dist/umd/popper.min.js'));
+app.use('/scripts', express.static(__dirname + '/node_modules/popper.js/dist/umd'));
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'build/index.html'))

@@ -9,6 +9,11 @@ module.exports = merge(baseConfig, {
   devtool: 'eval',
 
   devServer: {
+    historyApiFallback: {
+      rewrites: [
+        {from: '/scripts/popper.min.js', to: '/popper.js/dist/umd/popper.min.js'}
+      ]
+    },
     contentBase: [path.join(prjRoot, 'public'), path.join(prjRoot, 'node_modules')],
     compress: true
   },
