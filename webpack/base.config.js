@@ -27,6 +27,9 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
+          options: {
+            "presets": ["react", "es2015", "stage-0"]
+          }
         }
       },
       {
