@@ -10,11 +10,16 @@
     "build": "webpack -p --config webpack/prod.config.js",
     "dev": "webpack-dev-server --config webpack/dev.config.js",
     "postinstall": "webpack -p --config webpack/prod.config.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "lint": "eslint webpack app public/scripts --color",
+    "lint:watch": "npm run lint -- --watch"
   },
   "author": "Joseph Théberge & Fredrik Blomqvist",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "eslint": "^4.12.1",
+    "eslint-plugin-react": "^7.5.1",
+    "eslint-watch": "^3.1.3",
     "webpack-dev-server": "^2.9.5"
   },
   "dependencies": {
