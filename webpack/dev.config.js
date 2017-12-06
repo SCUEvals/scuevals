@@ -2,7 +2,7 @@ const merge = require('webpack-merge');
 const baseConfig = require('./base.config.js');
 const path = require('path');
 
-prjRoot = path.join(__dirname, '..');
+const prjRoot = path.join(__dirname, '..');
 
 module.exports = merge(baseConfig, {
 
