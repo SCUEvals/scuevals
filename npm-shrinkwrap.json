@@ -410,6 +410,38 @@
       "from": "babel-plugin-check-es2015-constants@https://registry.npmjs.org/babel-plugin-check-es2015-constants/-/babel-plugin-check-es2015-constants-6.22.0.tgz",
       "resolved": "https://registry.npmjs.org/babel-plugin-check-es2015-constants/-/babel-plugin-check-es2015-constants-6.22.0.tgz"
     },
+    "babel-plugin-react-css-modules": {
+      "version": "3.3.2",
+      "from": "babel-plugin-react-css-modules@latest",
+      "resolved": "https://registry.npmjs.org/babel-plugin-react-css-modules/-/babel-plugin-react-css-modules-3.3.2.tgz",
+      "dependencies": {
+        "ansi-styles": {
+          "version": "3.2.0",
+          "from": "ansi-styles@>=3.1.0 <4.0.0",
+          "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-3.2.0.tgz"
+        },
+        "chalk": {
+          "version": "2.3.0",
+          "from": "chalk@>=2.3.0 <3.0.0",
+          "resolved": "https://registry.npmjs.org/chalk/-/chalk-2.3.0.tgz"
+        },
+        "postcss": {
+          "version": "6.0.14",
+          "from": "postcss@>=6.0.13 <7.0.0",
+          "resolved": "https://registry.npmjs.org/postcss/-/postcss-6.0.14.tgz"
+        },
+        "source-map": {
+          "version": "0.6.1",
+          "from": "source-map@>=0.6.1 <0.7.0",
+          "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz"
+        },
+        "supports-color": {
+          "version": "4.5.0",
+          "from": "supports-color@>=4.4.0 <5.0.0",
+          "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-4.5.0.tgz"
+        }
+      }
+    },
     "babel-plugin-syntax-async-functions": {
       "version": "6.13.0",
       "from": "babel-plugin-syntax-async-functions@https://registry.npmjs.org/babel-plugin-syntax-async-functions/-/babel-plugin-syntax-async-functions-6.13.0.tgz",
@@ -1322,6 +1354,28 @@
       "from": "css-loader@latest",
       "resolved": "https://registry.npmjs.org/css-loader/-/css-loader-0.28.7.tgz"
     },
+    "css-modules-loader-core": {
+      "version": "1.1.0",
+      "from": "css-modules-loader-core@>=1.0.1 <2.0.0",
+      "resolved": "https://registry.npmjs.org/css-modules-loader-core/-/css-modules-loader-core-1.1.0.tgz",
+      "dependencies": {
+        "has-flag": {
+          "version": "1.0.0",
+          "from": "has-flag@>=1.0.0 <2.0.0",
+          "resolved": "https://registry.npmjs.org/has-flag/-/has-flag-1.0.0.tgz"
+        },
+        "postcss": {
+          "version": "6.0.1",
+          "from": "postcss@6.0.1",
+          "resolved": "https://registry.npmjs.org/postcss/-/postcss-6.0.1.tgz"
+        },
+        "supports-color": {
+          "version": "3.2.3",
+          "from": "supports-color@>=3.2.3 <4.0.0",
+          "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-3.2.3.tgz"
+        }
+      }
+    },
     "css-select": {
       "version": "1.2.0",
       "from": "css-select@https://registry.npmjs.org/css-select/-/css-select-1.2.0.tgz",
@@ -2137,6 +2191,18 @@
       "from": "generate-object-property@>=1.1.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/generate-object-property/-/generate-object-property-1.2.0.tgz"
     },
+    "generic-names": {
+      "version": "1.0.3",
+      "from": "generic-names@>=1.0.2 <2.0.0",
+      "resolved": "https://registry.npmjs.org/generic-names/-/generic-names-1.0.3.tgz",
+      "dependencies": {
+        "loader-utils": {
+          "version": "0.2.17",
+          "from": "loader-utils@>=0.2.16 <0.3.0",
+          "resolved": "https://registry.npmjs.org/loader-utils/-/loader-utils-0.2.17.tgz"
+        }
+      }
+    },
     "get-caller-file": {
       "version": "1.0.2",
       "from": "get-caller-file@https://registry.npmjs.org/get-caller-file/-/get-caller-file-1.0.2.tgz",
@@ -2951,10 +3017,25 @@
       "from": "lodash-es@https://registry.npmjs.org/lodash-es/-/lodash-es-4.17.4.tgz",
       "resolved": "https://registry.npmjs.org/lodash-es/-/lodash-es-4.17.4.tgz"
     },
+    "lodash._arrayeach": {
+      "version": "3.0.0",
+      "from": "lodash._arrayeach@>=3.0.0 <4.0.0",
+      "resolved": "https://registry.npmjs.org/lodash._arrayeach/-/lodash._arrayeach-3.0.0.tgz"
+    },
+    "lodash._baseeach": {
+      "version": "3.0.4",
+      "from": "lodash._baseeach@>=3.0.0 <4.0.0",
+      "resolved": "https://registry.npmjs.org/lodash._baseeach/-/lodash._baseeach-3.0.4.tgz"
+    },
     "lodash._basefor": {
       "version": "3.0.3",
       "from": "lodash._basefor@https://registry.npmjs.org/lodash._basefor/-/lodash._basefor-3.0.3.tgz",
       "resolved": "https://registry.npmjs.org/lodash._basefor/-/lodash._basefor-3.0.3.tgz"
+    },
+    "lodash._bindcallback": {
+      "version": "3.0.1",
+      "from": "lodash._bindcallback@>=3.0.0 <4.0.0",
+      "resolved": "https://registry.npmjs.org/lodash._bindcallback/-/lodash._bindcallback-3.0.1.tgz"
     },
     "lodash._getnative": {
       "version": "3.9.1",
@@ -2975,6 +3056,11 @@
       "version": "4.5.0",
       "from": "lodash.clonedeep@>=4.3.2 <5.0.0",
       "resolved": "https://registry.npmjs.org/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz"
+    },
+    "lodash.foreach": {
+      "version": "3.0.3",
+      "from": "lodash.foreach@>=3.0.3 <4.0.0",
+      "resolved": "https://registry.npmjs.org/lodash.foreach/-/lodash.foreach-3.0.3.tgz"
     },
     "lodash.isarguments": {
       "version": "3.1.0",
@@ -3735,6 +3821,11 @@
       "from": "postcss-minify-selectors@>=2.0.4 <3.0.0",
       "resolved": "https://registry.npmjs.org/postcss-minify-selectors/-/postcss-minify-selectors-2.1.1.tgz"
     },
+    "postcss-modules": {
+      "version": "0.6.4",
+      "from": "postcss-modules@>=0.6.2 <0.7.0",
+      "resolved": "https://registry.npmjs.org/postcss-modules/-/postcss-modules-0.6.4.tgz"
+    },
     "postcss-modules-extract-imports": {
       "version": "1.1.0",
       "from": "postcss-modules-extract-imports@>=1.0.0 <2.0.0",
@@ -3798,6 +3889,11 @@
           "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-4.5.0.tgz"
         }
       }
+    },
+    "postcss-modules-parser": {
+      "version": "1.1.1",
+      "from": "postcss-modules-parser@>=1.1.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/postcss-modules-parser/-/postcss-modules-parser-1.1.1.tgz"
     },
     "postcss-modules-scope": {
       "version": "1.1.0",
@@ -3892,6 +3988,44 @@
       "version": "1.0.4",
       "from": "postcss-reduce-transforms@>=1.0.3 <2.0.0",
       "resolved": "https://registry.npmjs.org/postcss-reduce-transforms/-/postcss-reduce-transforms-1.0.4.tgz"
+    },
+    "postcss-scss": {
+      "version": "1.0.2",
+      "from": "postcss-scss@latest",
+      "resolved": "https://registry.npmjs.org/postcss-scss/-/postcss-scss-1.0.2.tgz",
+      "dev": true,
+      "dependencies": {
+        "ansi-styles": {
+          "version": "3.2.0",
+          "from": "ansi-styles@>=3.1.0 <4.0.0",
+          "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-3.2.0.tgz",
+          "dev": true
+        },
+        "chalk": {
+          "version": "2.3.0",
+          "from": "chalk@>=2.3.0 <3.0.0",
+          "resolved": "https://registry.npmjs.org/chalk/-/chalk-2.3.0.tgz",
+          "dev": true
+        },
+        "postcss": {
+          "version": "6.0.14",
+          "from": "postcss@>=6.0.3 <7.0.0",
+          "resolved": "https://registry.npmjs.org/postcss/-/postcss-6.0.14.tgz",
+          "dev": true
+        },
+        "source-map": {
+          "version": "0.6.1",
+          "from": "source-map@>=0.6.1 <0.7.0",
+          "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz",
+          "dev": true
+        },
+        "supports-color": {
+          "version": "4.5.0",
+          "from": "supports-color@>=4.4.0 <5.0.0",
+          "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-4.5.0.tgz",
+          "dev": true
+        }
+      }
     },
     "postcss-selector-parser": {
       "version": "2.2.3",
@@ -4859,6 +4993,11 @@
       "version": "0.10.31",
       "from": "string_decoder@https://registry.npmjs.org/string_decoder/-/string_decoder-0.10.31.tgz",
       "resolved": "https://registry.npmjs.org/string_decoder/-/string_decoder-0.10.31.tgz"
+    },
+    "string-hash": {
+      "version": "1.1.3",
+      "from": "string-hash@>=1.1.1 <2.0.0",
+      "resolved": "https://registry.npmjs.org/string-hash/-/string-hash-1.1.3.tgz"
     },
     "string-width": {
       "version": "1.0.2",

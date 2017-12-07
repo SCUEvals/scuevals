@@ -1,15 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import '../../public/styles/eval.scss'
 
-const Footer = ()  => {
+const Eval = ()  => {
   return (
-    <div className='eval'>
-      <div className='vote'>
+    <div styleName='eval'>
+      <div styleName='vote'>
         <i className='fa fa-caret-up active' />
         <i className='fa fa-caret-down' />
       </div>
-      <div className='evalContent'>
-        <div className='evalInfo row'>
+      <div styleName='evalContent'>
+        <div styleName='evalInfo' className='row'>
           <div className='col-12 col-md-6'>
             Fall 2017
           </div>
@@ -17,61 +17,61 @@ const Footer = ()  => {
             Course/Professor
           </div>
         </div>
-        <div className='row scores'>
-          <div className='scoreBlock col-sm-4 col-md-2'>
-            <div className='scoreTitle'>Average</div>
-                <div className='scoreNum'>
+        <div styleName='scores' className='row'>
+          <div styleName='scoreBlock' className='col-sm-4 col-md-2'>
+            <div styleName='scoreTitle'>Average</div>
+                <div styleName='scoreNum'>
                 4.2
               </div>
           </div>
-          <div className='scoreBlock col-sm-4 col-md-2'>
-            <div className='scoreTitle'>Easiness</div>
-              <div className='scoreNum'>
+          <div styleName='scoreBlock' className='col-sm-4 col-md-2'>
+            <div styleName='scoreTitle'>Easiness</div>
+              <div styleName='scoreNum'>
                 4.2
               </div>
           </div>
-          <div className='scoreBlock col-sm-4 col-md-2'>
-            <div className='scoreTitle'>Easiness</div>
-              <div className='scoreNum'>
+          <div styleName='scoreBlock' className='col-sm-4 col-md-2'>
+            <div styleName='scoreTitle'>Easiness</div>
+              <div styleName='scoreNum'>
                 4.2
               </div>
           </div>
-          <div className='scoreBlock col-sm-4 col-md-2'>
-            <div className='scoreTitle'>Easiness</div>
-              <div className='scoreNum'>
+          <div styleName='scoreBlock' className='col-sm-4 col-md-2'>
+            <div styleName='scoreTitle'>Easiness</div>
+              <div styleName='scoreNum'>
                 4.2
               </div>
           </div>
-          <div className='scoreBlock col-sm-4 col-md-2'>
-            <div className='scoreTitle'>Easiness</div>
-              <div className='scoreNum'>
+          <div styleName='scoreBlock' className='col-sm-4 col-md-2'>
+            <div styleName='scoreTitle'>Easiness</div>
+              <div styleName='scoreNum'>
                 4.2
               </div>
           </div>
-          <div className='scoreBlock col-sm-4 col-md-2'>
-            <div className='scoreTitle'>Easiness</div>
-              <div className='scoreNum'>
+          <div styleName='scoreBlock' className='col-sm-4 col-md-2'>
+            <div styleName='scoreTitle'>Easiness</div>
+              <div styleName='scoreNum'>
                 4.2
               </div>
           </div>
-          <div className='scoreBlock col-sm-4 col-md-2'>
-            <div className='scoreTitle'>Easiness</div>
-              <div className='scoreNum'>
+          <div styleName='scoreBlock' className='col-sm-4 col-md-2'>
+            <div styleName='scoreTitle'>Easiness</div>
+              <div styleName='scoreNum'>
                 4.2
               </div>
           </div>
-          <div className='scoreBlock col-sm-4 col-md-2'>
-            <div className='scoreTitle'>Easiness</div>
-              <div className='scoreNum'>
+          <div styleName='scoreBlock' className='col-sm-4 col-md-2'>
+            <div styleName='scoreTitle'>Easiness</div>
+              <div styleName='scoreNum'>
                 4.2
               </div>
           </div>
         </div>
-        <div className='comment'>
-          <div className='commentQuote'>
+        <div styleName='comment'>
+          <div styleName='commentQuote'>
             "Great teacher"
           </div>
-          <div className='commentReport'>
+          <div styleName='commentReport'>
             Report post
           </div>
         </div>
@@ -80,4 +80,4 @@ const Footer = ()  => {
   );
 }
 
-export default Footer;
+export default Eval;

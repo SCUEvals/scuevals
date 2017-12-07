@@ -22,10 +22,10 @@ import ViewEvals from './containers/viewEvals';
 import requireAuth from './components/requireAuth';
 import API from '../public/scripts/api_service';
 
-import '../public/styles/style.scss'
-import '../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
-import '../node_modules/rc-slider/dist/rc-slider.min.css'
-import '../node_modules/react-select/dist/react-select.min.css'
+import '../public/styles/style.scss?global'
+import '../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css?global'
+import '../node_modules/rc-slider/dist/rc-slider.min.css?global'
+import '../node_modules/react-select/dist/react-select.min.css?global'
 
 
 ReactGA.initialize('UA-102751367-1');

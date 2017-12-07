@@ -3,19 +3,32 @@ const HTMLWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
+const htmlWebpackPluginConfig = new HTMLWebpackPlugin({
   template: './app/index.html',
   filename: 'index.html',
   inject: 'head'
 });
 
-const ScriptExtHtmlWebpackPluginConfig = new ScriptExtHtmlWebpackPlugin({
+const scriptExtHtmlWebpackPluginConfig = new ScriptExtHtmlWebpackPlugin({
   defaultAttribute: 'async'
 });
 
-const ExtractStyle = new ExtractTextPlugin({
+const extractStyle = new ExtractTextPlugin({
   filename: 'styles.min.css'
 });
+
+const cssLoaderOptions = {
+  importLoaders: 1,
+  modules: true,
+  sourceMap: true,
+  localIdentName: '[path]___[name]__[local]___[hash:base64:5]'
+};
+
+const cssGlobalLoaderOptions = {
+  importLoaders: 1,
+  sourceMap: true,
+};
+
 
 module.exports = {
   entry: './app/index.js',
@@ -28,15 +41,46 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            "presets": ["react", "es2015", "stage-0"]
+            'presets': ['react', 'es2015', 'stage-0'],
+            'plugins': [['react-css-modules',
+              {
+                'exclude': 'style.scss',
+                'filetypes': {
+                  '.scss': {
+                    'syntax': 'postcss-scss'
+                  }
+                }
+              }
+            ]]
           }
         }
       },
       {
         test: /\.css$/,
-        use: ExtractStyle.extract({
+        use: extractStyle.extract({
           use: [{
-            loader: 'css-loader', options: {
+            loader: 'css-loader', options: cssLoaderOptions
+          }],
+          fallback: 'style-loader',
+        })
+      },
+      {
+        test: /\.css$/,
+        resourceQuery: /global/,
+        use: extractStyle.extract({
+          use: [{
+            loader: 'css-loader', options: cssGlobalLoaderOptions
+          }],
+          fallback: 'style-loader',
+        })
+      },
+      {
+        test: /\.scss$/,
+        use: extractStyle.extract({
+          use: [{
+            loader: 'css-loader', options: cssLoaderOptions
+          }, {
+            loader: 'sass-loader', options: {
               sourceMap: true
             }
           }],
@@ -45,11 +89,10 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ExtractStyle.extract({
+        resourceQuery: /global/,
+        use: extractStyle.extract({
           use: [{
-            loader: 'css-loader', options: {
-              sourceMap: true
-            }
+            loader: 'css-loader', options: cssGlobalLoaderOptions
           }, {
             loader: 'sass-loader', options: {
               sourceMap: true
@@ -67,5 +110,5 @@ module.exports = {
     publicPath: '/'
   },
 
-  plugins: [HTMLWebpackPluginConfig, ScriptExtHtmlWebpackPluginConfig, ExtractStyle],
+  plugins: [htmlWebpackPluginConfig, scriptExtHtmlWebpackPluginConfig, extractStyle],
 };
