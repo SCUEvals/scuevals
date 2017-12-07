@@ -1,7 +1,6 @@
-//Source: https://gist.github.com/paulsturgess/ebfae1d1ac1779f18487d3dee80d1258
 import axios from 'axios';
 
-import { storeWithMiddleware } from '../../app/index';
+import { storeWithMiddleware } from '../index';
 
 class API {
 
@@ -13,7 +12,7 @@ class API {
     let api = axios.create({
       headers: headers,
       baseURL: 'https://api.scuevals.com',
-      timeout: 30000
+      timeout: 10000
     });
     //api.interceptors.response.use(this.handleSuccess, this.handleError);
     this.api = api;
@@ -46,25 +45,6 @@ class API {
     );
     }
   }
-
-    // switch (error.response.status) {
-    //   case 500:
-    //     this.redirectTo(document, '/500');
-    //   case 401:
-    //     this.redirectTo(document, '/')
-    //     break;
-    //   case 404:
-    //     this.redirectTo(document, '/404')
-    //     break;
-    //   default:
-    //     this.redirectTo(document, '/')
-    //     break;
-    // }
-  //  return Promise.reject(error)
-
-  // redirectTo = (document, path) => {
-  //   document.location = path
-  // }
 
   get(path, callback, passedParams) { //passedParams optional, may be null
     return this.api.get(path, {params: passedParams}).then(response => callback(response.data)).catch(error => this.handleError(error));

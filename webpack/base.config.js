@@ -4,7 +4,7 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const htmlWebpackPluginConfig = new HTMLWebpackPlugin({
-  template: './app/index.html',
+  template: './src/index.html',
   filename: 'index.html',
   inject: 'head'
 });
@@ -31,7 +31,7 @@ const cssGlobalLoaderOptions = {
 
 
 module.exports = {
-  entry: './app/index.js',
+  entry: './src/index.js',
 
   module: {
     rules: [

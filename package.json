@@ -1,7 +1,7 @@
 {
   "name": "SCUevals",
   "version": "1.0.0",
-  "description": "A web app for rating and reviewing courses at SCU.",
+  "description": "A web app for rating and reviewing professors and courses at SCU.",
   "main": "index.js",
   "engines": {
     "node": "^8.1.4"
@@ -11,7 +11,7 @@
     "dev": "webpack-dev-server --config webpack/dev.config.js",
     "postinstall": "webpack -p --config webpack/prod.config.js",
     "start": "node server.js",
-    "lint": "eslint webpack app public/scripts --color",
+    "lint": "eslint webpack src public/scripts --color",
     "lint:watch": "npm run lint -- --watch"
   },
   "author": "Joseph Théberge & Fredrik Blomqvist",

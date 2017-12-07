@@ -20,12 +20,12 @@ import Profile from './containers/profile';
 import ViewEvals from './containers/viewEvals';
 
 import requireAuth from './components/requireAuth';
-import API from '../public/scripts/api_service';
+import API from './scripts/api_service';
 
-import '../public/styles/style.scss?global'
-import '../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css?global'
-import '../node_modules/rc-slider/dist/rc-slider.min.css?global'
-import '../node_modules/react-select/dist/react-select.min.css?global'
+import '../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css?global';
+import '../node_modules/rc-slider/dist/rc-slider.min.css?global';
+import '../node_modules/react-select/dist/react-select.min.css?global';
+import './styles/style.scss?global'; //ensure this is last file, want our styles to override all others
 
 
 ReactGA.initialize('UA-102751367-1');
@@ -35,9 +35,6 @@ export const storeWithMiddleware = createStore(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), //for browser's Redux DevTools add-on to work for development
   applyMiddleware(promise)
 );
-
-
-//const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 if (localStorage.jwt) {
   if (new Date().getTime() / 1000 > jwtDecode(localStorage.jwt).exp) { //if token expired, delete it

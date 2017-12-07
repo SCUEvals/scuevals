@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import TextareaAutoSize from 'react-textarea-autosize';
 import Slider from 'rc-slider';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
+import PropTypes from 'prop-types';
 
-import API from '../../public/scripts/api_service';
+import API from '../scripts/api_service';
 
 const Handle = Slider.Handle;
 
@@ -71,6 +72,10 @@ const handle = (props, textProps) => {
 };
 
 class PostEval extends Component {
+
+  static defaultProps = {
+    userInfo: PropTypes.object
+  }
 
   constructor(props) {
     super(props);
@@ -185,6 +190,5 @@ class PostEval extends Component {
 
 export default reduxForm({
   form: 'postEval'
-})(
-  connect(null, null )(PostEval)
-);
+})
+(PostEval);

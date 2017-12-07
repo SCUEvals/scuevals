@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, change } from 'redux-form';
-import { connect } from 'react-redux';
 import Select from 'react-select';
 import { withRouter } from 'react-router'; //because not a direct route, needs access to this.props.history
+import PropTypes from 'prop-types';
 
 import { storeWithMiddleware } from '../index';
-import API from '../../public/scripts/api_service';
+import API from '../scripts/api_service';
 
+class PostSearch extends Component {
 
-class PrePostEval extends Component {
+  static defaultProps = {
+    history: PropTypes.obj,
+    handleSubmit: PropTypes.obj
+  }
 
   constructor(props) {
     super(props);
@@ -182,6 +186,6 @@ function validate(values) {
 export default withRouter(reduxForm({
   validate,
   form: 'postSearch'
-})(
-  connect(null, null )(PrePostEval))
+})
+(PostSearch)
 );

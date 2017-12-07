@@ -2,13 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { GoogleLogin } from 'react-google-login';
 import jwtDecode from 'jwt-decode';
+import PropTypes from 'prop-types';
 
-import API from '../../public/scripts/api_service';
+import API from '../scripts/api_service';
 
-import PostSearch from './postSearch.js';
+import PostSearch from '../components/postSearch.js';
 import { setUserInfo } from '../actions';
 
 class Home extends Component {
+
+  static defaultProps = {
+    setUserInfo: PropTypes.func,
+    history: PropTypes.object
+  }
 
   constructor(props) {
     super(props);
@@ -22,7 +28,7 @@ class Home extends Component {
       try {
         localStorage.setItem("jwt", responseData.jwt);
       } catch(err) {
-        console.error("Cannot execute localStorage.setItem (using private mode?), err:", err);
+        console.error("Cannot execute localStorage.setItem (perhaps private mode is enabled). Error:", err);
       }
       this.props.setUserInfo(responseData.jwt);
       if (jwtDecode(responseData.jwt).sub.roles.includes(0)) this.props.history.push('/profile');

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../public/styles/eval.scss'
+import '../styles/eval.scss';
 
 const Eval = ()  => {
   return (

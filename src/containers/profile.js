@@ -2,11 +2,20 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import Select from 'react-select';
+import PropTypes from 'prop-types';
 
 import { setUserInfo, delUserInfo } from '../actions';
-import API from '../../public/scripts/api_service';
+import API from '../scripts/api_service';
 
 class Profile extends Component {
+
+  static defaultProps = {
+    userInfo: PropTypes.object,
+    setUserInfo: PropTypes.func,
+    history: PropTypes.obj,
+    handleSubmit: PropTypes.obj,
+    delUserInfo: PropTypes.func,
+  }
 
   componentWillMount() {
     const getMajors = () => {
@@ -123,6 +132,7 @@ class Profile extends Component {
 
   render() {
     const { handleSubmit, history, delUserInfo, userInfo, submitting } = this.props;
+    console.log('submitting prop:', submitting);
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
           {userInfo && !userInfo.roles.includes(0) ?

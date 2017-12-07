@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 class Privacy extends Component {
+
+    static defaultProps = {
+      userInfo: PropTypes.object
+    }
+
   render() {
     return (
       <div className="content">

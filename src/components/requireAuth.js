@@ -3,10 +3,15 @@ import { withRouter } from 'react-router';
 import jwtDecode from 'jwt-decode';
 import Profile from '../containers/profile';
 import Home from '../containers/home';
+import PropTypes from 'prop-types';
 
-export default function requireAuth(Component, extraProps={}) {
+export default function requireAuth(PassedComponent, extraProps={}) {
 
-  class AuthenticatedComponent extends Component {
+  class AuthenticatedPassedComponent extends Component {
+
+    static defaultProps = {
+      history: PropTypes.object
+    }
 
     componentWillMount() { //check auth
       if (!localStorage.jwt) this.props.history.push('/');
@@ -16,12 +21,12 @@ export default function requireAuth(Component, extraProps={}) {
     render() {
       return localStorage.jwt ?
         jwtDecode(localStorage.jwt).sub.roles.includes(0) ?
-          Component === Profile ? <Component {...this.props} {...extraProps} /> : null
+          PassedComponent === Profile ? <PassedComponent {...this.props} {...extraProps} /> : null
         :
-         <Component { ...this.props }  {...extraProps} />
-      : Component === Home ? <Component {...this.props} {...extraProps} /> : null
+         <PassedComponent { ...this.props }  {...extraProps} />
+      : PassedComponent === Home ? <PassedComponent {...this.props} {...extraProps} /> : null
     }
   }
 
-  return withRouter(AuthenticatedComponent);
+  return withRouter(AuthenticatedPassedComponent);
 }

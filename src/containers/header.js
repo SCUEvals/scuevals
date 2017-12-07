@@ -5,12 +5,20 @@ import { delUserInfo, setSearchResults } from '../actions';
 import { Link } from 'react-router-dom';
 import { debounce } from 'lodash';
 import { withRouter } from 'react-router';
+import PropTypes from 'prop-types';
 
-import API from '../../public/scripts/api_service';
-import { storeWithMiddleware } from '../index';
-
+import API from '../scripts/api_service';
 
 class Header extends Component {
+
+  static defaultProps = {
+    userInfo: PropTypes.object,
+    setUserInfo: PropTypes.func,
+    history: PropTypes.obj,
+    handleSubmit: PropTypes.obj,
+    delUserInfo: PropTypes.func,
+  }
+
   componentDidMount() {
     let pushFooter = document.getElementById('push-footer');
     if (this.props.userInfo && !this.props.userInfo.roles.includes(0)) pushFooter.className = '';
@@ -53,7 +61,6 @@ class Header extends Component {
   renderSearch(field) {
     const { meta: { error, submitFailed, touched } } = field;
     const searchBarClass = `col-12 col-md-8 mx-auto input-group ${touched && error ? 'has-danger' : ''}`;
-    const textHelpClass = `${submitFailed && error ? 'text-help' : ''}`;
 
     function hideOnClickOutside(searchBar, searchBarResults) {
      const outsideClickListener = (event) => {
@@ -139,7 +146,7 @@ class Header extends Component {
   }
 
   render() {
-    const { handleSubmit, setUserInfo, delUserInfo, userInfo } = this.props;
+    const { handleSubmit, delUserInfo, userInfo } = this.props;
     if (this.props.userInfo && !this.props.userInfo.roles.includes(0)) {
       return (
         <header>
