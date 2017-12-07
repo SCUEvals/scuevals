@@ -14,7 +14,7 @@ const scriptExtHtmlWebpackPluginConfig = new ScriptExtHtmlWebpackPlugin({
 });
 
 const extractStyle = new ExtractTextPlugin({
-  filename: 'styles.min.css'
+  filename: 'styles.[hash].min.css'
 });
 
 const cssLoaderOptions = {
@@ -56,57 +56,55 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        resourceQuery: /^$/,
-        use: extractStyle.extract({
-          use: [{
-            loader: 'css-loader', options: cssLoaderOptions
-          }],
-          fallback: 'style-loader',
-        })
-      },
-      {
-        test: /\.css$/,
-        resourceQuery: /global/,
-        use: extractStyle.extract({
-          use: [{
-            loader: 'css-loader', options: cssGlobalLoaderOptions
-          }],
-          fallback: 'style-loader',
-        })
-      },
-      {
-        test: /\.scss$/,
-        resourceQuery: /^$/,
-        use: extractStyle.extract({
-          use: [{
-            loader: 'css-loader', options: cssLoaderOptions
-          }, {
-            loader: 'sass-loader', options: {
-              sourceMap: true
-            }
-          }],
-          fallback: 'style-loader',
-        })
+        oneOf: [{
+          resourceQuery: /global/,
+          use: extractStyle.extract({
+            use: [{
+              loader: 'css-loader', options: cssGlobalLoaderOptions
+            }],
+            fallback: 'style-loader',
+          })
+        }, {
+          use: extractStyle.extract({
+            use: [{
+              loader: 'css-loader', options: cssLoaderOptions
+            }],
+            fallback: 'style-loader',
+          })
+        }],
       },
       {
         test: /\.scss$/,
-        resourceQuery: /global/,
-        use: extractStyle.extract({
-          use: [{
-            loader: 'css-loader', options: cssGlobalLoaderOptions
-          }, {
-            loader: 'sass-loader', options: {
-              sourceMap: true
-            }
-          }],
-          fallback: 'style-loader',
-        })
-      }
+        oneOf: [{
+          resourceQuery: /global/,
+          use: extractStyle.extract({
+            use: [{
+              loader: 'css-loader', options: cssGlobalLoaderOptions
+            }, {
+              loader: 'sass-loader', options: {
+                sourceMap: true
+              }
+            }],
+            fallback: 'style-loader',
+          })
+        }, {
+          use: extractStyle.extract({
+            use: [{
+              loader: 'css-loader', options: cssLoaderOptions
+            }, {
+              loader: 'sass-loader', options: {
+                sourceMap: true
+              }
+            }],
+            fallback: 'style-loader',
+          })
+        }]
+      },
     ]
   },
 
   output: {
-    filename: 'bundle.min.js',
+    filename: 'bundle.[hash].min.js',
     path: path.join(__dirname, '..', 'build'),
     publicPath: '/'
   },
