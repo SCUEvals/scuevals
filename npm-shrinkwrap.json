@@ -3991,39 +3991,33 @@
     },
     "postcss-scss": {
       "version": "1.0.2",
-      "from": "postcss-scss@latest",
+      "from": "https://registry.npmjs.org/postcss-scss/-/postcss-scss-1.0.2.tgz",
       "resolved": "https://registry.npmjs.org/postcss-scss/-/postcss-scss-1.0.2.tgz",
-      "dev": true,
       "dependencies": {
         "ansi-styles": {
           "version": "3.2.0",
           "from": "ansi-styles@>=3.1.0 <4.0.0",
-          "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-3.2.0.tgz",
-          "dev": true
+          "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-3.2.0.tgz"
         },
         "chalk": {
           "version": "2.3.0",
           "from": "chalk@>=2.3.0 <3.0.0",
-          "resolved": "https://registry.npmjs.org/chalk/-/chalk-2.3.0.tgz",
-          "dev": true
+          "resolved": "https://registry.npmjs.org/chalk/-/chalk-2.3.0.tgz"
         },
         "postcss": {
           "version": "6.0.14",
           "from": "postcss@>=6.0.3 <7.0.0",
-          "resolved": "https://registry.npmjs.org/postcss/-/postcss-6.0.14.tgz",
-          "dev": true
+          "resolved": "https://registry.npmjs.org/postcss/-/postcss-6.0.14.tgz"
         },
         "source-map": {
           "version": "0.6.1",
           "from": "source-map@>=0.6.1 <0.7.0",
-          "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz",
-          "dev": true
+          "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz"
         },
         "supports-color": {
           "version": "4.5.0",
           "from": "supports-color@>=4.4.0 <5.0.0",
-          "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-4.5.0.tgz",
-          "dev": true
+          "resolved": "https://registry.npmjs.org/supports-color/-/supports-color-4.5.0.tgz"
         }
       }
     },
@@ -4636,7 +4630,7 @@
     },
     "sass-loader": {
       "version": "6.0.6",
-      "from": "sass-loader@latest",
+      "from": "https://registry.npmjs.org/sass-loader/-/sass-loader-6.0.6.tgz",
       "resolved": "https://registry.npmjs.org/sass-loader/-/sass-loader-6.0.6.tgz",
       "dependencies": {
         "pify": {
