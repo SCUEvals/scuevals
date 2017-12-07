@@ -5,7 +5,7 @@ import Select from 'react-select';
 import PropTypes from 'prop-types';
 
 import { setUserInfo, delUserInfo } from '../actions';
-import API from '../scripts/api_service';
+import API from '../services/api_service';
 
 class Profile extends Component {
 

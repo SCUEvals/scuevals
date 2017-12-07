@@ -6,7 +6,7 @@ import Slider from 'rc-slider';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
 import PropTypes from 'prop-types';
 
-import API from '../scripts/api_service';
+import API from '../services/api_service';
 
 const Handle = Slider.Handle;
 

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { setSearchResults } from '../actions';
-import API from '../scripts/api_service';
+import API from '../services/api_service';
 
 class SearchContent extends Component {
 

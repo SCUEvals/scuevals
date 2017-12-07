@@ -4,9 +4,9 @@ import { GoogleLogin } from 'react-google-login';
 import jwtDecode from 'jwt-decode';
 import PropTypes from 'prop-types';
 
-import API from '../scripts/api_service';
+import API from '../services/api';
 
-import PostSearch from '../components/postSearch.js';
+import PostSearch from '../components/postSearch';
 import { setUserInfo } from '../actions';
 
 class Home extends Component {
