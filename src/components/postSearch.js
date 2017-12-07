@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, change } from 'redux-form';
 import Select from 'react-select';
-import { withRouter } from 'react-router'; //because not a direct route, needs access to this.props.history
+
+//because not a direct route, needs access to this.props.history
+import { withRouter } from 'react-router';
+
 import PropTypes from 'prop-types';
 
 import { storeWithMiddleware } from '../index';
-import API from '../scripts/api_service';
+import API from '../services/api';
 
 class PostSearch extends Component {
 

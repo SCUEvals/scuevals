@@ -20,7 +20,7 @@ import Profile from './containers/profile';
 import ViewEvals from './containers/viewEvals';
 
 import requireAuth from './components/requireAuth';
-import API from './services/api_service';
+import API from './services/api';
 
 import '../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css?global';
 import '../node_modules/rc-slider/dist/rc-slider.min.css?global';

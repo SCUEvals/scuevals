@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { connect } from 'react-redux';
 import TextareaAutoSize from 'react-textarea-autosize';
 import Slider from 'rc-slider';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
 import PropTypes from 'prop-types';
 
-import API from '../services/api_service';
+import API from '../services/api';
 
 const Handle = Slider.Handle;
 

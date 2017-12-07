@@ -44,7 +44,6 @@ module.exports = {
             'presets': ['react', 'es2015', 'stage-0'],
             'plugins': [['react-css-modules',
               {
-                'exclude': 'style.scss',
                 'filetypes': {
                   '.scss': {
                     'syntax': 'postcss-scss'

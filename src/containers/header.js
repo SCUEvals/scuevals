@@ -7,7 +7,7 @@ import { debounce } from 'lodash';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 
-import API from '../services/api_service';
+import API from '../services/api';
 
 class Header extends Component {
 
