@@ -56,6 +56,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
+        resourceQuery: /^$/,
         use: extractStyle.extract({
           use: [{
             loader: 'css-loader', options: cssLoaderOptions
@@ -75,6 +76,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
+        resourceQuery: /^$/,
         use: extractStyle.extract({
           use: [{
             loader: 'css-loader', options: cssLoaderOptions
