@@ -49,7 +49,7 @@ if (localStorage.getItem('jwt')) {
     client.get('auth/validate',
       responseData => {
         if (responseData.jwt) {
-          ReactGA.set({ userId: decodedJwt.id }); //id will be same from prev json token, no need to decode new one from responseData and find id
+          ReactGA.set({ userId: decodedJwt.sub.id }); //id will be same from prev json token, no need to decode new one from responseData and find id
           localStorage.setItem('jwt', responseData.jwt);
         }
         else localStorage.removeItem('jwt'); //else responseData.msg error msg occurs if not valid
@@ -78,11 +78,11 @@ function renderDOM () {
             <div className='container'>
               <Switch>
                 <Route path="/about" component={About} />
+                <Route path="/privacy" component={Privacy} />
                 <Route path="/search/:search" component={requireAuth(SearchContent)} />
                 <Route path="/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)" component={requireAuth(PostEval)} />
                 <Route path="/professors/:professor_id(\d+)" component={requireAuth(ViewEvals, {type: "professors"})} />
                 <Route path="/courses/:course_id(\d+)" component={requireAuth(ViewEvals, {type: "courses"})} />
-                <Route path="/privacy" component={Privacy} />
                 <Route path="/profile" component={requireAuth(Profile)} />
                 <Route exact path="/" component={requireAuth(Home)} />
                 <Redirect to="/" />

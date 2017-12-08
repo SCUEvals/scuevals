@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { debounce } from 'lodash';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
+import ReactGA from 'react-ga';
 
 import API from '../services/api';
 
@@ -181,6 +182,7 @@ class Header extends Component {
             <button type="button" onClick={() => {
               localStorage.removeItem('jwt');
               delUserInfo();
+              ReactGA.set({ userId: undefined });
               if (this.props.history.location.pathname !== '/') this.props.history.push('/');
             }}
             className="signOutBtn">

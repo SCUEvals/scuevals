@@ -27,7 +27,7 @@ class Home extends Component {
     const client = new API();
     client.post('/auth', {id_token: token}, responseData =>  {
       let decodedJwt = jwtDecode(responseData.jwt);
-      ReactGA.set({ userId: decodedJwt.id });
+      ReactGA.set({ userId: decodedJwt.sub.id });
       try {
         localStorage.setItem("jwt", responseData.jwt);
       } catch(err) {

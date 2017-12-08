@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ReactGA from 'react-ga';
 
 class GAListener extends Component {
+
   static contextTypes = {
     router: PropTypes.object
   };
@@ -18,7 +19,6 @@ class GAListener extends Component {
   }
 
   render() {
-
     return (
       <div>
         {this.props.children}
