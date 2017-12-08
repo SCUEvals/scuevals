@@ -14,11 +14,10 @@ class API {
       baseURL: 'https://api.scuevals.com',
       timeout: 10000
     });
-    //api.interceptors.response.use(this.handleSuccess, this.handleError);
     this.api = api;
   }
 
-  handleError = error => {
+  handleError = (error, customHandleError) => {
     if (error.response) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
@@ -42,12 +41,13 @@ class API {
      console.error('Something happened in request setup that triggered an error.\n',
       'Message:', error.message, '\n\n',
       'Request config:', error.config
-    );
+     );
     }
+    if (customHandleError) customHandleError();
   }
 
-  get(path, callback, passedParams) { //passedParams optional, may be null
-    return this.api.get(path, {params: passedParams}).then(response => callback(response.data)).catch(error => this.handleError(error));
+  get(path, callback, passedParams, customHandleError) { //passedParams (obj) and customHandleError (func) optional
+    return this.api.get(path, {params: passedParams}).then(response => callback(response.data)).catch(error => this.handleError(error, customHandleError));
   }
 
   patch(path, payload, callback) {

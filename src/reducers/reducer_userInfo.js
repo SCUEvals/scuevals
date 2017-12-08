@@ -8,7 +8,7 @@ if (localStorage.jwt) {
   try {
     initState = Object.assign(obj, jwtDecode(localStorage.jwt).sub);
   }
-  catch (e) { //will catch if jwtDecode fails (jwt not properly encoded, user probably manually entered non-decodable jwt)
+  catch (err) { //will catch if jwtDecode fails (jwt not properly encoded, user probably manually entered non-decodable jwt)
     localStorage.removeItem('jwt');
   }
 }
