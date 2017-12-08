@@ -21,6 +21,7 @@ import ViewEvals from './containers/viewEvals';
 
 import requireAuth from './components/requireAuth';
 import API from './services/api';
+import { delUserInfo } from './actions';
 
 import '../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css?global';
 import '../node_modules/rc-slider/dist/rc-slider.min.css?global';
@@ -31,25 +32,39 @@ import './styles/style.scss?global'; //ensure this is last file, want our styles
 ReactGA.initialize('UA-102751367-1');
 
 export const storeWithMiddleware = createStore(
-  reducers,
+  reducers, //note: undecodeable jwt will be removed in userInfo reducer here if altered by user, so safe to assume next steps have decodeable jwt
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), //for browser's Redux DevTools add-on to work for development
   applyMiddleware(promise)
 );
 
-if (localStorage.jwt) {
-  if (new Date().getTime() / 1000 > jwtDecode(localStorage.jwt).exp) { //if token expired, delete it
+if (localStorage.getItem('jwt')) {
+  let decodedJwt = jwtDecode(localStorage.getItem('jwt')); //won't fail, reducers above took care of undecodeable jwt (check note for reducers above)
+  if (new Date().getTime() / 1000 > decodedJwt.exp) { //if token expired, delete it
     localStorage.removeItem('jwt');
+    storeWithMiddleware.dispatch(delUserInfo()); //userInfo decoded from expired token, so delete it
     renderDOM();
   }
   else { //else verify with back end
     const client = new API();
-    client.get('auth/validate', responseData => {
-      localStorage.jwt = responseData.jwt;
-      renderDOM();
-    });
+    client.get('auth/validate',
+      responseData => {
+        if (responseData.jwt) {
+          ReactGA.set({ userId: decodedJwt.sub.id }); //id will be same from prev json token, no need to decode new one from responseData and find id
+          localStorage.setItem('jwt', responseData.jwt);
+        }
+        else localStorage.removeItem('jwt'); //else responseData.msg error msg occurs if not valid
+        renderDOM();
+      },
+      null, //no passedParams
+      () => { //custom handleError function, if error returned assume jwt invalid
+        localStorage.removeItem('jwt');
+        storeWithMiddleware.dispatch(delUserInfo()); //userInfo incorrect (decoded invalid jwt), so delete it
+        renderDOM();
+      }
+    );
   }
 }
-else {
+else { //no jwt found
   renderDOM();
 }
 
@@ -63,11 +78,11 @@ function renderDOM () {
             <div className='container'>
               <Switch>
                 <Route path="/about" component={About} />
+                <Route path="/privacy" component={Privacy} />
                 <Route path="/search/:search" component={requireAuth(SearchContent)} />
                 <Route path="/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)" component={requireAuth(PostEval)} />
                 <Route path="/professors/:professor_id(\d+)" component={requireAuth(ViewEvals, {type: "professors"})} />
                 <Route path="/courses/:course_id(\d+)" component={requireAuth(ViewEvals, {type: "courses"})} />
-                <Route path="/privacy" component={Privacy} />
                 <Route path="/profile" component={requireAuth(Profile)} />
                 <Route exact path="/" component={requireAuth(Home)} />
                 <Redirect to="/" />

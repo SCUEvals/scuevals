@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { GoogleLogin } from 'react-google-login';
 import jwtDecode from 'jwt-decode';
 import PropTypes from 'prop-types';
+import ReactGA from 'react-ga';
 
 import API from '../services/api';
 
@@ -25,13 +26,15 @@ class Home extends Component {
     this.setState({loading: true});
     const client = new API();
     client.post('/auth', {id_token: token}, responseData =>  {
+      let decodedJwt = jwtDecode(responseData.jwt);
+      ReactGA.set({ userId: decodedJwt.sub.id });
       try {
         localStorage.setItem("jwt", responseData.jwt);
       } catch(err) {
         console.error("Cannot execute localStorage.setItem (perhaps private mode is enabled). Error:", err);
       }
       this.props.setUserInfo(responseData.jwt);
-      if (jwtDecode(responseData.jwt).sub.roles.includes(0)) this.props.history.push('/profile');
+      if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile');
       this.setState({loading: false});
     });
   }
