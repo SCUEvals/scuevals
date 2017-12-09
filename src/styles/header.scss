@@ -1,0 +1,118 @@
+@import "theme";
+header {
+  flex-flow: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 15px;
+  height: $headerHeight;
+  z-index: 1;
+  width: 100%;
+  background-color: $overlayBackground;
+  color: white;
+
+  .text-help {
+    position: absolute;
+    top: 37px;
+    background-color: $SCUred;
+    z-index: 2;
+    border-radius: 10px;
+    padding: 4px 8px;
+    font-size: 13px;
+  }
+
+  input, input.form-control {
+    border-color: $backgroundColor;
+  }
+
+  .input-group-btn > button {
+    //margin: 0 !important;
+  }
+
+  .profileBtn, .signOutBtn {
+    color: white;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    margin: 0 5px;
+
+    &:focus {
+      color: white;
+    }
+
+    &:hover {
+      color: $hoverOverlayLinkColor;
+      background-color: transparent;
+    }
+
+  }
+  .signOutBtn {
+    top: 0;
+    right: 10px; //+5px for padding = 15px
+    position: absolute;
+  }
+
+  .oauth-img {
+    height: 32px;
+    border-radius: 50%;
+    margin-left: 8px;
+  }
+
+  .header-items {
+    position: relative;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
+
+  :global(#searchBarResults) {
+    top: 31px;
+    position: absolute;
+    width: calc(100% - 30px - 41px); //30px for  15px x2 padding, 40px for search button
+    max-height: 212px;
+    overflow: auto;
+    background-color: white;
+    z-index: 1;
+    text-align: left;
+    list-style-type: none;
+    padding-left: 0;
+    border: 2px solid $backgroundColor;
+    border-radius: .25rem;
+    padding-top: 6px;
+
+    h6, li {
+      padding: 5px;
+    }
+
+    h6 {
+      font-weight: bold;
+      background-color: $overlayBackground;
+      color: white;
+      margin: 0;
+    }
+
+    a {
+      cursor: pointer;
+      color: $overlayBackground;
+      font-weight: bold;
+      li {
+        border-bottom: 2px solid $backgroundColor;
+      }
+      &:hover li, &:focus li {
+          color: $SCUdarkred;
+          background-color: $backgroundColor;
+      }
+      &:last-child li {
+        border-bottom: none;
+      }
+    }
+  }
+  form i {
+    color: white;
+  }
+}

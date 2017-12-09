@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import ReactGA from 'react-ga';
 
 import API from '../services/api';
+import '../styles/header.scss';
 
 class Header extends Component {
 
@@ -99,7 +100,7 @@ class Header extends Component {
             <button type="submit" className="btn"><i className="fa fa-search" /></button>
           </div>
           {submitFailed && error ?
-            <div className='text-help'>
+            <div styleName='text-help'>
               {error}
             </div>
             : ''
@@ -121,7 +122,7 @@ class Header extends Component {
         {response.professors.length > 0 ?
           response.professors.map(professor => {
             return(
-              <Link key={professor.id} to={`/courses/${professor.id}`}><li tabIndex='0'>{professor.first_name} {professor.last_name}</li></Link>
+              <Link tabIndex='0' key={professor.id} to={`/courses/${professor.id}`}><li>{professor.first_name} {professor.last_name}</li></Link>
             );
           })
           : ''
@@ -130,7 +131,7 @@ class Header extends Component {
         {response.courses.length > 0 ?
           response.courses.map(course => {
             return(
-              <Link key={course.id} to={`/courses/${course.id}`}><li tabIndex='0'>{course.department} {course.number}: {course.title}</li></Link>
+              <Link tabIndex='0' key={course.id} to={`/courses/${course.id}`}><li>{course.department} {course.number}: {course.title}</li></Link>
             );
           })
           : ''
@@ -171,13 +172,13 @@ class Header extends Component {
             />
           </form>
 
-          <div className="container header-items">
+          <div styleName="header-items" className="container">
             <Link to={'/'}>
               <i className="fa fa-home homeBtn" />
             </Link>
-            <Link className='profileBtn' to={'/profile'}>
+            <Link styleName='profileBtn' to={'/profile'}>
               {userInfo.first_name}
-              <img className="oauth-img" src={userInfo.picture} alt="Profile picture" />
+              <img styleName="oauth-img" src={userInfo.picture} alt="Profile picture" />
             </Link>
             <button type="button" onClick={() => {
               localStorage.removeItem('jwt');
@@ -185,7 +186,7 @@ class Header extends Component {
               ReactGA.set({ userId: undefined });
               if (this.props.history.location.pathname !== '/') this.props.history.push('/');
             }}
-            className="signOutBtn">
+            styleName="signOutBtn">
               Sign Out
             </button>
           </div>

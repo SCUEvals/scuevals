@@ -1,9 +1,5 @@
 @import "theme";
 
-$headerHeight: 99px;
-$footerHeight: 35px;
-$defaultBorderRadius: .4rem;
-
 $xs: 575px;
 
 @mixin absoluteCenter {
@@ -37,64 +33,6 @@ body {
   min-height: 100vh;
 }
 
-header {
-  padding-top: 15px;
-  height: $headerHeight;
-  z-index: 1;
-  //position: absolute;
-  width: 100%;
-  background-color: $overlayBackground;
-  color: white;
-
-  .text-help {
-    position: absolute;
-    top: 37px;
-    background-color: $SCUred;
-    z-index: 2;
-    border-radius: 10px;
-    padding: 4px 8px;
-    font-size: 13px;
-  }
-
-  input, input.form-control {
-    border-color: $backgroundColor;
-  }
-
-  .input-group-btn > button {
-    @include button;
-    margin: 0 !important;
-  }
-  .profileBtn, .signOutBtn {
-    color: white;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    font-weight: normal;
-    border: none;
-    background-color: transparent;
-    padding: 0 5px;
-    &:focus {
-      color: white;
-    }
-    &:hover {
-      color: $hoverOverlayLinkColor;
-      background-color: transparent;
-    }
-  }
-
-  .signOutBtn {
-    top: 0;
-    right: 10px; //+5px for padding = 15px
-    position: absolute;
-  }
-
-  .oauth-img {
-    height: 32px;
-    border-radius: 50%;
-    margin-left: 8px;
-  }
-}
-
 form.content {
   .form-control {
     border: 1px solid $backgroundColor;
@@ -109,7 +47,7 @@ form.content {
   margin: 15px 0;
   width: 100%;
   position: relative;
-  .signOutBtn {
+  .signOutBtn { //for when no header (not signed in)
     font-weight: bold;
     padding: 0;
     color: $SCUred;
@@ -235,49 +173,9 @@ body::after {
   z-index: -1;
 }
 
-
-#searchBarResults {
-  top: 31px;
-  position: absolute;
-  width: calc(100% - 30px - 41px); //30px for  15px x2 padding, 40px for search button
-  max-height: 212px;
-  overflow: auto;
-  background-color: white;
-  z-index: 1;
-  text-align: left;
-  list-style-type: none;
-  padding-left: 0;
-  border: 2px solid $backgroundColor;
-  border-radius: .25rem;
-  padding-top: 6px;
-  h6, li {
-    padding: 5px;
-  }
-  h6 {
-    font-weight: bold;
-    background-color: $overlayBackground;
-    color: white;
-    margin: 0;
-  }
-  li {
-    cursor: pointer;
-    border-bottom: 2px solid $backgroundColor;
-    color: $overlayBackground;
-    font-weight: bold;
-    &:hover, &:focus {
-      color: $SCUdarkred;
-      background-color: $backgroundColor;
-    }
-  }
-  li:last-child {
-    border-bottom: none;
-  }
-}
-
 table {
   text-align: left;
 }
-
 
 form {
   i {
@@ -292,10 +190,6 @@ form {
     margin-top: 50px;
     margin-bottom: 20px;
   }
-}
-
-header form i {
-  color: white;
 }
 
 textarea {
@@ -474,21 +368,6 @@ label {
   top: initial;
 }
 
-header {
-  flex-flow: column;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.header-items {
-  position: relative;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-}
-
 .flex h3 {
   position: relative; //for home icon to sit inside h3 when signed out
 }
@@ -548,4 +427,3 @@ input[type="checkbox"], input[type="radio"] {
     }
   }
 }
-
