@@ -24,7 +24,6 @@ import API from './services/api';
 import { delUserInfo } from './actions';
 
 import '../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css?global';
-import '../node_modules/rc-slider/dist/rc-slider.min.css?global';
 import '../node_modules/react-select/dist/react-select.min.css?global';
 import './styles/style.scss?global'; //ensure this is last file, want our styles to override all others
 

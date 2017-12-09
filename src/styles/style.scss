@@ -274,48 +274,10 @@ body::after {
   }
 }
 
-.rc-slider {
-  margin: 9px auto;
-  width: 300px;
-  max-width: 90%;
-  height: 15px;
-  padding: 0;
-  .rc-slider-rail {
-    background-color: $overlayBackground;
-    height: 15px;
-  }
-  .rc-slider-step {
-    bottom: 0;
-    .rc-slider-dot {
-      border: 0;
-      bottom: 0;
-      width: 2px;
-      color: white;
-      border-radius: 0;
-      background-color: white;
-      height: 15px;
-    }
-    // .rc-slider-dot-active {
-    //   background-color: green;
-    // }
-  }
-}
-
-.rc-slider-dot:first-child, .rc-slider-dot:last-child {
-  display: none;
-}
-
 table {
   text-align: left;
 }
 
-.handleNum {
-  font-weight: bold;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-}
 
 form {
   i {
@@ -342,16 +304,6 @@ textarea {
   resize: none;
   &:focus {
     outline: 2px solid $SCUdarkred;
-  }
-}
-
-.postGuidelines {
-  text-align: left;
-  .card-header {
-    color: white;
-    font-weight: bold;
-    background-color: $SCUred;
-    text-align: center;
   }
 }
 
@@ -597,141 +549,3 @@ input[type="checkbox"], input[type="radio"] {
   }
 }
 
-
-$handleTransition: all 0.25s ease 0s;
-.rc-slider-handle {
-  transition: $handleTransition;
-}
-
-.rc-slider-track {
-  background-color: $overlayBackground;
-  transition: $handleTransition;
-}
-
-.track1 {
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7c0000+0,fc0000+100 */
-  //background: linear-gradient(to right, #7c0000 0%,#fc0000 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  background-color: red;
-}
-
-.track2 {
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#d36200+0,ffa500+100 */
-  //background: linear-gradient(to right, #d36200 0%,#ffa500 100%);
-  background-color: orange;
-}
-
-.track3 {
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#edd500+0,3fff00+100 */
-  //background: linear-gradient(to right, #edd500 0%,#3fff00 100%);
-  background-color: greenyellow;
-}
-
-.track4 {
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#46d300+0,00840d+100 */
-  //background: linear-gradient(to right, #46d300 0%,#00840d 100%);
-  background-color: green;
-}
-
-
-/*BEGIN POPPER CSS*/
-.popper,
-.tooltip {
-    position: absolute;
-    background: #FFC107;
-    color: black;
-    border-radius: 3px;
-    box-shadow: 0 0 2px rgba(0,0,0,0.5);
-    padding: 10px;
-    text-align: center;
-}
-
-.popper .popper__arrow,
-.tooltip .tooltip-arrow {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    position: absolute;
-    margin: 5px;
-    border-color: #FFC107;
-}
-
-.popper[data-placement="top"],
-.tooltip[data-placement="top"] {
-    margin-bottom: 5px;
-}
-.popper[data-placement="top"] .popper__arrow,
-.tooltip[data-placement="top"] .tooltip-arrow {
-    border-width: 5px 5px 0 5px;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-bottom-color: transparent;
-    bottom: -5px;
-    left: calc(50% - 5px);
-    margin-top: 0;
-    margin-bottom: 0;
-}
-.popper[data-placement="bottom"],
-.tooltip[data-placement="bottom"] {
-    margin-top: 5px;
-}
-.tooltip[data-placement="bottom"] .tooltip-arrow,
-.popper[data-placement="bottom"] .popper__arrow {
-    border-width: 0 5px 5px 5px;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-top-color: transparent;
-    top: -5px;
-    left: calc(50% - 5px);
-    margin-top: 0;
-    margin-bottom: 0;
-}
-.tooltip[data-placement="right"],
-.popper[data-placement="right"] {
-    margin-left: 5px;
-}
-.popper[data-placement="right"] .popper__arrow,
-.tooltip[data-placement="right"] .tooltip-arrow {
-    border-width: 5px 5px 5px 0;
-    border-left-color: transparent;
-    border-top-color: transparent;
-    border-bottom-color: transparent;
-    left: -5px;
-    top: calc(50% - 5px);
-    margin-left: 0;
-    margin-right: 0;
-}
-.popper[data-placement="left"],
-.tooltip[data-placement="left"] {
-    margin-right: 5px;
-}
-.popper[data-placement="left"] .popper__arrow,
-.tooltip[data-placement="left"] .tooltip-arrow {
-    border-width: 5px 0 5px 5px;
-    border-top-color: transparent;
-    border-right-color: transparent;
-    border-bottom-color: transparent;
-    right: -5px;
-    top: calc(50% - 5px);
-    margin-left: 0;
-    margin-right: 0;
-}
-/*END POPPERJS*/
-
-.rc-slider-handle + .popper {
-  opacity: 0;
-}
-
-.rc-slider-handle:focus + .popper {
-  opacity: 1;
-}
-
-.popper-manager, .popper, .tooltip {
-  transition: all .2s ease-in-out;
-}
-
-.tooltip-manager {
-  display: inline-block;
-  .tooltip-target:hover + .tooltip {
-    opacity: 1;
-  }
-}

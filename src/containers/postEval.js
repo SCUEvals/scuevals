@@ -6,6 +6,8 @@ import { Manager, Target, Popper, Arrow } from 'react-popper';
 import PropTypes from 'prop-types';
 
 import API from '../services/api';
+import '../../node_modules/rc-slider/dist/rc-slider.min.css?global';
+import '../styles/postEval.scss';
 
 const Handle = Slider.Handle;
 
@@ -24,21 +26,21 @@ const textOptions = {
     four: 'blah',
     info: 'blah'
   }
-}
+};
 
 const infoTooltip = (info) => {
   return (
-    <Manager className='tooltip-manager'>
-      <Target className='tooltip-target'>
+    <Manager styleName='tooltip-manager'>
+      <Target styleName='tooltip-target'>
       <i className='fa fa-question-circle'/>
       </Target>
       <Popper placement="top" className="tooltip">
         {info}
-        <Arrow className="popper__arrow"/>
+        <Arrow styleName="popper__arrow"/>
       </Popper>
     </Manager>
   );
-}
+};
 
 const handle = (props, textProps) => {
   const { value, dragging, ...restProps } = props;
@@ -52,19 +54,19 @@ const handle = (props, textProps) => {
   }
 
   return (
-    <Manager style={managerStyle} className='popper-manager'>
+    <Manager style={managerStyle} styleName='popper-manager'>
       <Target>
         {({ targetProps }) => (
           <Handle value={value} {...restProps}>
-            <div {...targetProps} className='handleNum'>
+            <div {...targetProps} styleName='handleNum'>
               {value !== 0 ? value : ''}
             </div>
           </Handle>
         )}
       </Target>
-      <Popper style={popperStyle} placement="top" className="popper">
+      <Popper style={popperStyle} placement="top" styleName="popper">
         {value === 0 || value === 1 ? textProps.one : value === 2 ? textProps.two : value === 3 ? textProps.three : value === 4 ? textProps.four : ''}
-        <Arrow className="popper__arrow"/>
+        <Arrow styleName="popper__arrow"/>
       </Popper>
     </Manager>
   );
@@ -74,7 +76,7 @@ class PostEval extends Component {
 
   static defaultProps = {
     userInfo: PropTypes.object
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -95,7 +97,7 @@ class PostEval extends Component {
   }
 
   renderSlider(props) {
-    var track = $('.' + props.input.name + ' .rc-slider-track');
+    let track = $('.' + props.input.name + ' .rc-slider-track');
 
     if (track.length === 1) {
       track = track[0];
@@ -132,12 +134,12 @@ class PostEval extends Component {
 
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
-        <div className='row postGuidelines'>
+        <div styleName='postGuidelines' className='row'>
           <div className='col-12 col-md-6'>
             <div className='card'>
               <div className='card-header'>GUIDELINES TO FOLLOW</div>
                 <div className='card-body'>
-                  <ul >
+                  <ul>
                     <li>Refer to the rating chart for each question</li>
                     <li>Remove unfair bias from your review</li>
                     <li>Proofread your comments before submission</li>
@@ -185,7 +187,6 @@ class PostEval extends Component {
     );
   }
 }
-
 
 export default reduxForm({
   form: 'postEval'
