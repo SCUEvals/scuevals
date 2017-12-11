@@ -2,37 +2,9 @@
 
 $xs: 575px;
 
-i.homeBtn {
-  cursor: pointer;
-  font-size: 1.75rem;
-  position: absolute;
-  left: 10px;
-  height: 100%;
-  padding: 0 5px;
-  top: 0;
-  align-items: center;
-  display: flex;
-}
-
 @media (max-width: $xs) {
   [data-target|='#serverSideDesc'] {
     margin-top: 3rem;
-  }
-}
-
-#app,
-#app > div {
-  height: 100%;
-}
-
-.flex {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  div.container { //not footer's container, only div
-    width: initial;
-    padding: 15px; //adds top and bottom padding
   }
 }
 
@@ -47,10 +19,6 @@ i.homeBtn {
   color: white;
   padding: 7px;
   margin-bottom: 20px;
-}
-
-.flex h3 {
-  position: relative; //for home icon to sit inside h3 when signed out
 }
 
 .error {

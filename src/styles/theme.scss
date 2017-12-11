@@ -142,6 +142,23 @@ input[type="radio"] {
   margin-right: 3px;
 }
 
+i.homeBtn {
+  cursor: pointer;
+  font-size: 1.75rem;
+  position: absolute;
+  left: 10px;
+  height: 100%;
+  padding: 0 5px;
+  top: 0;
+  align-items: center;
+  display: flex;
+}
+
+#app,
+#app > div {
+  height: 100%;
+}
+
 .content {
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 0.25rem;
@@ -150,6 +167,21 @@ input[type="radio"] {
   margin: 15px 0;
   width: 100%;
   position: relative;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  h3 {
+    position: relative; //for home icon to sit inside h3 when signed out
+  }
+
+  div.container { //not footer's container, only div
+    width: initial;
+    padding: 15px; //adds top and bottom padding
+  }
 }
 
 .loadingWrapper {
