@@ -1,3 +1,16 @@
 {
-  "extends": "stylelint-config-standard"
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "no-eol-whitespace": [true, {
+      "ignore": ["empty-lines"]
+    }],
+
+    "selector-pseudo-class-no-unknown": [true, {
+      "ignorePseudoClasses": ["global", "local"]
+    }],
+
+    "at-rule-no-unknown": [true, {
+      "ignoreAtRules": ["mixin", "include"]
+    }]
+  }
 }

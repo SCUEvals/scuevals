@@ -1,4 +1,5 @@
 @import "theme";
+
 header {
   flex-flow: column;
   display: flex;
@@ -21,7 +22,8 @@ header {
     font-size: 13px;
   }
 
-  input, input.form-control {
+  input,
+  input.form-control {
     border-color: $backgroundColor;
   }
 
@@ -29,7 +31,14 @@ header {
     //margin: 0 !important;
   }
 
-  .profileBtn, .signOutBtn {
+  .signOutBtn {
+    top: 0;
+    right: 10px; //+5px for padding = 15px
+    position: absolute;
+  }
+
+  .profileBtn,
+  .signOutBtn {
     color: white;
     height: 100%;
     display: flex;
@@ -48,12 +57,6 @@ header {
       color: $hoverOverlayLinkColor;
       background-color: transparent;
     }
-
-  }
-  .signOutBtn {
-    top: 0;
-    right: 10px; //+5px for padding = 15px
-    position: absolute;
   }
 
   .oauth-img {
@@ -82,10 +85,11 @@ header {
     list-style-type: none;
     padding-left: 0;
     border: 2px solid $backgroundColor;
-    border-radius: .25rem;
+    border-radius: 0.25rem;
     padding-top: 6px;
 
-    h6, li {
+    h6,
+    li {
       padding: 5px;
     }
 
@@ -100,18 +104,23 @@ header {
       cursor: pointer;
       color: $overlayBackground;
       font-weight: bold;
+
       li {
         border-bottom: 2px solid $backgroundColor;
       }
-      &:hover li, &:focus li {
-          color: $SCUdarkred;
-          background-color: $backgroundColor;
+
+      &:hover li,
+      &:focus li {
+        color: $SCUdarkred;
+        background-color: $backgroundColor;
       }
+
       &:last-child li {
         border-bottom: none;
       }
     }
   }
+
   form i {
     color: white;
   }

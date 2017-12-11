@@ -1,22 +1,14 @@
 @import "theme";
 
 $voteWidth: 40px;
+
 .eval {
   position: relative;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: .25rem;
+  border-radius: 0.25rem;
 }
 
 .vote {
-  i {
-    &.active {
-      color: $SCUred;
-    }
-    font-size: 28px;
-    margin: 5px 0;
-    color: $overlayBackground;
-    cursor: pointer;
-  }
   float: left;
   width: $voteWidth;
   display: flex;
@@ -28,6 +20,16 @@ $voteWidth: 40px;
   height: 100%;
   background-color: $backgroundColor;
 
+  i {
+    font-size: 28px;
+    margin: 5px 0;
+    color: $overlayBackground;
+    cursor: pointer;
+
+    &.active {
+      color: $SCUred;
+    }
+  }
 }
 
 .evalContent {
@@ -36,11 +38,11 @@ $voteWidth: 40px;
 }
 
 .evalInfo.row {
-  border-left: 1px solid rgba(0, 0, 0, .2);
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
   margin: 0;
+
   div {
     width: 50%;
-    padding: 0;
     display: inline-block;
     background-color: $backgroundColor;
     font-size: 16px;
@@ -56,13 +58,17 @@ $voteWidth: 40px;
   height: 78px;
   position: relative;
   overflow: auto;
+  background-color: $SCUred;
+
   .scoreBlock {
     padding: 5px 0;
     font-size: 15px;
+
     .scoreTitle {
       font-weight: bold;
       margin-bottom: 5px;
     }
+
     .scoreNum {
       width: 38px;
       margin: 0 auto;
@@ -74,16 +80,17 @@ $voteWidth: 40px;
       border-radius: 50%;
     }
   }
-  background-color: $SCUred;
 }
 
 .comment {
   text-align: initial;
+
   .commentQuote {
     text-align: center;
     font-style: oblique;
     padding: 15px;
   }
+
   .commentReport {
     text-align: right;
     margin: 15px;

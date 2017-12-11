@@ -1,7 +1,7 @@
 @import "~react-bootstrap-table/dist/react-bootstrap-table.min";
 @import "~react-select/dist/react-select.min";
 
-$backgroundColor: #F0f0f0;
+$backgroundColor: #f0f0f0;
 $overlayBackground: #444;
 $SCUred: #b30738;
 $SCUdarkred: #97052e;
@@ -10,7 +10,7 @@ $hoverLinkColor: $SCUdarkred;
 $hoverOverlayLinkColor: #ffb6ca;
 $headerHeight: 99px;
 $footerHeight: 35px;
-$defaultBorderRadius: .4rem;
+$defaultBorderRadius: 0.4rem;
 
 * {
   text-overflow: ellipsis;
@@ -60,6 +60,7 @@ body::after {
   background-color: $SCUred;
   cursor: pointer;
   font-weight: 600;
+
   &:hover {
     background-color: $SCUdarkred;
   }
@@ -70,7 +71,7 @@ button {
 }
 
 a {
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
   font-weight: bold;
   text-decoration: none !important;
   color: $linkColor;
@@ -82,6 +83,10 @@ a {
   &:hover {
     color: $hoverLinkColor;
   }
+}
+
+h6 {
+  font-size: 1.1rem;
 }
 
 table {
@@ -104,6 +109,7 @@ form {
     font-size: 25px;
     color: $SCUred;
     cursor: pointer;
+
     &:hover {
       color: $SCUdarkred;
     }
@@ -131,17 +137,14 @@ label {
   }
 }
 
-input[type="checkbox"], input[type="radio"] {
+input[type="checkbox"],
+input[type="radio"] {
   margin-right: 3px;
 }
 
-h6 {
-  font-size: 1.1rem;
-}
-
 .content {
-  border: 1px solid rgba(0, 0, 0, .2);
-  border-radius: .25rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.25rem;
   background: white;
   padding: 15px;
   margin: 15px 0;
@@ -151,6 +154,7 @@ h6 {
 
 .loadingWrapper {
   @include absoluteCenter;
+
   color: $SCUred;
   height: auto !important;
 }
@@ -160,8 +164,33 @@ h6 {
   margin: auto auto 50px;
   max-width: 350px;
 
+  &-option {
+    border-bottom: 1px solid $backgroundColor;
+    color: $overlayBackground;
+    font-weight: bold;
+
+    &:hover {
+      background-color: $backgroundColor;
+      color: $SCUdarkred;
+    }
+  }
+
+  &-value {
+    max-width: 302px !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin: 0 10px;
+    text-align: center;
+  }
+
   &-value-icon {
     width: 19px;
+    float: left;
+  }
+
+  &-arrow-zone,
+  &-clear-zone {
+    vertical-align: top;
   }
 
   &-clear-zone {
@@ -178,14 +207,14 @@ h6 {
     color: $SCUdarkred;
     background-color: $backgroundColor;
   }
-
-  &-arrow-zone,
-  &-clear-zone {
-    vertical-align: top;
-  }
 }
 
 .Select--multi {
+  .Select-value-icon {
+    display: flex;
+    align-items: center;
+  }
+
   .Select-multi-value-wrapper {
     padding-right: 20px;
     display: flex;
@@ -204,51 +233,16 @@ h6 {
       }
     }
   }
-
-  .Select-value-icon {
-    display: flex;
-    align-items: center;
-  }
-}
-
-.Select-value {
-  max-width: 302px !important;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  margin: 0 10px;
-  text-align: center;
-
-  &-icon {
-    float: left;
-  }
-}
-
-.Select-option {
-  border-bottom: 1px solid $backgroundColor;
-  color: $overlayBackground;
-  font-weight: bold;
-
-  &:hover {
-    background-color: $backgroundColor;
-    color: $SCUdarkred;
-  }
 }
 
 .Select-option.is-selected {
   background-color: white;
+  color: $SCUred;
 
   &:hover {
     background-color: $backgroundColor;
     color: $SCUdarkred;
   }
-}
-
-.Select-option.is-selected {
-  color: $SCUred;
-}
-
-.has-value.is-clearable.Select--single > .Select-control .Select-value {
-  padding: inherit;
 }
 
 .Select--single > .Select-control .Select-value,
@@ -256,3 +250,6 @@ h6 {
   top: initial;
 }
 
+.has-value.is-clearable.Select--single > .Select-control .Select-value {
+  padding: inherit;
+}
