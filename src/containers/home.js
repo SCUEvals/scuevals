@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import ReactGA from 'react-ga';
 
 import API from '../services/api';
+import '../styles/home.scss';
 
 import PostSearch from '../components/postSearch';
 import { setUserInfo } from '../actions';
@@ -15,7 +16,7 @@ class Home extends Component {
   static defaultProps = {
     setUserInfo: PropTypes.func,
     history: PropTypes.object
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -57,7 +58,7 @@ class Home extends Component {
     }
     else { //if not logged in
       return (
-        <div className="login">
+        <div styleName="login">
           <h1>SCU Evals</h1>
           <GoogleLogin
             hostedDomain="scu.edu"
@@ -65,7 +66,7 @@ class Home extends Component {
             buttonText=''
             onSuccess={info => this.authWithBackEnd(info.tokenObj.id_token)}
             onFailure={err => console.error('Google Login Error: ', err)}
-            className='loginBtn'
+            styleName='loginBtn'
           >
               <img className='pull-left' alt='Google "G" logo' src='/images/googleG.jpg' />
               <span>Sign in with Google</span>

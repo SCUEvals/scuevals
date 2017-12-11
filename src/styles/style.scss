@@ -193,43 +193,6 @@ textarea {
   }
 }
 
-.login {
-  width: 258px; //270px when font-weight is bold
-  .loginBtn {
-    padding: 0;
-    border: 0;
-    &:hover {
-      background-color: $SCUdarkred;
-    }
-    img {
-      cursor: pointer;
-      height: 100%;
-      padding: 2px;
-      border-radius: $defaultBorderRadius;
-    }
-    span {
-      cursor: pointer;
-      font-size: 19px;
-      justify-content: center;
-      align-items: center;
-      display: flex;
-      height: 100%;
-    }
-    color: white;
-    border-radius: $defaultBorderRadius;
-    background-color: $SCUred;
-    width: 100%;
-    height: 51px;
-  //  border: 7px solid black;
-  }
-  h1 {
-    border-radius: $defaultBorderRadius;
-    background-color: $SCUred;
-    color: white;
-    font-size: 3rem;
-  }
-}
-
 .flex {
   display: flex;
   justify-content: center;
