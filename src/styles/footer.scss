@@ -1,0 +1,22 @@
+@import "theme";
+
+.footer {
+  color: white;
+  background-color: $overlayBackground;
+  position: relative;
+  height: $footerHeight;
+  line-height: 35px;
+}
+
+.link {
+  font-weight: normal;
+  color: white;
+
+  &:focus {
+    color: white;
+  }
+
+  &:hover {
+    color: $hoverOverlayLinkColor;
+  }
+}
