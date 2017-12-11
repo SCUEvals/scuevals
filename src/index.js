@@ -72,7 +72,7 @@ function renderDOM () {
     <Provider store={storeWithMiddleware}>
       <BrowserRouter>
         <GAListener>
-          <div styleName='push-footer'>
+          <div id="push-footer" styleName='push-footer'>
             <Header />
             <div className='container'>
               <Switch>

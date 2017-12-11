@@ -23,15 +23,15 @@ class Header extends Component {
 
   componentDidMount() {
     let pushFooter = document.getElementById('push-footer');
-    if (this.props.userInfo && !this.props.userInfo.roles.includes(0)) pushFooter.className = '';
-    else pushFooter.className = 'flex';
+    if (this.props.userInfo && !this.props.userInfo.roles.includes(0)) pushFooter.classList.remove('flex');
+    else pushFooter.classList.add('flex');
   }
 
   componentWillUpdate(nextProps) {
     if (nextProps.userInfo !== this.props.userInfo) {
       let pushFooter = document.getElementById('push-footer');
-      if (nextProps.userInfo && !nextProps.userInfo.roles.includes(0)) pushFooter.className = '';
-      else pushFooter.className = 'flex';
+      if (nextProps.userInfo && !nextProps.userInfo.roles.includes(0)) pushFooter.classList.remove('flex');
+      else pushFooter.classList.add('flex');
     }
   }
 
