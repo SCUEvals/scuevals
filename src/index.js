@@ -24,7 +24,6 @@ import API from './services/api';
 import { delUserInfo } from './actions';
 
 import './styles/theme.scss?global';
-import './styles/style.scss?global';
 import './styles/index.scss';
 
 

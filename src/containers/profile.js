@@ -138,12 +138,12 @@ class Profile extends Component {
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
           {userInfo && !userInfo.roles.includes(0) ?
             <div>
-              <h4 className='banner'>{userInfo.first_name}'s Profile</h4>
+              <h4 styleName='banner'>{userInfo.first_name}'s Profile</h4>
               <small>This information is kept anonymous from the public and is only used for statistical purposes.</small>
             </div>
             :
             <div>
-            <h4 className='banner'>Welcome to SCU Evals, {userInfo.first_name}!</h4>
+            <h4 styleName='banner'>Welcome to SCU Evals, {userInfo.first_name}!</h4>
             <p>Before we start, we need to know a few things about you.</p>
             <small>This information is kept anonymous from the public and is only used for statistical purposes.<br/>
             <button type="button" onClick={() => {
@@ -158,7 +158,7 @@ class Profile extends Component {
         </div>
           }
         <hr/>
-        <div className='form-container'>
+        <div styleName='form-container'>
           <h5>Major(s)</h5>
           <Field
             name='majors' //responsible for object's key name for values

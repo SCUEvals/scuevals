@@ -11,6 +11,13 @@ $hoverOverlayLinkColor: #ffb6ca;
 $headerHeight: 99px;
 $footerHeight: 35px;
 $defaultBorderRadius: 0.4rem;
+$xs: 575px;
+
+@media (max-width: $xs) {
+  [data-target|='#serverSideDesc'] {
+    margin-top: 3rem;
+  }
+}
 
 * {
   text-overflow: ellipsis;
@@ -167,6 +174,10 @@ i.homeBtn {
   margin: 15px 0;
   width: 100%;
   position: relative;
+
+  *[class^="col"] {
+    padding: 15px;
+  }
 }
 
 .flex {
@@ -184,11 +195,39 @@ i.homeBtn {
   }
 }
 
+.react-bs-table-container {
+  td {
+    padding: 0;
+
+    a {
+      padding: 0.75rem;
+      display: block;
+
+      &:hover {
+        transition: none;
+      }
+    }
+  }
+
+  tr {
+    &:hover {
+      a {
+        color: $SCUdarkred;
+      }
+    }
+  }
+}
+
 .loadingWrapper {
   @include absoluteCenter;
 
   color: $SCUred;
   height: auto !important;
+}
+
+.error {
+  box-shadow: 0 0 0 2px $SCUred;
+  border-radius: 4px;
 }
 
 .Select {
