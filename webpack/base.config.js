@@ -2,6 +2,7 @@ const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 const htmlWebpackPluginConfig = new HTMLWebpackPlugin({
   template: './src/index.html',
@@ -15,6 +16,12 @@ const scriptExtHtmlWebpackPluginConfig = new ScriptExtHtmlWebpackPlugin({
 
 const extractStyle = new ExtractTextPlugin({
   filename: 'styles.[hash].min.css'
+});
+
+const styleLintPluginConfig = new StyleLintPlugin({
+  failOnError: true,
+  syntax: 'scss',
+  quiet: false
 });
 
 const cssLoaderOptions = {
@@ -109,5 +116,5 @@ module.exports = {
     publicPath: '/'
   },
 
-  plugins: [htmlWebpackPluginConfig, scriptExtHtmlWebpackPluginConfig, extractStyle],
+  plugins: [htmlWebpackPluginConfig, scriptExtHtmlWebpackPluginConfig, extractStyle, styleLintPluginConfig],
 };
