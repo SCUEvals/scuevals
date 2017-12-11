@@ -1,3 +1,6 @@
+@import "~react-bootstrap-table/dist/react-bootstrap-table.min";
+@import "~react-select/dist/react-select.min";
+
 $backgroundColor: #F0f0f0;
 $overlayBackground: #444;
 $SCUred: #b30738;
@@ -8,3 +11,248 @@ $hoverOverlayLinkColor: #ffb6ca;
 $headerHeight: 99px;
 $footerHeight: 35px;
 $defaultBorderRadius: .4rem;
+
+* {
+  text-overflow: ellipsis;
+  font-family: 'Roboto', sans-serif;
+}
+
+html {
+  position: relative;
+  height: 100%;
+}
+
+body {
+  background-color: $backgroundColor;
+  text-align: center;
+  height: 100%;
+  min-height: 100vh;
+}
+
+body::after {
+  content: "";
+  background-image: url('/images/background.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.6;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  height: 100vh;
+  z-index: -1;
+}
+
+@mixin absoluteCenter {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+@mixin button { //not to be used with <i> tags as buttons
+  color: white;
+  background-color: $SCUred;
+  cursor: pointer;
+  font-weight: 600;
+  &:hover {
+    background-color: $SCUdarkred;
+  }
+}
+
+button {
+  @include button;
+}
+
+a {
+  transition: all .2s ease-in-out;
+  font-weight: bold;
+  text-decoration: none !important;
+  color: $linkColor;
+
+  &:focus {
+    color: $linkColor;
+  }
+
+  &:hover {
+    color: $hoverLinkColor;
+  }
+}
+
+table {
+  text-align: left;
+}
+
+textarea {
+  width: 100%;
+  outline: 1px solid $overlayBackground;
+  max-width: 750px;
+  resize: none;
+
+  &:focus {
+    outline: 2px solid $SCUdarkred;
+  }
+}
+
+form {
+  i {
+    font-size: 25px;
+    color: $SCUred;
+    cursor: pointer;
+    &:hover {
+      color: $SCUdarkred;
+    }
+  }
+
+  h6 {
+    margin-top: 50px;
+    margin-bottom: 20px;
+  }
+}
+
+form.content {
+  .form-control {
+    border: 1px solid $backgroundColor;
+  }
+}
+
+label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+
+  &:not(:last-child) {
+    padding-right: 15px;
+  }
+}
+
+input[type="checkbox"], input[type="radio"] {
+  margin-right: 3px;
+}
+
+h6 {
+  font-size: 1.1rem;
+}
+
+.content {
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: .25rem;
+  background: white;
+  padding: 15px;
+  margin: 15px 0;
+  width: 100%;
+  position: relative;
+}
+
+.loadingWrapper {
+  @include absoluteCenter;
+  color: $SCUred;
+  height: auto !important;
+}
+
+.Select {
+  text-align: left;
+  margin: auto auto 50px;
+  max-width: 350px;
+
+  &-value-icon {
+    width: 19px;
+  }
+
+  &-clear-zone {
+    position: absolute;
+    right: 25px;
+    top: 3px;
+
+    &:hover {
+      color: $SCUdarkred;
+    }
+  }
+
+  &-menu-outer:hover {
+    color: $SCUdarkred;
+    background-color: $backgroundColor;
+  }
+
+  &-arrow-zone,
+  &-clear-zone {
+    vertical-align: top;
+  }
+}
+
+.Select--multi {
+  .Select-multi-value-wrapper {
+    padding-right: 20px;
+    display: flex;
+    flex-wrap: wrap;
+
+    .Select-value {
+      margin: 4px 0 0 4px;
+      height: 100%;
+      display: flex;
+      color: white;
+      background-color: $SCUred;
+
+      .Select-value-icon:hover {
+        background-color: $SCUdarkred;
+        color: white;
+      }
+    }
+  }
+
+  .Select-value-icon {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.Select-value {
+  max-width: 302px !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin: 0 10px;
+  text-align: center;
+
+  &-icon {
+    float: left;
+  }
+}
+
+.Select-option {
+  border-bottom: 1px solid $backgroundColor;
+  color: $overlayBackground;
+  font-weight: bold;
+
+  &:hover {
+    background-color: $backgroundColor;
+    color: $SCUdarkred;
+  }
+}
+
+.Select-option.is-selected {
+  background-color: white;
+
+  &:hover {
+    background-color: $backgroundColor;
+    color: $SCUdarkred;
+  }
+}
+
+.Select-option.is-selected {
+  color: $SCUred;
+}
+
+.has-value.is-clearable.Select--single > .Select-control .Select-value {
+  padding: inherit;
+}
+
+.Select--single > .Select-control .Select-value,
+.Select-placeholder {
+  top: initial;
+}
+

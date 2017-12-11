@@ -2,91 +2,16 @@
 
 $xs: 575px;
 
-@mixin absoluteCenter {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 0;
-  right: 0;
-  margin-left: 0;
-  margin-right: 0;
-}
-
-@mixin button { //not to be used with <i> tags as buttons
-  color: white;
-  background-color: $SCUred;
-  cursor: pointer;
-  font-weight: 600;
-  &:hover {
-     background-color: $SCUdarkred;
-  }
-}
-
-button {
-  @include button;
-}
-
-body {
-  background-color: $backgroundColor;
-  text-align: center;
-  height: 100%;
-  min-height: 100vh;
-}
-
-form.content {
-  .form-control {
-    border: 1px solid $backgroundColor;
-  }
-}
-
-.content {
-  border: 1px solid rgba(0,0,0,.2);
-  border-radius: .25rem;
-  background: white;
-  padding: 15px;
-  margin: 15px 0;
-  width: 100%;
-  position: relative;
-  .signOutBtn { //for when no header (not signed in)
-    font-weight: bold;
-    padding: 0;
-    color: $SCUred;
-    &:hover {
-      color: $SCUdarkred;
-    }
-    background-color: initial;
-    border: none;
-  }
-}
-
 i.homeBtn {
   cursor: pointer;
   font-size: 1.75rem;
   position: absolute;
-  left: 10px; //+5px for padding = 15px
+  left: 10px;
   height: 100%;
   padding: 0 5px;
   top: 0;
   align-items: center;
   display: flex;
-}
-
-
-a {
-  transition: all .2s ease-in-out;
-  font-weight: bold;
-  text-decoration: none !important;
-  color: $linkColor;
-  &:focus {
-    color: $linkColor;
-  }
-  &:hover {
-    color: $hoverLinkColor;
-  }
-}
-
-.blueLink {
-  color: $linkColor;
 }
 
 @media (max-width: $xs) {
@@ -95,102 +20,8 @@ a {
   }
 }
 
-#aboutEnd {
-  margin-bottom: 50px;
-}
-
-textarea {
-  width: 100%;
-}
-
-.loadingWrapper {
- @include absoluteCenter;
- color: $SCUred;
- height: auto !important;
-}
-
-#toggleFullscreenBtn {
-  position: fixed;
-  top:64px;
-  right: 15px;
-  color: $SCUred;
-  z-index: 1;
-  font-size: 26px;
-  cursor: pointer;
-}
-
-html {
-  position: relative;
-  height: 100%;
-}
-
-
-#push-footer {
-    min-height: calc(100% - #{$footerHeight});
-    position: relative;
-    padding-right: 0;
-    padding-left: 0;
-    display: flex;
-    flex-direction: column;
-}
-
 #app, #app > div {
   height: 100%;
-}
-
-body::after {
-  content: "";
-  background-image: url('/images/background.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  opacity: 0.6;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: fixed;
-  height: 100vh;
-  z-index: -1;
-}
-
-table {
-  text-align: left;
-}
-
-form {
-  i {
-    font-size: 25px;
-    color: $SCUred;
-    cursor: pointer;
-    &:hover {
-      color: $SCUdarkred;
-    }
-  }
-  h6 {
-    margin-top: 50px;
-    margin-bottom: 20px;
-  }
-}
-
-textarea {
-  outline: 1px solid $overlayBackground;
-  max-width: 750px;
-  resize: none;
-  &:focus {
-    outline: 2px solid $SCUdarkred;
-  }
-}
-
-.content.results {
-  h4 {
-  margin-top: 35px;
-  text-align: left;
-  font-weight: bold;
-  }
-  h5 {
-    margin-bottom: 0;
-  }
 }
 
 .flex {
@@ -210,54 +41,6 @@ textarea {
   }
 }
 
-label:not(:last-child) {
-  padding-right: 15px;
-}
-
-.Select {
-  text-align: left;
-  margin: auto;
-  margin-bottom: 50px;
-  max-width: 350px;
-  .Select-value-icon {
-    width: 19px;
-  }
-  .Select-clear-zone {
-    position: absolute;
-    right: 25px;
-    top: 3px;
-    &:hover {
-      color: $SCUdarkred;
-    }
-  }
-  .Select-menu-outer {
-    &:hover {
-      color: $SCUdarkred;
-      background-color: $backgroundColor;
-    }
-  }
-  .Select-arrow-zone, .Select-clear-zone {
-    vertical-align: top;
-  }
-}
-
-.Select.Select--multi .Select-multi-value-wrapper {
-  padding-right: 20px;
-  .Select-value {
-    .Select-value-icon:hover {
-      background-color: $SCUdarkred;
-      color: white;
-    }
-    margin: 4px 0 0 4px;
-    height: 100%;
-    display: flex;
-    color: white;
-    background-color: $SCUred;
-  }
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .banner {
   background-color: $SCUred;
   color: white;
@@ -265,78 +48,13 @@ label:not(:last-child) {
   margin-bottom: 20px;
 }
 
-label {
-  margin-bottom: 0;
-}
-
-.Select-option {
-  &:hover {
-    background-color: $backgroundColor;
-    color: $SCUdarkred;
-  }
-  border-bottom: 1px solid $backgroundColor;
-  color: $overlayBackground;
-  font-weight: bold;
-}
-
-.Select-option.is-selected {
-  &:hover {
-    background-color: $backgroundColor;
-    color: $SCUdarkred;
-  }
-  background-color: white;
-}
-
-.Select-option.is-selected {
-  color: $SCUred;
-}
-
-.Select-value {
-  text-align: center;
-}
-
-.Select--multi .Select-value-icon {
-  display: flex;
-  align-items: center;
-}
-
-.Select-value-icon {
-  float: left;
-}
-
-.has-value.is-clearable.Select--single>.Select-control .Select-value {
-  padding: inherit;
-}
-
-.Select--single > .Select-control .Select-value, .Select-placeholder {
-  top: initial;
-}
-
 .flex h3 {
   position: relative; //for home icon to sit inside h3 when signed out
-}
-
-h6 {
-  font-size: 1.1rem;
-}
-
-* {
-  text-overflow: ellipsis;
-  font-family: 'Roboto', sans-serif;
 }
 
 .error {
   box-shadow: 0 0 0 2px $SCUred;
   border-radius: 4px;
-}
-
-label {
-  display: flex;
-  align-items: center;
-}
-
-input[type="checkbox"], input[type="radio"] {
-  margin-right: 3px;
 }
 
 .form-container {
@@ -345,19 +63,12 @@ input[type="checkbox"], input[type="radio"] {
   margin-left: auto !important;
 }
 
-.Select-value {
-  max-width: 302px !important;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  margin: 0 10px;
-}
-
 .react-bs-table-container {
   tr {
     &:hover {
       a {
-      color: $SCUdarkred;
-    }
+        color: $SCUdarkred;
+      }
     }
   }
   td {

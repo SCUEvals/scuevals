@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 import { setUserInfo, delUserInfo } from '../actions';
 import API from '../services/api';
+import '../styles/profile.scss';
 
 class Profile extends Component {
 

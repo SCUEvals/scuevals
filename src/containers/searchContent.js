@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 import { setSearchResults } from '../actions';
 import API from '../services/api';
+import '../styles/searchContent.scss';
 
 class SearchContent extends Component {
 
@@ -36,7 +37,7 @@ class SearchContent extends Component {
   render() {
     if (this.props.searchResults) {
       return (
-        <div className="content results">
+        <div styleName= "results" className="content">
           {this.props.searchResults.professors.length === 0 && this.props.searchResults.courses.length === 0 ?
             <h5>No results found for "{this.props.match.params.search}"</h5>
             :
@@ -72,7 +73,7 @@ class SearchContent extends Component {
       );
     } else {
       return (
-        <div className='content results'>
+        <div styleName="results" className="content">
           <h5>Please search with at least 3 characters.</h5>
         </div>
       );

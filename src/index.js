@@ -23,9 +23,9 @@ import requireAuth from './components/requireAuth';
 import API from './services/api';
 import { delUserInfo } from './actions';
 
-import '../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css?global';
-import '../node_modules/react-select/dist/react-select.min.css?global';
-import './styles/style.scss?global'; //ensure this is last file, want our styles to override all others
+import './styles/theme.scss?global';
+import './styles/style.scss?global';
+import './styles/index.scss';
 
 
 ReactGA.initialize('UA-102751367-1');
@@ -72,7 +72,7 @@ function renderDOM () {
     <Provider store={storeWithMiddleware}>
       <BrowserRouter>
         <GAListener>
-          <div id='push-footer'>
+          <div styleName='push-footer'>
             <Header />
             <div className='container'>
               <Switch>

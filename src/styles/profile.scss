@@ -1,0 +1,13 @@
+@import "theme";
+
+.signOutBtn {
+  font-weight: bold;
+  padding: 0;
+  color: $SCUred;
+  background-color: initial;
+  border: none;
+
+  &:hover {
+    color: $SCUdarkred;
+  }
+}
