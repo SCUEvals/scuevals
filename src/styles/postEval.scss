@@ -1,6 +1,12 @@
 @import "theme";
 
-$handleTransition: all 0.25s ease 0s;
+.handleNum {
+  font-weight: bold;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
 
 :global(.rc-slider) {
   margin: 9px auto;
@@ -30,11 +36,11 @@ $handleTransition: all 0.25s ease 0s;
 
   &-track {
     background-color: $overlayBackground;
-    transition: $handleTransition;
+    transition: $defaultTransition;
   }
 
   &-handle {
-    transition: $handleTransition;
+    transition: $defaultTransition;
   }
 }
 
@@ -162,11 +168,17 @@ $handleTransition: all 0.25s ease 0s;
 }
 
 :global(.rc-slider-handle) + .popper {
-  opacity: 0;
+  visibility: hidden;
 }
 
 :global(.rc-slider-handle:focus) + .popper {
-  opacity: 1;
+  visibility: visible;
+}
+
+.popper-manager,
+.popper,
+:global(.tooltip) {
+  transition: $defaultTransition;
 }
 
 .postGuidelines {

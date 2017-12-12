@@ -79,8 +79,8 @@ function renderDOM () {
                 <Route path="/privacy" component={Privacy} />
                 <Route path="/search/:search" component={requireAuth(SearchContent)} />
                 <Route path="/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)" component={requireAuth(PostEval)} />
-                <Route path="/professors/:professor_id(\d+)" component={requireAuth(ViewEvals, {type: "professors"})} />
-                <Route path="/courses/:course_id(\d+)" component={requireAuth(ViewEvals, {type: "courses"})} />
+                <Route path="/professors/:id(\d+)" component={requireAuth(ViewEvals, {type: "professors"})} />
+                <Route path="/courses/:id(\d+)" component={requireAuth(ViewEvals, {type: "courses"})} />
                 <Route path="/profile" component={requireAuth(Profile)} />
                 <Route exact path="/" component={requireAuth(Home)} />
                 <Redirect to="/" />

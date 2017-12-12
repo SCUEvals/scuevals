@@ -14,12 +14,25 @@ header {
 
   .text-help {
     position: absolute;
-    top: 37px;
+    top: 38px;
     background-color: $SCUred;
     z-index: 2;
-    border-radius: 10px;
+    border-radius: $defaultBorderRadius;
     padding: 4px 8px;
     font-size: 13px;
+    opacity: 0;
+    transition: $defaultTransition;
+    visibility: hidden;
+  }
+  .search-error {
+    input:focus {
+      border-color: $SCUred !important;
+    }
+    input:focus ~ .text-help {
+      visibility: visible;
+      opacity: 1;
+      transition: $defaultTransition;
+    }
   }
 
   input,
@@ -59,7 +72,7 @@ header {
     }
   }
 
-  .oauth-img {
+  .profile-img {
     height: 32px;
     border-radius: 50%;
     margin-left: 8px;
@@ -73,55 +86,59 @@ header {
     display: flex;
   }
 
-  :global(#searchBarResults) {
-    top: 31px;
-    position: absolute;
-    width: calc(100% - 30px - 41px); //30px for  15px x2 padding, 40px for search button
-    max-height: 212px;
-    overflow: auto;
-    background-color: white;
-    z-index: 1;
-    text-align: left;
-    list-style-type: none;
-    padding-left: 0;
-    border: 2px solid $backgroundColor;
-    border-radius: 0.25rem;
-    padding-top: 6px;
-
-    h6,
-    li {
-      padding: 5px;
+  :global(#searchBar) {
+    input {
+      z-index: 3;
+      border-width: 2px;
+      border-color: white;
     }
-
-    h6 {
-      font-weight: bold;
-      background-color: $overlayBackground;
+    :global(#searchBarResults[style='']) ~ input { //make sure style not display: none
+       border-bottom-left-radius: 0 !important;
+     }
+    i, i:hover {
       color: white;
-      margin: 0;
     }
+    :global(#searchBarResults) {
+      border-top: 0 !important;
+      top: 40px;
+      position: absolute;
+      width: calc(100% - 30px - 40px); //30px for  15px x2 padding, 40px for search button (add 1px to fit correctly)
+      max-height: 212px;
+      overflow: auto;
+      background-color: white;
+      z-index: 1;
+      text-align: left;
+      list-style-type: none;
+      padding-left: 0;
+      border: 2px solid $backgroundColor;
+      border-radius: 0 0 $defaultBorderRadius $defaultBorderRadius;
 
-    a {
-      cursor: pointer;
-      color: $overlayBackground;
-      font-weight: bold;
-
-      li {
-        border-bottom: 2px solid $backgroundColor;
+      h6, li {
+        padding: 5px;
       }
 
-      &:hover li,
-      &:focus li {
-        color: $SCUdarkred;
-        background-color: $backgroundColor;
+      h6 {
+        font-weight: bold;
+        background-color: $overlayBackground;
+        color: white;
+        margin: 0;
       }
 
-      &:last-child li {
-        border-bottom: none;
+      a {
+        cursor: pointer;
+        color: $overlayBackground;
+        font-weight: bold;
+        li {
+          border-bottom: 2px solid $backgroundColor;
+        }
+        &:hover li, &:focus li {
+            color: $SCUdarkred;
+            background-color: $backgroundColor;
+        }
+        &:last-child li {
+          border-bottom: none;
+        }
       }
     }
-  }
-
-  form i {
-    color: white;
   }
 }

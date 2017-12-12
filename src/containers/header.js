@@ -43,7 +43,12 @@ class Header extends Component {
   debouncedGetResponse(searchVal, setSearchResults) {
     if (searchVal && setSearchResults) {
       let client = new API();
-      client.get('/search', responseData => setSearchResults(responseData), {q: searchVal});
+      client.get('/search', responseData => {
+          setSearchResults(responseData);
+          $('#searchBar input').focus(); //focus on input after appears, which will also enable ha
+        },
+        {q: searchVal}
+      );
     }
   }
 
@@ -62,27 +67,21 @@ class Header extends Component {
 
   renderSearch(field) {
     const { meta: { error, submitFailed, touched } } = field;
-    const searchBarClass = `col-12 col-md-8 mx-auto input-group ${touched && error ? 'has-danger' : ''}`;
 
-    function hideOnClickOutside(searchBar, searchBarResults) {
-     const outsideClickListener = (event) => {
-       const searchBarDOM = $(searchBar);
-       const searchBarResultsDOM = $(searchBarResults);
-       if (searchBarResultsDOM === 0) document.removeEventListener('click', outsideClickListener); //if results empty
-       else if (!$(event.target).closest(searchBarDOM).length) {
-         if ($(searchBarResultsDOM).is(':visible')) {
-           $(searchBarResultsDOM).hide();
-           document.removeEventListener('click', outsideClickListener);
-         }
-       }
-     }
-     document.addEventListener('click', outsideClickListener);
+    function hideOnMouseDownOutside(searchBar, searchBarResults) { //must not be DOM objects passed, since each click needs to re-search DOM to see if exists
+      const outsideMouseDownListener = event => {
+        if (!$(event.target).closest($(searchBar)).length) {
+          $(searchBarResults).hide(); //if already hidden, will do nothing
+          document.removeEventListener('mousedown', outsideMouseDownListener);
+        }
+      }
+      document.addEventListener('mousedown', outsideMouseDownListener);
     }
 
     return (
       <div className="row">
         <label className="sr-only">{field.label}</label>
-        <div id='searchBar' className={searchBarClass}>
+        <div id='searchBar' styleName={submitFailed && error ? 'search-error' : ''} className='col-12 col-md-8 mx-auto input-group'>
           <input
             className='form-control'
             type='text'
@@ -92,13 +91,13 @@ class Header extends Component {
             onFocus={ event => {
               $('#searchBarResults').show();
               field.input.onFocus(event);
-              hideOnClickOutside('#searchBar', '#searchBarResults');
+              hideOnMouseDownOutside('#searchBar', '#searchBarResults');
             }}
 
           />
-          <div className="input-group-btn">
+          <span className="input-group-btn">
             <button type="submit" className="btn"><i className="fa fa-search" /></button>
-          </div>
+          </span>
           {submitFailed && error ?
             <div styleName='text-help'>
               {error}
@@ -116,22 +115,28 @@ class Header extends Component {
   renderSearchResults(response) {
     if (response.courses.length === 0 && response.professors.length === 0) return null;
 
+    //onMouseDown prevents losing focus if clicking on h6 elements (will also prevent potential unnecessary hideOnMouseDownOutside events which are called on refocusing on input)
     return (
       <ul id='searchBarResults'>
-        {response.professors.length > 0 ? <h6>Professors</h6> : ''}
+        {response.professors.length > 0 ? <h6 onMouseDown={event => event.preventDefault()}>Professors</h6> : ''}
         {response.professors.length > 0 ?
           response.professors.map(professor => {
             return(
-              <Link tabIndex='0' key={professor.id} to={`/courses/${professor.id}`}><li>{professor.first_name} {professor.last_name}</li></Link>
+              <Link onMouseDown={event => event.preventDefault()}
+                onClick={event => {
+                  $('#searchBarResults').hide();
+                  $('#searchBar input').blur();
+                 }}
+                 tabIndex='0' key={professor.id} to={`/professors/${professor.id}`}><li>{professor.first_name} {professor.last_name}</li></Link>
             );
           })
           : ''
         }
-        {response.courses.length > 0 ? <h6>Classes</h6> : ''}
+        {response.courses.length > 0 ? <h6 onMouseDown={event => event.preventDefault()}>Classes</h6> : ''}
         {response.courses.length > 0 ?
           response.courses.map(course => {
             return(
-              <Link tabIndex='0' key={course.id} to={`/courses/${course.id}`}><li>{course.department} {course.number}: {course.title}</li></Link>
+              <Link onClick={() => $('#searchBarResults').hide()} tabIndex='0' key={course.id} to={`/courses/${course.id}`}><li>{course.department} {course.number}: {course.title}</li></Link>
             );
           })
           : ''
@@ -178,7 +183,7 @@ class Header extends Component {
             </Link>
             <Link styleName='profileBtn' to={'/profile'}>
               {userInfo.first_name}
-              <img styleName="oauth-img" src={userInfo.picture} alt="Profile picture" />
+              <img styleName="profile-img" src={userInfo.picture} alt="Profile picture" />
             </Link>
             <button type="button" onClick={() => {
               localStorage.removeItem('jwt');

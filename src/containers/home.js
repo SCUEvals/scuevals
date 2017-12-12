@@ -51,7 +51,12 @@ class Home extends Component {
     else if (this.props.userInfo) {
       return(
         <div className='content'>
-          Home
+          <h3>SCU Evals</h3>
+          <p>Welcome to SCU Evals, the best platform for rating and reviewing professors and courses at Santa Clara University.</p>
+          <hr />
+          <br />
+          <h3>Post an Evaluation</h3>
+          <br />
           <PostSearch />
         </div>
       );
