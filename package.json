@@ -9,7 +9,8 @@
   "scripts": {
     "build": "webpack -p --config webpack/prod.config.js",
     "dev": "webpack-dev-server --config webpack/dev.config.js",
-    "postinstall": "webpack -p --config webpack/prod.config.js",
+    "postinstall": "if [ \"$NODE_ENV\" = \"production\" ]; then npm run build-assets; fi",
+    "build-assets": "webpack -p --config webpack/prod.config.js",
     "start": "node server.js",
     "lint": "eslint webpack src public/scripts --color",
     "lint:watch": "npm run lint -- --watch"
@@ -38,6 +39,7 @@
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",
     "node-sass": "^4.7.2",
+    "postcss-sass": "^0.2.0",
     "postcss-scss": "^1.0.2",
     "prop-types": "^15.6.0",
     "rc-slider": "^8.5.0",
