@@ -1,0 +1,306 @@
+@import "theme";
+
+@media (max-width: $xs) {
+  [data-target|='#serverSideDesc'] {
+    margin-top: 3rem;
+  }
+}
+
+* {
+  text-overflow: ellipsis;
+  font-family: 'Roboto', sans-serif;
+}
+
+html {
+  position: relative;
+  height: 100%;
+}
+
+body {
+  background-color: $backgroundColor;
+  text-align: center;
+  height: 100%;
+  min-height: 100vh;
+}
+
+body::after {
+  content: "";
+  background-image: url('/images/background.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.6;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  height: 100vh;
+  z-index: -1;
+}
+
+button {
+  @include button;
+}
+
+a {
+  transition: all 0.2s ease-in-out;
+  font-weight: bold;
+  text-decoration: none !important;
+  color: $linkColor;
+
+  &:focus {
+    color: $linkColor;
+  }
+
+  &:hover {
+    color: $hoverLinkColor;
+  }
+}
+
+h6 {
+  font-size: 1.1rem;
+}
+
+table {
+  text-align: left;
+}
+
+textarea {
+  width: 100%;
+  outline: 1px solid $overlayBackground;
+  max-width: 750px;
+  resize: none;
+
+  &:focus {
+    outline: 2px solid $SCUdarkred;
+  }
+}
+
+form {
+  i {
+    font-size: 25px;
+    color: $SCUred;
+    cursor: pointer;
+
+    &:hover {
+      color: $SCUdarkred;
+    }
+  }
+
+  h6 {
+    margin-top: 50px;
+    margin-bottom: 20px;
+  }
+}
+
+form.content {
+  .form-control {
+    border: 1px solid $backgroundColor;
+  }
+}
+
+label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+
+  &:not(:last-child) {
+    padding-right: 15px;
+  }
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  margin-right: 3px;
+}
+
+i.homeBtn {
+  cursor: pointer;
+  font-size: 1.75rem;
+  position: absolute;
+  left: 10px;
+  height: 100%;
+  padding: 0 5px;
+  top: 0;
+  align-items: center;
+  display: flex;
+}
+
+#app,
+#app > div {
+  height: 100%;
+}
+
+.content {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: $defaultBorderRadius;
+  background: white;
+  padding: 15px;
+  margin: 15px 0;
+  width: 100%;
+  position: relative;
+
+  *[class^="col"] {
+    padding: 15px;
+  }
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  h3 {
+    position: relative; //for home icon to sit inside h3 when signed out
+  }
+
+  div.container { //not footer's container, only div
+    width: initial;
+    padding: 15px; //adds top and bottom padding
+  }
+}
+
+.react-bs-table-container {
+  td {
+    padding: 0;
+
+    a {
+      padding: 0.75rem;
+      display: block;
+
+      &:hover {
+        transition: none;
+      }
+    }
+  }
+
+  tr {
+    &:hover {
+      a {
+        color: $SCUdarkred;
+      }
+    }
+  }
+}
+
+.loadingWrapper {
+  @include absoluteCenter;
+
+  color: $SCUred;
+  height: auto !important;
+}
+
+.error {
+  box-shadow: 0 0 0 2px $SCUred;
+  border-radius: $defaultBorderRadius;
+}
+
+.Select {
+  text-align: left;
+  margin: auto auto 50px;
+  max-width: 350px;
+
+  &-option {
+    border-bottom: 1px solid $backgroundColor;
+    color: $overlayBackground;
+    font-weight: bold;
+
+    &:hover {
+      background-color: $backgroundColor;
+      color: $SCUdarkred;
+    }
+  }
+
+  &-value {
+    max-width: 302px !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin: 0 10px;
+    text-align: center;
+  }
+
+  &-value-icon {
+    width: 19px;
+    float: left;
+  }
+
+  &-arrow-zone,
+  &-clear-zone {
+    vertical-align: top;
+  }
+
+  &-clear-zone {
+    position: absolute;
+    right: 25px;
+    top: 3px;
+
+    &:hover {
+      color: $SCUdarkred;
+    }
+  }
+
+  &-menu-outer:hover {
+    color: $SCUdarkred;
+    background-color: $backgroundColor;
+  }
+}
+
+.Select--multi {
+  .Select-value-icon {
+    display: flex;
+    align-items: center;
+  }
+
+  .Select-multi-value-wrapper {
+    padding-right: 20px;
+    display: flex;
+    flex-wrap: wrap;
+
+    .Select-value {
+      margin: 4px 0 0 4px;
+      height: 100%;
+      display: flex;
+      color: white;
+      background-color: $SCUred;
+
+      .Select-value-icon:hover {
+        background-color: $SCUdarkred;
+        color: white;
+      }
+    }
+  }
+}
+
+.Select-option.is-selected {
+  background-color: white;
+  color: $SCUred;
+
+  &:hover {
+    background-color: $backgroundColor;
+    color: $SCUdarkred;
+  }
+}
+
+.Select--single > .Select-control .Select-value,
+.Select-placeholder {
+  top: initial;
+}
+
+.has-value.is-clearable.Select--single > .Select-control .Select-value {
+  padding: inherit;
+}
+
+input:focus,
+textarea:focus {
+  box-shadow: none !important;
+  border-color: #80bdff !important;
+}
+
+.input-group-btn:not(:last-child) > .btn {
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.Select-control {
+  border-radius: $defaultBorderRadius;
+}

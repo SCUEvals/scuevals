@@ -23,7 +23,7 @@ import requireAuth from './components/requireAuth';
 import API from './services/api';
 import { delUserInfo } from './actions';
 
-import './styles/theme.scss?global';
+import './styles/global.scss?global';
 import './styles/index.scss';
 
 
