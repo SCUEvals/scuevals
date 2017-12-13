@@ -10,8 +10,8 @@ $hoverLinkColor: $SCUdarkred;
 $hoverOverlayLinkColor: #ffb6ca;
 $headerHeight: 99px;
 $footerHeight: 35px;
-$defaultBorderRadius: .25rem;
-$defaultTransition: all .2s ease-in-out;
+$defaultBorderRadius: 0.25rem;
+$defaultTransition: all 0.2s ease-in-out;
 $xs: 575px;
 
 @media (max-width: $xs) {
@@ -326,13 +326,14 @@ i.homeBtn {
   padding: inherit;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
   box-shadow: none !important;
   border-color: #80bdff !important;
 }
 
-.input-group-btn:not(:last-child)>.btn {
-  border-radius: 0 .25rem .25rem 0;
+.input-group-btn:not(:last-child) > .btn {
+  border-radius: 0 0.25rem 0.25rem 0;
 }
 
 .Select-control {

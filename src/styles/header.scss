@@ -24,20 +24,17 @@ header {
     transition: $defaultTransition;
     visibility: hidden;
   }
+
   .search-error {
     input:focus {
       border-color: $SCUred !important;
     }
+
     input:focus ~ .text-help {
       visibility: visible;
       opacity: 1;
       transition: $defaultTransition;
     }
-  }
-
-  input,
-  input.form-control {
-    border-color: $backgroundColor;
   }
 
   .input-group-btn > button {
@@ -92,12 +89,16 @@ header {
       border-width: 2px;
       border-color: white;
     }
+
     :global(#searchBarResults[style='']) ~ input { //make sure style not display: none
-       border-bottom-left-radius: 0 !important;
-     }
-    i, i:hover {
+      border-bottom-left-radius: 0 !important;
+    }
+
+    i,
+    i:hover {
       color: white;
     }
+
     :global(#searchBarResults) {
       border-top: 0 !important;
       top: 40px;
@@ -113,7 +114,8 @@ header {
       border: 2px solid $backgroundColor;
       border-radius: 0 0 $defaultBorderRadius $defaultBorderRadius;
 
-      h6, li {
+      h6,
+      li {
         padding: 5px;
       }
 
@@ -128,13 +130,17 @@ header {
         cursor: pointer;
         color: $overlayBackground;
         font-weight: bold;
+
         li {
           border-bottom: 2px solid $backgroundColor;
         }
-        &:hover li, &:focus li {
-            color: $SCUdarkred;
-            background-color: $backgroundColor;
+
+        &:hover li,
+        &:focus li {
+          color: $SCUdarkred;
+          background-color: $backgroundColor;
         }
+
         &:last-child li {
           border-bottom: none;
         }
