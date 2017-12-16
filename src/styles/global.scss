@@ -1,11 +1,5 @@
 @import "theme";
 
-@media (max-width: $xs) {
-  [data-target|='#serverSideDesc'] {
-    margin-top: 3rem;
-  }
-}
-
 * {
   text-overflow: ellipsis;
   font-family: 'Roboto', sans-serif;
@@ -68,13 +62,11 @@ table {
 
 textarea {
   width: 100%;
-  outline: 1px solid $overlayBackground;
   max-width: 750px;
   resize: none;
-
-  &:focus {
-    outline: 2px solid $SCUdarkred;
-  }
+  border: 2px solid $overlayBackground;
+  border-radius: $defaultBorderRadius;
+  padding: 5px;
 }
 
 form {
@@ -287,14 +279,22 @@ i.homeBtn {
   top: initial;
 }
 
-.has-value.is-clearable.Select--single > .Select-control .Select-value {
-  padding: inherit;
+.Select.has-value.is-clearable.Select--single > .Select-control .Select-value {
+  padding: 0;
+  margin: 0 45px;
+}
+
+input:focus {
+  border-color: $focusColor !important;
+}
+
+textarea:focus {
+  border: 2px solid $focusColor !important;
 }
 
 input:focus,
 textarea:focus {
   box-shadow: none !important;
-  border-color: #80bdff !important;
 }
 
 .input-group-btn:not(:last-child) > .btn {

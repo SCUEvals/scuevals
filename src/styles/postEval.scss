@@ -1,11 +1,26 @@
 @import "theme";
 
-.handleNum {
-  font-weight: bold;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
+:global(.rc-slider-handle) {
+  border-color: black;
+  height: 33px;
+  width: 33px;
+  margin-left: -18px;
+  margin-top: -9.5px;
+  background-color: white;
+
+  .handleNum {
+    font-weight: bold;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+:global(.rc-slider-handle:hover),
+:global(.rc-slider-handle:active),
+:global(.rc-slider-handle:focus) {
+  border-color: black;
 }
 
 :global(.rc-slider) {
@@ -37,6 +52,7 @@
   &-track {
     background-color: $overlayBackground;
     transition: $defaultTransition;
+    height: 15px;
   }
 
   &-handle {
@@ -47,6 +63,31 @@
 :global(.rc-slider-dot:first-child),
 :global(.rc-slider-dot:last-child) {
   display: none;
+}
+
+.popper {
+  position: absolute;
+  background: $SCUred;
+  color: white;
+  border-radius: 3px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  text-align: center;
+  white-space: pre;
+}
+
+.tooltip-popper {
+  font-size: 14px;
+  z-index: 1;
+}
+
+.popper-manager,
+.popper {
+  transition: $defaultTransition;
+}
+
+:global(.rc-slider-handle:focus) {
+  box-shadow: 0 0 0 5px $focusColor;
 }
 
 :global(.track1) {
@@ -65,39 +106,39 @@
   background-color: green;
 }
 
-.popper,
-:global(.tooltip) {
-  position: absolute;
-  background: #ffc107;
-  color: black;
-  border-radius: 3px;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-  padding: 10px;
-  text-align: center;
+:global(.workload .track1),
+:global(.difficulty .track1) {
+  background-color: green;
 }
 
-.popper-manager,
-.popper,
-:global(.tooltip) {
-  transition: $defaultTransition;
+:global(.workload .track2),
+:global(.difficulty .track2) {
+  background-color: yellow;
 }
 
-.popper .popper__arrow,
-:global(.tooltip) .tooltip-arrow {
+:global(.workload .track3),
+:global(.difficulty .track3) {
+  background-color: orange;
+}
+
+:global(.workload .track4),
+:global(.difficulty .track4) {
+  background-color: red;
+}
+
+.popper .popper__arrow {
   width: 0;
   height: 0;
   position: absolute;
   margin: 5px;
-  border: solid #ffc107;
+  border: solid $SCUred;
 }
 
-.popper[data-placement="top"],
-:global(.tooltip[data-placement="top"]) {
+.popper[data-placement="top"] {
   margin-bottom: 5px;
 }
 
-.popper[data-placement="top"] .popper__arrow,
-:global(.tooltip[data-placement="top"]) .tooltip-arrow {
+.popper[data-placement="top"] .popper__arrow {
   border-width: 5px 5px 0 5px;
   border-left-color: transparent;
   border-right-color: transparent;
@@ -108,13 +149,11 @@
   margin-bottom: 0;
 }
 
-.popper[data-placement="bottom"],
-:global(.tooltip[data-placement="bottom"]) {
+.popper[data-placement="bottom"] {
   margin-top: 5px;
 }
 
-.popper[data-placement="bottom"] .popper__arrow,
-:global(.tooltip[data-placement="bottom"]) .tooltip-arrow {
+.popper[data-placement="bottom"] .popper__arrow {
   border-width: 0 5px 5px 5px;
   border-left-color: transparent;
   border-right-color: transparent;
@@ -125,13 +164,11 @@
   margin-bottom: 0;
 }
 
-.popper[data-placement="right"],
-:global(.tooltip[data-placement="right"]) {
+.popper[data-placement="right"] {
   margin-left: 5px;
 }
 
-.popper[data-placement="right"] .popper__arrow,
-:global(.tooltip[data-placement="right"]) .tooltip-arrow {
+.popper[data-placement="right"] .popper__arrow {
   border-width: 5px 5px 5px 0;
   border-left-color: transparent;
   border-top-color: transparent;
@@ -142,13 +179,11 @@
   margin-right: 0;
 }
 
-.popper[data-placement="left"],
-:global(.tooltip[data-placement="left"]) {
+.popper[data-placement="left"] {
   margin-right: 5px;
 }
 
-.popper[data-placement="left"] .popper__arrow,
-:global(.tooltip[data-placement="left"]) .tooltip-arrow {
+.popper[data-placement="left"] .popper__arrow {
   border-width: 5px 0 5px 5px;
   border-top-color: transparent;
   border-right-color: transparent;
@@ -167,8 +202,24 @@
   visibility: visible;
 }
 
+.popper-manager {
+  display: inline-block;
+
+  .popper-target + .popper {
+    visibility: hidden;
+  }
+
+  .popper-target:hover + .popper {
+    visibility: visible;
+  }
+}
+
 .postGuidelines {
   text-align: left;
+
+  :global(.card) {
+    height: 100%;
+  }
 
   :global(.card-header) {
     color: white;
@@ -178,10 +229,14 @@
   }
 }
 
-.tooltip-manager {
-  display: inline-block;
+.postGuidelines ~ h3 + h6 {
+  margin-top: 25px;
+}
 
-  .tooltip-target:hover + :global(.tooltip) {
-    opacity: 1;
-  }
+.postGuidelines + h3 {
+  margin-top: 25px;
+}
+
+.postGuidelines ~ h3:not(:first-of-type) {
+  margin-top: 75px;
 }

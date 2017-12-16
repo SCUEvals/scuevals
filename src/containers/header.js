@@ -45,7 +45,7 @@ class Header extends Component {
       let client = new API();
       client.get('/search', responseData => {
           setSearchResults(responseData);
-          $('#searchBar input').focus(); //focus on input after appears, which will also enable ha
+          $('#searchBar input').focus(); //focus on input after appears, which will also enable searchResults
         },
         {q: searchVal}
       );

@@ -37,8 +37,8 @@ header {
     }
   }
 
-  .input-group-btn > button {
-    //margin: 0 !important;
+  .input-group-btn > button:focus {
+    box-shadow: none;
   }
 
   .signOutBtn {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import TextareaAutoSize from 'react-textarea-autosize';
 import Slider from 'rc-slider';
@@ -12,29 +12,74 @@ import '../styles/postEval.scss';
 const Handle = Slider.Handle;
 
 const textOptions = {
-  availability: {
-    one: 'Always tardy',
-    two: 'Often late',
-    three: 'Mostly punctual',
-    four: 'Always on time',
-    info: 'How often was this teacher late to class?'
+  attitude: {
+    one: 'Unapproachable',
+    two: 'Negative or mean',
+    three: 'Nice enough',
+    four: 'Fantastic',
+    info: 'How did you feel the professor acted towards students?'
   },
-  placehold: {
-    one: 'blah',
-    two: 'blah',
-    three: 'blah',
-    four: 'blah',
-    info: 'blah'
+  availability: {
+    one: 'Misses own office hours',
+    two: 'Only during office hours',
+    three: 'Hard to schedule',
+    four: 'Super flexible',
+    info: 'How easy was it to meet with the professor?'
+  },
+  clarity: {
+    one: 'Impossible to understand',
+    two: 'Often unclear',
+    three: 'Usually get it',
+    four: 'Great explainer',
+    info: 'Was the professor\'s notes and explanations clear (word choice, handwriting, etc.)?'
+  },
+  timeliness: {
+    one: 'Won\'t know grade\nuntil end of quarter',
+    two: 'Extremely slow grader',
+    three: 'Takes a week or two',
+    four: 'Typically know\ngrade next class',
+    info: 'How quickly does the professor grade assignments?'
+  },
+  resourcefulness: {
+    one: 'Provides nothing',
+    two: 'Occasional handouts',
+    three: 'Shares most things',
+    four: 'Shares everything\nfrom class',
+    info: 'How much does the professor share to help students learn?'
+  },
+  workload: {
+    one: 'There\'s work?',
+    two: 'Easy stuff',
+    three: 'You\'ll survive',
+    four: 'Good luck',
+    info: 'How much work was assigned compared to other classes?'
+  },
+  difficulty: {
+    one: 'Easy "A"',
+    two: 'Study the week before',
+    three: 'Challenging',
+    four: 'You will suffer',
+    info: 'How hard was the material for this course?'
+  },
+  recommend: {
+    one: 'No, avoid at all costs',
+    two: 'Only as a last option',
+    three: 'Yes, but it could be better',
+    four: 'Absolutely',
+    info: 'Overall, was this course a good option to take?'
+  },
+  comment: {
+    info: 'Write anything you feel other students would benefit from knowing that the questions above left unanswered.'
   }
 };
 
 const infoTooltip = (info) => {
   return (
-    <Manager styleName='tooltip-manager'>
-      <Target styleName='tooltip-target'>
+    <Manager styleName='popper-manager'>
+      <Target styleName='popper-target'>
       <i className='fa fa-question-circle'/>
       </Target>
-      <Popper placement="top" className="tooltip">
+      <Popper placement="top" styleName="popper tooltip-popper">
         {info}
         <Arrow styleName="popper__arrow"/>
       </Popper>
@@ -92,7 +137,7 @@ class PostEval extends Component {
 
   renderTextArea(field) {
     return (
-      <TextareaAutoSize minRows={3} {...field.input} placeholder="Write your constructive review here"/>
+      <TextareaAutoSize minRows={5} {...field.input} placeholder="Write your constructive review here"/>
     )
   }
 
@@ -116,15 +161,6 @@ class PostEval extends Component {
           handle={passedProps => handle(passedProps, props.textProps)}
           max={4}
           defaultValue={0}
-          trackStyle={{ height: 15 }}
-          handleStyle={{
-             borderColor: 'black',
-             height: 33,
-             width: 33,
-             marginLeft: -18,
-             marginTop: -9.5,
-             backgroundColor: 'white',
-          }}
           />
     );
   }
@@ -164,21 +200,28 @@ class PostEval extends Component {
             </div>
           </div>
         </div>
-        <h6>Attitude {infoTooltip(textOptions.placehold.info)}</h6>
-        <Field name='attitude' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
-        <h6>Availability {infoTooltip(textOptions.placehold.info)}</h6>
-        <Field name='availability' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
-        <h6>Clarity {infoTooltip(textOptions.placehold.info)}</h6>
-        <Field name='clarity' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
-        <h6>Handwriting {infoTooltip(textOptions.placehold.info)}</h6>
-        <Field name='handwriting' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.availability} component={this.renderSlider} />
-        <h6>Timeliness {infoTooltip(textOptions.placehold.info)}</h6>
-        <Field name='timeliness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
-        <h6>Workload {infoTooltip(textOptions.availability.info)}</h6>
-        <Field name='workload' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
-        <h6>Would you recommend this course with this professor? {infoTooltip(textOptions.placehold.info)}</h6>
-        <Field name='recommended' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.placehold} component={this.renderSlider} />
-        <h6>Comments {infoTooltip(textOptions.placehold.info)}</h6>
+        <h3>Professor</h3>
+        <h6>Attitude {infoTooltip(textOptions.attitude.info)}</h6>
+        <Field name='attitude' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.attitude} component={this.renderSlider} />
+        <h6>Availability {infoTooltip(textOptions.availability.info)}</h6>
+        <Field name='availability' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.availability} component={this.renderSlider} />
+        <h6>Clarity {infoTooltip(textOptions.clarity.info)}</h6>
+        <Field name='clarity' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.clarity} component={this.renderSlider} />
+        <h6>Grading Timeliness {infoTooltip(textOptions.timeliness.info)}</h6>
+        <Field name='timeliness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.timeliness} component={this.renderSlider} />
+        <h6>Resourcefulness {infoTooltip(textOptions.resourcefulness.info)}</h6>
+        <Field name='resourcefulness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.resourcefulness} component={this.renderSlider} />
+
+        <h3>Class</h3>
+        <h6>Workload {infoTooltip(textOptions.workload.info)}</h6>
+        <Field name='workload' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.workload} component={this.renderSlider} />
+        <h6>Difficulty {infoTooltip(textOptions.difficulty.info)}</h6>
+        <Field name='difficulty' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.difficulty} component={this.renderSlider} />
+
+        <h3>General</h3>
+        <h6>Would you recommend this course with this professor? {infoTooltip(textOptions.recommend.info)}</h6>
+        <Field name='recommended' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.recommend} component={this.renderSlider} />
+        <h6>Comments {infoTooltip(textOptions.comment.info)}</h6>
         <Field name="comment" onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
         <p>Max characters: {this.state.term.length} / 750</p>
         <br />
