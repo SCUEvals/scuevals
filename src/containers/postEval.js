@@ -10,7 +10,7 @@ import '../../node_modules/rc-slider/dist/rc-slider.min.css?global';
 import '../styles/postEval.scss';
 
 const Handle = Slider.Handle;
-
+// \xA0 is used for non-breaking whitespace,
 const textOptions = {
   attitude: {
     one: 'Unapproachable',
@@ -20,31 +20,31 @@ const textOptions = {
     info: 'How did you feel the professor acted towards students?'
   },
   availability: {
-    one: 'Misses own office hours',
-    two: 'Only during office hours',
-    three: 'Hard to schedule',
+    one: 'Misses office hours',
+    two: 'Only\xA0at office hours',
+    three: 'Can sometimes schedule',
     four: 'Super flexible',
     info: 'How easy was it to meet with the professor?'
   },
   clarity: {
-    one: 'Impossible to understand',
+    one: 'Cannot understand',
     two: 'Often unclear',
     three: 'Usually get it',
     four: 'Great explainer',
     info: 'Was the professor\'s notes and explanations clear (word choice, handwriting, etc.)?'
   },
   timeliness: {
-    one: 'Won\'t know grade\nuntil end of quarter',
-    two: 'Extremely slow grader',
-    three: 'Takes a week or two',
-    four: 'Typically know\ngrade next class',
+    one: 'Not\xA0until end of quarter',
+    two: 'Extremely slow',
+    three: 'After a few classes',
+    four: 'By\xA0next class',
     info: 'How quickly does the professor grade assignments?'
   },
   resourcefulness: {
     one: 'Provides nothing',
     two: 'Occasional handouts',
     three: 'Shares most things',
-    four: 'Shares everything\nfrom class',
+    four: 'Shares everything',
     info: 'How much does the professor share to help students learn?'
   },
   workload: {
@@ -56,15 +56,15 @@ const textOptions = {
   },
   difficulty: {
     one: 'Easy "A"',
-    two: 'Study the week before',
+    two: 'Study the\xA0week before',
     three: 'Challenging',
-    four: 'You will suffer',
+    four: 'You\xA0will suffer',
     info: 'How hard was the material for this course?'
   },
   recommend: {
-    one: 'No, avoid at all costs',
-    two: 'Only as a last option',
-    three: 'Yes, but it could be better',
+    one: 'No,\xA0avoid at all costs',
+    two: 'Only\xA0as a last option',
+    three: 'Yes, but\xA0it could\xA0be better',
     four: 'Absolutely',
     info: 'Overall, was this course a good option to take?'
   },
@@ -110,7 +110,7 @@ const handle = (props, textProps) => {
         )}
       </Target>
       <Popper style={popperStyle} placement="top" styleName="popper">
-        {value === 0 || value === 1 ? textProps.one : value === 2 ? textProps.two : value === 3 ? textProps.three : value === 4 ? textProps.four : ''}
+          {value === 0 || value === 1 ? textProps.one : value === 2 ? textProps.two : value === 3 ? textProps.three : value === 4 ? textProps.four : ''}
         <Arrow styleName="popper__arrow"/>
       </Popper>
     </Manager>

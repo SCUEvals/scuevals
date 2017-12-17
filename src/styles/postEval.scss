@@ -69,16 +69,16 @@
   position: absolute;
   background: $SCUred;
   color: white;
-  border-radius: 3px;
+  border-radius: $defaultBorderRadius;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   padding: 10px;
   text-align: center;
-  white-space: pre;
+  z-index: 1;
 }
 
 .tooltip-popper {
   font-size: 14px;
-  z-index: 1;
+  z-index: 2;
 }
 
 .popper-manager,
