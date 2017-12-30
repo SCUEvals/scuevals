@@ -95,7 +95,8 @@ const handle = (props, textProps) => {
 
   let popperStyle = {};
   if (value === 0) {
-    popperStyle.opacity = '0';
+    popperStyle.visibility = 'hidden';
+    popperStyle.opacity = '0'; //needed for transition animation
   }
 
   return (
@@ -143,14 +144,24 @@ class PostEval extends Component {
 
   renderSlider(props) {
     let track = $('.' + props.input.name + ' .rc-slider-track');
-
-    if (track.length === 1) {
+    if (track.length === 1) { //if exists
       track = track[0];
-      if (props.input.value === 1) track.className = 'rc-slider-track track1';
-      else if (props.input.value === 2) track.className = 'rc-slider-track track2';
-      else if (props.input.value === 3) track.className = 'rc-slider-track track3';
-      else if (props.input.value === 4) track.className = 'rc-slider-track track4';
+      switch(props.input.value) {
+        case 1:
+          track.className = 'rc-slider-track track1';
+          break;
+        case 2:
+          track.className = 'rc-slider-track track2';
+          break;
+        case 3:
+          track.className = 'rc-slider-track track3';
+          break;
+        case 4:
+          track.className = 'rc-slider-track track4';
+          break;
+      }
     }
+
     return (
         <Slider
           onBeforeChange={() => $('.' + props.input.name + ' div[role="slider"]').focus()}
@@ -167,6 +178,8 @@ class PostEval extends Component {
 
   render() {
     const { handleSubmit } = this.props;
+
+    const required = value => {console.log('value:', value); return 'test'};
 
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
@@ -202,7 +215,7 @@ class PostEval extends Component {
         </div>
         <h3>Professor</h3>
         <h6>Attitude {infoTooltip(textOptions.attitude.info)}</h6>
-        <Field name='attitude' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.attitude} component={this.renderSlider} />
+        <Field name='attitude' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.attitude} component={this.renderSlider} validate={[required]} />
         <h6>Availability {infoTooltip(textOptions.availability.info)}</h6>
         <Field name='availability' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.availability} component={this.renderSlider} />
         <h6>Clarity {infoTooltip(textOptions.clarity.info)}</h6>

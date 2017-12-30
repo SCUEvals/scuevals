@@ -189,7 +189,7 @@ function validate(values) {
   if (!values.gender || (values.gender !== 'm' && values.gender !== 'f' && values.gender !=='o')) errors.gender = 'Not a valid gender input.';
   if (!values.graduation_year || (values.graduation_year < currentYear || values.graduation_year > currentYear + 5)) errors.graduation_year = 'Graduation year not in valid range.';
   if (!Array.isArray(values.majors) || values.majors.length < 1) errors.majors = 'Not a valid major selected.';
-  if (Array.isArray(values.majors) && values.majors.length > 3) errors.majors = 'Only allowed to declare up to 3 majors.';
+  else if (values.majors.length > 3) errors.majors = 'Only allowed to declare up to 3 majors.';
   return errors;
 }
 

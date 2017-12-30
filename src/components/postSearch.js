@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { Field, reduxForm, change } from 'redux-form';
 import Select from 'react-select';
 
-//because not a direct route, needs access to this.props.history
-import { withRouter } from 'react-router';
-
 import PropTypes from 'prop-types';
 
 import { storeWithMiddleware } from '../index';
@@ -149,7 +146,7 @@ class PostSearch extends Component {
   render() {
     const { handleSubmit } = this.props;
     return (
-      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+      <form className='content' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
           name="quarter" //responsible for object's key name for values
           component={this.renderQuarters}
@@ -186,9 +183,8 @@ function validate(values) {
   return errors;
 }
 
-export default withRouter(reduxForm({
+export default reduxForm({
   validate,
   form: 'postSearch'
 })
-(PostSearch)
-);
+(PostSearch);

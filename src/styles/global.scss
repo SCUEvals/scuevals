@@ -33,8 +33,19 @@ body::after {
   z-index: -1;
 }
 
-button {
-  @include button;
+.btn {
+  color: white;
+  background-color: $SCUred;
+  cursor: pointer;
+
+  &:hover {
+    color: white;
+    background-color: $SCUdarkred;
+  }
+
+  &:focus {
+    color: white;
+  }
 }
 
 a {
@@ -54,19 +65,6 @@ a {
 
 h6 {
   font-size: 1.1rem;
-}
-
-table {
-  text-align: left;
-}
-
-textarea {
-  width: 100%;
-  max-width: 750px;
-  resize: none;
-  border: 2px solid $overlayBackground;
-  border-radius: $defaultBorderRadius;
-  padding: 5px;
 }
 
 form {
@@ -107,18 +105,6 @@ input[type="radio"] {
   margin-right: 3px;
 }
 
-i.homeBtn {
-  cursor: pointer;
-  font-size: 1.75rem;
-  position: absolute;
-  left: 10px;
-  height: 100%;
-  padding: 0 5px;
-  top: 0;
-  align-items: center;
-  display: flex;
-}
-
 #app,
 #app > div {
   height: 100%;
@@ -132,10 +118,6 @@ i.homeBtn {
   margin: 15px 0;
   width: 100%;
   position: relative;
-
-  *[class^="col"] {
-    padding: 15px;
-  }
 }
 
 .flex {
@@ -177,7 +159,7 @@ i.homeBtn {
 }
 
 .loadingWrapper {
-  @include absoluteCenter;
+  @include fixedCenter;
 
   color: $SCUred;
   height: auto !important;
@@ -189,9 +171,13 @@ i.homeBtn {
 }
 
 .Select {
-  text-align: left;
   margin: auto auto 50px;
   max-width: 350px;
+  text-align: left;
+
+  &.sort {
+    margin-bottom: 0;
+  }
 
   &-option {
     border-bottom: 1px solid $backgroundColor;
@@ -284,23 +270,61 @@ i.homeBtn {
   margin: 0 45px;
 }
 
-input:focus {
-  border-color: $focusColor !important;
-}
-
-textarea:focus {
-  border: 2px solid $focusColor !important;
-}
-
-input:focus,
-textarea:focus {
-  box-shadow: none !important;
-}
-
 .input-group-btn:not(:last-child) > .btn {
   border-radius: 0 0.25rem 0.25rem 0;
 }
 
 .Select-control {
   border-radius: $defaultBorderRadius;
+
+  &:focus {
+    border-color: $focusColor;
+  }
+}
+
+@media (max-width: $xs) {
+  .col-sm-6:not(:last-child) {
+    padding-bottom: 15px;
+  }
+}
+
+@media (max-width: $sm) {
+  .col-md-6:not(:last-child) {
+    padding-bottom: 15px;
+  }
+}
+
+.Select.is-focused:not(.is-open) > .Select-control {
+  box-shadow: none;
+  border-color: $focusColor;
+}
+
+textarea {
+  width: 100%;
+  max-width: 750px;
+  resize: none;
+  border: 2px solid $overlayBackground !important; //below outline is set to none, but exception for textarea
+  border-radius: $defaultBorderRadius;
+  padding: 5px;
+}
+
+//target all focusable items to make focus color same for all items
+a[href],
+area[href],
+input:not([disabled]):not([role='combobox']), //not combobox, don't want to see border of characters while typing input (on react-select)
+select:not([disabled]),
+textarea:not([disabled]),
+button:not([disabled]),
+iframe,
+[tabindex],
+[contentEditable=true] {
+  &:not([tabindex='-1']) {
+    border: 2px solid transparent; //not important, sometimes overridden
+
+    &:focus {
+      border: 2px solid $focusColor !important;
+      box-shadow: none;
+      outline: none;
+    }
+  }
 }

@@ -48,24 +48,46 @@ header {
   }
 
   .profileBtn,
-  .signOutBtn {
-    color: white;
+  .signOutBtn,
+  .homeBtn {
     height: 100%;
     display: flex;
     align-items: center;
     font-weight: normal;
-    border: none;
     background-color: transparent;
     padding: 0;
     margin: 0 5px;
+  }
+
+  .homeBtn {
+    color: $SCUred;
+    font-size: 1.75rem;
+    position: absolute;
+    left: 10px;
+    height: 100%;
+    top: 0;
+
+    &:hover {
+      color: $SCUdarkred;
+      background-color: transparent;
+    }
+
+    &:focus {
+      color: $SCUred;
+    }
+  }
+
+  .profileBtn,
+  .signOutBtn {
+    color: white;
 
     &:focus {
       color: white;
     }
 
     &:hover {
-      color: $hoverOverlayLinkColor;
       background-color: transparent;
+      color: $hoverOverlayLinkColor;
     }
   }
 
@@ -126,10 +148,11 @@ header {
         margin: 0;
       }
 
-      a {
+      a[tabindex='0'] {
         cursor: pointer;
         color: $overlayBackground;
         font-weight: bold;
+        display: block; //needed for transparent border to work (a is focusable because tabindex is on it)
 
         li {
           border-bottom: 2px solid $backgroundColor;

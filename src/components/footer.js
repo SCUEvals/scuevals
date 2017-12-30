@@ -5,16 +5,14 @@ import '../styles/footer.scss';
 
 const Footer = ()  => {
   return (
-    <footer styleName="footer">
+    <footer>
       <div className="container">
-        <Link styleName="link" className="float-left" to={"/about"}>
+        <Link styleName="link" className="btn float-left" to={"/about"}>
           About Us
         </Link>
-        <div className="float-right">
-          <Link styleName="link" className="float-left" to={"/privacy"}>
-            Privacy Policy
-          </Link>
-        </div>
+        <Link styleName="link" className="btn float-right" to={"/privacy"}>
+          Privacy Policy
+        </Link>
       </div>
     </footer>
   );

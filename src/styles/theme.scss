@@ -13,24 +13,15 @@ $footerHeight: 35px;
 $defaultBorderRadius: 0.25rem;
 $defaultTransition: all 0.2s ease-in-out;
 $focusColor: #80bdff;
+$xs: 575px;
+$sm: 767px;
 
-@mixin absoluteCenter {
-  position: absolute;
+@mixin fixedCenter {
+  position: fixed;
   top: 50%;
   transform: translateY(-50%);
   left: 0;
   right: 0;
   margin-left: 0;
   margin-right: 0;
-}
-
-@mixin button { //not to be used with <i> tags as buttons
-  color: white;
-  background-color: $SCUred;
-  cursor: pointer;
-  font-weight: 600;
-
-  &:hover {
-    background-color: $SCUdarkred;
-  }
 }

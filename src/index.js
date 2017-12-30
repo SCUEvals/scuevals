@@ -18,6 +18,7 @@ import Privacy from './containers/privacy';
 import GAListener from './components/gaListener';
 import Profile from './containers/profile';
 import ViewEvals from './containers/viewEvals';
+import PostSearch from './components/postSearch';
 
 import requireAuth from './components/requireAuth';
 import API from './services/api';
@@ -75,13 +76,14 @@ function renderDOM () {
             <Header />
             <div className='container'>
               <Switch>
-                <Route path="/about" component={About} />
-                <Route path="/privacy" component={Privacy} />
-                <Route path="/search/:search" component={requireAuth(SearchContent)} />
-                <Route path="/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)" component={requireAuth(PostEval)} />
-                <Route path="/professors/:id(\d+)" component={requireAuth(ViewEvals, {type: "professors"})} />
-                <Route path="/courses/:id(\d+)" component={requireAuth(ViewEvals, {type: "courses"})} />
-                <Route path="/profile" component={requireAuth(Profile)} />
+                <Route exact path="/search/:search" component={requireAuth(SearchContent)} />
+                <Route exact path="/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)" component={requireAuth(PostEval)} />
+                <Route exact path="/professors/:id(\d+)" component={requireAuth(ViewEvals, {type: "professors"})} />
+                <Route exact path="/courses/:id(\d+)" component={requireAuth(ViewEvals, {type: "courses"})} />
+                <Route exact path="/about" component={About} />
+                <Route exact path="/privacy" component={Privacy} />
+                <Route exact path="/profile" component={requireAuth(Profile)} />
+                <Route exact path="/post" component={requireAuth(PostSearch)} />
                 <Route exact path="/" component={requireAuth(Home)} />
                 <Redirect to="/" />
               </Switch>

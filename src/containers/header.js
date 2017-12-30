@@ -52,13 +52,13 @@ class Header extends Component {
     }
   }
 
-  getResponseAndPushHistory(searchVal, setSearchResults, pushHistory) { //same as debouncedGetResponse but without delay and routes to page after submitted
+  getResponse(searchVal, setSearchResults) { //same as debouncedGetResponse but without delay
     if (searchVal && setSearchResults) {
       let client = new API();
       client.get('/search', responseData => {
+          responseData.term = searchVal;
           setSearchResults(responseData);
           $('#searchBarResults').hide(); //hide results dropdown after new results in until new input entered after
-          pushHistory();
         },
         {q: searchVal}
       );
@@ -119,10 +119,11 @@ class Header extends Component {
     return (
       <ul id='searchBarResults'>
         {response.professors.length > 0 ? <h6 onMouseDown={event => event.preventDefault()}>Professors</h6> : ''}
-        {response.professors.length > 0 ?
+        {
           response.professors.map(professor => {
-            return(
-              <Link onMouseDown={event => event.preventDefault()}
+            return (
+              <Link
+                onMouseDown={event => event.preventDefault()}
                 onClick={event => {
                   $('#searchBarResults').hide();
                   $('#searchBar input').blur();
@@ -130,16 +131,14 @@ class Header extends Component {
                  tabIndex='0' key={professor.id} to={`/professors/${professor.id}`}><li>{professor.first_name} {professor.last_name}</li></Link>
             );
           })
-          : ''
         }
         {response.courses.length > 0 ? <h6 onMouseDown={event => event.preventDefault()}>Classes</h6> : ''}
-        {response.courses.length > 0 ?
+        {
           response.courses.map(course => {
             return(
               <Link onClick={() => $('#searchBarResults').hide()} tabIndex='0' key={course.id} to={`/courses/${course.id}`}><li>{course.department} {course.number}: {course.title}</li></Link>
             );
           })
-          : ''
         }
       </ul>
     );
@@ -147,9 +146,24 @@ class Header extends Component {
 
   onSubmit(values) {
     //values is object with searchBar: <input>
-    $('#searchBarResults').hide();
     this.debouncedGetResponse(null, null); //cancel other responses in progress
-    this.getResponseAndPushHistory(values.searchBar, response => this.props.setSearchResults(response), () => this.props.history.push('/search/' + values.searchBar));
+    if ('/search/' + values.searchBar !== window.location.pathname) { //only do something if search is different than last
+      if (this.props.searchResults && values.searchBar === this.props.searchResults.term) { //if values same, don't make new request, use current searchResults instead (but force update for searchContent)
+        const response = this.props.searchResults;
+        response.forceUpdate = true;
+        this.props.setSearchResults(response);
+      }
+      else if ('/search/' + values.searchBar !== window.location.pathname) { //don't re-search if search would be same
+        const tempResponse = {professors: [], courses: [], forceUpdate: true, loading: true};
+        this.props.setSearchResults(tempResponse); //show loading icon while results being asynchronously fetched
+        this.getResponse(values.searchBar, response =>  {
+          response.forceUpdate = true;
+          response.term = values.searchBar;
+          this.props.setSearchResults(response);
+        });
+      }
+      this.props.history.push('/search/' + values.searchBar);
+    }
   }
 
   render() {
@@ -167,7 +181,10 @@ class Header extends Component {
               onChange={
                 (change, newVal) => {
                   if (newVal.length > 2) {
-                    this.debouncedGetResponse(newVal, response => this.props.setSearchResults(response));
+                    this.debouncedGetResponse(newVal, response => {
+                      response.term = newVal;
+                      this.props.setSearchResults(response);
+                    });
                   } else {
                     this.debouncedGetResponse(null, null);//this cancels any previous calls still being debounced so function not called later
                     if (this.props.searchResults !== null) this.props.setSearchResults(null);
@@ -178,20 +195,19 @@ class Header extends Component {
           </form>
 
           <div styleName="header-items" className="container">
-            <Link to={'/'}>
-              <i className="fa fa-home homeBtn" />
+            <Link to={'/'} className='btn' styleName="homeBtn">
+              <i className="fa fa-home" />
             </Link>
-            <Link styleName='profileBtn' to={'/profile'}>
+            <Link className='btn' styleName='profileBtn' to={'/profile'}>
               {userInfo.first_name}
               <img styleName="profile-img" src={userInfo.picture} alt="Profile picture" />
             </Link>
-            <button type="button" onClick={() => {
+            <button className='btn' styleName='signOutBtn' type="button" onClick={() => {
               localStorage.removeItem('jwt');
               delUserInfo();
               ReactGA.set({ userId: undefined });
               if (this.props.history.location.pathname !== '/') this.props.history.push('/');
-            }}
-            styleName="signOutBtn">
+            }} >
               Sign Out
             </button>
           </div>
@@ -204,7 +220,7 @@ class Header extends Component {
 
 function validate(values) {
   const errors = {};
-  if (values.searchBar && values.searchBar.length < 3) {
+  if (!values.searchBar || values.searchBar.length < 3) {
     errors.searchBar = "Enter at least 3 characters";
   }
   return errors;

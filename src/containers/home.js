@@ -4,11 +4,11 @@ import { GoogleLogin } from 'react-google-login';
 import jwtDecode from 'jwt-decode';
 import PropTypes from 'prop-types';
 import ReactGA from 'react-ga';
+import { Link } from 'react-router-dom';
 
 import API from '../services/api';
 import '../styles/home.scss';
 
-import PostSearch from '../components/postSearch';
 import { setUserInfo } from '../actions';
 
 class Home extends Component {
@@ -55,9 +55,7 @@ class Home extends Component {
           <p>Welcome to SCU Evals, the best platform for rating and reviewing professors and courses at Santa Clara University.</p>
           <hr />
           <br />
-          <h3>Post an Evaluation</h3>
-          <br />
-          <PostSearch />
+          <Link to='/post' className='btn'>Quick post</Link>
         </div>
       );
     }
@@ -71,6 +69,7 @@ class Home extends Component {
             buttonText=''
             onSuccess={info => this.authWithBackEnd(info.tokenObj.id_token)}
             onFailure={err => console.error('Google Login Error: ', err)}
+            className='btn'
             styleName='loginBtn'
           >
               <img className='pull-left' alt='Google "G" logo' src='/images/googleG.jpg' />

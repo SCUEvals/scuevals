@@ -17,16 +17,17 @@ class SearchContent extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if (this.props.searchResults !== nextProps.searchResults) return false; //don't update on new search results, only want 1st instance
+    if (nextProps.searchResults && nextProps.searchResults.forceUpdate) return true;
+    else if (this.props.searchResults !== nextProps.searchResults) return false; //don't update on new search results, only want 1st instance
     else return true;
   }
 
   componentWillMount() {
-    if (!this.props.searchResults && this.props.match.params.search.length > 2) { //if loading this component straight from GET request (rather than being routed with React Router)
+    if (this.props.match.params.search.length > 2 && this.props.history.action === 'POP') { //if loading this component straight from GET request (rather than being routed with React Router (action would be PUSH))
       let client = new API();
       client.get('/search', responseData => {
           this.props.setSearchResults(responseData);
-          $('#searchBarResults').remove(); //remove results dropdown when submitting until new input entered after
+          $('#searchBarResults').hide(); //hide results dropdown when submitting until new input entered after
           this.forceUpdate(); //passes shouldComponentUpdate, ensures that new state read by component
         },
         {q: this.props.match.params.search}
@@ -35,27 +36,30 @@ class SearchContent extends Component {
   }
 
   render() {
-    if (this.props.searchResults) {
+    const { searchResults } = this.props;
+    $('#searchBarResults').hide();
+
+    if (searchResults && !searchResults.loading) {
       return (
         <div styleName= "results" className="content">
-          {this.props.searchResults.professors.length === 0 && this.props.searchResults.courses.length === 0 ?
+          {searchResults.professors.length === 0 && searchResults.courses.length === 0 ?
             <h5>No results found for "{this.props.match.params.search}"</h5>
             :
             <h5>Showing results for "{this.props.match.params.search}"</h5>
           }
-          {this.props.searchResults.professors.length > 0 ?
+          {searchResults.professors.length > 0 ?
             <div>
               <h4>Professors</h4>
-              <BootstrapTable version='4' data={this.props.searchResults.professors} striped={true} hover={true}>
+              <BootstrapTable version='4' data={searchResults.professors} striped={true} hover={true}>
                 <TableHeaderColumn dataFormat={nameFormatter} dataField="first_name" isKey={true} dataAlign="center" dataSort={true}>Name</TableHeaderColumn>
               </BootstrapTable>
             </div>
             : ''
           }
-          {this.props.searchResults.courses.length > 0 ?
+          {searchResults.courses.length > 0 ?
             <div>
               <h4>Courses</h4>
-              <BootstrapTable version='4' data={this.props.searchResults.courses} striped={true} hover={true}>
+              <BootstrapTable version='4' data={searchResults.courses} striped={true} hover={true}>
                 <TableHeaderColumn dataFormat={courseNumberFormatter} dataField="number" dataSort={true} dataAlign="center">Course</TableHeaderColumn>
                 <TableHeaderColumn dataFormat={courseTitleFormatter} dataField="title" isKey={true} dataSort={true} dataAlign="center">Title</TableHeaderColumn>
               </BootstrapTable>

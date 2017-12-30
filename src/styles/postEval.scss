@@ -1,7 +1,7 @@
 @import "theme";
 
 :global(.rc-slider-handle) {
-  border-color: black;
+  border-color: black !important;
   height: 33px;
   width: 33px;
   margin-left: -18px;
@@ -20,7 +20,8 @@
 :global(.rc-slider-handle:hover),
 :global(.rc-slider-handle:active),
 :global(.rc-slider-handle:focus) {
-  border-color: black;
+  border-color: black !important;
+  box-shadow: 0 0 0 2px $focusColor !important;
 }
 
 :global(.rc-slider) {
