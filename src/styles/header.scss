@@ -21,7 +21,6 @@ header {
     padding: 4px 8px;
     font-size: 13px;
     opacity: 0;
-    transition: $defaultTransition;
     visibility: hidden;
   }
 
@@ -33,7 +32,6 @@ header {
     input:focus ~ .text-help {
       visibility: visible;
       opacity: 1;
-      transition: $defaultTransition;
     }
   }
 
@@ -55,8 +53,7 @@ header {
     align-items: center;
     font-weight: normal;
     background-color: transparent;
-    padding: 0;
-    margin: 0 5px;
+    padding: 0 5px;
   }
 
   .homeBtn {
@@ -108,8 +105,11 @@ header {
   :global(#searchBar) {
     input {
       z-index: 3;
-      border-width: 2px;
       border-color: white;
+
+      &:focus {
+        border-color: $focusColor;
+      }
     }
 
     :global(#searchBarResults[style='']) ~ input { //make sure style not display: none

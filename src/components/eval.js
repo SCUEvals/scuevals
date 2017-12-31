@@ -17,8 +17,8 @@ console.log(info);
   return (
     <div styleName='eval'>
       <div styleName='vote'>
-        <i className='fa fa-caret-up active' />
-        <i className='fa fa-caret-down' />
+        <i tabindex='0' className='fa fa-caret-up active' />
+        <i tabindex='0' className='fa fa-caret-down' />
       </div>
       <div styleName='evalContent'>
         <div styleName='evalInfo' className='row'>

@@ -15,6 +15,7 @@ body {
   text-align: center;
   height: 100%;
   min-height: 100vh;
+  color: $overlayBackground;
 }
 
 body::after {
@@ -37,6 +38,7 @@ body::after {
   color: white;
   background-color: $SCUred;
   cursor: pointer;
+  border-radius: $defaultBorderRadius;
 
   &:hover {
     color: white;
@@ -276,6 +278,7 @@ input[type="radio"] {
 
 .Select-control {
   border-radius: $defaultBorderRadius;
+  border: 2px solid $backgroundColor;
 
   &:focus {
     border-color: $focusColor;
@@ -294,9 +297,20 @@ input[type="radio"] {
   }
 }
 
+.Select.is-disabled > .Select-control {
+  .Select-input {
+    width: calc(100% + 25px) !important;
+    background-color: #f9f9f9;
+
+    &:focus {
+      border: 2px solid $focusColor !important;
+    }
+  }
+}
+
 .Select.is-focused:not(.is-open) > .Select-control {
   box-shadow: none;
-  border-color: $focusColor;
+  border: 2px solid $focusColor;
 }
 
 textarea {
@@ -320,9 +334,10 @@ iframe,
 [contentEditable=true] {
   &:not([tabindex='-1']) {
     border: 2px solid transparent; //not important, sometimes overridden
+    transition: none;
 
     &:focus {
-      border: 2px solid $focusColor !important;
+      border: 2px solid $focusColor;
       box-shadow: none;
       outline: none;
     }

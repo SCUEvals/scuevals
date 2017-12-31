@@ -7,10 +7,10 @@ const Footer = ()  => {
   return (
     <footer>
       <div className="container">
-        <Link styleName="link" className="btn float-left" to={"/about"}>
+        <Link styleName="link" className="btn" to={"/about"}>
           About Us
         </Link>
-        <Link styleName="link" className="btn float-right" to={"/privacy"}>
+        <Link styleName="link" className="btn" to={"/privacy"}>
           Privacy Policy
         </Link>
       </div>

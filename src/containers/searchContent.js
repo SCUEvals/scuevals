@@ -50,7 +50,7 @@ class SearchContent extends Component {
           {searchResults.professors.length > 0 ?
             <div>
               <h4>Professors</h4>
-              <BootstrapTable version='4' data={searchResults.professors} striped={true} hover={true}>
+              <BootstrapTable withoutTabIndex version='4' data={searchResults.professors} striped={true} hover={true}>
                 <TableHeaderColumn dataFormat={nameFormatter} dataField="first_name" isKey={true} dataAlign="center" dataSort={true}>Name</TableHeaderColumn>
               </BootstrapTable>
             </div>
@@ -59,7 +59,7 @@ class SearchContent extends Component {
           {searchResults.courses.length > 0 ?
             <div>
               <h4>Courses</h4>
-              <BootstrapTable version='4' data={searchResults.courses} striped={true} hover={true}>
+              <BootstrapTable withoutTabIndex version='4' data={searchResults.courses} striped={true} hover={true}>
                 <TableHeaderColumn dataFormat={courseNumberFormatter} dataField="number" dataSort={true} dataAlign="center">Course</TableHeaderColumn>
                 <TableHeaderColumn dataFormat={courseTitleFormatter} dataField="title" isKey={true} dataSort={true} dataAlign="center">Title</TableHeaderColumn>
               </BootstrapTable>

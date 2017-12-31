@@ -8,99 +8,99 @@ $voteWidth: 40px;
   position: relative;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 0.25rem;
-}
 
-.vote {
-  float: left;
-  width: $voteWidth;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  //border-right: 1px solid $backgroundColor;
-  position: absolute;
-  height: 100%;
-  background-color: $backgroundColor;
-
-  i {
-    font-size: 28px;
-    margin: 5px 0;
-    color: $overlayBackground;
-    cursor: pointer;
-
-    &.active {
-      color: $SCUred;
-    }
-  }
-}
-
-.evalContent {
-  margin-left: $voteWidth;
-  width: calc(100% - #{$voteWidth});
-}
-
-:global(.slick-slider) {
-  background-color: $SCUred;
-  color: white;
-}
-
-.evalInfo {
-  border-left: 1px solid rgba(0, 0, 0, 0.2);
-  margin: 0;
-  background-color: $backgroundColor;
-  font-size: 16px;
-  color: $overlayBackground;
-  font-weight: bold;
-
-  :global(.col-sm-6) {
-    padding-bottom: 0 !important;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-}
-
-.scoreBlock {
-  padding: 5px 0;
-  font-size: 15px;
-
-  .scoreTitle {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-
-  .score1,
-  .score2,
-  .score3,
-  .score4 {
-    width: 38px;
-    margin: 0 auto;
-    height: 38px;
+  .vote {
+    float: left;
+    width: $voteWidth;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 50%;
+    //border-right: 1px solid $backgroundColor;
+    position: absolute;
+    height: 100%;
+    background-color: $backgroundColor;
+
+    i {
+      font-size: 28px;
+      margin: 5px 0;
+      color: $overlayBackground;
+      cursor: pointer;
+
+      &.active {
+        color: $SCUred;
+      }
+    }
   }
 
-  .score1 {
-    border: 3px solid red;
-    border-right-color: transparent;
-    border-bottom-color: transparent;
-  }
-}
-
-.comment {
-  text-align: initial;
-
-  .commentQuote {
-    text-align: center;
-    font-style: oblique;
-    padding: 15px;
+  .evalContent {
+    margin-left: $voteWidth;
+    width: calc(100% - #{$voteWidth});
   }
 
-  .commentReport {
-    text-align: right;
-    margin: 15px;
-    cursor: pointer;
+  :global(.slick-slider) {
+    background-color: $SCUred;
+    color: white;
+  }
+
+  .evalInfo {
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+    margin: 0;
+    background-color: $backgroundColor;
+    font-size: 16px;
+    color: $overlayBackground;
+    font-weight: bold;
+
+    :global(.col-sm-6) {
+      padding-bottom: 0 !important;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+
+  .scoreBlock {
+    padding: 5px 0;
+    font-size: 15px;
+
+    .scoreTitle {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .score1,
+    .score2,
+    .score3,
+    .score4 {
+      width: 38px;
+      margin: 0 auto;
+      height: 38px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+    }
+
+    .score1 {
+      border: 3px solid red;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+    }
+  }
+
+  .comment {
+    text-align: initial;
+
+    .commentQuote {
+      text-align: center;
+      font-style: oblique;
+      padding: 15px;
+    }
+
+    .commentReport {
+      text-align: right;
+      margin: 15px;
+      cursor: pointer;
+    }
   }
 }

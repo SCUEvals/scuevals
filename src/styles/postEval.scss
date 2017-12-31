@@ -18,9 +18,13 @@
 }
 
 :global(.rc-slider-handle:hover),
-:global(.rc-slider-handle:active),
-:global(.rc-slider-handle:focus) {
+:global(.rc-slider-handle:active) {
   border-color: black !important;
+  box-shadow: 0 0 0 2px $focusColor !important;
+}
+
+:global(.rc-slider-handle:focus) {
+  border-color: $focusColor !important;
   box-shadow: 0 0 0 2px $focusColor !important;
 }
 
@@ -85,10 +89,6 @@
 .popper-manager,
 .popper {
   transition: $defaultTransition;
-}
-
-:global(.rc-slider-handle:focus) {
-  box-shadow: 0 0 0 5px $focusColor;
 }
 
 :global(.track1) {
