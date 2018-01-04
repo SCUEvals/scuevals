@@ -322,6 +322,10 @@ textarea {
   border: 2px solid $overlayBackground !important; //below outline is set to none, but exception for textarea
   border-radius: $defaultBorderRadius;
   padding: 5px;
+
+  &:focus {
+    border: 2px solid $focusColor !important;
+  }
 }
 
 //target all focusable items to make focus color same for all items

@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import '../styles/about.scss';
-
 class About extends Component {
 
   static defaultProps = {
@@ -80,7 +78,7 @@ class About extends Component {
           </div>
         </div>
         <hr />
-        <h6 styleName="end">Like what you see? Have ideas for change?<br />
+        <h6>Like what you see? Have ideas for change?<br />
         Email us at  <a href="mailto:scuevalsteam@gmail.com">scuevalsteam@gmail.com </a>
         or check out our official <a href="https://github.com/scuevals">GitHub</a>!
         </h6>

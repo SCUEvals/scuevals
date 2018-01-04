@@ -61,8 +61,8 @@ header {
     font-size: 1.75rem;
     position: absolute;
     left: 10px;
-    height: 100%;
     top: 0;
+    border-radius: $defaultBorderRadius;
 
     &:hover {
       color: $SCUdarkred;
@@ -125,7 +125,7 @@ header {
       border-top: 0 !important;
       top: 40px;
       position: absolute;
-      width: calc(100% - 30px - 40px); //30px for  15px x2 padding, 40px for search button (add 1px to fit correctly)
+      width: calc(100% - 30px - 41px); //30px for 15px x2 padding, 41px for search button
       max-height: 212px;
       overflow: auto;
       background-color: white;
@@ -153,9 +153,10 @@ header {
         color: $overlayBackground;
         font-weight: bold;
         display: block; //needed for transparent border to work (a is focusable because tabindex is on it)
+        outline: 1px solid $backgroundColor;
 
-        li {
-          border-bottom: 2px solid $backgroundColor;
+        &:hover {
+          border: 2px solid $backgroundColor;
         }
 
         &:hover li,

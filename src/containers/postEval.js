@@ -76,8 +76,8 @@ const textOptions = {
 const infoTooltip = (info) => {
   return (
     <Manager styleName='popper-manager'>
-      <Target styleName='popper-target'>
-      <i className='fa fa-question-circle'/>
+      <Target tabIndex='0' styleName='popper-target'>
+      <i className='fa fa-question'/>
       </Target>
       <Popper placement="top" styleName="popper tooltip-popper">
         {info}

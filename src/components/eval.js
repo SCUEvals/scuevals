@@ -1,16 +1,17 @@
 import React from 'react';
 import Slider from 'react-slick';
+import PropTypes from 'prop-types';
+
 import '../styles/eval.scss';
 
-const Eval = ({info}) => {
-console.log(info);
-
+const Eval = ({ info }) => {
+console.log('info:', info);
   const settings = {
     dots: true,
     arrows: false,
-    infinite: false,
     slidesToShow: 6,
     slidesToScroll: 6,
+    touchThreshold: 10, //more sensitive to move with click or touch
     responsive: [
       { breakpoint: 576,
         settings: {
@@ -124,6 +125,10 @@ console.log(info);
       </div>
     </div>
   );
+}
+
+Eval.propTypes = {
+  info: PropTypes.obj
 }
 
 export default Eval;

@@ -195,7 +195,7 @@ class Header extends Component {
           </form>
 
           <div styleName="header-items" className="container">
-            <Link to={'/'} className='btn' styleName="homeBtn">
+            <Link to={'/'} styleName="homeBtn">
               <i className="fa fa-home" />
             </Link>
             <Link className='btn' styleName='profileBtn' to={'/profile'}>
