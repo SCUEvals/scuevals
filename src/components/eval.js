@@ -7,18 +7,37 @@ console.log(info);
 
   const settings = {
     dots: true,
-    slidesToScroll: 6,
-    slidesToShow: 6,
     arrows: false,
     infinite: false,
-    touchThreshold: 5
+    slidesToShow: 6,
+    slidesToScroll: 6,
+    responsive: [
+      { breakpoint: 576,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      },
+      { breakpoint: 768,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3
+        }
+      },
+      { breakpoint: 1024,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 4
+        }
+      },
+    ]
   };
 
   return (
     <div styleName='eval'>
       <div styleName='vote'>
-        <i tabindex='0' className='fa fa-caret-up active' />
-        <i tabindex='0' className='fa fa-caret-down' />
+        <i styleName='active' tabIndex='0' className='fa fa-caret-up' />
+        <i tabIndex='0' className='fa fa-caret-down' />
       </div>
       <div styleName='evalContent'>
         <div styleName='evalInfo' className='row'>

@@ -1,6 +1,5 @@
 @import "theme";
-// @import "~slick-carousel/slick/slick";
-// @import "~slick-carousel/slick/slick-theme";
+@import "~slick-carousel/slick/slick";
 
 $voteWidth: 40px;
 
@@ -41,6 +40,39 @@ $voteWidth: 40px;
   :global(.slick-slider) {
     background-color: $SCUred;
     color: white;
+  }
+
+  :global(.slick-dots) {
+    margin: 0;
+    padding: 0;
+    position: static;
+    background-color: white;
+
+    li {
+      display: inline;
+      padding: 3px;
+
+      button {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+        padding: 0;
+        border-radius: 50%;
+        color: transparent;
+        font-size: 0;
+        background-color: $backgroundColor;
+        border: 2px solid white;
+
+        &:hover {
+          background-color: $overlayBackground;
+        }
+      }
+
+      &:global(.slick-active) button {
+        background-color: $SCUred;
+      }
+    }
   }
 
   .evalInfo {

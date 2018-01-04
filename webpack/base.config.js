@@ -106,10 +106,6 @@ module.exports = {
             fallback: 'style-loader',
           })
         }]
-      },
-      {
-        test: /\.(eot|woff|woff2|ttf|svg|png|jpg|gif)$/,
-        loader: 'url-loader?limit=30000&name=[name]-[hash].[ext]'
       }
     ]
   },
