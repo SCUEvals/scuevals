@@ -1,6 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
 @import "theme";
-@import "~slick-carousel/slick/slick";
 
 * {
   text-overflow: ellipsis;
@@ -169,11 +167,6 @@ input[type="radio"] {
   height: auto !important;
 }
 
-.error {
-  box-shadow: 0 0 0 2px $SCUred;
-  border-radius: $defaultBorderRadius;
-}
-
 .Select {
   margin: auto auto 50px;
   max-width: 350px;
@@ -285,6 +278,10 @@ input[type="radio"] {
   &:focus {
     border-color: $focusColor;
   }
+}
+
+.error .Select-control {
+  border: 2px solid $SCUred;
 }
 
 @media (max-width: $xs) {

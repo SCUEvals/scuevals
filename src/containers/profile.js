@@ -139,7 +139,7 @@ class Profile extends Component {
           {userInfo && !userInfo.roles.includes(0) ?
             <div>
               <h4 styleName='banner'>{userInfo.first_name}'s Profile</h4>
-              <small>This information is kept anonymous from the public and is only used for statistical purposes.</small>
+              <small>This information is displayed anonymously when posting to give readers a better idea of the demographics of the poster. Your name is kept hidden.</small>
             </div>
             :
             <div>

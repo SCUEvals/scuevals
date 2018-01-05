@@ -81,7 +81,6 @@ $voteWidth: 40px;
     background-color: $backgroundColor;
     font-size: 16px;
     color: $overlayBackground;
-    font-weight: bold;
 
     :global(.col-sm-6) {
       padding-bottom: 0 !important;
@@ -96,27 +95,7 @@ $voteWidth: 40px;
     font-size: 15px;
 
     .scoreTitle {
-      font-weight: bold;
       margin-bottom: 5px;
-    }
-
-    .score1,
-    .score2,
-    .score3,
-    .score4 {
-      width: 38px;
-      margin: 0 auto;
-      height: 38px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 50%;
-    }
-
-    .score1 {
-      border: 3px solid red;
-      border-right-color: transparent;
-      border-bottom-color: transparent;
     }
   }
 
@@ -134,5 +113,67 @@ $voteWidth: 40px;
       margin: 15px;
       cursor: pointer;
     }
+  }
+
+  svg {
+    width: 36px; //2x cx
+    height: 36px; //2x cy
+
+    circle { //r = 16, circumference = 2 * pi * 16 ≈ 100.531
+      animation: score 1s;
+      fill: transparent;
+      stroke-dasharray: 100.531;
+      stroke: white;
+      stroke-width: 2;
+    }
+
+    text {
+      dominant-baseline: central;
+      text-anchor: middle;
+      fill: white;
+      font-size: 20px;
+    }
+
+    &.score1 {
+      stroke-dashoffset: -75.398; // == * -3/4 circumference
+
+      circle {
+        fill: $score1Color;
+      }
+    }
+
+    &.score2 {
+      stroke-dashoffset: -50.265; // == * -1/2 circumference
+
+      circle {
+        fill: $score2Color;
+      }
+    }
+
+    &.score3 {
+      stroke-dashoffset: -25.133; // == * -1/4 circumference
+
+      circle {
+        fill: $score3Color;
+      }
+    }
+
+    &.score4 {
+      stroke-dashoffset: initial;
+
+      circle {
+        fill: $score4Color;
+      }
+    }
+  }
+
+  :global(.slick-initialized .slick-slide) {
+    padding-bottom: 0;
+  }
+}
+
+@keyframes score {
+  from {
+    stroke-dashoffset: -100.5;
   }
 }

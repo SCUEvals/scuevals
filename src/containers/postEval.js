@@ -179,7 +179,7 @@ class PostEval extends Component {
   render() {
     const { handleSubmit } = this.props;
 
-    const required = value => {console.log('value:', value); return 'test'};
+    const required = value => {};
 
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >

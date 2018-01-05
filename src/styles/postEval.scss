@@ -92,39 +92,39 @@
 }
 
 :global(.track1) {
-  background-color: red;
+  background-color: $score1Color;
 }
 
 :global(.track2) {
-  background-color: orange;
+  background-color: $score2Color;
 }
 
 :global(.track3) {
-  background-color: greenyellow;
+  background-color: $score3Color;
 }
 
 :global(.track4) {
-  background-color: green;
+  background-color: $score4Color;
 }
 
 :global(.workload .track1),
 :global(.difficulty .track1) {
-  background-color: green;
+  background-color: $score4Color;
 }
 
 :global(.workload .track2),
 :global(.difficulty .track2) {
-  background-color: yellow;
+  background-color: $score3Color;
 }
 
 :global(.workload .track3),
 :global(.difficulty .track3) {
-  background-color: orange;
+  background-color: $score2Color;
 }
 
 :global(.workload .track4),
 :global(.difficulty .track4) {
-  background-color: red;
+  background-color: $score1Color;
 }
 
 .popper .popper__arrow {

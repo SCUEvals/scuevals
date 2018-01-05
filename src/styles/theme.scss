@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 @import "~react-bootstrap-table/dist/react-bootstrap-table.min";
 @import "~react-select/dist/react-select.min";
+@import "~slick-carousel/slick/slick";
 
 $backgroundColor: #d7d7d7;
 $overlayBackground: #212529;
@@ -13,6 +15,10 @@ $footerHeight: 35px;
 $defaultBorderRadius: 0.25rem;
 $defaultTransition: all 0.2s ease-in-out;
 $focusColor: #80bdff;
+$score1Color: red;
+$score2Color: orange;
+$score3Color: #5ebd2d;
+$score4Color: green;
 $xs: 575px;
 $sm: 767px;
 
