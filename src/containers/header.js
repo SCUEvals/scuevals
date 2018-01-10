@@ -199,8 +199,8 @@ class Header extends Component {
               <i className="fa fa-home" />
             </Link>
             <Link className='btn' styleName='profileBtn' to={'/profile'}>
-              {userInfo.first_name}
               <img styleName="profile-img" src={userInfo.picture} alt="Profile picture" />
+              {userInfo.first_name}
             </Link>
             <button className='btn' styleName='signOutBtn' type="button" onClick={() => {
               localStorage.removeItem('jwt');

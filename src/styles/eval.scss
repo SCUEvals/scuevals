@@ -1,5 +1,4 @@
 @import "theme";
-@import "~slick-carousel/slick/slick";
 
 $voteWidth: 40px;
 
@@ -18,12 +17,12 @@ $voteWidth: 40px;
     //border-right: 1px solid $backgroundColor;
     position: absolute;
     height: 100%;
-    background-color: $backgroundColor;
+    background-color: $overlayBackground;
 
     i {
       font-size: 28px;
       margin: 5px 0;
-      color: $overlayBackground;
+      color: white;
       cursor: pointer;
 
       &.active {
@@ -37,16 +36,12 @@ $voteWidth: 40px;
     width: calc(100% - #{$voteWidth});
   }
 
-  :global(.slick-slider) {
-    background-color: $SCUred;
-    color: white;
-  }
-
   :global(.slick-dots) {
     margin: 0;
     padding: 0;
     position: static;
     background-color: white;
+    cursor: default;
 
     li {
       display: inline;
@@ -65,7 +60,7 @@ $voteWidth: 40px;
         border: 2px solid white;
 
         &:hover {
-          background-color: $overlayBackground;
+          background-color: $SCUdarkred;
         }
       }
 
@@ -75,12 +70,22 @@ $voteWidth: 40px;
     }
   }
 
+  :global(.slick-slider) {
+    background-color: $SCUred;
+    color: white;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
   .evalInfo {
     border-left: 1px solid rgba(0, 0, 0, 0.2);
     margin: 0;
-    background-color: $backgroundColor;
+    background-color: $overlayBackground;
     font-size: 16px;
-    color: $overlayBackground;
+    color: white;
 
     :global(.col-sm-6) {
       padding-bottom: 0 !important;
@@ -112,6 +117,11 @@ $voteWidth: 40px;
       text-align: right;
       margin: 15px;
       cursor: pointer;
+      color: $SCUred;
+
+      &:hover {
+        color: $SCUdarkred;
+      }
     }
   }
 

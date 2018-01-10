@@ -346,3 +346,29 @@ iframe,
     }
   }
 }
+
+input[type=radio]:focus {
+  outline: 2px solid $focusColor !important;
+  border: none !important;
+}
+
+.fa[tabindex] {
+  &:focus {
+    border: 2px solid transparent;
+    text-shadow: $textShadow;
+  }
+
+  &:hover {
+    color: $SCUdarkred;
+  }
+}
+
+a.homeBtn {
+  position: absolute;
+  left: 5px;
+
+  &:focus {
+    text-shadow: $textShadow;
+    border: 2px solid transparent !important;
+  }
+}

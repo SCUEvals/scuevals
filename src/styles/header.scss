@@ -71,6 +71,8 @@ header {
 
     &:focus {
       color: $SCUred;
+      border: 2px solid transparent !important;
+      text-shadow: $textShadow;
     }
   }
 
@@ -89,9 +91,9 @@ header {
   }
 
   .profile-img {
-    height: 32px;
+    height: 26px;
     border-radius: 50%;
-    margin-left: 8px;
+    margin-right: 8px;
   }
 
   .header-items {

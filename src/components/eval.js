@@ -150,7 +150,7 @@ console.log('info:', info);
             Year:
           </div>
           <div styleName='commentReport'>
-            Report post
+            <i className='fa fa-flag' />
           </div>
         </div>
       </div>

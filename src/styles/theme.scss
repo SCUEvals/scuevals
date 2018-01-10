@@ -19,8 +19,9 @@ $score1Color: red;
 $score2Color: orange;
 $score3Color: #5ebd2d;
 $score4Color: green;
-$xs: 575px;
 $sm: 767px;
+$xs: 575px;
+$textShadow: -1px 0 $focusColor, 0 1px $focusColor, 1px 0 $focusColor, 0 -1px $focusColor;
 
 @mixin fixedCenter {
   position: fixed;
