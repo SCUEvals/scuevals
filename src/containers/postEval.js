@@ -33,7 +33,7 @@ const textOptions = {
     four: 'Great explainer',
     info: 'Was the professor\'s notes and explanations clear (word choice, handwriting, etc.)?'
   },
-  grade_speed: {
+  grading_speed: {
     one: 'Not\xA0until end of quarter',
     two: 'Extremely slow',
     three: 'After a few classes',
