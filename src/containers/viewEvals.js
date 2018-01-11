@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
+import ReactModal from 'react-modal';
 
 import Eval from '../components/eval';
 import API from '../services/api';
@@ -18,7 +19,8 @@ class ViewEvals extends Component {
     super(props);
     this.state = {
       info: null,
-      orderedInfo: null
+      orderedInfo: null,
+      modalOpen: false
     };
   }
 
@@ -28,9 +30,27 @@ class ViewEvals extends Component {
   }
 
   render() {
-    const { info, orderedInfo } = this.state;
+    const { info, orderedInfo, modalOpen } = this.state;
     return (
       <div className="content">
+        <ReactModal isOpen={modalOpen} className='Modal'>
+          <div className='container'>
+          <div className='modalPanel'>
+            <div className='modalHeader'>
+              <h5>Flag comment</h5>
+              <i tabIndex='0' className='fa fa-times'
+                onClick={() => this.setState({modalOpen: false})}
+                onKeyPress={event => {
+                  if (event.key === 'Enter') this.setState({modalOpen: false});
+                }}
+              />
+            </div>
+            <div className='modalBlock'>
+              Content
+            </div>
+          </div>
+        </div>
+        </ReactModal>
         <h2>
           {info ?
             this.props.type === 'professors' ?
@@ -84,13 +104,22 @@ class ViewEvals extends Component {
           placeholder="Sort"
         />
         <br/>
-        <Eval info={info} />
+        <Eval
+          info={info}
+          openModal={() => this.setState({modalOpen: true})}
+        />
         <br/>
         <br/>
-        <Eval info={info} />
+        <Eval
+          info={info}
+          openModal={() => this.setState({modalOpen: true})}
+        />
         <br/>
         <br/>
-        <Eval info={info} />
+        <Eval
+          info={info}
+          openModal={() => this.setState({modalOpen: true})}
+        />
       </div>
     );
   }

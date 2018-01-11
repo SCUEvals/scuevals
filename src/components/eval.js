@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import '../styles/eval.scss';
 
-const Eval = ({ info }) => {
+const Eval = ({ info, openModal }) => {
 console.log('info:', info);
   const settings = { //set speed = slidesToShow * 75
     dots: false,
@@ -160,8 +160,12 @@ console.log('info:', info);
             Gender:
             Year:
           </div>
-          <div styleName='commentReport'>
-            <i className='fa fa-flag' />
+          <div styleName='flagComment'>
+            <i className='fa fa-flag' tabIndex='0'
+              onClick={() => openModal()}
+              onKeyPress={event => {
+                if (event.key === 'Enter') openModal();
+              }} />
           </div>
         </div>
       </div>

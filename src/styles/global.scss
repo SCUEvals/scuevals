@@ -352,7 +352,13 @@ input[type=radio]:focus {
   border: none !important;
 }
 
+.fa {
+  color: $SCUred;
+}
+
 .fa[tabindex] {
+  cursor: pointer;
+
   &:focus {
     border: 2px solid transparent;
     text-shadow: $textShadow;
@@ -371,4 +377,42 @@ a.homeBtn {
     text-shadow: $textShadow;
     border: 2px solid transparent !important;
   }
+}
+
+.Modal {
+  @include fixedCenter;
+
+  .modalPanel {
+    border-radius: $defaultBorderRadius;
+    background-color: white;
+    position: relative;
+    border: 2px solid $backgroundColor;
+
+    h5 {
+      margin-bottom: 0;
+      padding: 5px;
+    }
+
+    .modalHeader {
+      background-color: $backgroundColor;
+
+      i {
+        position: absolute;
+        top: -1px;
+        right: 1px;
+        font-size: 20px;
+      }
+    }
+
+    .modalBlock {
+      background-color: white;
+    }
+  }
+
+  width: 100%;
+  max-width: 750px;
+}
+
+.Overlay {
+  background-color: rebeccapurple;
 }

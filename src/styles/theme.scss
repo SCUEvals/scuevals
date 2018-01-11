@@ -25,10 +25,7 @@ $textShadow: -1px 0 $focusColor, 0 1px $focusColor, 1px 0 $focusColor, 0 -1px $f
 
 @mixin fixedCenter {
   position: fixed;
+  left: 50%;
   top: 50%;
-  transform: translateY(-50%);
-  left: 0;
-  right: 0;
-  margin-left: 0;
-  margin-right: 0;
+  transform: translate(-50%, -50%);
 }
