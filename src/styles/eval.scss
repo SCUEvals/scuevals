@@ -1,6 +1,6 @@
 @import "theme";
 
-$voteWidth: 40px;
+$voteWidth: 30px;
 
 .eval {
   position: relative;
@@ -17,7 +17,7 @@ $voteWidth: 40px;
     //border-right: 1px solid $backgroundColor;
     position: absolute;
     height: 100%;
-    background-color: $overlayBackground;
+    background-color: $backgroundColor;
 
     i {
       font-size: 28px;
@@ -34,6 +34,10 @@ $voteWidth: 40px;
   .evalContent {
     margin-left: $voteWidth;
     width: calc(100% - #{$voteWidth});
+  }
+
+  :global(.slick-list) {
+    height: 74px;
   }
 
   :global(.slick-dots) {
@@ -83,9 +87,9 @@ $voteWidth: 40px;
   .evalInfo {
     border-left: 1px solid rgba(0, 0, 0, 0.2);
     margin: 0;
-    background-color: $overlayBackground;
+    background-color: $backgroundColor;
     font-size: 16px;
-    color: white;
+    color: $overlayBackground;
 
     :global(.col-sm-6) {
       padding-bottom: 0 !important;
@@ -97,10 +101,11 @@ $voteWidth: 40px;
 
   .scoreBlock {
     padding: 5px 0;
-    font-size: 15px;
 
     .scoreTitle {
       margin-bottom: 5px;
+      font-size: 14px;
+      font-weight: bold;
     }
   }
 

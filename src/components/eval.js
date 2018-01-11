@@ -7,15 +7,16 @@ import '../styles/eval.scss';
 const Eval = ({ info }) => {
 console.log('info:', info);
   const settings = { //set speed = slidesToShow * 75
-    dots: true,
+    dots: false,
     arrows: false,
-    slidesToShow: 6,
-    slidesToScroll: 6,
+    slidesToShow: 9,
+    slidesToScroll: 9,
     touchThreshold: 10, //more sensitive to move with click or touch
     speed: 450,
     responsive: [
       { breakpoint: 576,
         settings: {
+          dots: true,
           slidesToShow: 1,
           slidesToScroll: 1,
           speed: 75
@@ -23,15 +24,25 @@ console.log('info:', info);
       },
       { breakpoint: 768,
         settings: {
+          dots: true,
           slidesToShow: 3,
           slidesToScroll: 3,
           speed: 225
         }
       },
-      { breakpoint: 1024,
+      { breakpoint: 992,
         settings: {
-          slidesToShow: 4,
-          slidesToScroll: 4,
+          dots: true,
+          slidesToShow: 5,
+          slidesToScroll: 5,
+          speed: 300
+        }
+      },
+      { breakpoint: 1200,
+        settings: {
+          dots: true,
+          slidesToShow: 7,
+          slidesToScroll: 7,
           speed: 300
         }
       },
@@ -68,52 +79,7 @@ console.log('info:', info);
             </svg>
           </div>
           <div styleName='scoreBlock'>
-            <div styleName='scoreTitle'>Attitude</div>
-            <svg styleName='score2'>
-              <circle cx="18" cy="18" r="16" />
-              <text x='50%' y='50%'>
-                2
-              </text>
-            </svg>
-          </div>
-          <div styleName='scoreBlock'>
-            <div styleName='scoreTitle'>Availability</div>
-            <svg styleName='score3'>
-              <circle cx="18" cy="18" r="16" />
-              <text x='50%' y='50%'>
-                3
-              </text>
-            </svg>
-          </div>
-          <div styleName='scoreBlock'>
-            <div styleName='scoreTitle'>Clarity</div>
-            <svg styleName='score4'>
-              <circle cx="18" cy="18" r="16" />
-              <text x='50%' y='50%'>
-                4
-              </text>
-            </svg>
-          </div>
-          <div styleName='scoreBlock'>
-            <div styleName='scoreTitle'>Grading Timeliness</div>
-            <svg styleName='score4'>
-              <circle cx="18" cy="18" r="16" />
-              <text x='50%' y='50%'>
-                4
-              </text>
-            </svg>
-          </div>
-          <div styleName='scoreBlock'>
-            <div styleName='scoreTitle'>Resourcefulness</div>
-            <svg styleName='score4'>
-              <circle cx="18" cy="18" r="16" />
-              <text x='50%' y='50%'>
-                4
-              </text>
-            </svg>
-          </div>
-          <div styleName='scoreBlock'>
-            <div styleName='scoreTitle'>Workload</div>
+            <div styleName='scoreTitle'>Recommend?</div>
             <svg styleName='score4'>
               <circle cx="18" cy="18" r="16" />
               <text x='50%' y='50%'>
@@ -131,11 +97,56 @@ console.log('info:', info);
             </svg>
           </div>
           <div styleName='scoreBlock'>
-            <div styleName='scoreTitle'>Recommend?</div>
+            <div styleName='scoreTitle'>Workload</div>
             <svg styleName='score4'>
               <circle cx="18" cy="18" r="16" />
               <text x='50%' y='50%'>
                 4
+              </text>
+            </svg>
+          </div>
+          <div styleName='scoreBlock'>
+            <div styleName='scoreTitle'>Grading Speed</div>
+            <svg styleName='score4'>
+              <circle cx="18" cy="18" r="16" />
+              <text x='50%' y='50%'>
+                4
+              </text>
+            </svg>
+          </div>
+          <div styleName='scoreBlock'>
+            <div styleName='scoreTitle'>Clarity</div>
+            <svg styleName='score4'>
+              <circle cx="18" cy="18" r="16" />
+              <text x='50%' y='50%'>
+                4
+              </text>
+            </svg>
+          </div>
+          <div styleName='scoreBlock'>
+            <div styleName='scoreTitle'>Resourcefulness</div>
+            <svg styleName='score4'>
+              <circle cx="18" cy="18" r="16" />
+              <text x='50%' y='50%'>
+                4
+              </text>
+            </svg>
+          </div>
+          <div styleName='scoreBlock'>
+            <div styleName='scoreTitle'>Attitude</div>
+            <svg styleName='score2'>
+              <circle cx="18" cy="18" r="16" />
+              <text x='50%' y='50%'>
+                2
+              </text>
+            </svg>
+          </div>
+          <div styleName='scoreBlock'>
+            <div styleName='scoreTitle'>Availability</div>
+            <svg styleName='score3'>
+              <circle cx="18" cy="18" r="16" />
+              <text x='50%' y='50%'>
+                3
               </text>
             </svg>
           </div>

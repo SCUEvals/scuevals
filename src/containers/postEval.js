@@ -20,11 +20,11 @@ const textOptions = {
     info: 'How did you feel the professor acted towards students?'
   },
   availability: {
-    one: 'Misses office hours',
-    two: 'Only\xA0at office hours',
-    three: 'Can sometimes schedule',
+    one: 'Impossible to reach',
+    two: 'Barely available',
+    three: 'Usually reachable',
     four: 'Super flexible',
-    info: 'How easy was it to meet with the professor?'
+    info: 'How easy is it to contact or meet with the professor?'
   },
   clarity: {
     one: 'Cannot understand',
@@ -33,7 +33,7 @@ const textOptions = {
     four: 'Great explainer',
     info: 'Was the professor\'s notes and explanations clear (word choice, handwriting, etc.)?'
   },
-  timeliness: {
+  grade_speed: {
     one: 'Not\xA0until end of quarter',
     two: 'Extremely slow',
     three: 'After a few classes',
@@ -220,8 +220,8 @@ class PostEval extends Component {
         <Field name='availability' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.availability} component={this.renderSlider} />
         <h6>Clarity {infoTooltip(textOptions.clarity.info)}</h6>
         <Field name='clarity' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.clarity} component={this.renderSlider} />
-        <h6>Grading Timeliness {infoTooltip(textOptions.timeliness.info)}</h6>
-        <Field name='timeliness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.timeliness} component={this.renderSlider} />
+        <h6>Grading Speed {infoTooltip(textOptions.grading_speed.info)}</h6>
+        <Field name='grading_speed' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.grading_speed} component={this.renderSlider} />
         <h6>Resourcefulness {infoTooltip(textOptions.resourcefulness.info)}</h6>
         <Field name='resourcefulness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.resourcefulness} component={this.renderSlider} />
 
