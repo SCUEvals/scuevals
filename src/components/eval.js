@@ -12,7 +12,7 @@ console.log('info:', info);
     slidesToShow: 9,
     slidesToScroll: 9,
     touchThreshold: 10, //more sensitive to move with click or touch
-    speed: 450,
+    speed: 675,
     responsive: [
       { breakpoint: 576,
         settings: {
@@ -35,7 +35,7 @@ console.log('info:', info);
           dots: true,
           slidesToShow: 5,
           slidesToScroll: 5,
-          speed: 300
+          speed: 375
         }
       },
       { breakpoint: 1200,
@@ -43,7 +43,7 @@ console.log('info:', info);
           dots: true,
           slidesToShow: 7,
           slidesToScroll: 7,
-          speed: 300
+          speed: 525
         }
       },
     ]
@@ -53,6 +53,7 @@ console.log('info:', info);
     <div styleName='eval'>
       <div styleName='vote'>
         <i styleName='active' tabIndex='0' className='fa fa-caret-up' />
+          <span styleName='voteScore'>0</span>
         <i tabIndex='0' className='fa fa-caret-down' />
       </div>
       <div styleName='evalContent'>
@@ -155,17 +156,22 @@ console.log('info:', info);
           <div styleName='commentQuote'>
             "Great teacher"
           </div>
-          <div>
-            Major:
-            Gender:
-            Year:
-          </div>
-          <div styleName='flagComment'>
-            <i className='fa fa-flag' tabIndex='0'
-              onClick={() => openModal()}
-              onKeyPress={event => {
-                if (event.key === 'Enter') openModal();
-              }} />
+          <div className='row'>
+            <div className='col-xs-12 col-sm-11' styleName='commentInfo'>
+              <div>
+                Majors: {/*major or majors, check length*/}
+              </div>
+              <div>
+                Graduation year:
+              </div>
+            </div>
+            <div className='col-xs-12 col-sm-1' styleName='flagComment'>
+              <i className='fa fa-flag' tabIndex='0'
+                onClick={() => openModal()}
+                onKeyPress={event => {
+                  if (event.key === 'Enter') openModal();
+                }} />
+            </div>
           </div>
         </div>
       </div>

@@ -226,11 +226,11 @@ class PostEval extends Component {
         <Field name='resourcefulness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.resourcefulness} component={this.renderSlider} />
 
         <h3>Class</h3>
-        <h6>Workload {infoTooltip(textOptions.workload.info)}</h6>
-        <Field name='workload' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.workload} component={this.renderSlider} />
         <h6>Difficulty {infoTooltip(textOptions.difficulty.info)}</h6>
         <Field name='difficulty' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.difficulty} component={this.renderSlider} />
-
+        <h6>Workload {infoTooltip(textOptions.workload.info)}</h6>
+        <Field name='workload' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.workload} component={this.renderSlider} />
+        
         <h3>General</h3>
         <h6>Would you recommend this course with this professor? {infoTooltip(textOptions.recommend.info)}</h6>
         <Field name='recommended' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.recommend} component={this.renderSlider} />

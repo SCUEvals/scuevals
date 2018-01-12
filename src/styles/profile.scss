@@ -4,7 +4,7 @@
   font-weight: bold;
   padding: 0;
   color: $SCUred;
-  background-color: initial;
+  background: initial;
   border: none;
 
   &:hover {
@@ -13,7 +13,7 @@
 }
 
 .banner {
-  background-color: $SCUred;
+  background: $SCUred;
   color: white;
   padding: 7px;
   margin-bottom: 20px;

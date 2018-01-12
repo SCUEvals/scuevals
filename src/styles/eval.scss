@@ -1,6 +1,6 @@
 @import "theme";
 
-$voteWidth: 30px;
+$voteWidth: 35px;
 
 .eval {
   position: relative;
@@ -17,17 +17,30 @@ $voteWidth: 30px;
     //border-right: 1px solid $backgroundColor;
     position: absolute;
     height: 100%;
-    background-color: $backgroundColor;
+    background: $SCUred;
 
     i {
-      font-size: 28px;
-      margin: 5px 0;
+      font-size: 32px;
       color: white;
       cursor: pointer;
 
       &.active {
-        color: $SCUred;
+        color: $overlayBackground;
       }
+
+      &:global(.fa-caret-up) {
+        margin-bottom: 3px; //icon needs to be centered, this fixes it
+      }
+    }
+
+    .voteScore {
+      color: white;
+      width: 100%;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
     }
   }
 
@@ -44,7 +57,7 @@ $voteWidth: 30px;
     margin: 0;
     padding: 0;
     position: static;
-    background-color: white;
+    background: white;
     cursor: default;
 
     li {
@@ -60,23 +73,22 @@ $voteWidth: 30px;
         border-radius: 50%;
         color: transparent;
         font-size: 0;
-        background-color: $backgroundColor;
+        background: $backgroundColor;
         border: 2px solid white;
 
         &:hover {
-          background-color: $SCUdarkred;
+          background: $SCUdarkred;
         }
       }
 
       &:global(.slick-active) button {
-        background-color: $SCUred;
+        background: $SCUred;
       }
     }
   }
 
   :global(.slick-slider) {
-    background-color: $SCUred;
-    color: white;
+    background: $backgroundColor;
     cursor: grab;
 
     &:active {
@@ -87,9 +99,9 @@ $voteWidth: 30px;
   .evalInfo {
     border-left: 1px solid rgba(0, 0, 0, 0.2);
     margin: 0;
-    background-color: $backgroundColor;
+    background: $SCUred;
     font-size: 16px;
-    color: $overlayBackground;
+    color: white;
 
     :global(.col-sm-6) {
       padding-bottom: 0 !important;
@@ -104,9 +116,12 @@ $voteWidth: 30px;
 
     .scoreTitle {
       margin-bottom: 5px;
-      font-size: 14px;
-      font-weight: bold;
+      font-size: 15px;
     }
+  }
+
+  :global(.slick-initialized .slick-slide) {
+    padding-bottom: 0;
   }
 
   .comment {
@@ -118,9 +133,19 @@ $voteWidth: 30px;
       padding: 15px;
     }
 
+    .commentInfo {
+      padding-left: 30px;
+      margin-bottom: 15px;
+    }
+
     .flagComment {
       text-align: right;
-      margin: 15px;
+      margin-bottom: 15px;
+      padding-right: 30px;
+      padding-left: 0;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
     }
   }
 
@@ -133,14 +158,14 @@ $voteWidth: 30px;
       fill: transparent;
       stroke-dasharray: 100.531;
       stroke: white;
-      stroke-width: 2;
+      stroke-width: 3;
     }
 
     text {
       dominant-baseline: central;
       text-anchor: middle;
       fill: white;
-      font-size: 20px;
+      font-size: 18px;
     }
 
     &.score1 {
@@ -174,10 +199,6 @@ $voteWidth: 30px;
         fill: $score4Color;
       }
     }
-  }
-
-  :global(.slick-initialized .slick-slide) {
-    padding-bottom: 0;
   }
 }
 

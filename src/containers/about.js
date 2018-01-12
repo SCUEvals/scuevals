@@ -79,8 +79,8 @@ class About extends Component {
         </div>
         <hr />
         <h6>Like what you see? Have ideas for change?<br />
-        Email us at  <a href="mailto:scuevalsteam@gmail.com">scuevalsteam@gmail.com </a>
-        or check out our official <a href="https://github.com/scuevals">GitHub</a>!
+        Email us at  <a href="mailto:scuevalsteam@gmail.com">scuevalsteam@gmail.com</a> or
+        check out our official <a href="https://github.com/scuevals">GitHub</a>!
         </h6>
       </div>
     );

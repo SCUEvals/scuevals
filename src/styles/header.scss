@@ -9,13 +9,13 @@ header {
   height: $headerHeight;
   z-index: 1;
   width: 100%;
-  background-color: $overlayBackground;
+  background: $overlayBackground;
   color: white;
 
   .text-help {
     position: absolute;
     top: 38px;
-    background-color: $SCUred;
+    background: $SCUred;
     z-index: 2;
     border-radius: $defaultBorderRadius;
     padding: 4px 8px;
@@ -52,7 +52,7 @@ header {
     display: flex;
     align-items: center;
     font-weight: normal;
-    background-color: transparent;
+    background: transparent;
     padding: 0 5px;
   }
 
@@ -66,7 +66,7 @@ header {
 
     &:hover {
       color: $SCUdarkred;
-      background-color: transparent;
+      background: transparent;
     }
 
     &:focus {
@@ -85,7 +85,7 @@ header {
     }
 
     &:hover {
-      background-color: transparent;
+      background: transparent;
       color: $hoverOverlayLinkColor;
     }
   }
@@ -130,7 +130,7 @@ header {
       width: calc(100% - 30px - 41px); //30px for 15px x2 padding, 41px for search button
       max-height: 212px;
       overflow: auto;
-      background-color: white;
+      background: white;
       z-index: 1;
       text-align: left;
       list-style-type: none;
@@ -145,7 +145,7 @@ header {
 
       h6 {
         font-weight: bold;
-        background-color: $overlayBackground;
+        background: $overlayBackground;
         color: white;
         margin: 0;
       }
@@ -164,7 +164,7 @@ header {
         &:hover li,
         &:focus li {
           color: $SCUdarkred;
-          background-color: $backgroundColor;
+          background: $backgroundColor;
         }
 
         &:last-child li {

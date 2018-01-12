@@ -9,13 +9,13 @@
   border: 0;
   color: white;
   border-radius: $defaultBorderRadius;
-  background-color: $SCUred;
+  background: $SCUred;
   width: 100%;
   font-weight: 600;
   height: 51px;
 
   &:hover {
-    background-color: $SCUdarkred;
+    background: $SCUdarkred;
   }
 
   img {
@@ -37,7 +37,7 @@
 
 h1 {
   border-radius: $defaultBorderRadius;
-  background-color: $SCUred;
+  background: $SCUred;
   color: white;
   font-size: 3rem;
 }

@@ -29,7 +29,12 @@ class ViewEvals extends Component {
     client.get('/' + this.props.type + '/' + this.props.match.params.id, info => this.setState({ info, orderedInfo: info }));
   }
 
-  render() {
+  calculatePath(n) { //n in range 1-4
+    //circumference w/ r=25 = 157.080
+    return  n / 4 * 157.08 - 157.08;
+  }
+
+  render() { //1-1.74 score1, 1.75-2.49 score2, 2.50-3.24 score3, 3.25-4 score4
     const { info, orderedInfo, modalOpen } = this.state;
     return (
       <div className="content">
@@ -59,44 +64,89 @@ class ViewEvals extends Component {
             : 'Loading...'
           }
         </h2>
-          <div className='row'>
-          <div className='col-xs-12 col-sm-4 col-md-3 col-lg-2'>
+        <div className='row' styleName='scores'>
+          <div styleName='avgScore'>
             <div styleName='scoreTitle'>Average</div>
             <svg styleName='score1'>
-              <circle cx="18" cy="18" r="16" />
+              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(1.3)}} />
               <text x='50%' y='50%'>
-                1
+                1.3
               </text>
             </svg>
           </div>
-          <div className='col-xs-12 col-sm-4 col-md-3 col-lg-2'>
-            <div styleName='scoreTitle'>Attitude</div>
-            <svg styleName='score2'>
-              <circle cx="18" cy="18" r="16" />
-              <text x='50%' y='50%'>
-                2
-              </text>
-            </svg>
-          </div>
-          <div className='col-xs-12 col-sm-4 col-md-3 col-lg-2'>
-            <div styleName='scoreTitle'>Availability</div>
+          <div styleName='avgScore'>
+            <div styleName='scoreTitle'>Recommend?</div>
             <svg styleName='score3'>
-              <circle cx="18" cy="18" r="16" />
+              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(2.6)}} />
               <text x='50%' y='50%'>
-                3
+                2.6
               </text>
             </svg>
           </div>
-          <div className='col-xs-12 col-sm-4 col-md-3 col-lg-2'>
-            <div styleName='scoreTitle'>Clarity</div>
+          <div styleName='avgScore'>
+            <div styleName='scoreTitle'>Difficulty</div>
             <svg styleName='score4'>
-              <circle cx="18" cy="18" r="16" />
+              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(3.8)}} />
               <text x='50%' y='50%'>
-                4
+                3.8
               </text>
             </svg>
           </div>
-      </div>
+          <div styleName='avgScore'>
+            <div styleName='scoreTitle'>Workload</div>
+            <svg styleName='score2'>
+              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(2.1)}} />
+              <text x='50%' y='50%'>
+                2.1
+              </text>
+            </svg>
+          </div>
+          <div styleName='avgScore'>
+            <div styleName='scoreTitle'>Grading Speed</div>
+            <svg styleName='score4'>
+              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(3.4)}} />
+              <text x='50%' y='50%'>
+                3.4
+              </text>
+            </svg>
+          </div>
+          <div styleName='avgScore'>
+            <div styleName='scoreTitle'>Clarity</div>
+            <svg styleName='score2'>
+              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(1.9)}} />
+              <text x='50%' y='50%'>
+                1.9
+              </text>
+            </svg>
+          </div>
+          <div styleName='avgScore'>
+            <div styleName='scoreTitle'>Resourcefulness</div>
+            <svg styleName='score3'>
+              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(2.5)}} />
+              <text x='50%' y='50%'>
+                2.5
+              </text>
+            </svg>
+          </div>
+          <div styleName='avgScore'>
+            <div styleName='scoreTitle'>Attitude</div>
+            <svg styleName='score3'>
+              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(3.1)}} />
+              <text x='50%' y='50%'>
+                3.1
+              </text>
+            </svg>
+          </div>
+          <div styleName='avgScore'>
+            <div styleName='scoreTitle'>Availability</div>
+            <svg styleName='score1'>
+              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(1.7)}} />
+              <text x='50%' y='50%'>
+                1.7
+              </text>
+            </svg>
+          </div>
+        </div>
         <Select
           className='sort'
           simpleValue

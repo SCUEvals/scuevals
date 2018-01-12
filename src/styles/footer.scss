@@ -2,7 +2,7 @@
 
 footer {
   color: white;
-  background-color: $overlayBackground;
+  background: $overlayBackground;
   height: $footerHeight;
 
   :global(.container) {
@@ -16,7 +16,7 @@ footer {
       align-items: center;
       font-weight: normal;
       color: white;
-      background-color: transparent;
+      background: transparent;
       padding: 0 5px;
 
       &:focus {
