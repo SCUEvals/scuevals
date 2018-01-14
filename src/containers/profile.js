@@ -22,14 +22,11 @@ class Profile extends Component {
     const getMajors = () => {
       let client = new API();
       client.get('/majors', responseData => {
-        for (var i = 0; i < responseData.length; i++) {
-          responseData[i].value = responseData[i].id;
-          delete responseData[i].id;
-          responseData[i].label = responseData[i].name;
-          delete responseData[i].name;
-        }
+        responseData.sort((a, b) => {
+          return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
+        });
         this.setState({majorsList: responseData});
-      })
+      });
     };
     getMajors();
   }
@@ -45,18 +42,24 @@ class Profile extends Component {
     const { input, majorsList } = field;
     const { meta: {submitFailed, error} } = field;
     return (
-      <Select
-        name='majors'
-        className={error && submitFailed ? 'error' : ''}
-        joinValues
-        multi
-        value={input.value}
-        options={majorsList}
-        onChange={newMajors => input.onChange(newMajors)}
-        isLoading={majorsList ? false : true}
-        placeholder="Select your major(s)"
-        onBlur={() => input.onBlur(input.value)}
-      />
+      <div>
+        {error && submitFailed ? <span>{error}</span> : ''}
+        <Select
+          name='majors'
+          className={error && submitFailed ? 'error' : ''}
+          simpleValue
+          joinValues
+          multi
+          valueKey='id'
+          labelKey='name'
+          value={input.value}
+          options={majorsList}
+          onChange={newMajors => input.onChange(newMajors)}
+          isLoading={majorsList ? false : true}
+          placeholder="Select your major(s)"
+          onBlur={() => input.onBlur(input.value)}
+        />
+    </div>
     );
   }
 
@@ -65,7 +68,7 @@ class Profile extends Component {
     const { meta: {submitFailed, error} } = field;
     let options = [];
     const currentYear = new Date().getFullYear();
-    for (var i = currentYear; i < currentYear + 6; i ++) {
+    for (let i = currentYear; i < currentYear + 6; i++) {
       options.push({value: i, label: i});
     }
 
@@ -119,11 +122,6 @@ class Profile extends Component {
 
   onSubmit(values) {
     const client = new API();
-    if (values.majors[0].value) { //on initialValues, first submit won't have .value, so check if submitting with initialValues
-      let majorsIDs = [];
-      values.majors.map(obj => majorsIDs.push(obj.value));
-      values.majors = majorsIDs;
-    }
     client.patch(`/students/${this.props.userInfo.id}`, values, responseData => {
       localStorage.jwt = responseData.jwt;
       this.props.setUserInfo(responseData.jwt);
@@ -133,7 +131,6 @@ class Profile extends Component {
 
   render() {
     const { handleSubmit, history, delUserInfo, userInfo, submitting } = this.props;
-    console.log('submitting prop:', submitting);
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
           {userInfo && !userInfo.roles.includes(0) ?
@@ -151,7 +148,7 @@ class Profile extends Component {
               delUserInfo();
               history.push('/');
               }}
-              className="signOutBtn">
+              styleName="signOutBtn">
               Sign Out
             </button>
           </small>
@@ -161,7 +158,7 @@ class Profile extends Component {
         <div styleName='form-container'>
           <h5>Major(s)</h5>
           <Field
-            name='majors' //responsible for object's key name for values
+            name='majors'
             component={this.renderMajors}
             majorsList={this.state.majorsList}
           />
@@ -186,10 +183,15 @@ class Profile extends Component {
 function validate(values) {
   const currentYear = new Date().getFullYear();
   const errors = {};
-  if (!values.gender || (values.gender !== 'm' && values.gender !== 'f' && values.gender !=='o')) errors.gender = 'Not a valid gender input.';
-  if (!values.graduation_year || (values.graduation_year < currentYear || values.graduation_year > currentYear + 5)) errors.graduation_year = 'Graduation year not in valid range.';
-  if (!Array.isArray(values.majors) || values.majors.length < 1) errors.majors = 'Not a valid major selected.';
+  if (!values.gender || (values.gender !== 'm' && values.gender !== 'f' && values.gender !=='o')) errors.gender = true;
+  if (!values.graduation_year || (values.graduation_year < currentYear || values.graduation_year > currentYear + 5)) errors.graduation_year = true;
+
+  //simpleValue only gives string, so convert to array. Without simpleValue, entire object passed, making comparisons more difficult
+  if (values.majors && typeof(values.majors) == 'string') values.majors = values.majors.split(',').map(Number);
+  if (!Array.isArray(values.majors) || values.majors.length < 1) errors.majors = true;
   else if (values.majors.length > 3) errors.majors = 'Only allowed to declare up to 3 majors.';
+  else if (values.majors.length > 1 && values.majors.includes(0))  errors.majors = 'Cannot choose "Undeclared" with other majors.';
+
   return errors;
 }
 

@@ -51,36 +51,20 @@
     }
 
     //circumference w/ r=25 = 157.080
-    &.score1 {
-      stroke-dashoffset: -117.81; // == * -3/4 circumference
-
-      circle {
-        fill: $score1Color;
-      }
+    &.score1 circle {
+      fill: $score1Color;
     }
 
-    &.score2 {
-      stroke-dashoffset: -78.54; // == * -1/2 circumference
-
-      circle {
-        fill: $score2Color;
-      }
+    &.score2 circle {
+      fill: $score2Color;
     }
 
-    &.score3 {
-      stroke-dashoffset: -39.27; // == * -1/4 circumference
-
-      circle {
-        fill: $score3Color;
-      }
+    &.score3 circle {
+      fill: $score3Color;
     }
 
-    &.score4 {
-      stroke-dashoffset: initial;
-
-      circle {
-        fill: $score4Color;
-      }
+    &.score4 circle {
+      fill: $score4Color;
     }
   }
 }

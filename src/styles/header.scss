@@ -150,21 +150,22 @@ header {
         margin: 0;
       }
 
-      a[tabindex='0'] {
+      a {
+        border: none !important;
+        display: block;
         cursor: pointer;
         color: $overlayBackground;
         font-weight: bold;
-        display: block; //needed for transparent border to work (a is focusable because tabindex is on it)
         outline: 1px solid $backgroundColor;
 
         &:hover {
-          border: 2px solid $backgroundColor;
+          background: $backgroundColor;
+          color: $SCUdarkred;
         }
 
-        &:hover li,
         &:focus li {
           color: $SCUdarkred;
-          background: $backgroundColor;
+          background: $focusColorTransparent;
         }
 
         &:last-child li {
