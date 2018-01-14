@@ -83,7 +83,6 @@ class PostSearch extends Component {
             }
           }}
           placeholder="Select your quarter"
-          onBlur={() => input.onBlur(input.value)}
         />
       </div>
     );
@@ -124,7 +123,6 @@ class PostSearch extends Component {
             }
           }}
           placeholder="Select your course"
-          onBlur={() => input.onBlur(input.value)}
         />
       </div>
     );
@@ -148,8 +146,6 @@ class PostSearch extends Component {
             input.onChange(newClass);
           }}
           placeholder="Select your professor"
-          onBlur={() => input.onBlur(input.value)
-          }
         />
       </div>
     );
