@@ -33,6 +33,9 @@ class PostSearch extends Component {
           quarter.label = quarter.name + ' ' + quarter.year;
           //optionally can delete unusued parts of obj, but not necessary
         });
+        responseData.sort((a, b) => { //responseData currently comes in order, but sort just in case in future it won't
+          return a.year > b.year ? 1 : a.year < b.year ? -1 : a.name == 'Winter' ? -1 : a.name == 'Fall' ? 1 : b.name == 'Fall' ? -1 : 1;
+        })
         this.setState({quartersList: responseData});
       })
     };
@@ -44,7 +47,7 @@ class PostSearch extends Component {
   }
 
   renderQuarters(field) {
-    const { input, quartersList, setCoursesList, setQuarterSelected, setCourseSelected } = field;
+    const { input, quartersList, setCoursesList, setQuarterSelected, setCourseSelected, setProfessorsList } = field;
     const { meta: {submitFailed, error} } = field;
     return (
       <div>
@@ -58,22 +61,26 @@ class PostSearch extends Component {
           isLoading={quartersList ? false : true}
           onChange={newQuarter => {
             input.onChange(newQuarter);
-            let client = new API();
-            setQuarterSelected(newQuarter ? true : false);
-            if (!newQuarter) {
+            if (newQuarter != input.value) {
               storeWithMiddleware.dispatch(change('postSearch', 'course', ''));
               storeWithMiddleware.dispatch(change('postSearch', 'professor', ''));
+              setQuarterSelected(newQuarter ? true : false);
               setCourseSelected(false);
-            }
+              setCoursesList(null);
+              setProfessorsList(null);
 
-            setCoursesList(null);
-            client.get('/courses', coursesList => {
-              coursesList.map(course => {
-                course.label = course.department + ' ' + course.number + ': ' + course.title;
-                //optionally can delete unusued parts of obj, but not necessary
-              });
-              setCoursesList(coursesList);
-            }, {quarter_id: newQuarter});
+              let client = new API();
+              client.get('/courses', coursesList => {
+                coursesList.map(course => {
+                  course.label = course.department + ' ' + course.number + ': ' + course.title;
+                  //optionally can delete unusued parts of obj, but not necessary
+                });
+                coursesList.sort((a, b) => {
+                  return a.label > b.label ? 1 : a.label < b.label ? -1 : 0;
+                })
+                setCoursesList(coursesList);
+              }, {quarter_id: newQuarter});
+            }
           }}
           placeholder="Select your quarter"
           onBlur={() => input.onBlur(input.value)}
@@ -97,18 +104,24 @@ class PostSearch extends Component {
           options={coursesList}
           isLoading={coursesList || !quarterSelected ? false : true}
           onChange={newCourse => {
-            setCourseSelected(newCourse ? true : false);
-            if (!newCourse) storeWithMiddleware.dispatch(change('postSearch', 'professor', ''));
-            setProfessorsList(null);
-            input.onChange(newCourse);
-            let client = new API();
-            client.get('/professors', professorsList => {
-              professorsList.map(professor => {
-                professor.label = professor.first_name + ' ' + professor.last_name;
-                //optionally can delete unusued parts of obj, but not necessary
-              });
-              setProfessorsList(professorsList);
-            }, {course_id: newCourse});
+            if (newCourse != input.value) {
+              storeWithMiddleware.dispatch(change('postSearch', 'professor', ''));
+              setCourseSelected(newCourse ? true : false);
+              setProfessorsList(null);
+              input.onChange(newCourse);
+
+              let client = new API();
+              client.get('/professors', professorsList => {
+                professorsList.map(professor => {
+                  professor.label = professor.first_name + ' ' + professor.last_name;
+                  //optionally can delete unusued parts of obj, but not necessary
+                });
+                professorsList.sort((a, b) => {
+                  return a.label > b.label ? 1 : a.label <   b.label ? -1 : 0;
+                })
+                setProfessorsList(professorsList);
+              }, {course_id: newCourse});
+            }
           }}
           placeholder="Select your course"
           onBlur={() => input.onBlur(input.value)}
@@ -135,8 +148,7 @@ class PostSearch extends Component {
             input.onChange(newClass);
           }}
           placeholder="Select your professor"
-          onBlur={() => {
-            input.onBlur(input.value)}
+          onBlur={() => input.onBlur(input.value)
           }
         />
       </div>
@@ -154,6 +166,7 @@ class PostSearch extends Component {
           setCoursesList={coursesList => this.setState({coursesList})}
           setQuarterSelected={state => this.setState({quarterSelected: state})}
           setCourseSelected={state => this.setState({courseSelected: state})}
+          setProfessorsList={professorsList => this.setState({professorsList})}
         />
         <Field
           name="course" //responsible for object's key name for values

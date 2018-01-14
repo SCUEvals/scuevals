@@ -31,7 +31,7 @@ const textOptions = {
     two: 'Often unclear',
     three: 'Usually get it',
     four: 'Great explainer',
-    info: 'Was the professor\'s notes and explanations clear (word choice, handwriting, etc.)?'
+    info: 'Were the professor\'s notes and explanations clear (word choice, handwriting, etc.)?'
   },
   grading_speed: {
     one: 'Not\xA0until end of quarter',
@@ -45,7 +45,7 @@ const textOptions = {
     two: 'Occasional handouts',
     three: 'Shares most things',
     four: 'Shares everything',
-    info: 'How much does the professor share to help students learn?'
+    info: 'How much material does the professor share to help students learn?'
   },
   workload: {
     one: 'There\'s work?',
@@ -230,7 +230,7 @@ class PostEval extends Component {
         <Field name='difficulty' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.difficulty} component={this.renderSlider} />
         <h6>Workload {infoTooltip(textOptions.workload.info)}</h6>
         <Field name='workload' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.workload} component={this.renderSlider} />
-        
+
         <h3>General</h3>
         <h6>Would you recommend this course with this professor? {infoTooltip(textOptions.recommend.info)}</h6>
         <Field name='recommended' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.recommend} component={this.renderSlider} />
