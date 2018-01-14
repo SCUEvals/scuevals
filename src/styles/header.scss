@@ -139,7 +139,7 @@ header {
       border-radius: 0 0 $defaultBorderRadius $defaultBorderRadius;
 
       h6,
-      li {
+      a {
         padding: 5px;
       }
 
@@ -163,7 +163,8 @@ header {
           color: $SCUdarkred;
         }
 
-        &:focus li {
+        &:focus,
+        &:active {
           color: $SCUdarkred;
           background: $focusColorTransparent;
         }

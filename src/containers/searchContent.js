@@ -26,6 +26,7 @@ class SearchContent extends Component {
     if (this.props.match.params.search.length > 2 && this.props.history.action === 'POP') { //if loading this component straight from GET request (rather than being routed with React Router (action would be PUSH))
       let client = new API();
       client.get('/search', responseData => {
+          this.sortResponseData(responseData);
           this.props.setSearchResults(responseData);
           $('#searchBarResults').hide(); //hide results dropdown when submitting until new input entered after
           this.forceUpdate(); //passes shouldComponentUpdate, ensures that new state read by component
@@ -33,6 +34,23 @@ class SearchContent extends Component {
         {q: this.props.match.params.search}
       );
     }
+  }
+
+  sortResponseData(responseData) {
+    responseData.professors.sort((a, b) => {
+      return a.last_name > b.last_name ? 1 : a.last_name < b.last_name ? -1 : 0;
+    });
+    responseData.courses.sort((a, b) => {
+    if (a.department == b.department) {
+      //nums can have letters in them too (ex. 12L), so parse integers and compare
+      let parsedANum = parseInt(a.number, 10);
+      let parsedBNum = parseInt(b.number, 10);
+      //if integers same, check for letters to decide
+      if (parsedANum == parsedBNum) return a.number > b.number ? 1 : a.number < b.number ? -1 : 0;
+      return parsedANum > parsedBNum ? 1 : parsedANum < parsedBNum ? -1 : 0;
+    }
+    else return a.department > b.department ? 1 : a.department < b.department ? -1 : 0;
+    });
   }
 
   render() {
@@ -51,7 +69,7 @@ class SearchContent extends Component {
             <div>
               <h4>Professors</h4>
               <BootstrapTable withoutTabIndex version='4' data={searchResults.professors} striped={true} hover={true}>
-                <TableHeaderColumn dataFormat={nameFormatter} dataField="first_name" isKey={true} dataAlign="center" dataSort={true}>Name</TableHeaderColumn>
+                <TableHeaderColumn dataFormat={nameFormatter} dataField="last_name" isKey={true} dataAlign="center" dataSort={true}>Name</TableHeaderColumn>
               </BootstrapTable>
             </div>
             : ''
@@ -68,8 +86,8 @@ class SearchContent extends Component {
           }
         </div>
       ); /* note: isKey={true} is not correctly set since there is no column displayed that is entirely unique,
-      but it is needed to render. However, \ is does not affect functionality for what we are using it for*/
-    } else if (this.props.match.params.search.length > 2){
+      but it is needed to render. However, it does not affect functionality in this case*/
+    } else if (this.props.match.params.search.length > 2) {
       return (
         <div className="loadingWrapper">
           <i className="fa fa-spinner fa-spin fa-3x fa-fw"></i>
@@ -86,7 +104,7 @@ class SearchContent extends Component {
 }
 
 function nameFormatter(cell, row) {
-  return <Link to={`/professors/${row.id}`}>{`${row.first_name} ${row.last_name}`}</Link>;
+  return <Link to={`/professors/${row.id}`}>{`${row.last_name}, ${row.first_name}`}</Link>;
 }
 
 function courseNumberFormatter(cell, row) {

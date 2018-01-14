@@ -189,7 +189,7 @@ function validate(values) {
   //simpleValue only gives string, so convert to array. Without simpleValue, entire object passed, making comparisons more difficult
   if (values.majors && typeof(values.majors) == 'string') values.majors = values.majors.split(',').map(Number);
   if (!Array.isArray(values.majors) || values.majors.length < 1) errors.majors = true;
-  else if (values.majors.length > 3) errors.majors = 'Only allowed to declare up to 3 majors.';
+  else if (values.majors.length > 3) errors.majors = 'Only up to 3 majors may be declared.';
   else if (values.majors.length > 1 && values.majors.includes(0))  errors.majors = 'Cannot choose "Undeclared" with other majors.';
 
   return errors;

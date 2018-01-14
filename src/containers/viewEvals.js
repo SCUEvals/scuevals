@@ -38,7 +38,7 @@ class ViewEvals extends Component {
     const { info, orderedInfo, modalOpen } = this.state;
     return (
       <div className="content">
-        <ReactModal isOpen={modalOpen} className='Modal'>
+        <ReactModal isOpen={modalOpen} className='Modal' appElement={document.getElementById('app')}>
           <div className='container'>
           <div className='modalPanel'>
             <div className='modalHeader'>
