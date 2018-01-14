@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 
-import { setUserInfo, delUserInfo } from '../actions';
+import { setUserInfo, delUserInfo, setMajorsList } from '../actions';
 import API from '../services/api';
 import '../styles/profile.scss';
 
@@ -19,23 +19,13 @@ class Profile extends Component {
   }
 
   componentWillMount() {
-    const getMajors = () => {
-      let client = new API();
-      client.get('/majors', responseData => {
-        responseData.sort((a, b) => {
-          return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
-        });
-        this.setState({majorsList: responseData});
-      });
-    };
-    getMajors();
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      majorsList: null,
-    };
+    if (this.props.majorsList) return;
+    let client = new API();
+    client.get('/majors', responseData => {
+      this.props.setMajorsList(responseData.sort((a, b) => {
+        return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
+      }));
+    });
   }
 
   renderMajors(field) {
@@ -160,7 +150,7 @@ class Profile extends Component {
           <Field
             name='majors'
             component={this.renderMajors}
-            majorsList={this.state.majorsList}
+            majorsList={this.props.majorsList}
           />
           <h5>Expected Graduation Year</h5>
           <Field
@@ -198,6 +188,7 @@ function validate(values) {
 function mapStateToProps(state) {
   return {
     userInfo: state.userInfo,
+    majorsList: state.majorsList,
     initialValues: {
       graduation_year: state.userInfo ? state.userInfo.graduation_year : null,
       majors: state.userInfo ? state.userInfo.majors : null,
@@ -207,7 +198,7 @@ function mapStateToProps(state) {
 }
 
 export default connect(
-  mapStateToProps, { setUserInfo, delUserInfo }
+  mapStateToProps, { setUserInfo, delUserInfo, setMajorsList }
 )
 (reduxForm({
     validate,
