@@ -182,7 +182,7 @@ class PostSearch extends Component {
     if (newQuarter) {
       quarterIndex = postSearchList.quarters.findIndex(x => x.id === newQuarter);
       if (quarterIndex !== -1) {
-          this.setState({professorsList: postSearchList.quarters[quarterIndex].courses});
+          this.setState({coursesList: postSearchList.quarters[quarterIndex].courses});
           if (postSearchList.quarters[quarterIndex].courses)
             return true;
           return false;
