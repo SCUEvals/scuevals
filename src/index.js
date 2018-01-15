@@ -18,7 +18,7 @@ import Privacy from './containers/privacy';
 import GAListener from './components/gaListener';
 import Profile from './containers/profile';
 import ViewEvals from './containers/viewEvals';
-import PostSearch from './components/postSearch';
+import PostSearch from './containers/postSearch';
 
 import requireAuth from './components/requireAuth';
 import API from './services/api';

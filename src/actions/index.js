@@ -2,6 +2,7 @@ export const SET_USER_INFO = 'set_user_info';
 export const DEL_USER_INFO = 'del_user_info';
 export const SET_SEARCH_RESULTS = 'set_search_results';
 export const SET_MAJORS_LIST = 'set_majors_list';
+export const SET_POST_SEARCH_LIST = 'set_post_search_list';
 
 export function setUserInfo(jwt) {
   return {
@@ -27,5 +28,12 @@ export function setMajorsList(majorsList) {
   return {
     type: SET_MAJORS_LIST,
     payload: majorsList
+  };
+}
+
+export function setPostSearchList(postSearchList) {
+  return {
+    type: SET_POST_SEARCH_LIST,
+    payload: postSearchList
   };
 }
