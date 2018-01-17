@@ -65,6 +65,14 @@ class Eval extends Component {
         },
       ]
     };
+    let votesFontSize = votes_score > 999 ? //make score smaller to prevent overflow
+      votes_score > 9999 ?
+        votes_score > 99999 ?
+          9
+        : 11
+      : 15
+    : 18;
+
     return (
       <div styleName='eval'>
         <div styleName='vote'>
@@ -94,7 +102,7 @@ class Eval extends Component {
                  })
               }}
           />
-          <span styleName='voteScore'>{votes_score}</span>
+          <span style={{fontSize: votesFontSize + 'px'}} styleName='voteScore'>{votes_score}</span>
           <i tabIndex='0'
             styleName={user_vote == -1 ? 'active' : ''}
              className='fa fa-caret-down'

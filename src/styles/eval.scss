@@ -20,12 +20,17 @@ $voteWidth: 35px;
     background: $SCUred;
 
     i {
+      @include alternateLink;
+
       font-size: 32px;
-      color: white;
       cursor: pointer;
 
       &.active {
         color: $overlayBackground;
+
+        &:hover {
+          color: $overlayBackground;
+        }
       }
 
       &:global(.fa-caret-up) {
@@ -40,7 +45,6 @@ $voteWidth: 35px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 18px;
     }
   }
 
@@ -104,7 +108,7 @@ $voteWidth: 35px;
 
     a {
       @include alternateLink;
-      
+
       font-size: 16px;
       display: block;
       white-space: nowrap;
@@ -115,6 +119,9 @@ $voteWidth: 35px;
 
     :global(.col-sm-6) {
       padding: 0 !important;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 

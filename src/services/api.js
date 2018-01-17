@@ -59,11 +59,11 @@ class API {
   }
 
   put(path, value, callback) {
-    return this.api.put(path, {value: value}).then(response => callback(response.data)).catch(error => this.handleError(error));
+    return this.api.put(path, {value: value}).catch(error => this.handleError(error));
   }
 
   delete(path, callback) {
-    return this.api.delete(path).then(response => callback(response.data)).catch(error => this.handleError(error));
+    return this.api.delete(path).catch(error => this.handleError(error));
   }
 }
 

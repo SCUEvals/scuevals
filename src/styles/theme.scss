@@ -32,13 +32,14 @@ $textShadow: -1px 0 $focusColor, 0 1px $focusColor, 1px 0 $focusColor, 0 -1px $f
 @mixin alternateLink {
   color: white;
   background: transparent !important;
-  
-  &:hover,
-  &:active {
-    color: $hoverOverlayLinkColor;
-  }
 
   &:focus {
     color: white;
+  }
+
+  &:hover,
+  &:active,
+  &:focus:hover {
+    color: $hoverOverlayLinkColor;
   }
 }

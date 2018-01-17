@@ -154,7 +154,7 @@ class ViewEvals extends Component {
           placeholder="Sort"
         />
         <br/>
-        {info ? info.evaluations.map(evaluation => { return <Eval key={evaluation.id} evaluation={evaluation} /> }) : ''}
+        {info ? info.evaluations.map(evaluation => { return <Eval key={evaluation.id} evaluation={evaluation} openModal={() => this.setState({modalOpen: true})}/> }) : ''}
       </div>
     );
   }

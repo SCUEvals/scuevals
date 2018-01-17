@@ -23,8 +23,7 @@ class Home extends Component {
     this.state = { loading: false };
   }
 
-  authWithBackEnd(token) {
-    this.setState({loading: true});
+  authWithBackEnd(token, referrer) {
     const client = new API();
     client.post('/auth', {id_token: token}, responseData =>  {
       let decodedJwt = jwtDecode(responseData.jwt);
@@ -34,13 +33,18 @@ class Home extends Component {
       } catch(err) {
         console.error("Cannot execute localStorage.setItem (perhaps private mode is enabled). Error:", err);
       }
+      if (referrer) {
+        if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile', { referrer });
+        else this.props.history.push(referrer);
+      }
+      else if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile');
       this.props.setUserInfo(responseData.jwt);
-      if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile');
       this.setState({loading: false});
     });
   }
 
   render() {
+    const referrer = this.props.location.state ? this.props.location.state.referrer : null;
     if (!this.props.userInfo && this.state.loading) { //if Google login succeeded, and in process of sending to backend
       return (
         <div className="loadingWrapper">
@@ -67,7 +71,7 @@ class Home extends Component {
             hostedDomain="scu.edu"
             clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
             buttonText=''
-            onSuccess={info => this.authWithBackEnd(info.tokenObj.id_token)}
+            onSuccess={info => this.setState({loading: true}, this.authWithBackEnd(info.tokenObj.id_token, referrer))}
             onFailure={err => console.error('Google Login Error: ', err)}
             className='btn'
             styleName='loginBtn'

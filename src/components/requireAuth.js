@@ -14,8 +14,14 @@ export default function requireAuth(PassedComponent, extraProps={}) {
     }
 
     componentWillMount() { //check auth
-      if (!localStorage.jwt) this.props.history.push('/');
-      else if (jwtDecode(localStorage.jwt).sub.roles.includes(0)) this.props.history.push('/profile'); //if incomplete user
+      if (!localStorage.jwt) {
+        if (this.props.location.pathname != '/') {
+          this.props.history.push('/', {referrer: this.props.location.pathname});
+        }
+      }
+      else if (jwtDecode(localStorage.jwt).sub.roles.includes(0) && this.props.location.pathname != 'profile') {
+        this.props.history.push('/profile', {referrer: this.props.location.pathname});
+      }
     }
 
     render() {

@@ -115,7 +115,8 @@ class Profile extends Component {
     client.patch(`/students/${this.props.userInfo.id}`, values, responseData => {
       localStorage.jwt = responseData.jwt;
       this.props.setUserInfo(responseData.jwt);
-      this.props.history.push('/');
+      if (this.props.location.state) this.props.history.push(this.props.location.state.referrer);
+      else this.props.history.push('/');
     });
   }
 
