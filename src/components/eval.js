@@ -16,7 +16,7 @@ class Eval extends Component {
     super(props);
     this.state = {
       votes_score: this.props.evaluation.votes_score,
-      user_vote: this.props.user_vote
+      user_vote: this.props.evaluation.user_vote
     };
   }
 
@@ -107,7 +107,7 @@ class Eval extends Component {
                    user_vote: null
                  });
                }
-               : e => {
+               : e => { //user_vote 1 or null
                  let client = new API();
                  client.put(`/evaluations/${evaluation.id}/vote`, 'd');
                  user_vote == 1 ?
@@ -115,7 +115,7 @@ class Eval extends Component {
                     votes_score: votes_score - 2,
                     user_vote: -1
                   })
-                  : this.setState({
+                  : this.setState({ ///user_vote null
                     votes_score: votes_score - 1,
                     user_vote: -1
                   })
