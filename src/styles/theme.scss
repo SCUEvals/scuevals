@@ -7,8 +7,6 @@ $backgroundColor: #d7d7d7;
 $overlayBackground: #212529;
 $SCUred: #b30738;
 $SCUdarkred: #820529;
-$linkColor: $SCUred;
-$hoverLinkColor: $SCUdarkred;
 $hoverOverlayLinkColor: #ffb6ca;
 $headerHeight: 99px;
 $footerHeight: 35px;
@@ -29,4 +27,18 @@ $textShadow: -1px 0 $focusColor, 0 1px $focusColor, 1px 0 $focusColor, 0 -1px $f
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+@mixin alternateLink {
+  color: white;
+  background: transparent !important;
+  
+  &:hover,
+  &:active {
+    color: $hoverOverlayLinkColor;
+  }
+
+  &:focus {
+    color: white;
+  }
 }

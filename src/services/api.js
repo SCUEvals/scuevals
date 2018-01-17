@@ -58,6 +58,13 @@ class API {
     return this.api.post(path, payload).then(response => callback(response.data)).catch(error => this.handleError(error));
   }
 
+  put(path, value, callback) {
+    return this.api.put(path, {value: value}).then(response => callback(response.data)).catch(error => this.handleError(error));
+  }
+
+  delete(path, callback) {
+    return this.api.delete(path).then(response => callback(response.data)).catch(error => this.handleError(error));
+  }
 }
 
 export default API;

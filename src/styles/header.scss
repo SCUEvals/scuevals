@@ -78,16 +78,7 @@ header {
 
   .profileBtn,
   .signOutBtn {
-    color: white;
-
-    &:focus {
-      color: white;
-    }
-
-    &:hover {
-      background: transparent;
-      color: $hoverOverlayLinkColor;
-    }
+    @include alternateLink;
   }
 
   .profile-img {

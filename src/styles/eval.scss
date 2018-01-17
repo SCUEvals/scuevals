@@ -100,14 +100,21 @@ $voteWidth: 35px;
     border-left: 1px solid rgba(0, 0, 0, 0.2);
     margin: 0;
     background: $SCUred;
-    font-size: 16px;
     color: white;
 
-    :global(.col-sm-6) {
-      padding-bottom: 0 !important;
+    a {
+      @include alternateLink;
+      
+      font-size: 16px;
+      display: block;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
+      padding: 0 15px;
+    }
+
+    :global(.col-sm-6) {
+      padding: 0 !important;
     }
   }
 

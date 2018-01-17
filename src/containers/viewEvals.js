@@ -154,22 +154,7 @@ class ViewEvals extends Component {
           placeholder="Sort"
         />
         <br/>
-        <Eval
-          info={info}
-          openModal={() => this.setState({modalOpen: true})}
-        />
-        <br/>
-        <br/>
-        <Eval
-          info={info}
-          openModal={() => this.setState({modalOpen: true})}
-        />
-        <br/>
-        <br/>
-        <Eval
-          info={info}
-          openModal={() => this.setState({modalOpen: true})}
-        />
+        {info ? info.evaluations.map(evaluation => { return <Eval key={evaluation.id} evaluation={evaluation} /> }) : ''}
       </div>
     );
   }

@@ -55,15 +55,15 @@ const textOptions = {
     info: 'How much work was assigned compared to other classes?'
   },
   difficulty: {
-    one: 'Easy "A"',
+    one: 'Easy\xA0"A"',
     two: 'Study the\xA0week before',
     three: 'Challenging',
     four: 'You\xA0will suffer',
     info: 'How hard was the material for this course?'
   },
   recommend: {
-    one: 'No,\xA0avoid at all costs',
-    two: 'Only\xA0as a last option',
+    one: 'No,\xA0avoid\xA0at all costs',
+    two: 'I do not recommend',
     three: 'Yes, but\xA0it could\xA0be better',
     four: 'Absolutely',
     info: 'Overall, was this course a good option to take?'

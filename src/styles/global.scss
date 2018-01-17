@@ -58,14 +58,14 @@ a {
   transition: all 0.2s ease-in-out;
   font-weight: bold;
   text-decoration: none !important;
-  color: $linkColor;
+  color: $SCUred;
 
   &:focus {
-    color: $linkColor;
+    color: $SCUred;
   }
 
   &:hover {
-    color: $hoverLinkColor;
+    color: $SCUdarkred;
   }
 }
 
@@ -352,6 +352,10 @@ input[type=radio]:focus {
 
 .fa {
   color: $SCUred;
+}
+
+a .fa {
+  color: inherit;
 }
 
 button .fa {

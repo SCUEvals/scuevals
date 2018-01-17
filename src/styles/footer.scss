@@ -9,23 +9,15 @@ footer {
     height: 100%;
     position: relative;
 
-    :global(.btn).link {
+    a {
+      @include alternateLink;
+
       position: absolute;
       height: 100%;
       display: flex;
       align-items: center;
       font-weight: normal;
-      color: white;
-      background: transparent;
       padding: 0 5px;
-
-      &:focus {
-        color: white;
-      }
-
-      &:hover {
-        color: $hoverOverlayLinkColor;
-      }
 
       &:first-of-type {
         left: 10px; //+5px padding = 15px
