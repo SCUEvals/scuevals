@@ -1,6 +1,7 @@
 @import "theme";
 
 .signOutBtn {
+  margin-top: 15px;
   font-weight: bold;
   padding: 0;
   color: $SCUred;
@@ -23,4 +24,10 @@
   max-width: 350px;
   margin-right: auto !important;
   margin-left: auto !important;
+}
+
+small {
+  display: block;
+  line-height: 18px;
+  white-space: pre-wrap;
 }

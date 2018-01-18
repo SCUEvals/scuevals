@@ -66,7 +66,7 @@ const textOptions = {
     two: 'I do not recommend',
     three: 'Yes, but\xA0it could\xA0be better',
     four: 'Absolutely',
-    info: 'Overall, was this course a good option to take?'
+    info: 'Overall, was this course with this professor a good option to take?'
   },
   comment: {
     info: 'Write anything you feel other students would benefit from knowing that the questions above left unanswered.'
@@ -132,7 +132,7 @@ class PostEval extends Component {
   onSubmit(values) {
     this.props.match.params.evaluation = values; //typically don't want to alter params, but submission redirects after post so OK. No need to make deep copy to preserve params
     let client = new API();
-    client.post('/evaluations', this.props.match.params, () => this.props.history.push('/'));
+    return client.post('/evaluations', this.props.match.params, () => this.props.history.push('/'));
   };
 
 
@@ -177,8 +177,7 @@ class PostEval extends Component {
   }
 
   render() {
-    const { handleSubmit } = this.props;
-
+    const { handleSubmit, submitting } = this.props;
     const required = value => {};
 
     return (
@@ -238,7 +237,7 @@ class PostEval extends Component {
         <Field name="comment" onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
         <p>Max characters: {this.state.term.length} / 750</p>
         <br />
-        <button type="submit" className="btn">Submit</button>
+        <button disabled={submitting} type="submit" className="btn">{submitting ? 'Submitting...' : 'Submit'}</button>
       </form>
     );
   }

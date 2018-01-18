@@ -19,7 +19,7 @@ export default function requireAuth(PassedComponent, extraProps={}) {
           this.props.history.push('/', {referrer: this.props.location.pathname});
         }
       }
-      else if (jwtDecode(localStorage.jwt).sub.roles.includes(0) && this.props.location.pathname != 'profile') {
+      else if (jwtDecode(localStorage.jwt).sub.roles.includes(0) && this.props.location.pathname != '/profile') {
         this.props.history.push('/profile', {referrer: this.props.location.pathname});
       }
     }

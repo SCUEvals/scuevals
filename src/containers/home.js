@@ -25,21 +25,22 @@ class Home extends Component {
 
   authWithBackEnd(token, referrer) {
     const client = new API();
-    client.post('/auth', {id_token: token}, responseData =>  {
+    client.post('/auth', {id_token: token}, responseData => {
       let decodedJwt = jwtDecode(responseData.jwt);
       ReactGA.set({ userId: decodedJwt.sub.id });
-      try {
-        localStorage.setItem("jwt", responseData.jwt);
-      } catch(err) {
-        console.error("Cannot execute localStorage.setItem (perhaps private mode is enabled). Error:", err);
-      }
-      if (referrer) {
-        if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile', { referrer });
-        else this.props.history.push(referrer);
-      }
-      else if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile');
-      this.props.setUserInfo(responseData.jwt);
-      this.setState({loading: false});
+      this.setState({loading: false}, () => {
+        this.props.setUserInfo(responseData.jwt);
+        try {
+          localStorage.setItem("jwt", responseData.jwt);
+        } catch(err) {
+          console.error("Cannot execute localStorage.setItem (perhaps private mode is enabled). Error:", err);
+        };
+        if (referrer) {
+          if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile', { referrer });
+          else this.props.history.push(referrer);
+        }
+        else if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile');
+      });
     });
   }
 

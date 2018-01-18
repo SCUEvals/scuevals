@@ -47,23 +47,23 @@ class API {
   }
 
   get(path, callback, passedParams, customHandleError) { //passedParams (obj) and customHandleError (func) optional
-    return this.api.get(path, {params: passedParams}).then(response => callback(response.data)).catch(error => this.handleError(error, customHandleError));
+    return this.api.get(path, {params: passedParams}).then(response => {callback(response.data); return response;}).catch(error => {this.handleError(error, customHandleError); throw error;});
   }
 
   patch(path, payload, callback) {
-    return this.api.patch(path, payload).then(response => callback(response.data)).catch(error => this.handleError(error));
+    return this.api.patch(path, payload).then(response => {callback(response.data); return response;}).catch(error => {this.handleError(error); throw error;});
   }
 
   post(path, payload, callback) {
-    return this.api.post(path, payload).then(response => callback(response.data)).catch(error => this.handleError(error));
+    return this.api.post(path, payload).then(response => {callback(response.data); return response;}).catch(error => {this.handleError(error); throw error;});
   }
 
   put(path, value, callback) {
-    return this.api.put(path, {value: value}).catch(error => this.handleError(error));
+    return this.api.put(path, {value: value}).catch(error => {this.handleError(error); throw error;});
   }
 
   delete(path, callback) {
-    return this.api.delete(path).catch(error => this.handleError(error));
+    return this.api.delete(path).catch(error => {this.handleError(error); throw error;});
   }
 }
 

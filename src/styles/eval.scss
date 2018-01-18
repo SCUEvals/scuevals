@@ -53,16 +53,11 @@ $voteWidth: 35px;
     width: calc(100% - #{$voteWidth});
   }
 
-  :global(.slick-list) {
-    height: 74px;
-  }
-
   :global(.slick-dots) {
     margin: 0;
     padding: 0;
     position: static;
     background: white;
-    cursor: default;
 
     li {
       display: inline;
@@ -91,8 +86,10 @@ $voteWidth: 35px;
     }
   }
 
-  :global(.slick-slider) {
-    background: $backgroundColor;
+  :global(.slick-list) {
+    height: 74px;
+    background: $sandColor;
+    border-bottom: 1px solid $backgroundColor;
     cursor: grab;
 
     &:active {
@@ -143,7 +140,6 @@ $voteWidth: 35px;
 
     .commentQuote {
       text-align: center;
-      font-style: oblique;
       padding: 15px;
     }
 
@@ -171,7 +167,7 @@ $voteWidth: 35px;
       animation: score 1s;
       fill: transparent;
       stroke-dasharray: 100.531;
-      stroke: white;
+      stroke: black;
       stroke-width: 3;
     }
 
@@ -179,7 +175,7 @@ $voteWidth: 35px;
       dominant-baseline: central;
       text-anchor: middle;
       fill: white;
-      font-size: 18px;
+      font-size: 20px;
     }
 
     &.score1 {

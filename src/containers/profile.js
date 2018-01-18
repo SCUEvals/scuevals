@@ -112,7 +112,7 @@ class Profile extends Component {
 
   onSubmit(values) {
     const client = new API();
-    client.patch(`/students/${this.props.userInfo.id}`, values, responseData => {
+    return client.patch(`/students/${this.props.userInfo.id}`, values, responseData => {
       localStorage.jwt = responseData.jwt;
       this.props.setUserInfo(responseData.jwt);
       if (this.props.location.state) this.props.history.push(this.props.location.state.referrer);
@@ -122,18 +122,19 @@ class Profile extends Component {
 
   render() {
     const { handleSubmit, history, delUserInfo, userInfo, submitting } = this.props;
+    const profileInfo = 'This information may only be used anonymously for statistical purposes.\nYour name is kept hidden at all times.';
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
           {userInfo && !userInfo.roles.includes(0) ?
             <div>
               <h4 styleName='banner'>{userInfo.first_name}'s Profile</h4>
-              <small>This information is displayed anonymously when posting to give readers a better idea of the demographics of the poster. Your name is kept hidden.</small>
+              <small>{profileInfo}</small>
             </div>
             :
             <div>
             <h4 styleName='banner'>Welcome to SCU Evals, {userInfo.first_name}!</h4>
             <p>Before we start, we need to know a few things about you.</p>
-            <small>This information is kept anonymous from the public and is only used for statistical purposes.<br/>
+            <small>{profileInfo}<br/>
             <button type="button" onClick={() => {
               localStorage.removeItem('jwt');
               delUserInfo();

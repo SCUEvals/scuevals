@@ -38,6 +38,10 @@ body::after {
   background: $focusColor;
 }
 
+button {
+  cursor: pointer;
+}
+
 .btn {
   color: white;
   background: $SCUred;
@@ -136,7 +140,9 @@ input[type="radio"] {
   }
 
   div.container { //not footer's container, only div
-    width: initial;
+    justify-content: center;
+    align-items: center;
+    display: flex;
     padding: 15px; //adds top and bottom padding
   }
 }

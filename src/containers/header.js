@@ -174,13 +174,13 @@ class Header extends Component {
   onSubmit(values) {
     //values is object with searchBar: <input>
     this.debouncedGetResponse(null, null); //cancel other responses in progress
-    if ('/search/' + values.searchBar !== window.location.pathname) { //only do something if search is different than last
+    if ('/search/' + values.searchBar !== this.props.location.pathname) { //only do something if search is different than last
       if (this.props.searchResults && values.searchBar === this.props.searchResults.term) { //if values same, don't make new request, use current searchResults instead (but force update for searchContent)
         const response = this.props.searchResults;
         response.forceUpdate = true;
         this.props.setSearchResults(response);
       }
-      else if ('/search/' + values.searchBar !== window.location.pathname) { //don't re-search if search would be same
+      else if ('/search/' + values.searchBar !== this.props.location.pathname) { //don't re-search if search would be same
         const tempResponse = {professors: [], courses: [], forceUpdate: true, loading: true};
         this.props.setSearchResults(tempResponse); //show loading icon while results being asynchronously fetched
         this.getResponse(values.searchBar, response =>  {
