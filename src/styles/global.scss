@@ -42,6 +42,15 @@ button {
   cursor: pointer;
 }
 
+input[type='checkbox'],
+label {
+  cursor: pointer;
+}
+
+label > input[type='checkbox'] {
+  margin-left: 5px;
+}
+
 .btn {
   color: white;
   background: $SCUred;
@@ -105,14 +114,13 @@ label {
   align-items: center;
   margin-bottom: 0;
 
-  &:not(:last-child) {
-    padding-right: 15px;
+  input[type='radio'] {
+    margin-right: 5px;
   }
 }
 
-input[type="checkbox"],
-input[type="radio"] {
-  margin-right: 3px;
+label:not(:first-child) input[type='radio'] {
+  margin-left: 15px;
 }
 
 #app,

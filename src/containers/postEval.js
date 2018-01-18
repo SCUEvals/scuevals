@@ -4,6 +4,7 @@ import TextareaAutoSize from 'react-textarea-autosize';
 import Slider from 'rc-slider';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux'; //want to check if multiple majors
 
 import API from '../services/api';
 import '../../node_modules/rc-slider/dist/rc-slider.min.css?global';
@@ -130,6 +131,7 @@ class PostEval extends Component {
   }
 
   onSubmit(values) {
+    console.log('values:', values);
     this.props.match.params.evaluation = values; //typically don't want to alter params, but submission redirects after post so OK. No need to make deep copy to preserve params
     let client = new API();
     return client.post('/evaluations', this.props.match.params, () => this.props.history.push('/'));
@@ -177,7 +179,7 @@ class PostEval extends Component {
   }
 
   render() {
-    const { handleSubmit, submitting } = this.props;
+    const { handleSubmit, submitting, userInfo } = this.props;
     const required = value => {};
 
     return (
@@ -236,6 +238,14 @@ class PostEval extends Component {
         <h6>Comments {infoTooltip(textOptions.comment.info)}</h6>
         <Field name="comment" onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
         <p>Max characters: {this.state.term.length} / 750</p>
+        <label>
+          {`Display ${userInfo.majors.length > 1 ? 'majors' : 'major'}`}
+          <Field name='displayMajors' component='input' type='checkbox' />
+        </label>
+        <label>
+          Display graduation year
+          <Field name='displayGradYear' component='input' type='checkbox' />
+        </label>
         <br />
         <button disabled={submitting} type="submit" className="btn">{submitting ? 'Submitting...' : 'Submit'}</button>
       </form>
@@ -243,7 +253,14 @@ class PostEval extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    userInfo: state.userInfo
+  };
+}
+
 export default reduxForm({
-  form: 'postEval'
+  form: 'postEval',
+  initialValues: { displayMajors: true, displayGradYear: true }
 })
-(PostEval);
+(connect(mapStateToProps, null)(PostEval));

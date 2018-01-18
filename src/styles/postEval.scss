@@ -268,3 +268,9 @@
 .postGuidelines ~ h3:not(:first-of-type) {
   margin-top: 75px;
 }
+
+label {
+  font-size: 1.1rem; //h6 size
+  display: flex;
+  justify-content: center;
+}
