@@ -190,7 +190,8 @@ class PostEval extends Component {
               <div className='card-header'>GUIDELINES TO FOLLOW</div>
                 <div className='card-body'>
                   <ul>
-                    <li>Refer to the rating chart for each question</li>
+                    <li>When moving the sliders, refer to the pop-up texts</li>
+                    <li>If unsure about a question, select <div tabIndex='0' styleName='popper-target-guidelines'><i className='fa fa-question'/></div> for more details</li>
                     <li>Remove unfair bias from your review</li>
                     <li>Proofread your comments before submission</li>
                     <li>Make respectful comments</li>
@@ -204,11 +205,11 @@ class PostEval extends Component {
               <div className='card-header'>THINGS TO AVOID</div>
               <div className='card-body'>
                 <ul >
-                  <li>Using profanity or hate speech</li>
+                  <li>Using hate speech or excessive profanity</li>
                   <li>Speaking on behalf of others</li>
                   <li>Using personally identfiable information of yourself or other students or faculty</li>
-                  <li>Share links</li>
-                  <li>Share names other than the professor being rated</li>
+                  <li>Sharing links</li>
+                  <li>Sharing names other than the professor being rated</li>
                 </ul>
               </div>
             </div>

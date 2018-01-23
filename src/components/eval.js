@@ -72,11 +72,12 @@ class Eval extends Component {
         : 11
       : 15
     : 18;
-
+    let upVote, downVote = null;
     return (
       <div styleName='eval'>
         <div styleName='vote'>
           <i tabIndex='0'
+            ref={node => upVote = node}
             styleName={user_vote == 1 ? 'active' : ''}
             className='fa fa-caret-up'
             onClick={user_vote == 1 ?
@@ -101,9 +102,13 @@ class Eval extends Component {
                    user_vote: 1
                  })
               }}
+              onKeyDown={e => {
+                if (e.keyCode === 13) upVote.click();
+              }}
           />
           <span style={{fontSize: votesFontSize + 'px'}} styleName='voteScore'>{votes_score}</span>
           <i tabIndex='0'
+            ref={node => downVote = node}
             styleName={user_vote == -1 ? 'active' : ''}
              className='fa fa-caret-down'
              onClick={user_vote == -1 ?
@@ -127,6 +132,9 @@ class Eval extends Component {
                     votes_score: votes_score - 1,
                     user_vote: -1
                   })
+               }}
+               onKeyDown={e => {
+                 if (e.keyCode === 13) downVote.click();
                }}
           />
         </div>
@@ -230,12 +238,21 @@ class Eval extends Component {
             </div>
             <div className='row'>
               <div className='col-xs-12 col-sm-11' styleName='commentInfo'>
-                <div>
-                  Majors: {/*major or majors, check length*/}
-                </div>
-                <div>
-                  Graduation year:
-                </div>
+                {evaluation.author.majors ?
+                  <div>
+                    {evaluation.author.majors.length > 1 ?
+                       'Majors: ' + evaluation.author.majors.toString()
+                       : 'Major: ' + evaluation.author.majors.toString()
+                     }
+                  </div>
+                  : ''
+                }
+                {evaluation.author.graduation_year ?
+                  <div>
+                    Graduation year: {evaluation.author.graduation_year}
+                  </div>
+                : ''
+                }
               </div>
               <div className='col-xs-12 col-sm-1' styleName='flagComment'>
                 <i className='fa fa-flag' tabIndex='0'

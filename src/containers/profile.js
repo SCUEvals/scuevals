@@ -3,6 +3,7 @@ import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import { setUserInfo, delUserInfo, setMajorsList } from '../actions';
 import API from '../services/api';
@@ -127,12 +128,12 @@ class Profile extends Component {
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
           {userInfo && !userInfo.roles.includes(0) ?
             <div>
-              <h4 styleName='banner'>{userInfo.first_name}'s Profile</h4>
+              <h4 className='banner'>{userInfo.first_name}'s Profile</h4>
               <small>{profileInfo}</small>
             </div>
             :
             <div>
-            <h4 styleName='banner'>Welcome to SCU Evals, {userInfo.first_name}!</h4>
+            <h4 className='banner'>Welcome to SCU Evals, {userInfo.first_name}!</h4>
             <p>Before we start, we need to know a few things about you.</p>
             <small>{profileInfo}<br/>
             <button type="button" onClick={() => {
@@ -145,7 +146,9 @@ class Profile extends Component {
             </button>
           </small>
         </div>
-          }
+        }
+        <hr />
+        <Link className='btn' to='/profile/evals'>Manage my Evals</Link>
         <hr/>
         <div styleName='form-container'>
           <h5>Major(s)</h5>

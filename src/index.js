@@ -19,6 +19,7 @@ import GAListener from './components/gaListener';
 import Profile from './containers/profile';
 import ViewEvals from './containers/viewEvals';
 import PostSearch from './containers/postSearch';
+import ViewMyEvals from './containers/viewMyEvals';
 
 import requireAuth from './components/requireAuth';
 import API from './services/api';
@@ -91,6 +92,7 @@ function renderDOM () {
                 <Route exact path="/courses/:id(\d+)" component={requireAuth(ViewEvals, {type: "courses"})} />
                 <Route exact path="/about" component={About} />
                 <Route exact path="/privacy" component={Privacy} />
+                <Route exact path="/profile/evals" component={requireAuth(ViewMyEvals)} />
                 <Route exact path="/profile" component={requireAuth(Profile)} />
                 <Route exact path="/post" component={requireAuth(PostSearch)} />
                 <Route exact path="/" component={requireAuth(Home)} />

@@ -22,9 +22,9 @@ class Privacy extends Component {
         </h3>
           <p>
             The only cookies in use on our site are for Google Analytics, Oauth 2.0 for Google, and a
-            token which is deleted after signing out for serverside verification containing information
+            JSON web token which is deleted after signing out for serverside verification containing information
             given while creating your account (major, graduation year, and gender). Google Analytics is
-            a tool that helps us understand how visitors interact with our website. Oauth 2.0 allows you
+            a tool that helps us understand how visitors interact with our website. Oauth 2.0 allows users
             to securely login through Google's services without us managing or having access to
             passwords. We use this so we may ensure those who wish to post reviews are from Santa Clara
             University while keeping you secure. We also have access to Google Analytics's 3rd-party
@@ -46,7 +46,7 @@ class Privacy extends Component {
           <p>
             We reserve the right to change this policy to meet the changing needs of
             SCU Evals, or for any other reason.
-            Last revision: 12 October 2017.
+            Last policy revision: 12 October 2017.
           </p>
       </div>
     );
