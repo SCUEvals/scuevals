@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
-import { setPostSearchList } from '../actions';
+import { setQuartersList } from '../actions';
 import { storeWithMiddleware } from '../index';
 import API from '../services/api';
 
@@ -25,7 +25,7 @@ class PostSearch extends Component {
   }
 
   componentWillMount() {
-    if (!this.props.postSearchList.quarters) {
+    if (!this.props.quartersList) {
       let client = new API();
       client.get('/quarters', responseData => {
         responseData.map(quarter => {
@@ -35,11 +35,9 @@ class PostSearch extends Component {
         responseData.sort((a, b) => { //responseData currently comes in order, but sort just in case in future it won't
           return a.year > b.year ? 1 : a.year < b.year ? -1 : a.name == 'Winter' ? -1 : a.name == 'Fall' ? 1 : b.name == 'Fall' ? -1 : 1;
         })
-        let postSearchListCopy;
-        if (this.props.postSearchList) postSearchListCopy = JSON.parse(JSON.stringify(this.props.postSearchList)); //makes deep copy, shouldn't alter current state
-        else postSearchListCopy = {quarters: null};
-        postSearchListCopy.quarters = responseData;
-        this.props.setPostSearchList(postSearchListCopy);
+        let quartersListCopy = JSON.parse(JSON.stringify(this.props.quartersList)); //makes deep copy, shouldn't alter current state
+        quartersListCopy = responseData;
+        this.props.setQuartersList(quartersListCopy);
       });
     }
   };
@@ -152,16 +150,16 @@ class PostSearch extends Component {
   }
 
   checkIfProfessorsListExists(newCourse) {
-    const { setPostSearchList, postSearchList, quarter } = this.props;
+    const { setQuartersList, quartersList, quarter } = this.props;
     const { coursesList, professorsList } = this.state;
     let quarterIndex, courseIndex;
     if (quarter && newCourse) {
-      quarterIndex = postSearchList.quarters.findIndex(x => x.id === quarter);
+      quarterIndex = quartersList.findIndex(x => x.id === quarter);
       if (quarterIndex !== -1) {
           courseIndex = coursesList.findIndex(x => x.id === newCourse);
           if (courseIndex !== -1) {
-            this.setState({professorsList: postSearchList.quarters[quarterIndex].courses[courseIndex].professors});
-            if (postSearchList.quarters[quarterIndex].courses[courseIndex].professors)
+            this.setState({professorsList: quartersList[quarterIndex].courses[courseIndex].professors});
+            if (quartersList[quarterIndex].courses[courseIndex].professors)
               return true;
             return false;
           }
@@ -176,14 +174,14 @@ class PostSearch extends Component {
   }
 
   checkIfCoursesListExists(newQuarter) {
-    const { setPostSearchList, postSearchList } = this.props;
+    const { setQuartersList, quartersList } = this.props;
     const { coursesList } = this.state;
     let quarterIndex;
     if (newQuarter) {
-      quarterIndex = postSearchList.quarters.findIndex(x => x.id === newQuarter);
+      quarterIndex = quartersList.findIndex(x => x.id === newQuarter);
       if (quarterIndex !== -1) {
-          this.setState({coursesList: postSearchList.quarters[quarterIndex].courses});
-          if (postSearchList.quarters[quarterIndex].courses)
+          this.setState({coursesList: quartersList[quarterIndex].courses});
+          if (quartersList[quarterIndex].courses)
             return true;
           return false;
       } else {
@@ -197,7 +195,7 @@ class PostSearch extends Component {
   }
 
   render() {
-    const { handleSubmit, postSearchList, setPostSearchList, quarter } = this.props;
+    const { handleSubmit, quartersList, setQuartersList, quarter } = this.props;
     const { coursesList, professorsList } = this.state;
     return (
       <form className='content' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
@@ -205,13 +203,13 @@ class PostSearch extends Component {
           name="quarter" //responsible for object's key name for values
           component={this.renderQuarters}
           checkIfCoursesListExists={newQuarter => this.checkIfCoursesListExists(newQuarter)}
-          quartersList={postSearchList.quarters}
+          quartersList={quartersList}
           setCoursesList={(newCoursesList, newQuarter) => {
-            let postSearchListCopy = JSON.parse(JSON.stringify(postSearchList));
-            let quarterIndex = postSearchListCopy.quarters.findIndex(x => x.id === newQuarter);
+            let quartersListCopy = JSON.parse(JSON.stringify(quartersList));
+            let quarterIndex = quartersListCopy.findIndex(x => x.id === newQuarter);
             if (quarterIndex !== -1) {
-              postSearchListCopy.quarters[quarterIndex].courses = newCoursesList; //*******
-              setPostSearchList(postSearchListCopy);
+              quartersListCopy[quarterIndex].courses = newCoursesList; //*******
+              setQuartersList(quartersListCopy);
               this.setState({coursesList: newCoursesList});
             }
           }}
@@ -225,13 +223,13 @@ class PostSearch extends Component {
           quarterSelected={this.props.quarter ? true : false}
           professorsList={professorsList}
           setProfessorsList={(professorsList, newCourse) => {
-            let postSearchListCopy = JSON.parse(JSON.stringify(postSearchList));
-            let quarterIndex = postSearchListCopy.quarters.findIndex(x => x.id === quarter);
+            let quartersListCopy = JSON.parse(JSON.stringify(quartersList));
+            let quarterIndex = quartersListCopy.findIndex(x => x.id === quarter);
             if (quarterIndex !== -1) {
-              let courseIndex = postSearchListCopy.quarters[quarterIndex].courses.findIndex(x => x.id === newCourse);
+              let courseIndex = quartersListCopy[quarterIndex].courses.findIndex(x => x.id === newCourse);
               if (courseIndex !== -1) {
-                postSearchListCopy.quarters[quarterIndex].courses[courseIndex].professors = professorsList;
-                setPostSearchList(postSearchListCopy);
+                quartersListCopy[quarterIndex].courses[courseIndex].professors = professorsList;
+                setQuartersList(quartersListCopy);
                 this.setState({professorsList});
               }
             }
@@ -270,8 +268,8 @@ const mapStateToProps = state => {
       quarter,
       course,
       professor,
-      postSearchList: state.postSearchList
+      quartersList: state.quartersList
    }
 }
 
-export default connect(mapStateToProps, {setPostSearchList} )(PostSearch);
+export default connect(mapStateToProps, { setQuartersList })(PostSearch);
