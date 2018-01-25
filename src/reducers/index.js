@@ -24,7 +24,7 @@ const rootReducer = combineReducers({
   majorsList: majorsListReducer,
   quartersList: quartersListReducer,
   departmentsList: departmentsListReducer,
-  professorsList: departmentsListReducer
+  professorsList: professorsListReducer
 
 });
 

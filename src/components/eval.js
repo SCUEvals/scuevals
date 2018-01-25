@@ -21,7 +21,7 @@ class Eval extends Component {
   }
 
   render() {
-    const { evaluation, openModal } = this.props;
+    const { evaluation, openModal, majorsList, quartersList, departmentsList } = this.props;
     const { votes_score, user_vote } = this.state;
     const settings = { //set speed = slidesToShow * 75
       dots: false,
@@ -73,79 +73,91 @@ class Eval extends Component {
       : 15
     : 18;
     let upVote, downVote = null;
+    let majorsString = '';
+    if (majorsList) {
+       for (let i of evaluation.author.majors) majorsString += majorsList[i].name + ', ';
+       if (majorsString) majorsString = majorsString.substring(0, majorsString.length - 2); //cut off last comma and space
+    }
+    console.log('evaluation:', evaluation);
     return (
       <div styleName='eval'>
         <div styleName='vote'>
-          <i tabIndex='0'
-            ref={node => upVote = node}
-            styleName={user_vote == 1 ? 'active' : ''}
-            className='fa fa-caret-up'
-            onClick={user_vote == 1 ?
-              e => {
-                let client = new API();
-                client.delete(`/evaluations/${evaluation.id}/vote`);
-                this.setState({
-                  votes_score: votes_score - 1,
-                  user_vote: null
-                });
-              }
-              : e => {
-                let client = new API();
-                client.put(`/evaluations/${evaluation.id}/vote`, 'u');
-                user_vote == -1 ?
-                this.setState({
-                  votes_score: votes_score + 2,
-                  user_vote: 1
-                })
-                 : this.setState({
-                   votes_score: votes_score + 1,
-                   user_vote: 1
-                 })
-              }}
-              onKeyDown={e => {
-                if (e.keyCode === 13) upVote.click();
-              }}
-          />
-          <span style={{fontSize: votesFontSize + 'px'}} styleName='voteScore'>{votes_score}</span>
-          <i tabIndex='0'
-            ref={node => downVote = node}
-            styleName={user_vote == -1 ? 'active' : ''}
-             className='fa fa-caret-down'
-             onClick={user_vote == -1 ?
-               e => {
-                 let client = new API();
-                 client.delete(`/evaluations/${evaluation.id}/vote`);
-                 this.setState({
-                   votes_score: votes_score + 1,
-                   user_vote: null
-                 });
-               }
-               : e => { //user_vote 1 or null
-                 let client = new API();
-                 client.put(`/evaluations/${evaluation.id}/vote`, 'd');
-                 user_vote == 1 ?
+          {evaluation.author.self ? '' :
+              <i tabIndex='0'
+              ref={node => upVote = node}
+              styleName={user_vote == 1 ? 'active' : ''}
+              className='fa fa-caret-up'
+              onClick={user_vote == 1 ?
+                e => {
+                  let client = new API();
+                  client.delete(`/evaluations/${evaluation.id}/vote`);
                   this.setState({
-                    votes_score: votes_score - 2,
-                    user_vote: -1
-                  })
-                  : this.setState({ ///user_vote null
                     votes_score: votes_score - 1,
-                    user_vote: -1
+                    user_vote: null
+                  });
+                }
+                : e => {
+                  let client = new API();
+                  client.put(`/evaluations/${evaluation.id}/vote`, 'u');
+                  user_vote == -1 ?
+                  this.setState({
+                    votes_score: votes_score + 2,
+                    user_vote: 1
                   })
-               }}
-               onKeyDown={e => {
-                 if (e.keyCode === 13) downVote.click();
-               }}
-          />
+                   : this.setState({
+                     votes_score: votes_score + 1,
+                     user_vote: 1
+                   })
+                }}
+                onKeyDown={e => {
+                  if (e.keyCode === 13) upVote.click();
+                }}
+            />
+          }
+          <span style={{fontSize: votesFontSize + 'px'}} styleName='voteScore'>{votes_score}</span>
+          {evaluation.author.self ? '' :
+            <i tabIndex='0'
+              ref={node => downVote = node}
+              styleName={user_vote == -1 ? 'active' : ''}
+               className='fa fa-caret-down'
+               onClick={user_vote == -1 ?
+                 e => {
+                   let client = new API();
+                   client.delete(`/evaluations/${evaluation.id}/vote`);
+                   this.setState({
+                     votes_score: votes_score + 1,
+                     user_vote: null
+                   });
+                 }
+                 : e => { //user_vote 1 or null
+                   let client = new API();
+                   client.put(`/evaluations/${evaluation.id}/vote`, 'd');
+                   user_vote == 1 ?
+                    this.setState({
+                      votes_score: votes_score - 2,
+                      user_vote: -1
+                    })
+                    : this.setState({ ///user_vote null
+                      votes_score: votes_score - 1,
+                      user_vote: -1
+                    })
+                 }}
+                 onKeyDown={e => {
+                   if (e.keyCode === 13) downVote.click();
+                 }}
+            />
+          }
         </div>
         <div styleName='evalContent'>
           <div styleName='evalInfo' className='row'>
             <div className='col-12 col-sm-6'>
-              {evaluation.quarter_id}
+              {quartersList ? quartersList[evaluation.quarter_id].name + ' ' + quartersList[evaluation.quarter_id].year : ''}
             </div>
             <div className='col-12 col-sm-6'>
               {evaluation.course ?
-                <Link to={`/courses/${evaluation.course.id}`}>{evaluation.course.department.abbreviation + ' ' + evaluation.course.name + ': ' + evaluation.course.title}</Link>
+                departmentsList ?
+                <Link to={`/courses/${evaluation.course.id}`}>{departmentsList[evaluation.course.department_id].abbr + ' ' + evaluation.course.number + ': ' + evaluation.course.title}</Link>
+                : ''
               : <Link to={`/professors/${evaluation.professor.id}`}>{evaluation.professor.last_name + ', ' + evaluation.professor.first_name}</Link>}
             </div>
           </div>
@@ -238,11 +250,11 @@ class Eval extends Component {
             </div>
             <div className='row'>
               <div className='col-xs-12 col-sm-11' styleName='commentInfo'>
-                {evaluation.author.majors ?
+                {evaluation.author.majors && majorsList ?
                   <div>
                     {evaluation.author.majors.length > 1 ?
-                       'Majors: ' + evaluation.author.majors.toString()
-                       : 'Major: ' + evaluation.author.majors.toString()
+                       'Majors: ' + majorsString
+                       : 'Major: ' + majorsString
                      }
                   </div>
                   : ''

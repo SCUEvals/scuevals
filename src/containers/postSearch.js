@@ -28,16 +28,7 @@ class PostSearch extends Component {
     if (!this.props.quartersList) {
       let client = new API();
       client.get('/quarters', responseData => {
-        responseData.map(quarter => {
-          quarter.label = quarter.name + ' ' + quarter.year;
-          //optionally can delete unusued parts of obj, but not necessary
-        });
-        responseData.sort((a, b) => { //responseData currently comes in order, but sort just in case in future it won't
-          return a.year > b.year ? 1 : a.year < b.year ? -1 : a.name == 'Winter' ? -1 : a.name == 'Fall' ? 1 : b.name == 'Fall' ? -1 : 1;
-        })
-        let quartersListCopy = JSON.parse(JSON.stringify(this.props.quartersList)); //makes deep copy, shouldn't alter current state
-        quartersListCopy = responseData;
-        this.props.setQuartersList(quartersListCopy);
+        this.props.setQuartersList(responseData);
       });
     }
   };
@@ -57,7 +48,7 @@ class PostSearch extends Component {
           valueKey={'id'}
           className={error && submitFailed ? 'error' : ''}
           simpleValue
-          options={quartersList}
+          options={quartersList ? Object.values(quartersList) : null}
           isLoading={quartersList ? false : true}
           onChange={newQuarter => {
             input.onChange(newQuarter);
@@ -69,13 +60,6 @@ class PostSearch extends Component {
               if (newQuarter && !checkIfCoursesListExists(newQuarter)) {
                 let client = new API();
                 client.get('/courses', coursesList => {
-                  coursesList.map(course => {
-                    course.label = course.department + ' ' + course.number + ': ' + course.title;
-                    //optionally can delete unusued parts of obj, but not necessary
-                  });
-                  coursesList.sort((a, b) => {
-                    return a.label > b.label ? 1 : a.label < b.label ? -1 : 0;
-                  });
                   setCoursesList(coursesList, newQuarter);
                 }, {quarter_id: newQuarter});
               }
@@ -268,7 +252,11 @@ const mapStateToProps = state => {
       quarter,
       course,
       professor,
-      quartersList: state.quartersList
+      quartersList: state.quartersList ?
+        Object.values(state.quartersList).sort((a, b) => { //convert object with ids as keys into array of objects, then sort alphabetically
+          return a.year > b.year ? 1 : a.year < b.year ? -1 : a.name == 'Winter' ? -1 : a.name == 'Fall' ? 1 : b.name == 'Fall' ? -1 : 1;
+        })
+      : null
    }
 }
 

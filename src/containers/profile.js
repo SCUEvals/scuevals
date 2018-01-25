@@ -23,9 +23,7 @@ class Profile extends Component {
     if (this.props.majorsList) return;
     let client = new API();
     client.get('/majors', responseData => {
-      this.props.setMajorsList(responseData.sort((a, b) => {
-        return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
-      }));
+      this.props.setMajorsList(responseData);
     });
   }
 
@@ -55,7 +53,7 @@ class Profile extends Component {
   }
 
   renderGradYear(field) {
-    const { input, majorsList } = field;
+    const { input } = field;
     const { meta: {submitFailed, error} } = field;
     let options = [];
     const currentYear = new Date().getFullYear();
@@ -193,7 +191,11 @@ function validate(values) {
 function mapStateToProps(state) {
   return {
     userInfo: state.userInfo,
-    majorsList: state.majorsList,
+    majorsList: state.majorsList ?
+      Object.values(state.majorsList).sort((a, b) => { //convert object with ids as keys into array of objects, then sort alphabetically
+        return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
+      })
+    : null,
     initialValues: {
       graduation_year: state.userInfo ? state.userInfo.graduation_year : null,
       majors: state.userInfo ? state.userInfo.majors : null,

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
+import { setDepartmentsList, setQuartersList, setMajorsList } from '../actions';
 
 import Eval from '../components/eval';
 import API from '../services/api';
@@ -27,6 +28,9 @@ class ViewEvals extends Component {
   componentWillMount() {
     let client = new API();
     client.get('/' + this.props.type + '/' + this.props.match.params.id, info => this.setState({ info, orderedInfo: info }));
+    if (!this.props.departmentsList) client.get('/departments', departmentsList => this.props.setDepartmentsList(departmentsList));
+    if (!this.props.quartersList) client.get('/quarters', quartersList => this.props.setQuartersList(quartersList));
+    if (!this.props.majorsList) client.get('/majors', majorsList => this.props.setMajorsList(majorsList));
   }
 
   calculatePath(n) { //n in range 1-4
@@ -36,6 +40,7 @@ class ViewEvals extends Component {
 
   render() { //1-1.74 score1, 1.75-2.49 score2, 2.50-3.24 score3, 3.25-4 score4
     const { info, orderedInfo, modalOpen } = this.state;
+    const { majorsList, quartersList, departmentsList } = this.props;
     return (
       <div className="content">
         <ReactModal isOpen={modalOpen} className='Modal' appElement={document.getElementById('app')}>
@@ -60,7 +65,9 @@ class ViewEvals extends Component {
           {info ?
             this.props.type === 'professors' ?
               info.first_name + ' ' + info.last_name
-              : info.department.abbreviation + ' ' + info.name + ': ' + info.title
+              : departmentsList ?
+                departmentsList[info.id].abbr + ' ' + info.number + ': ' + info.title
+              : 'Loading...'
             : 'Loading...'
           }
         </h2>
@@ -154,7 +161,14 @@ class ViewEvals extends Component {
           placeholder="Sort"
         />
         <br/>
-        {info ? info.evaluations.map(evaluation => { return <Eval key={evaluation.id} evaluation={evaluation} openModal={() => this.setState({modalOpen: true})}/> }) : ''}
+        {info ? info.evaluations.map(evaluation => {
+          return <Eval  key={evaluation.id}
+                        majorsList={majorsList}
+                        quartersList={quartersList}
+                        departmentsList={departmentsList}
+                        evaluation={evaluation} openModal={() => this.setState({modalOpen: true})}
+                  />
+        }) : ''}
       </div>
     );
   }
@@ -162,8 +176,11 @@ class ViewEvals extends Component {
 
 function mapStateToProps(state) {
   return {
-    userInfo: state.userInfo
+    userInfo: state.userInfo,
+    departmentsList: state.departmentsList,
+    quartersList: state.quartersList,
+    majorsList: state.majorsList
   };
 }
 
-export default connect(mapStateToProps, null)(ViewEvals);
+export default connect(mapStateToProps, { setDepartmentsList, setQuartersList, setMajorsList })(ViewEvals);
