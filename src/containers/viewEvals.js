@@ -34,8 +34,8 @@ class ViewEvals extends Component {
   }
 
   calculatePath(n) { //n in range 1-4
-    //circumference w/ r=25 = 157.080
-    return  n / 4 * 157.08 - 157.08;
+    //circumference r=25, 25*2*pi = 157.080
+    return  157.08 - (n / 4 * 157.08);
   }
 
   render() { //1-1.74 score1, 1.75-2.49 score2, 2.50-3.24 score3, 3.25-4 score4

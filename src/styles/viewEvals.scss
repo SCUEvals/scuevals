@@ -44,9 +44,12 @@
     }
 
     circle {
+      transform: rotate(-90deg) scaleY(-1);
+      transform-origin: center;
       stroke-width: 4;
       animation: score 1s;
       stroke-dasharray: 157.08;
+      stroke-dashoffset: 157.08;
       stroke: $overlayBackground;
     }
 
@@ -71,6 +74,6 @@
 
 @keyframes score {
   from {
-    stroke-dashoffset: -100.5;
+    stroke-dashoffset: 157.08;
   }
 }
