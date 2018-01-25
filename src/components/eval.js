@@ -164,7 +164,7 @@ class Eval extends Component {
           <Slider {...settings}>
             <div styleName='scoreBlock'>
               <div styleName='scoreTitle'>Average</div>
-              <svg >
+              <svg>
                 <circle cx="18" cy="18" r="16" />
                 <text x='50%' y='50%'>
                   X
@@ -173,8 +173,8 @@ class Eval extends Component {
             </div>
             <div styleName='scoreBlock'>
               <div styleName='scoreTitle'>Recommend?</div>
-              <svg styleName={`score${evaluation.data.recommended}`}>
-                <circle cx="18" cy="18" r="16" />
+              <svg>
+                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.recommended}`}/>
                 <text x='50%' y='50%'>
                   {evaluation.data.recommended}
                 </text>
@@ -182,8 +182,8 @@ class Eval extends Component {
             </div>
             <div styleName='scoreBlock'>
               <div styleName='scoreTitle'>Difficulty</div>
-              <svg styleName={`score${evaluation.data.difficulty}`}>
-                <circle cx="18" cy="18" r="16" />
+              <svg>
+                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.difficulty}`}/>
                 <text x='50%' y='50%'>
                   {evaluation.data.difficulty}
                 </text>
@@ -191,8 +191,8 @@ class Eval extends Component {
             </div>
             <div styleName='scoreBlock'>
               <div styleName='scoreTitle'>Workload</div>
-              <svg styleName={`score${evaluation.data.workload}`}>
-                <circle cx="18" cy="18" r="16" />
+              <svg>
+                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.workload}`}/>
                 <text x='50%' y='50%'>
                   {evaluation.data.workload}
                 </text>
@@ -200,8 +200,8 @@ class Eval extends Component {
             </div>
             <div styleName='scoreBlock'>
               <div styleName='scoreTitle'>Grading Speed</div>
-              <svg styleName={`score${evaluation.data.grading_speed}`}>
-                <circle cx="18" cy="18" r="16" />
+              <svg>
+                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.grading_speed}`}/>
                 <text x='50%' y='50%'>
                   {evaluation.data.grading_speed}
                 </text>
@@ -209,8 +209,8 @@ class Eval extends Component {
             </div>
             <div styleName='scoreBlock'>
               <div styleName='scoreTitle'>Clarity</div>
-              <svg styleName={`score${evaluation.data.clarity}`}>
-                <circle cx="18" cy="18" r="16" />
+              <svg>
+                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.clarity}`}/>
                 <text x='50%' y='50%'>
                   {evaluation.data.clarity}
                 </text>
@@ -218,8 +218,8 @@ class Eval extends Component {
             </div>
             <div styleName='scoreBlock'>
               <div styleName='scoreTitle'>Resourcefulness</div>
-              <svg styleName={`score${evaluation.data.resourcefulness}`}>
-                <circle cx="18" cy="18" r="16" />
+              <svg>
+                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.resourcefulness}`}/>
                 <text x='50%' y='50%'>
                   {evaluation.data.resourcefulness}
                 </text>
@@ -227,8 +227,8 @@ class Eval extends Component {
             </div>
             <div styleName='scoreBlock'>
               <div styleName='scoreTitle'>Attitude</div>
-              <svg styleName={`score${evaluation.data.attitude}`}>
-                <circle cx="18" cy="18" r="16" />
+              <svg>
+                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.attitude}`}/>
                 <text x='50%' y='50%'>
                   {evaluation.data.attitude}
                 </text>
@@ -236,8 +236,8 @@ class Eval extends Component {
             </div>
             <div styleName='scoreBlock'>
               <div styleName='scoreTitle'>Availability</div>
-              <svg styleName={`score${evaluation.data.availability}`}>
-                <circle cx="18" cy="18" r="16" />
+              <svg>
+                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.availability}`}/>
                 <text x='50%' y='50%'>
                   {evaluation.data.availability}
                 </text>
