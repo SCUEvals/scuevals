@@ -28,17 +28,7 @@ import { delUserInfo } from './actions';
 import './styles/global.scss?global';
 import './styles/index.scss';
 
-
 ReactGA.initialize('UA-102751367-1');
-
-const bg = $('body::after');
-
-function resizeBackground() {
-    bg.height( $(window).height() + 60);
-}
-
-$(window).resize(resizeBackground);
-resizeBackground();
 
 export const storeWithMiddleware = createStore(
   reducers, //note: undecodeable jwt will be removed in userInfo reducer here if altered by user, so safe to assume next steps have decodeable jwt

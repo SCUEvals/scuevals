@@ -33,6 +33,15 @@ class ViewEvals extends Component {
     if (!this.props.majorsList) client.get('/majors', majorsList => this.props.setMajorsList(majorsList));
   }
 
+  componentWillUpdate(nextProps) {
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      this.setState({info: null}, () => {
+        let client = new API();
+        client.get('/' + this.props.type + '/' + this.props.match.params.id, info => this.setState({ info, orderedInfo: info }));
+      });
+    }
+  }
+
   calculatePath(n) { //n in range 1-4
     //circumference r=25, 25*2*pi = 157.080
     return  157.08 - (n / 4 * 157.08);
@@ -66,7 +75,7 @@ class ViewEvals extends Component {
             this.props.type === 'professors' ?
               info.first_name + ' ' + info.last_name
               : departmentsList ?
-                departmentsList[info.id].abbr + ' ' + info.number + ': ' + info.title
+                departmentsList[info.department_id].abbr + ' ' + info.number + ': ' + info.title
               : 'Loading...'
             : 'Loading...'
           }
