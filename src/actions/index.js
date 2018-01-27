@@ -27,24 +27,27 @@ export function delUserInfo() {
 }
 
 export function setMajorsList(majorsList) {
+  let majorsListObj = majorsList ? majorsList.reduce((obj, item) => (obj[item.id] = item, obj) ,{}) : null;
   return {
     type: SET_MAJORS_LIST,
-    payload: majorsList
+    payload: majorsListObj
   };
 }
 
 
 export function setQuartersList(quartersList) {
+  let quartersListObj = quartersList ? quartersList.reduce((obj, item) => (obj[item.id] = item, obj) ,{}) : null;
   return {
     type: SET_QUARTERS_LIST,
-    payload: quartersList
+    payload: quartersListObj
   };
 }
 
 export function setDepartmentsList(departmentsList) {
+  let departmentsListObj = departmentsList ? departmentsList.reduce((obj, item) => (obj[item.id] = item, obj) ,{}) : null;
   return {
     type: SET_DEPARTMENTS_LIST,
-    payload: departmentsList
+    payload: departmentsListObj
   };
 }
 

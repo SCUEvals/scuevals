@@ -120,7 +120,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { handleSubmit, history, delUserInfo, userInfo, submitting } = this.props;
+    const { handleSubmit, history, delUserInfo, userInfo, submitting, majorsList } = this.props;
     const profileInfo = 'This information may only be used anonymously for statistical purposes.\nYour name is kept hidden at all times.';
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
@@ -153,7 +153,9 @@ class Profile extends Component {
           <Field
             name='majors'
             component={this.renderMajors}
-            majorsList={this.props.majorsList}
+            majorsList={majorsList ? Object.values(majorsList).sort((a, b) => {
+              return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
+            }) : null}
           />
           <h5>Expected Graduation Year</h5>
           <Field
@@ -188,7 +190,7 @@ function validate(values) {
   return errors;
 }
 
-function mapStateToProps(state) {
+const mapStateToProps = state => {
   return {
     userInfo: state.userInfo,
     majorsList: state.majorsList,

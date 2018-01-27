@@ -4,8 +4,7 @@ export default function(state = null, action) {
   switch (action.type) {
 
     case SET_MAJORS_LIST:
-      let newObj = action.payload.reduce((obj, item) => (obj[item.id] = item, obj) ,{});
-      return newObj;
+      return action.payload;
 
     default:
       return state;
