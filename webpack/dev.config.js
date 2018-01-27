@@ -6,14 +6,10 @@ const prjRoot = path.join(__dirname, '..');
 
 module.exports = merge(baseConfig, {
 
-  devtool: 'eval',
+  devtool: 'source-map',
 
   devServer: {
-    historyApiFallback: {
-      rewrites: [
-        {from: '/scripts/popper.min.js', to: '/popper.js/dist/umd/popper.min.js'}
-      ]
-    },
+    historyApiFallback: true,
     contentBase: [path.join(prjRoot, 'public'), path.join(prjRoot, 'node_modules')],
     compress: true
   },

@@ -1,0 +1,96 @@
+@import "theme";
+
+form {
+  position: relative;
+}
+
+.text-help {
+  position: absolute;
+  top: 38px;
+  background: $SCUred;
+  z-index: 2;
+  border-radius: $defaultBorderRadius;
+  padding: 4px 8px;
+  font-size: 13px;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.search-error {
+  input:focus {
+    border-color: $SCUred !important;
+  }
+
+  input:focus ~ .text-help {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+:global(#searchBar) {
+  input {
+    z-index: 3;
+    border-color: white;
+
+    &:focus {
+      border-color: $focusColor;
+    }
+  }
+
+  i,
+  i:hover {
+    color: white;
+  }
+
+  :global(#searchBarResults) {
+    border-top: 0 !important;
+    top: 40px;
+    position: absolute;
+    width: calc(100% - 30px - 43px); //30px for 15px x2 padding, 43px for search button
+    max-height: 202px;
+    overflow: auto;
+    background: white;
+    z-index: 1;
+    text-align: left;
+    list-style-type: none;
+    padding: 0;
+    border: 2px solid $backgroundColor;
+    border-radius: 0 0 $defaultBorderRadius $defaultBorderRadius;
+
+    h6,
+    a {
+      padding: 5px;
+    }
+
+    h6 {
+      font-weight: bold;
+      background: $overlayBackground;
+      color: white;
+      margin: 0;
+    }
+
+    a {
+      border: none !important;
+      display: block;
+      cursor: pointer;
+      color: $overlayBackground;
+      font-weight: bold;
+      outline: 1px solid $backgroundColor;
+
+      &:hover {
+        background: $backgroundColor;
+        color: $SCUdarkred;
+      }
+
+      &:focus,
+      &:active {
+        color: $SCUdarkred;
+        background: $focusColorTransparent;
+      }
+
+      &:last-child li {
+        border-bottom: none;
+      }
+    }
+  }
+}

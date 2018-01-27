@@ -191,11 +191,7 @@ function validate(values) {
 function mapStateToProps(state) {
   return {
     userInfo: state.userInfo,
-    majorsList: state.majorsList ?
-      Object.values(state.majorsList).sort((a, b) => { //convert object with ids as keys into array of objects, then sort alphabetically
-        return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
-      })
-    : null,
+    majorsList: state.majorsList,
     initialValues: {
       graduation_year: state.userInfo ? state.userInfo.graduation_year : null,
       majors: state.userInfo ? state.userInfo.majors : null,

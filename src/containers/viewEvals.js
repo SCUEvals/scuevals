@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
-import { setDepartmentsList, setQuartersList, setMajorsList } from '../actions';
+import { setQuartersList, setMajorsList } from '../actions';
 
 import Eval from '../components/eval';
 import API from '../services/api';
@@ -28,7 +28,6 @@ class ViewEvals extends Component {
   componentWillMount() {
     let client = new API();
     client.get('/' + this.props.type + '/' + this.props.match.params.id, info => this.setState({ info, orderedInfo: info }));
-    if (!this.props.departmentsList) client.get('/departments', departmentsList => this.props.setDepartmentsList(departmentsList));
     if (!this.props.quartersList) client.get('/quarters', quartersList => this.props.setQuartersList(quartersList));
     if (!this.props.majorsList) client.get('/majors', majorsList => this.props.setMajorsList(majorsList));
   }
@@ -192,4 +191,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { setDepartmentsList, setQuartersList, setMajorsList })(ViewEvals);
+export default connect(mapStateToProps, { setQuartersList, setMajorsList })(ViewEvals);
