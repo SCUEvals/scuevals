@@ -36,25 +36,64 @@ class SearchContent extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.departmentsList !== prevProps.departmentsList && this.props.searchResults) {
+        let sortedSearchResults = JSON.parse(JSON.stringify(this.props.searchResults)); //make deep copy, state immutable
+        this.sortResponseData(sortedSearchResults);
+        this.props.setSearchResults(sortedSearchResults);
+        $('#searchBarResults').hide(); //hide results dropdown when submitting until new input entered after
+        this.forceUpdate(); //passes shouldComponentUpdate, ensures that new state read by component
+    }
+  }
+
   sortResponseData(responseData) {
+    const { departmentsList } = this.props;
     responseData.professors.sort((a, b) => {
       return a.last_name > b.last_name ? 1 : a.last_name < b.last_name ? -1 : 0;
     });
-    responseData.courses.sort((a, b) => {
-    if (a.department == b.department) {
-      //nums can have letters in them too (ex. 12L), so parse integers and compare
-      let parsedANum = parseInt(a.number, 10);
-      let parsedBNum = parseInt(b.number, 10);
-      //if integers same, check for letters to decide
-      if (parsedANum == parsedBNum) return a.number > b.number ? 1 : a.number < b.number ? -1 : 0;
-      return parsedANum > parsedBNum ? 1 : parsedANum < parsedBNum ? -1 : 0;
-    }
-    else return a.department > b.department ? 1 : a.department < b.department ? -1 : 0;
+
+    if (departmentsList) responseData.courses.sort((a, b) => {
+      if (a.department_id == b.department_id) {
+        //nums can have letters in them too (ex. 12L), so parse integers and compare
+        let parsedANum = parseInt(a.number, 10);
+        let parsedBNum = parseInt(b.number, 10);
+        //if integers same, check for letters to decide
+        if (parsedANum == parsedBNum) return a.number > b.number ? 1 : a.number < b.number ? -1 : 0;
+        return parsedANum > parsedBNum ? 1 : parsedANum < parsedBNum ? -1 : 0;
+      }
+      else return departmentsList[a.department_id].abbr > departmentsList[b.department_id].abbr ? 1 : departmentsList[a.department_id].abbr < departmentsList[b.department_id].abbr ? -1 : 0;
     });
   }
 
+  sortCourseTitles(a, b, order, departmentsList) {
+    if (departmentsList) {
+      if (order=='asc') {
+        if (a.department_id == b.department_id) {
+          //nums can have letters in them too (ex. 12L), so parse integers and compare
+          let parsedANum = parseInt(a.number, 10);
+          let parsedBNum = parseInt(b.number, 10);
+          //if integers same, check for letters to decide
+          if (parsedANum == parsedBNum) return a.number > b.number ? 1 : a.number < b.number ? -1 : 0;
+          return parsedANum > parsedBNum ? 1 : parsedANum < parsedBNum ? -1 : 0;
+        }
+        else return departmentsList[a.department_id].abbr > departmentsList[b.department_id].abbr ? 1 : departmentsList[a.department_id].abbr < departmentsList[b.department_id].abbr ? -1 : 0;
+      }
+      else {
+        if (a.department_id == b.department_id) {
+          //nums can have letters in them too (ex. 12L), so parse integers and compare
+          let parsedANum = parseInt(a.number, 10);
+          let parsedBNum = parseInt(b.number, 10);
+          //if integers same, check for letters to decide
+          if (parsedANum == parsedBNum) return a.number > b.number ? -1 : a.number < b.number ? 1 : 0;
+          return parsedANum > parsedBNum ? -1 : parsedANum < parsedBNum ? 1 : 0;
+        }
+        else return departmentsList[a.department_id].abbr > departmentsList[b.department_id].abbr ? -1 : departmentsList[a.department_id].abbr < departmentsList[b.department_id].abbr ? 1 : 0;
+      }
+    }
+  }
+
   render() {
-    const { searchResults } = this.props;
+    const { searchResults, departmentsList } = this.props;
     $('#searchBarResults').hide();
 
     if (searchResults && !searchResults.loading) {
@@ -74,12 +113,12 @@ class SearchContent extends Component {
             </div>
             : ''
           }
-          {searchResults.courses.length > 0 ?
+          {searchResults.courses.length > 0  && departmentsList ?
             <div>
               <h4>Courses</h4>
               <BootstrapTable withoutTabIndex version='4' data={searchResults.courses} striped={true} hover={true}>
-                <TableHeaderColumn dataFormat={courseNumberFormatter} dataField="number" dataSort={true} dataAlign="center">Course</TableHeaderColumn>
-                <TableHeaderColumn dataFormat={courseTitleFormatter} dataField="title" isKey={true} dataSort={true} dataAlign="center">Title</TableHeaderColumn>
+                <TableHeaderColumn dataFormat={(cell, row) => courseNumberFormatter(cell, row, departmentsList)} dataField="number" dataSort sortFunc={(a, b, order) => this.sortCourseTitles(a, b, order, departmentsList) } dataAlign="center">Course</TableHeaderColumn>
+                <TableHeaderColumn dataFormat={courseTitleFormatter} dataField="title" isKey={true} dataSort sortFunc={ this.revertSortFunc } dataAlign="center">Title</TableHeaderColumn>
               </BootstrapTable>
             </div>
             : ''
@@ -107,8 +146,8 @@ function nameFormatter(cell, row) {
   return <Link to={`/professors/${row.id}`}>{`${row.last_name}, ${row.first_name}`}</Link>;
 }
 
-function courseNumberFormatter(cell, row) {
-  return  <Link to={`/courses/${row.id}`}>{`${row.department} ${row.number}`}</Link>;
+function courseNumberFormatter(cell, row, departmentsList) {
+  return  <Link to={`/courses/${row.id}`}>{departmentsList[row.department_id].abbr} {row.number}</Link>;
 }
 
 function courseTitleFormatter(cell, row) {
@@ -117,7 +156,8 @@ function courseTitleFormatter(cell, row) {
 
 function mapStateToProps(state) {
   return {
-    searchResults: state.searchResults
+    searchResults: state.searchResults,
+    departmentsList: state.departmentsList
   };
 }
 
