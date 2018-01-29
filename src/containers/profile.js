@@ -57,9 +57,7 @@ class Profile extends Component {
     const { meta: {submitFailed, error} } = field;
     let options = [];
     const currentYear = new Date().getFullYear();
-    for (let i = currentYear; i < currentYear + 6; i++) {
-      options.push({value: i, label: i});
-    }
+    for (let i = currentYear; i < currentYear + 6; i++) options.push({value: i, label: i});
 
     return (
       <Select

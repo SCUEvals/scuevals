@@ -104,7 +104,7 @@ class PostSearch extends Component {
             if (newProfessor != input.value) populateFields(newProfessor);
           }}
           placeholder="Select your professor"
-          onOpen={() => postSearchForm.style.marginBottom='108px'}
+          onOpen={() => postSearchForm.style.marginBottom='115px'}
           onClose={() => postSearchForm.style.marginBottom=''}
         />
       </div>

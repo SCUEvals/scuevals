@@ -238,8 +238,16 @@ label:not(:first-child) input[type='radio'] {
     top: 3px;
   }
 
-  &-menu-outer:hover {
-    color: $SCUdarkred;
+  &-menu-outer {
+    max-height: none;
+
+    &:hover {
+      color: $SCUdarkred;
+    }
+
+    .Select-menu {
+      max-height: 205px;
+    }
   }
 }
 

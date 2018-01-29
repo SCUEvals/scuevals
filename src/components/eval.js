@@ -150,7 +150,7 @@ class Eval extends Component {
         <div styleName='evalContent'>
           <div styleName='evalInfo' className='row'>
             <div className='col-12 col-sm-6'>
-              {quartersList ? quartersList[evaluation.quarter_id].name + ' ' + quartersList[evaluation.quarter_id].year : ''}
+              {quartersList ? quartersList.object[evaluation.quarter_id].name + ' ' + quartersList.object[evaluation.quarter_id].year : ''}
             </div>
             <div className='col-12 col-sm-6'>
               {evaluation.course ?
