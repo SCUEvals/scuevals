@@ -20,7 +20,7 @@ class PostSearch extends Component {
       localQuartersList: props.quartersList ? props.quartersList.array : null,
       localCoursesList: props.coursesList && props.coursesList.departmentsListLoaded ? props.coursesList.array : null,
       localProfessorsList: props.professorsList ? props.professorsList.array : null,
-      selectionOrder: []
+      selectionOrder: [] //keep track of order of selected fields to behave appropriately (clear/repopulate proper fields)
     };
   }
 
@@ -134,7 +134,7 @@ class PostSearch extends Component {
     }
     let client = new API();
     if (selectionOrder.includes(currentField)) {
-      for (let i = selectionOrder.length - 1; i > 0; i--) { //clear values .//if at index 0, do nothing, so only loop while i > 0
+      for (let i = selectionOrder.length - 1; i > 0; i--) { //clear values ahead of currentField. If at index 0, do nothing, so only loop while i > 0
         if (selectionOrder[i] == currentField) break;
         storeWithMiddleware.dispatch(change('postSearch', selectionOrder[i], ''));
         switch(selectionOrder[i]) {
@@ -152,6 +152,7 @@ class PostSearch extends Component {
       }
       if (!quarter_id && !course_id && !professor_id) {
         this.setState({localQuartersList: quartersList.array, localCoursesList: coursesList.array, localProfessorsList: professorsList.array});
+        selectionOrder.splice(0, selectionOrder.length); //clear array (can't reassign array = [], state is immutable)
         return;
       }
       if (!quarter_id && currentField != 'quarter' && (course_id || professor_id)) this.getField('quarter', client, quarter_id, course_id, professor_id);
@@ -160,17 +161,9 @@ class PostSearch extends Component {
     }
     else {
       selectionOrder.push(currentField);
-      if (!newValue && !selectionOrder.includes(field1) && !selectionOrder.includes(field2)) { //if nothing selected, show full lists of each (stored in Redux)
-        this.setState({localQuartersList: quartersList.array, localCoursesList: coursesList.array, localProfessorsList: professorsList.array});
-      }
-      else  {
-        if (!selectionOrder.includes(field1)) {
-          this.getField(field1, client, quarter_id, course_id, professor_id, departmentsList);
-        }
-        if (!selectionOrder.includes(field2)) {
-          this.getField(field2, client, quarter_id, course_id, professor_id, departmentsList);
-        }
-      }
+      //in large arrays, multiple includes is inefficient, but for clean code and since array will only ever be max size 3, keeping it for simplicity
+      if (!selectionOrder.includes(field1)) this.getField(field1, client, quarter_id, course_id, professor_id, departmentsList);
+      if (!selectionOrder.includes(field2)) this.getField(field2, client, quarter_id, course_id, professor_id, departmentsList);
     }
   }
 
