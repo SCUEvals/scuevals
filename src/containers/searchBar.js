@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
-import { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } from '../actions';
+import { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList } from '../actions';
 import { debounce } from 'lodash';
 import { Link } from 'react-router-dom';
 
@@ -29,8 +29,12 @@ class SearchBar extends Component {
       let client = new API();
       client.get('/courses', responseData =>this.props.setCoursesList(responseData, this.props.departmentsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
     }
+    if (!this.props.majorsList) {
+      let client = new API();
+      client.get('/majors', responseData =>this.props.setMajorsList(responseData)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+    }
   }
-  
+
   componentDidUpdate(prevProps) { //if coursesList fetched before departmentsList, then need to retroactively search for department name from id and sort
     if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList)
       this.props.setCoursesList(JSON.parse(JSON.stringify(this.props.coursesList.array)), this.props.departmentsList); //make deep copy of current, state immutable
@@ -230,11 +234,12 @@ const mapStateToProps = state => {
      userInfo: state.userInfo,
      searchResults: state.searchResults,
      departmentsList: state.departmentsList,
-     coursesList: state.coursesList
+     coursesList: state.coursesList,
+     majorsList: state.majorsList
    }
 }
 
 export default reduxForm({
   validate,
   form: 'searchBar'
-})(connect(mapStateToProps, { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList })(SearchBar));
+})(connect(mapStateToProps, { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList })(SearchBar));

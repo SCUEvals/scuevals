@@ -85,7 +85,7 @@ class PostSearch extends Component {
   }
 
   renderProfessors(field) {
-    const { input, localProfessorsList, populateFields } = field;
+    const { input, localProfessorsList, populateFields, postSearchForm } = field;
     const { meta: {submitFailed, error} } = field;
     return (
       <div>
@@ -104,6 +104,8 @@ class PostSearch extends Component {
             if (newProfessor != input.value) populateFields(newProfessor);
           }}
           placeholder="Select your professor"
+          onOpen={() => postSearchForm.style.marginBottom='108px'}
+          onClose={() => postSearchForm.style.marginBottom=''}
         />
       </div>
     );
@@ -199,7 +201,7 @@ class PostSearch extends Component {
     const { handleSubmit, quartersList, coursesList, professorsList, setQuartersList, quarter } = this.props;
     const { localQuartersList, localCoursesList, localProfessorsList } = this.state;
     return (
-      <form className='content' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+      <form ref={node => this.postSearchForm = node} className='content' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
           name='quarter' //responsible for object's key name for values
           component={this.renderQuarters}
@@ -219,6 +221,7 @@ class PostSearch extends Component {
           component={this.renderProfessors}
           localProfessorsList={localProfessorsList}
           populateFields={newValue => this.populateFields('professor', 'quarter', 'course', newValue)}
+          postSearchForm={this.postSearchForm}
         />
 
         <button type="submit" className="btn">Continue</button>
