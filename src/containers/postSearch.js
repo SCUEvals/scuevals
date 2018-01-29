@@ -52,9 +52,7 @@ class PostSearch extends Component {
           isLoading={!localQuartersList || localQuartersList.length == 0}
           onChange={newQuarter => {
             input.onChange(newQuarter);
-            if (newQuarter != input.value) {
-              populateFields(newQuarter);
-            }
+            if (newQuarter != input.value) populateFields(newQuarter);
           }}
           placeholder="Select your quarter"
         />
@@ -65,7 +63,6 @@ class PostSearch extends Component {
   renderCourses(field) {
     const { input, localCoursesList, populateFields } = field;
     const { meta: {submitFailed, error} } = field;
-    console.log('localCoursesList:', localCoursesList);
     return (
       <div>
         <h4>{!localCoursesList || localCoursesList.length == 0 ? 'Loading courses...' : 'Choose course'}</h4>
@@ -79,9 +76,7 @@ class PostSearch extends Component {
           isLoading={!localCoursesList || localCoursesList.length == 0}
           onChange={newCourse => {
             input.onChange(newCourse);
-            if (newCourse != input.value) {
-              populateFields(newCourse);
-            }
+            if (newCourse != input.value) populateFields(newCourse);
           }}
           placeholder="Select your course"
         />
@@ -106,9 +101,7 @@ class PostSearch extends Component {
           isLoading={!localProfessorsList || localProfessorsList.length == 0}
           onChange={newProfessor => {
             input.onChange(newProfessor);
-            if (newProfessor != input.value) {
-              populateFields(newProfessor);
-            }
+            if (newProfessor != input.value) populateFields(newProfessor);
           }}
           placeholder="Select your professor"
         />
@@ -138,37 +131,30 @@ class PostSearch extends Component {
         break;
     }
     let client = new API();
-    console.log('selectoinOrder:', selectionOrder);
-    console.log('currentField:', currentField);
     if (selectionOrder.includes(currentField)) {
       for (let i = selectionOrder.length - 1; i > 0; i--) { //clear values .//if at index 0, do nothing, so only loop while i > 0
         if (selectionOrder[i] == currentField) break;
         storeWithMiddleware.dispatch(change('postSearch', selectionOrder[i], ''));
-        console.log('selectionOrder[i]', selectionOrder[i]);
-        // switch(selectionOrder[i]) {
-        //   case 'quarter':
-        //     quarter_id: null;
-        //     break;
-        //   case 'course':
-        //     course_id: null;
-        //     break;
-        //   case 'professor':
-        //     professor_id: null;
-        //     break;
-        // }
+        switch(selectionOrder[i]) {
+          case 'quarter':
+            quarter_id = null;
+            break;
+          case 'course':
+            course_id = null;
+            break;
+          case 'professor':
+            professor_id = null;
+            break;
+        }
         selectionOrder.pop();
       }
-      console.log(quarter_id, course_id, professor_id);
-      // if (quarter_id && course_id && professor_id) return;
-      // if (!quarter_id && !course_id && !professor_id)this.setState({localQuartersList: quartersList.array, localCoursesList: coursesList.array, localProfessorsList: professorsList.array});
+      if (!quarter_id && !course_id && !professor_id) {
+        this.setState({localQuartersList: quartersList.array, localCoursesList: coursesList.array, localProfessorsList: professorsList.array});
+        return;
+      }
       if (!quarter_id && currentField != 'quarter' && (course_id || professor_id)) this.getField('quarter', client, quarter_id, course_id, professor_id);
-      else this.setState({localQuartersList: quartersList.array});
-
       if (!course_id && currentField != 'course' && (quarter_id || professor_id)) this.getField('course', client, quarter_id, course_id, professor_id, departmentsList);
-      else this.setState({localCoursesList: coursesList.array});
-
       if (!professor_id && currentField != 'professor' && (quarter_id || course_id)) this.getField('professor', client, quarter_id, course_id, professor_id);
-      else this.setState({localProfessorsList: professorsList.array});
     }
     else {
       selectionOrder.push(currentField);
