@@ -153,9 +153,7 @@ class Profile extends Component {
           <Field
             name='majors'
             component={this.renderMajors}
-            majorsList={majorsList ? Object.values(majorsList).sort((a, b) => {
-              return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
-            }) : null}
+            majorsList={majorsList ? majorsList.array : null}
           />
           <h5>Expected Graduation Year</h5>
           <Field

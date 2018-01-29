@@ -75,10 +75,9 @@ class Eval extends Component {
     let upVote, downVote = null;
     let majorsString = '';
     if (majorsList) {
-       for (let i of evaluation.author.majors) majorsString += majorsList[i].name + ', ';
+       for (let i of evaluation.author.majors) majorsString += majorsList.object[i].name + ', ';
        if (majorsString) majorsString = majorsString.substring(0, majorsString.length - 2); //cut off last comma and space
     }
-    console.log('evaluation:', evaluation);
     return (
       <div styleName='eval'>
         <div styleName='vote'>

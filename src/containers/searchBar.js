@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
-import { setSearchResults, setDepartmentsList } from '../actions';
+import { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } from '../actions';
 import { debounce } from 'lodash';
 import { Link } from 'react-router-dom';
 
@@ -17,6 +17,23 @@ class SearchBar extends Component {
       let client = new API();
       client.get('/departments', departmentsList => this.props.setDepartmentsList(departmentsList));
     }
+    if (!this.props.professorsList) {
+      let client = new API();
+      client.get('/professors', professorsList => this.props.setProfessorsList(professorsList));
+    }
+    if (!this.props.quartersList) {
+      let client = new API();
+      client.get('/quarters', responseData => this.props.setQuartersList(responseData));
+    }
+    if (!this.props.coursesList) {
+      let client = new API();
+      client.get('/courses', responseData =>this.props.setCoursesList(responseData, this.props.departmentsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+    }
+  }
+  
+  componentDidUpdate(prevProps) { //if coursesList fetched before departmentsList, then need to retroactively search for department name from id and sort
+    if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList)
+      this.props.setCoursesList(JSON.parse(JSON.stringify(this.props.coursesList.array)), this.props.departmentsList); //make deep copy of current, state immutable
   }
 
   getResponse(searchVal, setSearchResults) { //same as debouncedGetResponse but without delay
@@ -212,11 +229,12 @@ const mapStateToProps = state => {
    return {
      userInfo: state.userInfo,
      searchResults: state.searchResults,
-     departmentsList: state.departmentsList
+     departmentsList: state.departmentsList,
+     coursesList: state.coursesList
    }
 }
 
 export default reduxForm({
   validate,
   form: 'searchBar'
-})(connect(mapStateToProps, { setSearchResults, setDepartmentsList })(SearchBar));
+})(connect(mapStateToProps, { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList })(SearchBar));

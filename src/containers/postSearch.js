@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import { Field, reduxForm, change, formValueSelector } from 'redux-form';
 import Select from 'react-select';
 import { connect } from 'react-redux';
-
 import PropTypes from 'prop-types';
 
-import { setQuartersList } from '../actions';
 import { storeWithMiddleware } from '../index';
 import API from '../services/api';
 
@@ -19,50 +17,43 @@ class PostSearch extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      coursesList: null,
-      professorsList: null
+      localQuartersList: props.quartersList ? props.quartersList.array : null,
+      localCoursesList: props.coursesList && props.coursesList.departmentsListLoaded ? props.coursesList.array : null,
+      localProfessorsList: props.professorsList ? props.professorsList.array : null,
+      selectionOrder: []
     };
   }
 
-  componentWillMount() {
-    if (!this.props.quartersList) {
-      let client = new API();
-      client.get('/quarters', responseData => {
-        this.props.setQuartersList(responseData);
-      });
-    }
-  };
+  componentDidUpdate() {
+    const { quartersList, coursesList, professorsList } = this.props;
+    const { localQuartersList, localCoursesList, localProfessorsList } = this.state;
+    if (!localQuartersList && quartersList) this.setState({localQuartersList: quartersList.array});
+    if (!localCoursesList && coursesList && coursesList.departmentsListLoaded) this.setState({localCoursesList: coursesList.array});
+    if (!localProfessorsList && professorsList) this.setState({localProfessorsList: professorsList.array});
+  }
 
   onSubmit(values) {
     this.props.history.push('/post/' + values.quarter + '/' + values.course + '/' + values.professor);
   }
 
   renderQuarters(field) {
-    const { input, quartersList, setCoursesList, checkIfCoursesListExists } = field;
+    const { input, localQuartersList, populateFields } = field;
     const { meta: {submitFailed, error} } = field;
     return (
       <div>
-        <h4>{quartersList ? 'Choose quarter' : 'Loading quarters...'}</h4>
+        <h4>{!localQuartersList || localQuartersList.length == 0 ? 'Loading quarters...' : 'Choose quarter'}</h4>
         <Select
+          disabled={!localQuartersList || localQuartersList.length == 0}
           value={input.value}
           valueKey={'id'}
           className={error && submitFailed ? 'error' : ''}
           simpleValue
-          options={quartersList ? Object.values(quartersList) : null}
-          isLoading={quartersList ? false : true}
+          options={localQuartersList}
+          isLoading={!localQuartersList || localQuartersList.length == 0}
           onChange={newQuarter => {
             input.onChange(newQuarter);
             if (newQuarter != input.value) {
-              storeWithMiddleware.dispatch(change('postSearch', 'course', ''));
-              storeWithMiddleware.dispatch(change('postSearch', 'professor', ''));
-
-              //check if instance of coursesList already exists, if not then GET
-              if (newQuarter && !checkIfCoursesListExists(newQuarter)) {
-                let client = new API();
-                client.get('/courses', coursesList => {
-                  setCoursesList(coursesList, newQuarter);
-                }, {quarter_id: newQuarter});
-              }
+              populateFields(newQuarter);
             }
           }}
           placeholder="Select your quarter"
@@ -72,38 +63,24 @@ class PostSearch extends Component {
   }
 
   renderCourses(field) {
-    const { input, coursesList, quarterSelected, setProfessorsList, professorsList, checkIfProfessorsListExists } = field;
+    const { input, localCoursesList, populateFields } = field;
     const { meta: {submitFailed, error} } = field;
+    console.log('localCoursesList:', localCoursesList);
     return (
       <div>
-        <h4>{quarterSelected && !coursesList ? 'Loading courses...' : 'Choose course'}</h4>
+        <h4>{!localCoursesList || localCoursesList.length == 0 ? 'Loading courses...' : 'Choose course'}</h4>
         <Select
-          disabled={!quarterSelected || !coursesList}
+          disabled={!localCoursesList || localCoursesList.length == 0}
           value={input.value}
           valueKey={'id'}
           className={error && submitFailed ? 'error' : ''}
           simpleValue
-          options={coursesList}
-          isLoading={coursesList || !quarterSelected ? false : true}
+          options={localCoursesList}
+          isLoading={!localCoursesList || localCoursesList.length == 0}
           onChange={newCourse => {
             input.onChange(newCourse);
             if (newCourse != input.value) {
-              storeWithMiddleware.dispatch(change('postSearch', 'professor', ''));
-
-              //Check if instance of professorsList already exists, if not then GET
-              if (newCourse && !checkIfProfessorsListExists(newCourse)) {
-                let client = new API();
-                client.get('/professors', newProfessorsList => {
-                  newProfessorsList.map(professor => {
-                    professor.label = professor.last_name + ', ' + professor.first_name;
-                    //optionally can delete unusued parts of obj, but not necessary
-                  });
-                  newProfessorsList.sort((a, b) => {
-                    return a.label > b.label ? 1 : a.label <   b.label ? -1 : 0;
-                  })
-                  setProfessorsList(newProfessorsList, newCourse);
-                }, {course_id: newCourse});
-              }
+              populateFields(newCourse);
             }
           }}
           placeholder="Select your course"
@@ -113,119 +90,151 @@ class PostSearch extends Component {
   }
 
   renderProfessors(field) {
-    const { input, professorsList, courseSelected } = field;
+    const { input, localProfessorsList, populateFields } = field;
     const { meta: {submitFailed, error} } = field;
     return (
       <div>
-        <h4>{courseSelected && !professorsList ? 'Loading professors...' : 'Choose professor'}</h4>
+        <h4>{!localProfessorsList || localProfessorsList.length == 0 ? 'Loading professors...' : 'Choose professor'}</h4>
         <Select
-          disabled={!courseSelected || !professorsList}
+          disabled={!localProfessorsList || localProfessorsList.length == 0}
           value={input.value}
           valueKey={'id'}
+          labelKey={'full_name'}
           className={error && submitFailed ? 'error' : ''}
           simpleValue
-          options={professorsList}
-          isLoading={professorsList || !courseSelected ? false : true}
-          onChange={newClass => input.onChange(newClass)}
+          options={localProfessorsList}
+          isLoading={!localProfessorsList || localProfessorsList.length == 0}
+          onChange={newProfessor => {
+            input.onChange(newProfessor);
+            if (newProfessor != input.value) {
+              populateFields(newProfessor);
+            }
+          }}
           placeholder="Select your professor"
         />
       </div>
     );
   }
 
-  checkIfProfessorsListExists(newCourse) {
-    const { setQuartersList, quartersList, quarter } = this.props;
-    const { coursesList, professorsList } = this.state;
-    let quarterIndex, courseIndex;
-    if (quarter && newCourse) {
-      quarterIndex = quartersList.findIndex(x => x.id === quarter);
-      if (quarterIndex !== -1) {
-          courseIndex = coursesList.findIndex(x => x.id === newCourse);
-          if (courseIndex !== -1) {
-            this.setState({professorsList: quartersList[quarterIndex].courses[courseIndex].professors});
-            if (quartersList[quarterIndex].courses[courseIndex].professors)
-              return true;
-            return false;
-          }
-        } else {
-          this.setState({professorsList: null});
-          return false;
+  populateFields(currentField, field1, field2, newValue) {
+    const { quartersList, coursesList, professorsList, departmentsList } = this.props;
+    const { selectionOrder } = this.state;
+    let quarter_id, course_id, professor_id; //= currently selected values
+    switch (currentField) {
+      case 'quarter':
+        quarter_id = newValue;
+        course_id = this.props.course;
+        professor_id = this.props.professor;
+        break;
+      case 'course':
+        quarter_id = this.props.quarter;
+        course_id = newValue;
+        professor_id = this.props.professor;
+        break;
+      case 'professor':
+        quarter_id = this.props.quarter;
+        course_id = this.props.course;
+        professor_id = newValue;
+        break;
+    }
+    let client = new API();
+    console.log('selectoinOrder:', selectionOrder);
+    console.log('currentField:', currentField);
+    if (selectionOrder.includes(currentField)) {
+      for (let i = selectionOrder.length - 1; i > 0; i--) { //clear values .//if at index 0, do nothing, so only loop while i > 0
+        if (selectionOrder[i] == currentField) break;
+        storeWithMiddleware.dispatch(change('postSearch', selectionOrder[i], ''));
+        console.log('selectionOrder[i]', selectionOrder[i]);
+        // switch(selectionOrder[i]) {
+        //   case 'quarter':
+        //     quarter_id: null;
+        //     break;
+        //   case 'course':
+        //     course_id: null;
+        //     break;
+        //   case 'professor':
+        //     professor_id: null;
+        //     break;
+        // }
+        selectionOrder.pop();
+      }
+      console.log(quarter_id, course_id, professor_id);
+      // if (quarter_id && course_id && professor_id) return;
+      // if (!quarter_id && !course_id && !professor_id)this.setState({localQuartersList: quartersList.array, localCoursesList: coursesList.array, localProfessorsList: professorsList.array});
+      if (!quarter_id && currentField != 'quarter' && (course_id || professor_id)) this.getField('quarter', client, quarter_id, course_id, professor_id);
+      else this.setState({localQuartersList: quartersList.array});
+
+      if (!course_id && currentField != 'course' && (quarter_id || professor_id)) this.getField('course', client, quarter_id, course_id, professor_id, departmentsList);
+      else this.setState({localCoursesList: coursesList.array});
+
+      if (!professor_id && currentField != 'professor' && (quarter_id || course_id)) this.getField('professor', client, quarter_id, course_id, professor_id);
+      else this.setState({localProfessorsList: professorsList.array});
+    }
+    else {
+      selectionOrder.push(currentField);
+      if (!newValue && !selectionOrder.includes(field1) && !selectionOrder.includes(field2)) { //if nothing selected, show full lists of each (stored in Redux)
+        this.setState({localQuartersList: quartersList.array, localCoursesList: coursesList.array, localProfessorsList: professorsList.array});
+      }
+      else  {
+        if (!selectionOrder.includes(field1)) {
+          this.getField(field1, client, quarter_id, course_id, professor_id, departmentsList);
         }
-      } else {
-        this.setState({professorsList: null});
-        return false;
-      };
+        if (!selectionOrder.includes(field2)) {
+          this.getField(field2, client, quarter_id, course_id, professor_id, departmentsList);
+        }
+      }
+    }
   }
 
-  checkIfCoursesListExists(newQuarter) {
-    const { setQuartersList, quartersList } = this.props;
-    const { coursesList } = this.state;
-    let quarterIndex;
-    if (newQuarter) {
-      quarterIndex = quartersList.findIndex(x => x.id === newQuarter);
-      if (quarterIndex !== -1) {
-          this.setState({coursesList: quartersList[quarterIndex].courses});
-          if (quartersList[quarterIndex].courses)
-            return true;
-          return false;
-      } else {
-        this.setState({coursesList: null});
-        return false;
-      }
-    } else {
-      this.setState({coursesList: null});
-      return false;
+  getField(field, client, quarter_id, course_id, professor_id, departmentsList) {
+    switch (field) {
+      case 'quarter':
+        this.setState({localQuartersList: []}, () => client.get('/quarters', quarters => {
+          quarters.map(quarter => quarter.label = quarter.name + ' ' + quarter.year);
+          this.setState({localQuartersList: quarters});
+        }, {quarter_id, course_id, professor_id}));
+        break;
+      case 'course':
+        this.setState({localCoursesList: []}, () => client.get('/courses', courses => {
+          courses.map(course => course.label = departmentsList[course.department_id].abbr + ' ' + course.number + ': ' + course.title);
+          this.setState({localCoursesList: courses});
+        }, {quarter_id, course_id, professor_id}));
+        break;
+      case 'professor':
+        this.setState({localProfessorsList: []}, () => client.get('/professors', professors => {
+          professors.map(professor => professor.full_name = professor.last_name + ', ' + professor.first_name);
+          this.setState({localProfessorsList: professors});
+        }, {quarter_id, course_id, professor_id}));
+        break;
     }
   }
 
   render() {
-    const { handleSubmit, quartersList, setQuartersList, quarter } = this.props;
-    const { coursesList, professorsList } = this.state;
+    const { handleSubmit, quartersList, coursesList, professorsList, setQuartersList, quarter } = this.props;
+    const { localQuartersList, localCoursesList, localProfessorsList } = this.state;
     return (
       <form className='content' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
-          name="quarter" //responsible for object's key name for values
+          name='quarter' //responsible for object's key name for values
           component={this.renderQuarters}
-          checkIfCoursesListExists={newQuarter => this.checkIfCoursesListExists(newQuarter)}
-          quartersList={quartersList}
-          setCoursesList={(newCoursesList, newQuarter) => {
-            let quartersListCopy = JSON.parse(JSON.stringify(quartersList));
-            let quarterIndex = quartersListCopy.findIndex(x => x.id === newQuarter);
-            if (quarterIndex !== -1) {
-              quartersListCopy[quarterIndex].courses = newCoursesList; //*******
-              setQuartersList(quartersListCopy);
-              this.setState({coursesList: newCoursesList});
-            }
-          }}
+          localQuartersList={localQuartersList}
+          populateFields={newValue => this.populateFields('quarter', 'course', 'professor', newValue)}
         />
 
         <Field
-          name="course" //responsible for object's key name for values
+          name='course' //responsible for object's key name for values
           component={this.renderCourses}
-          checkIfProfessorsListExists={newCourse => this.checkIfProfessorsListExists(newCourse)}
-          coursesList={coursesList}
-          quarterSelected={this.props.quarter ? true : false}
-          professorsList={professorsList}
-          setProfessorsList={(professorsList, newCourse) => {
-            let quartersListCopy = JSON.parse(JSON.stringify(quartersList));
-            let quarterIndex = quartersListCopy.findIndex(x => x.id === quarter);
-            if (quarterIndex !== -1) {
-              let courseIndex = quartersListCopy[quarterIndex].courses.findIndex(x => x.id === newCourse);
-              if (courseIndex !== -1) {
-                quartersListCopy[quarterIndex].courses[courseIndex].professors = professorsList;
-                setQuartersList(quartersListCopy);
-                this.setState({professorsList});
-              }
-            }
-          }}
+          localCoursesList={localCoursesList}
+          populateFields={newValue => this.populateFields('course', 'quarter', 'professor', newValue)}
         />
 
         <Field
-          name="professor" //responsible for object's key name for values
+          name='professor' //responsible for object's key name for values
           component={this.renderProfessors}
-          professorsList={professorsList}
-          courseSelected={this.props.course ? true : false}
+          localProfessorsList={localProfessorsList}
+          populateFields={newValue => this.populateFields('professor', 'quarter', 'course', newValue)}
         />
+
         <button type="submit" className="btn">Continue</button>
       </form>
     );
@@ -252,12 +261,11 @@ const mapStateToProps = state => {
       quarter,
       course,
       professor,
-      quartersList: state.quartersList ?
-        Object.values(state.quartersList).sort((a, b) => { //convert object with ids as keys into array of objects, then sort alphabetically
-          return a.year > b.year ? 1 : a.year < b.year ? -1 : a.name == 'Winter' ? -1 : a.name == 'Fall' ? 1 : b.name == 'Fall' ? -1 : 1;
-        })
-      : null
-   }
+      quartersList: state.quartersList,
+      departmentsList: state.departmentsList,
+      coursesList: state.coursesList,
+      professorsList: state.professorsList
+  }
 }
 
-export default connect(mapStateToProps, { setQuartersList })(PostSearch);
+export default connect(mapStateToProps, null)(PostSearch);
