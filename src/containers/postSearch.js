@@ -17,9 +17,9 @@ class PostSearch extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      localQuartersList: props.quartersList ? props.quartersList.array : null,
-      localCoursesList: props.coursesList && props.coursesList.departmentsListLoaded ? props.coursesList.array : null,
-      localProfessorsList: props.professorsList ? props.professorsList.array : null,
+      localQuartersList: props.quartersList ? props.quartersList.array : undefined,
+      localCoursesList: props.coursesList && props.coursesList.departmentsListLoaded ? props.coursesList.array : undefined,
+      localProfessorsList: props.professorsList ? props.professorsList.array : undefined,
       selectionOrder: props.course ? ['course'] : props.professor ? ['professor'] : [] //keep track of order of selected fields to behave appropriately (clear/repopulate proper fields)
     };
   }
@@ -44,10 +44,10 @@ class PostSearch extends Component {
     const { quartersList, coursesList, professorsList, initialValues, departmentsList } = this.props;
     const { localQuartersList, localCoursesList, localProfessorsList } = this.state;
     const { id } = this.props.match.params;
-    if (!initialValues) {
-      if (!localQuartersList && quartersList) this.setState({localQuartersList: quartersList.array});
-      if (!localCoursesList && coursesList && coursesList.departmentsListLoaded) this.setState({localCoursesList: coursesList.array});
-      if (!localProfessorsList && professorsList) this.setState({localProfessorsList: professorsList.array});
+    if (!initialValues) { //if undefiend but NOT null (treated differently in this component)
+      if (localQuartersList === undefined && quartersList) this.setState({localQuartersList: quartersList.array});
+      if (localCoursesList === undefined && coursesList && coursesList.departmentsListLoaded) this.setState({localCoursesList: coursesList.array});
+      if (localProfessorsList === undefined && professorsList) this.setState({localProfessorsList: professorsList.array});
     }
     else if (initialValues.professor && !localCoursesList && professorsList && departmentsList) {
       let client = new API();
@@ -67,15 +67,15 @@ class PostSearch extends Component {
     const { meta: {submitFailed, error} } = field;
     return (
       <div>
-        <h4>{!localQuartersList || localQuartersList.length == 0 ? 'Loading quarters...' : 'Choose quarter'}</h4>
+        <h4>{!localQuartersList ? 'Loading quarters...' : 'Choose quarter'}</h4>
         <Select
-          disabled={!localQuartersList || localQuartersList.length == 0}
+          disabled={!localQuartersList}
           value={input.value}
           valueKey={'id'}
           className={error && submitFailed ? 'error' : ''}
           simpleValue
           options={localQuartersList}
-          isLoading={!localQuartersList || localQuartersList.length == 0}
+          isLoading={!localQuartersList}
           onChange={newQuarter => {
             input.onChange(newQuarter);
             if (newQuarter != input.value) populateFields(newQuarter);
@@ -91,15 +91,15 @@ class PostSearch extends Component {
     const { meta: {submitFailed, error} } = field;
     return (
       <div>
-        <h4>{!localCoursesList || localCoursesList.length == 0 ? 'Loading courses...' : 'Choose course'}</h4>
+        <h4>{!localCoursesList ? 'Loading courses...' : 'Choose course'}</h4>
         <Select
-          disabled={!localCoursesList || localCoursesList.length == 0}
+          disabled={!localCoursesList}
           value={input.value}
           valueKey={'id'}
           className={error && submitFailed ? 'error' : ''}
           simpleValue
           options={localCoursesList}
-          isLoading={!localCoursesList || localCoursesList.length == 0}
+          isLoading={!localCoursesList}
           onChange={newCourse => {
             input.onChange(newCourse);
             if (newCourse != input.value) populateFields(newCourse);
@@ -115,16 +115,16 @@ class PostSearch extends Component {
     const { meta: {submitFailed, error} } = field;
     return (
       <div>
-        <h4>{!localProfessorsList || localProfessorsList.length == 0 ? 'Loading professors...' : 'Choose professor'}</h4>
+        <h4>{!localProfessorsList ? 'Loading professors...' : 'Choose professor'}</h4>
         <Select
-          disabled={!localProfessorsList || localProfessorsList.length == 0}
+          disabled={!localProfessorsList}
           value={input.value}
           valueKey={'id'}
           labelKey={'full_name'}
           className={error && submitFailed ? 'error' : ''}
           simpleValue
           options={localProfessorsList}
-          isLoading={!localProfessorsList || localProfessorsList.length == 0}
+          isLoading={!localProfessorsList}
           onChange={newProfessor => {
             input.onChange(newProfessor);
             if (newProfessor != input.value) populateFields(newProfessor);
@@ -196,20 +196,38 @@ class PostSearch extends Component {
   getField(field, client, quarter_id, course_id, professor_id, departmentsList) {
     switch (field) {
       case 'quarter':
-        this.setState({localQuartersList: []}, () => client.get('/quarters', quarters => {
-          quarters.map(quarter => quarter.label = quarter.name + ' ' + quarter.year);
+        this.setState({localQuartersList: null}, () => client.get('/quarters', quarters => {
+          quarters.sort((a, b) => { //convert object with ids as keys into array of objects, then sort
+            return a.year > b.year ? 1 : a.year < b.year ? -1 : a.name == 'Winter' ? -1 : a.name == 'Fall' ? 1 : b.name == 'Fall' ? -1 : 1;
+          })
+          .map(quarter => quarter.label = quarter.name + ' ' + quarter.year);
+
           this.setState({localQuartersList: quarters});
         }, {quarter_id, course_id, professor_id}));
         break;
       case 'course':
-        this.setState({localCoursesList: []}, () => client.get('/courses', courses => {
-          courses.map(course => course.label = departmentsList[course.department_id].abbr + ' ' + course.number + ': ' + course.title);
+        this.setState({localCoursesList: null}, () => client.get('/courses', courses => {
+            courses.sort((a, b) => {
+              if (a.department_id == b.department_id) {
+                //nums can have letters in them too (ex. 12L), so parse integers and compare
+                let parsedANum = parseInt(a.number, 10);
+                let parsedBNum = parseInt(b.number, 10);
+                //if integers same, check for letters to decide
+                if (parsedANum == parsedBNum) return a.number > b.number ? 1 : a.number < b.number ? -1 : 0;
+                return parsedANum > parsedBNum ? 1 : parsedANum < parsedBNum ? -1 : 0;
+              }
+              else return departmentsList[a.department_id].abbr > departmentsList[b.department_id].abbr ? 1 : departmentsList[a.department_id].abbr < departmentsList[b.department_id].abbr ? -1 : 0;
+            }).map(course => course.label = departmentsList[course.department_id].abbr + ' ' + course.number + ': ' + course.title);
+
           this.setState({localCoursesList: courses});
         }, {quarter_id, course_id, professor_id}));
         break;
       case 'professor':
-        this.setState({localProfessorsList: []}, () => client.get('/professors', professors => {
+        this.setState({localProfessorsList: null}, () => client.get('/professors', professors => {
           professors.map(professor => professor.full_name = professor.last_name + ', ' + professor.first_name);
+          professors.sort((a, b) => { //must type professors.sort, not just .sort (else sorting doesn't work since full_name won't be recognized yet)
+            return a.full_name > b.full_name ? 1 : a.full_name < b.full_name ? -1 : 0;
+          });
           this.setState({localProfessorsList: professors});
         }, {quarter_id, course_id, professor_id}));
         break;
