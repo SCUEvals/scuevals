@@ -20,16 +20,42 @@ class PostSearch extends Component {
       localQuartersList: props.quartersList ? props.quartersList.array : null,
       localCoursesList: props.coursesList && props.coursesList.departmentsListLoaded ? props.coursesList.array : null,
       localProfessorsList: props.professorsList ? props.professorsList.array : null,
-      selectionOrder: [] //keep track of order of selected fields to behave appropriately (clear/repopulate proper fields)
+      selectionOrder: props.course ? ['course'] : props.professor ? ['professor'] : [] //keep track of order of selected fields to behave appropriately (clear/repopulate proper fields)
     };
   }
 
+  componentDidMount() {
+    const { id } = this.props.match.params;
+    const { departmentsList, initialValues, professorsList } = this.props;
+    let client = new API();
+    if (initialValues && initialValues.course) {
+      this.setState({selectionOrder: ['course']});
+      this.getField('quarter', client, null, id, null);
+      this.getField('professor', client, null, id, null);
+    } else if (initialValues && initialValues.professor && departmentsList) {
+      this.setState({selectionOrder: ['professor']});
+      this.getField('quarter', client, null, null, id);
+      this.getField('course', client, null, null, id, departmentsList);
+      this.setState({localProfessorsList: professorsList.array});
+    }
+  }
+
   componentDidUpdate() {
-    const { quartersList, coursesList, professorsList } = this.props;
+    const { quartersList, coursesList, professorsList, initialValues, departmentsList } = this.props;
     const { localQuartersList, localCoursesList, localProfessorsList } = this.state;
-    if (!localQuartersList && quartersList) this.setState({localQuartersList: quartersList.array});
-    if (!localCoursesList && coursesList && coursesList.departmentsListLoaded) this.setState({localCoursesList: coursesList.array});
-    if (!localProfessorsList && professorsList) this.setState({localProfessorsList: professorsList.array});
+    const { id } = this.props.match.params;
+    if (!initialValues) {
+      if (!localQuartersList && quartersList) this.setState({localQuartersList: quartersList.array});
+      if (!localCoursesList && coursesList && coursesList.departmentsListLoaded) this.setState({localCoursesList: coursesList.array});
+      if (!localProfessorsList && professorsList) this.setState({localProfessorsList: professorsList.array});
+    }
+    else if (initialValues.professor && !localCoursesList && professorsList && departmentsList) {
+      let client = new API();
+      this.setState({selectionOrder: ['professor']});
+      this.getField('quarter', client, null, null, id);
+      this.getField('course', client, null, null, id, departmentsList);
+      this.setState({localProfessorsList: professorsList.array});
+    }
   }
 
   onSubmit(values) {
@@ -152,7 +178,7 @@ class PostSearch extends Component {
       }
       if (!quarter_id && !course_id && !professor_id) {
         this.setState({localQuartersList: quartersList.array, localCoursesList: coursesList.array, localProfessorsList: professorsList.array});
-        selectionOrder.splice(0, selectionOrder.length); //clear array (can't reassign array = [], state is immutable)
+        this.setState({selectionOrder: []});
         return;
       }
       if (!quarter_id && currentField != 'quarter' && (course_id || professor_id)) this.getField('quarter', client, quarter_id, course_id, professor_id);
@@ -236,7 +262,7 @@ PostSearch = reduxForm({
   form: 'postSearch'
 })(PostSearch);
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   const selector = formValueSelector('postSearch'); // <-- same as form name
   const { quarter, course, professor } = selector(state, 'quarter', 'course', 'professor');
    return {
@@ -246,7 +272,12 @@ const mapStateToProps = state => {
       quartersList: state.quartersList,
       departmentsList: state.departmentsList,
       coursesList: state.coursesList,
-      professorsList: state.professorsList
+      professorsList: state.professorsList,
+      initialValues: ownProps.type === 'professors' ?
+        {professor: ownProps.match.params.id}
+      : ownProps.type === 'courses' ?
+        {course: ownProps.match.params.id}
+      : null
   }
 }
 

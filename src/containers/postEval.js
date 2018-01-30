@@ -181,7 +181,6 @@ class PostEval extends Component {
   render() {
     const { handleSubmit, submitting, userInfo } = this.props;
     const required = value => {};
-
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
         <div styleName='postGuidelines' className='row'>
@@ -214,7 +213,7 @@ class PostEval extends Component {
               </div>
             </div>
           </div>
-        </div>
+        </div>        
         <h3>Professor</h3>
         <h6>Attitude {infoTooltip(textOptions.attitude.info)}</h6>
         <Field name='attitude' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.attitude} component={this.renderSlider} validate={[required]} />

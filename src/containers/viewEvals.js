@@ -4,6 +4,7 @@ import Select from 'react-select';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import { setQuartersList, setMajorsList } from '../actions';
+import { Link } from 'react-router-dom';
 
 import Eval from '../components/eval';
 import API from '../services/api';
@@ -79,6 +80,9 @@ class ViewEvals extends Component {
             : 'Loading...'
           }
         </h2>
+        <Link className='btn' to={this.props.type === 'professors' ?
+          `/professors/${this.props.match.params.id}/post`
+          :`/courses/${this.props.match.params.id}/post`}>Quick Post</Link>
         <div className='row' styleName='scores'>
           <div styleName='avgScore'>
             <div styleName='scoreTitle'>Average</div>
@@ -169,14 +173,19 @@ class ViewEvals extends Component {
           placeholder="Sort"
         />
         <br/>
-        {info ? info.evaluations.map(evaluation => {
-          return <Eval  key={evaluation.id}
-                        majorsList={majorsList}
-                        quartersList={quartersList}
-                        departmentsList={departmentsList}
-                        evaluation={evaluation} openModal={() => this.setState({modalOpen: true})}
-                  />
-        }) : ''}
+        {info ?
+          info.evaluations.map(evaluation => {
+            return (
+              <Eval
+                key={evaluation.id}
+                majorsList={majorsList}
+                quartersList={quartersList}
+                departmentsList={departmentsList}
+                evaluation={evaluation} openModal={() => this.setState({modalOpen: true})}
+              />
+            );
+          })
+        : ''}
       </div>
     );
   }

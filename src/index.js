@@ -72,21 +72,23 @@ function renderDOM () {
     <Provider store={storeWithMiddleware}>
       <BrowserRouter>
         <GAListener>
-          <div id="push-footer" styleName='push-footer'>
+          <div id='push-footer' styleName='push-footer'>
             <Header />
             <div className='container'>
               <Switch>
-                <Route exact path="/search/:search" component={requireAuth(SearchContent)} />
-                <Route exact path="/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)" component={requireAuth(PostEval)} />
-                <Route exact path="/professors/:id(\d+)" component={requireAuth(ViewEvals, {type: "professors"})} />
-                <Route exact path="/courses/:id(\d+)" component={requireAuth(ViewEvals, {type: "courses"})} />
-                <Route exact path="/about" component={About} />
-                <Route exact path="/privacy" component={Privacy} />
-                <Route exact path="/profile/evals" component={requireAuth(ViewMyEvals)} />
-                <Route exact path="/profile" component={requireAuth(Profile)} />
-                <Route exact path="/post" component={requireAuth(PostSearch)} />
-                <Route exact path="/" component={requireAuth(Home)} />
-                <Redirect to="/" />
+                <Route exact path='/search/:search' component={requireAuth(SearchContent)} />
+                <Route exact path='/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)' component={requireAuth(PostEval)} />
+                <Route exact path='/professors/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'professors'})} />
+                <Route exact path='/courses/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'courses'})} />
+                <Route exact path='/professors/:id(\d+)' component={requireAuth(ViewEvals, {type: 'professors'})} />
+                <Route exact path='/courses/:id(\d+)' component={requireAuth(ViewEvals, {type: 'courses'})} />
+                <Route exact path='/about' component={About} />
+                <Route exact path='/privacy' component={Privacy} />
+                <Route exact path='/profile/evals' component={requireAuth(ViewMyEvals)} />
+                <Route exact path='/profile' component={requireAuth(Profile)} />
+                <Route exact path='/post' component={requireAuth(PostSearch)} />
+                <Route exact path='/' component={requireAuth(Home)} />
+                <Redirect to='/' />
               </Switch>
             </div>
           </div>
