@@ -49,7 +49,7 @@ class PostSearch extends Component {
       if (localCoursesList === undefined && coursesList && coursesList.departmentsListLoaded) this.setState({localCoursesList: coursesList.array});
       if (localProfessorsList === undefined && professorsList) this.setState({localProfessorsList: professorsList.array});
     }
-    else if (initialValues.professor && !localCoursesList && professorsList && departmentsList) {
+    else if (initialValues.professor && localCoursesList === undefined && professorsList && departmentsList) {
       let client = new API();
       this.setState({selectionOrder: ['professor']});
       this.getField('quarter', client, null, null, id);
@@ -201,7 +201,6 @@ class PostSearch extends Component {
             return a.year > b.year ? 1 : a.year < b.year ? -1 : a.name == 'Winter' ? -1 : a.name == 'Fall' ? 1 : b.name == 'Fall' ? -1 : 1;
           })
           .map(quarter => quarter.label = quarter.name + ' ' + quarter.year);
-
           this.setState({localQuartersList: quarters});
         }, {quarter_id, course_id, professor_id}));
         break;
