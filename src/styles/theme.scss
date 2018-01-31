@@ -19,9 +19,19 @@ $score1Color: red;
 $score2Color: orange;
 $score3Color: #5ebd2d;
 $score4Color: green;
-$sm: 767px;
-$xs: 575px;
+//bootstrap width breakpoints
+$xl: 1200px; //min
+$lg: 992px; //min
+$md: 768px; //min
+$sm: 576px; //min
+$xs: 575px; //max
 $textShadow: -1px 0 $focusColor, 0 1px $focusColor, 1px 0 $focusColor, 0 -1px $focusColor;
+//breakpoints for avgScores (should mimick react-slick slides shown on breakpoints in eval.js)
+$xlBP: 9;
+$lgBP: 7;
+$mdBP: 5;
+$smBP: 3;
+$xsBP: 2;
 
 @mixin fixedCenter {
   position: fixed;

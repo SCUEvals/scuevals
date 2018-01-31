@@ -86,6 +86,25 @@ $voteWidth: 35px;
     }
   }
 
+  .scoreBlock {
+    padding: 5px 0;
+
+    .scoreTitle {
+      margin-bottom: 5px;
+      font-size: 15px;
+    }
+  }
+
+  :global(.unslicked) {
+    border-bottom: 1px solid $backgroundColor;
+
+    .scoreBlock {
+      display: inline-block;
+      width: percentage(1 / $xlBP);
+      background: $sandColor;
+    }
+  }
+
   :global(.slick-list) {
     height: 74px;
     background: $sandColor;
@@ -119,15 +138,6 @@ $voteWidth: 35px;
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-  }
-
-  .scoreBlock {
-    padding: 5px 0;
-
-    .scoreTitle {
-      margin-bottom: 5px;
-      font-size: 15px;
     }
   }
 

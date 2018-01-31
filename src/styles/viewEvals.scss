@@ -15,20 +15,24 @@
   justify-content: center;
 
   .avgScore {
-    @media (max-width: 575px) {
-      width: 100%;
+    @media (max-width: $xs) {
+      width: (100% / $xsBP);
     }
 
-    @media (min-width: 576px) and (max-width: 767px) {
-      width: (100% / 3);
+    @media (min-width: $sm) {
+      width: (100% / $smBP);
     }
 
-    @media (min-width: 768px) and (max-width: 1199px) {
-      width: (100% / 5);
+    @media (min-width: $md) {
+      width: (100% / $mdBP);
     }
 
-    @media (min-width: 1200px) {
-      width: (100% / 9);
+    @media (min-width: $lg) {
+      width: (100% / $lgBP);
+    }
+
+    @media (min-width: $xl) {
+      width: (100% / $xlBP);
     }
   }
 

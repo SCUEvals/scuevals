@@ -26,10 +26,6 @@ class Eval extends Component {
     const settings = { //set speed = slidesToShow * 75
       dots: false,
       arrows: false,
-      slidesToShow: 9,
-      slidesToScroll: 9,
-      touchThreshold: 10, //more sensitive to move with click or touch
-      speed: 675,
       responsive: [
         { breakpoint: 576,
           settings: {
@@ -63,6 +59,9 @@ class Eval extends Component {
             speed: 525
           }
         },
+        { breakpoint: 999999999, //anything bigger than 1200 (no way to set default behavior for unslick)
+          settings: 'unslick'
+        }
       ]
     };
     let votesFontSize = votes_score > 999 ? //make score smaller to prevent overflow
