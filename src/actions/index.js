@@ -66,9 +66,9 @@ export function setDepartmentsList(departmentsList) {
 }
 
 export function setProfessorsList(professorsList) {
-  professorsList.map(professor => {professor.full_name = professor.last_name + ', ' + professor.first_name});
+  professorsList.map(professor => {professor.label = professor.last_name + ', ' + professor.first_name});
   professorsList.sort((a, b) => {
-    return a.full_name > b.full_name ? 1 : a.full_name < b.full_name ? -1 : 0;
+    return a.label > b.label ? 1 : a.label < b.label ? -1 : 0;
   });
   let professorsListObj = professorsList ? professorsList.reduce((obj, item) => (obj[item.id] = item, obj) ,{}) : null;
   let returnedObj = {object: professorsListObj, array: professorsList};

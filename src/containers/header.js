@@ -38,15 +38,15 @@ class Header extends Component {
       return (
         <header>
           <SearchBar location={this.props.location} history={this.props.history} />
-          <div styleName="header-items" className="container">
-            <Link to={'/'} styleName="homeBtn">
-              <i className="fa fa-home" />
+          <div styleName='header-items' className='container'>
+            <Link to={'/'} className='homeBtn' styleName='headerHomeBtn'>
+              <i className='fa fa-home' />
             </Link>
             <Link className='btn' styleName='profileBtn' to={'/profile'}>
-              <img styleName="profile-img" src={userInfo.picture} alt="Profile picture" />
+              <img styleName='profile-img' src={userInfo.picture} alt='Profile picture' />
               {userInfo.first_name}
             </Link>
-            <button className='btn' styleName='signOutBtn' type="button" onClick={() => {
+            <button className='btn' styleName='signOutBtn' type='button' onClick={() => {
               localStorage.removeItem('jwt');
               delUserInfo();
               ReactGA.set({ userId: undefined });

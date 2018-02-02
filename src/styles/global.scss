@@ -321,7 +321,7 @@ label:not(:first-child) input[type='radio'] {
   }
 }
 
-@media (max-width: $sm) {
+@media (max-width: $md - 1) {
   .col-md-6:not(:last-child) {
     padding-bottom: 15px;
   }
@@ -409,8 +409,12 @@ button .fa {
 }
 
 a.homeBtn {
-  position: absolute;
-  left: 5px;
+  font-size: 1.75rem;
+
+  &.noAuthHomeBtn {
+    position: absolute;
+    left: 0;
+  }
 
   &:focus {
     text-shadow: $textShadow;
@@ -435,7 +439,13 @@ a.homeBtn {
     .modalHeader {
       background: $backgroundColor;
 
-      i {
+      a.homeBtn {
+        position: absolute;
+        top: -1px;
+        left: 5px;
+      }
+
+      i.fa-times {
         position: absolute;
         top: -1px;
         right: 1px;

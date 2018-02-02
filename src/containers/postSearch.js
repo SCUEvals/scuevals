@@ -59,7 +59,14 @@ class PostSearch extends Component {
   }
 
   onSubmit(values) {
-    this.props.history.push('/post/' + values.quarter + '/' + values.course + '/' + values.professor);
+    this.props.history.push({
+      pathname: '/post/' + values.quarter + '/' + values.course + '/' + values.professor,
+      state: {
+        quarter_id: values.quarter,
+        course_id: values.course,
+        professor_id: values.professor
+      }
+    });
   }
 
   renderQuarters(field) {
@@ -120,7 +127,6 @@ class PostSearch extends Component {
           disabled={!localProfessorsList}
           value={input.value}
           valueKey={'id'}
-          labelKey={'full_name'}
           className={error && submitFailed ? 'error' : ''}
           simpleValue
           options={localProfessorsList}
@@ -223,9 +229,9 @@ class PostSearch extends Component {
         break;
       case 'professor':
         this.setState({localProfessorsList: null}, () => client.get('/professors', professors => {
-          professors.map(professor => professor.full_name = professor.last_name + ', ' + professor.first_name);
-          professors.sort((a, b) => { //must type professors.sort, not just .sort (else sorting doesn't work since full_name won't be recognized yet)
-            return a.full_name > b.full_name ? 1 : a.full_name < b.full_name ? -1 : 0;
+          professors.map(professor => professor.label = professor.last_name + ', ' + professor.first_name);
+          professors.sort((a, b) => { //must type professors.sort, not just .sort (else sorting doesn't work since label won't be recognized yet)
+            return a.label > b.label ? 1 : a.label < b.label ? -1 : 0;
           });
           this.setState({localProfessorsList: professors});
         }, {quarter_id, course_id, professor_id}));

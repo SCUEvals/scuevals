@@ -28,7 +28,7 @@ header {
 
   .profileBtn,
   .signOutBtn,
-  .homeBtn {
+  .headerHomeBtn {
     height: 100%;
     display: flex;
     align-items: center;
@@ -37,24 +37,11 @@ header {
     padding: 0 5px;
   }
 
-  .homeBtn {
-    color: $SCUred;
-    font-size: 1.75rem;
+  .headerHomeBtn {
     position: absolute;
     left: 10px;
     top: 0;
     border-radius: $defaultBorderRadius;
-
-    &:hover {
-      color: $SCUdarkred;
-      background: transparent;
-    }
-
-    &:focus {
-      color: $SCUred;
-      border: 2px solid transparent !important;
-      text-shadow: $textShadow;
-    }
   }
 
   .profileBtn,

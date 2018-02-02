@@ -14,7 +14,7 @@ class About extends Component {
       <div className="content">
         <h3>
           {this.props.userInfo && !this.props.userInfo.roles.includes(0) ? '' :
-            <Link className='homeBtn' to={'/'}>
+            <Link className='homeBtn noAuthHomeBtn' to={'/'}>
               <i className="fa fa-home" />
             </Link>
           }
