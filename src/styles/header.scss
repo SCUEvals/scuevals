@@ -12,7 +12,7 @@ header {
   background: $overlayBackground;
   color: white;
 
-  .input-group-btn > button {
+  :global(.input-group-btn) > button {
     border-radius: 0 $defaultBorderRadius $defaultBorderRadius 0;
 
     &:focus {

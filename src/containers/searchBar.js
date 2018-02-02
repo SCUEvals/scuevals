@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 import { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList, setMyEvalsList } from '../actions';
-import { debounce } from 'lodash';
+import debounce from 'lodash.debounce';
 import { Link } from 'react-router-dom';
 
 import '../styles/searchBar.scss';
@@ -12,6 +12,9 @@ class SearchBar extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      loading: false
+    };
     this.debouncedGetResponse = debounce(this.debouncedGetResponse, 250);
     if (!this.props.departmentsList) {
       let client = new API();
@@ -61,14 +64,15 @@ class SearchBar extends Component {
   debouncedGetResponse(searchVal, setSearchResults) {
     if (searchVal && setSearchResults) {
       let client = new API();
-      client.get('/search', responseData => {
+      this.setState({loading: true}, () => client.get('/search', responseData => {
           responseData.term = searchVal;
           this.sortResponseData(responseData);
           setSearchResults(responseData);
+          this.setState({loading: false});
           if (responseData.courses.length > 0 || responseData.professors.length > 0) $('#searchBar input').focus(); //focus on input after appears, which will also enable searchResults
         },
         {q: searchVal}
-      );
+      ));
     }
   }
 
@@ -91,7 +95,7 @@ class SearchBar extends Component {
   }
 
   renderSearch(field) {
-    const { meta: { error, submitFailed, touched }, renderSearchResults, departmentsList, input, searchResults } = field;
+    const { meta: { error, submitFailed, touched }, renderSearchResults, departmentsList, input, searchResults, loading } = field;
     function hideOnMouseDownOutside(searchBar, searchBarResults) { //must not be DOM objects passed, since each click needs to re-search DOM to see if exists
       const outsideMouseDownListener = event => {
         if (!$(event.target).closest($(searchBar)).length) {
@@ -101,6 +105,7 @@ class SearchBar extends Component {
       }
       document.addEventListener('mousedown', outsideMouseDownListener);
     }
+    const submitBtnClass = loading ? 'Select-loading' : 'fa fa-search';
     return (
       <div className="row">
         <label className="sr-only">{field.label}</label>
@@ -119,7 +124,7 @@ class SearchBar extends Component {
 
           />
           <span className="input-group-btn">
-            <button type="submit" className="btn"><i className="fa fa-search" /></button>
+            <button type="submit" className="btn"><i className={submitBtnClass} /></button>
           </span>
           {submitFailed && error ?
             <div styleName='text-help'>
@@ -204,6 +209,7 @@ class SearchBar extends Component {
 
   render() {
     const { handleSubmit, setSearchResults, searchResults, departmentsList } = this.props;
+    const { loading } = this.state;
     return(
       <form className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
@@ -213,6 +219,7 @@ class SearchBar extends Component {
           departmentsList={departmentsList}
           searchResults={searchResults}
           setSearchResults={response => setSearchResults(response)}
+          loading={loading}
           onChange={
             (change, newVal) => {
               if (newVal.length > 2) {
