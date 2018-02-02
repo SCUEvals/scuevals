@@ -127,6 +127,10 @@
   background-color: $score1Color;
 }
 
+:global(.slider-error .rc-slider-rail) {
+  border: 3px solid $SCUred;
+}
+
 .popper .popper__arrow {
   width: 0;
   height: 0;
@@ -298,4 +302,8 @@ label {
   font-size: 1.1rem; //h6 size
   display: flex;
   justify-content: center;
+}
+
+textarea:global(.comment-error) {
+  border: 2px solid $SCUred !important;
 }

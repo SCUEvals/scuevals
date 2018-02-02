@@ -78,9 +78,6 @@ class ViewEvals extends Component {
             : 'Loading...'
           }
         </h2>
-        <Link className='btn' to={this.props.type === 'professors' ?
-          `/professors/${this.props.match.params.id}/post`
-          :`/courses/${this.props.match.params.id}/post`}>Quick Post</Link>
         <div className='row' styleName='scores'>
           <div styleName='avgScore'>
             <div styleName='scoreTitle'>Average</div>
@@ -164,7 +161,11 @@ class ViewEvals extends Component {
             </svg>
           </div>
         </div>
-
+        <Link className='btn' to={this.props.type === 'professors' ?
+          `/professors/${this.props.match.params.id}/post`
+          :`/courses/${this.props.match.params.id}/post`}>
+          Quick Post
+        </Link>
         {info ?
           info.evaluations.length === 0 ?
             <h5>No evaluations posted yet.</h5>

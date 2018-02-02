@@ -149,16 +149,18 @@ class PostEval extends Component {
 
 
   renderTextArea(field) {
+    const { meta: {submitFailed, error} } = field;
     return (
-      <TextareaAutoSize minRows={5} {...field.input} placeholder="Write your constructive review here"/>
+      <TextareaAutoSize className={submitFailed && error ? 'comment-error' : ''} minRows={5} {...field.input} placeholder="Write your constructive review here"/>
     )
   }
 
-  renderSlider(props) {
-    let track = $('.' + props.input.name + ' .rc-slider-track');
+  renderSlider(field) {
+    const { meta: {submitFailed, error}, input, textProps } = field;
+    let track = $('.' + input.name + ' .rc-slider-track');
     if (track.length === 1) { //if exists
       track = track[0];
-      switch(props.input.value) {
+      switch(input.value) {
         case 1:
           track.className = 'rc-slider-track track1';
           break;
@@ -173,15 +175,15 @@ class PostEval extends Component {
           break;
       }
     }
-
+    const sliderClass = submitFailed && error ? input.name + ' slider-error' : input.name;
     return (
       <Slider
-        onBeforeChange={() => $('.' + props.input.name + ' div[role="slider"]').focus()}
-        className={props.input.name} //used to change track colors on changes
-        name={props.input.name}
-        {...props.input}
+        onBeforeChange={() => $('.' + input.name + ' div[role="slider"]').focus()}
+        className={sliderClass} //used to change track colors on changes
+        name={input.name}
+        {...input}
         dots
-        handle={passedProps => handle(passedProps, props.textProps)}
+        handle={passedProps => handle(passedProps, textProps)}
         max={4}
         defaultValue={0}
       />
@@ -211,7 +213,6 @@ class PostEval extends Component {
         professor = professorsList.object[classInfo.professor.id].label;
       }
     }
-    const required = value => {};
     if (location.state || classInfo !== undefined) { //passed values from postSearch
       return (
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
@@ -268,7 +269,7 @@ class PostEval extends Component {
           </div>
           <h3>Professor</h3>
           <h6>Attitude {infoTooltip(textOptions.attitude.info)}</h6>
-          <Field name='attitude' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.attitude} component={this.renderSlider} validate={[required]} />
+          <Field name='attitude' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.attitude} component={this.renderSlider} />
           <h6>Availability {infoTooltip(textOptions.availability.info)}</h6>
           <Field name='availability' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.availability} component={this.renderSlider} />
           <h6>Clarity {infoTooltip(textOptions.clarity.info)}</h6>
@@ -313,6 +314,20 @@ class PostEval extends Component {
   }
 }
 
+const validate = values => {
+  const errors = {};
+  if (!values.attitude) errors.attitude = 'Required';
+  if (!values.availability) errors.availability = 'Required';
+  if (!values.clarity) errors.clarity = 'Required';
+  if (!values.comment) errors.comment = 'Required';
+  if (!values.difficulty) errors.difficulty = 'Required';
+  if (!values.grading_speed) errors.grading_speed = 'Required';
+  if (!values.recommended) errors.recommended = 'Required';
+  if (!values.resourcefulness) errors.resourcefulness = 'Required';
+  if (!values.workload) errors.workload = 'Required';
+  return errors;
+}
+
 function mapStateToProps(state) {
   return {
     userInfo: state.userInfo,
@@ -323,6 +338,7 @@ function mapStateToProps(state) {
 }
 
 export default reduxForm({
+  validate,
   form: 'postEval',
   initialValues: { displayMajors: true, displayGradYear: true }
 })

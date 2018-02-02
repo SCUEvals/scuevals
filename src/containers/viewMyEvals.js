@@ -54,8 +54,11 @@ class ViewMyEvals extends Component {
           options={null}
           placeholder="Sort"
         />
-        <br/>
-        {myEvalsList ? myEvalsList.map(evaluation => { return <Eval dkey={evaluation.id} evaluation={evaluation} quartersList={quartersList} departmentsList={departmentsList} openModal={() => this.setState({modalOpen: true})}/> }) : <h5>Loading...</h5>}
+        {myEvalsList ?
+           myEvalsList.length === 0 ?
+            'You haven\'t posted anything yet.'
+          : myEvalsList.map(evaluation => { return <Eval key={evaluation.id} evaluation={evaluation} quartersList={quartersList} departmentsList={departmentsList} openModal={() => this.setState({modalOpen: true})}/> })
+        : <h5>Loading...</h5>}
       </div>
     );
   }

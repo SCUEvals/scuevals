@@ -163,7 +163,7 @@ class Profile extends Component {
 }
 
 
-function validate(values) {
+const validate = values => {
   const currentYear = new Date().getFullYear();
   const errors = {};
   if (!values.gender || (values.gender !== 'm' && values.gender !== 'f' && values.gender !=='o')) errors.gender = true;
