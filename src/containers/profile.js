@@ -109,6 +109,13 @@ class Profile extends Component {
     });
   }
 
+  componentDidUpdate() {
+    if (!this.props.majorsList) {
+      let client = new API();
+      client.get('/majors', majorsList =>this.props.setMajorsList(majorsList));
+    }
+  }
+
   render() {
     const { handleSubmit, history, delUserInfo, userInfo, submitting, majorsList } = this.props;
     const profileInfo = 'This information may only be used anonymously for statistical purposes.\nYour name is kept hidden at all times.';
@@ -136,8 +143,8 @@ class Profile extends Component {
         </div>
         }
         <hr />
-        <Link className='btn' to='/profile/evals'>Manage my Evals</Link>
-        <hr/>
+        {userInfo && !userInfo.roles.includes(0) ? <Link className='btn' to='/profile/evals'>Manage my Evals</Link> : ''}
+        {userInfo && !userInfo.roles.includes(0) ? <hr /> : ''}
         <div styleName='form-container'>
           <h5>Major(s)</h5>
           <Field
