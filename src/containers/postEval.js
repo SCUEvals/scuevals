@@ -297,7 +297,7 @@ class PostEval extends Component {
           </label>
           <label>
             Display graduation year
-            <Field name='displayGradYear' component='input' type='checkbox' />
+            <Field name='display_grad_year' component='input' type='checkbox' />
           </label>
           <br />
           <button disabled={submitting} type="submit" className="btn">{submitting ? 'Submitting...' : 'Submit'}</button>
@@ -340,6 +340,6 @@ function mapStateToProps(state) {
 export default reduxForm({
   validate,
   form: 'postEval',
-  initialValues: { displayMajors: true, displayGradYear: true }
+  initialValues: { display_majors: true, display_grad_year: true }
 })
 (connect(mapStateToProps, null)(PostEval));
