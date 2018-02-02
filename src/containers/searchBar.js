@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
-import { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList } from '../actions';
+import { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList, setMyEvalsList } from '../actions';
 import { debounce } from 'lodash';
 import { Link } from 'react-router-dom';
 
@@ -23,15 +23,19 @@ class SearchBar extends Component {
     }
     if (!this.props.quartersList) {
       let client = new API();
-      client.get('/quarters', responseData => this.props.setQuartersList(responseData));
+      client.get('/quarters', quartersList => this.props.setQuartersList(quartersList));
     }
     if (!this.props.coursesList) {
       let client = new API();
-      client.get('/courses', responseData =>this.props.setCoursesList(responseData, this.props.departmentsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+      client.get('/courses', coursesList =>this.props.setCoursesList(coursesList, this.props.departmentsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
     }
     if (!this.props.majorsList) {
       let client = new API();
-      client.get('/majors', responseData =>this.props.setMajorsList(responseData)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+      client.get('/majors', majorsList =>this.props.setMajorsList(majorsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+    }
+    if (!this.props.myEvalsList) {
+      let client = new API();
+      client.get('/evaluations', myEvalsList => this.props.setMyEvalsList(myEvalsList));
     }
   }
 
@@ -160,7 +164,14 @@ class SearchBar extends Component {
             response.courses.map(course => {
               return(
                 <li key={course.id}>
-                  <Link onClick={() => $('#searchBarResults').hide()} to={`/courses/${course.id}`}>
+                  <Link
+                    onClick={() => {
+                      $('#searchBarResults').hide();
+                      $('#searchBar input').blur();
+                    }}
+                    onMouseDown={event => event.preventDefault()}
+                     to={`/courses/${course.id}`}
+                    >
                      {departmentsList[course.department_id].abbr} {course.number}: {course.title}
                   </Link>
                 </li>
@@ -235,11 +246,12 @@ const mapStateToProps = state => {
      searchResults: state.searchResults,
      departmentsList: state.departmentsList,
      coursesList: state.coursesList,
-     majorsList: state.majorsList
+     majorsList: state.majorsList,
+     myEvalsList: state.myEvalsList
    }
 }
 
 export default reduxForm({
   validate,
   form: 'searchBar'
-})(connect(mapStateToProps, { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList })(SearchBar));
+})(connect(mapStateToProps, { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList, setMyEvalsList })(SearchBar));

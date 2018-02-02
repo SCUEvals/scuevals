@@ -7,6 +7,7 @@ import quartersListReducer from './reducer_quartersList';
 import departmentsListReducer from './reducer_departmentsList';
 import professorsListReducer from './reducer_professorsList';
 import coursesListReducer from './reducer_coursesList';
+import myEvalsListReducer from './reducer_myEvalsList';
 import { DEL_USER_INFO } from '../actions';
 
 const rootReducer = combineReducers({
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
   quartersList: quartersListReducer,
   departmentsList: departmentsListReducer,
   professorsList: professorsListReducer,
-  coursesList: coursesListReducer
+  coursesList: coursesListReducer,
+  myEvalsList: myEvalsListReducer
 
 });
 

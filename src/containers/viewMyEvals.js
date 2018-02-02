@@ -24,21 +24,16 @@ class ViewMyEvals extends Component {
     };
   }
 
-  // componentWillMount() {
-  //   let client = new API();
-  //   client.get('/' + this.props.type + '/' + this.props.match.params.id, info => this.setState({ info, orderedInfo: info }));
-  // }
-
   render() {
     const { info, orderedInfo, modalOpen } = this.state;
-    const { userInfo } = this.props;
+    const { userInfo, myEvalsList, departmentsList, quartersList } = this.props;
     return (
       <div className="content">
         <ReactModal isOpen={modalOpen} className='Modal' appElement={document.getElementById('app')}>
           <div className='container'>
           <div className='modalPanel'>
             <div className='modalHeader'>
-              <h5>Flag comment</h5>
+              <h5>Are you sure?</h5>
               <i tabIndex='0' className='fa fa-times'
                 onClick={() => this.setState({modalOpen: false})}
                 onKeyPress={event => {
@@ -47,7 +42,7 @@ class ViewMyEvals extends Component {
               />
             </div>
             <div className='modalBlock'>
-              Content
+              Are you sure you want to delete this post?
             </div>
           </div>
         </div>
@@ -60,7 +55,7 @@ class ViewMyEvals extends Component {
           placeholder="Sort"
         />
         <br/>
-        {info ? info.evaluations.map(evaluation => { return <Eval key={evaluation.id} evaluation={evaluation} openModal={() => this.setState({modalOpen: true})}/> }) : ''}
+        {myEvalsList ? myEvalsList.map(evaluation => { return <Eval dkey={evaluation.id} evaluation={evaluation} quartersList={quartersList} departmentsList={departmentsList} openModal={() => this.setState({modalOpen: true})}/> }) : <h5>Loading...</h5>}
       </div>
     );
   }
@@ -68,7 +63,10 @@ class ViewMyEvals extends Component {
 
 function mapStateToProps(state) {
   return {
-    userInfo: state.userInfo
+    userInfo: state.userInfo,
+    myEvalsList: state.myEvalsList,
+    departmentsList: state.departmentsList,
+    quartersList: state.quartersList
   };
 }
 

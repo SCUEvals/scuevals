@@ -191,7 +191,18 @@ label:not(:first-child) input[type='radio'] {
   text-align: left;
 
   &.sort {
-    margin-bottom: 0;
+    margin-bottom: 15px;
+    display: inline-block;
+    width: calc(100% - 16px - 4px - 15px); //16px + 2px*2 for border from focusable i + 15px margin-left
+
+    + i {
+      width: 16px;
+      font-size: 24px;
+      margin-left: 15px;
+      margin-top: 5px;
+      vertical-align: top;
+      display: inline-block;
+    }
   }
 
   &-option {

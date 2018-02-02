@@ -12,8 +12,12 @@ header {
   background: $overlayBackground;
   color: white;
 
-  .input-group-btn > button:focus {
-    box-shadow: none;
+  .input-group-btn > button {
+    border-radius: 0 $defaultBorderRadius $defaultBorderRadius 0;
+
+    &:focus {
+      box-shadow: none;
+    }
   }
 
   .signOutBtn {

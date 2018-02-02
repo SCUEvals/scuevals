@@ -29,8 +29,6 @@ class ViewEvals extends Component {
   componentWillMount() {
     let client = new API();
     client.get('/' + this.props.type + '/' + this.props.match.params.id, info => this.setState({ info, orderedInfo: info }));
-    if (!this.props.quartersList) client.get('/quarters', quartersList => this.props.setQuartersList(quartersList));
-    if (!this.props.majorsList) client.get('/majors', majorsList => this.props.setMajorsList(majorsList));
   }
 
   componentWillUpdate(nextProps) {
@@ -166,23 +164,40 @@ class ViewEvals extends Component {
             </svg>
           </div>
         </div>
-        <Select
-          className='sort'
-          simpleValue
-          options={null}
-          placeholder="Sort"
-        />
-        <br/>
+
         {info ?
-          info.evaluations.map(evaluation => {
+          info.evaluations.length === 0 ?
+            <h5>No evaluations posted yet.</h5>
+          : info.evaluations.map(evaluation => {
             return (
-              <Eval
-                key={evaluation.id}
-                majorsList={majorsList}
-                quartersList={quartersList}
-                departmentsList={departmentsList}
-                evaluation={evaluation} openModal={() => this.setState({modalOpen: true})}
-              />
+              <div key={evaluation.id}>
+                <Select
+                  className='sort'
+                  simpleValue
+                  options={null}
+                  placeholder="Sort"
+                />
+                <i
+                  tabIndex='0'
+                  className='fa fa-sort'
+                  onClick={e => {
+                    if (e.target.className === 'fa fa-sort' || e.target.className === 'fa fa-sort-asc')
+                      e.target.className = 'fa fa-sort-desc';
+                    else e.target.className = 'fa fa-sort-asc';
+                  }}
+                  onKeyDown={e => {
+                    if (e.keyCode === 13) e.target.click();
+                  }}
+
+                 />
+                <Eval
+                  key={evaluation.id}
+                  majorsList={majorsList}
+                  quartersList={quartersList}
+                  departmentsList={departmentsList}
+                  evaluation={evaluation} openModal={() => this.setState({modalOpen: true})}
+                />
+              </div>
             );
           })
         : ''}

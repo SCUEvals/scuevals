@@ -73,14 +73,15 @@ class Eval extends Component {
     : 18;
     let upVote, downVote = null;
     let majorsString = '';
-    if (majorsList) {
+    if (evaluation.author && majorsList) {
        for (let i of evaluation.author.majors) majorsString += majorsList.object[i].name + ', ';
        if (majorsString) majorsString = majorsString.substring(0, majorsString.length - 2); //cut off last comma and space
-    }
+    };
+
     return (
       <div styleName='eval'>
         <div styleName='vote'>
-          {evaluation.author.self ? '' :
+          {evaluation.author && !evaluation.author.self ?
               <i tabIndex='0'
               ref={node => upVote = node}
               styleName={user_vote == 1 ? 'active' : ''}
@@ -111,9 +112,9 @@ class Eval extends Component {
                   if (e.keyCode === 13) upVote.click();
                 }}
             />
-          }
+          : ''}
           <span style={{fontSize: votesFontSize + 'px'}} styleName='voteScore'>{votes_score}</span>
-          {evaluation.author.self ? '' :
+          {evaluation.author && !evaluation.author.self ?
             <i tabIndex='0'
               ref={node => downVote = node}
               styleName={user_vote == -1 ? 'active' : ''}
@@ -144,21 +145,37 @@ class Eval extends Component {
                    if (e.keyCode === 13) downVote.click();
                  }}
             />
-          }
+          : ''}
         </div>
         <div styleName='evalContent'>
-          <div styleName='evalInfo' className='row'>
-            <div className='col-12 col-sm-6'>
-              {quartersList ? quartersList.object[evaluation.quarter_id].name + ' ' + quartersList.object[evaluation.quarter_id].year : ''}
+          {evaluation.course && evaluation.professor ? //for viewing own evals on viewMyEvals, both sent
+            <div styleName='evalInfo' className='row'>
+              <div styleName='col-sm-custom' className='col-12 col-md-2'>
+                {quartersList ? quartersList.object[evaluation.quarter_id].name + ' ' + quartersList.object[evaluation.quarter_id].year : ''}
+              </div>
+              <div styleName='col-sm-custom' className='col-12 col-md-5'>
+                <Link to={`/professors/${evaluation.professor.id}`}>{evaluation.professor.last_name + ', ' + evaluation.professor.first_name}</Link>
+              </div>
+              <div styleName='col-sm-custom' className='col-12 col-md-5'>
+                {departmentsList ?
+                  <Link to={`/courses/${evaluation.course.id}`}>{departmentsList[evaluation.course.department_id].abbr + ' ' + evaluation.course.number + ': ' + evaluation.course.title}</Link>
+                : ''}
+              </div>
             </div>
-            <div className='col-12 col-sm-6'>
-              {evaluation.course ?
-                departmentsList ?
-                <Link to={`/courses/${evaluation.course.id}`}>{departmentsList[evaluation.course.department_id].abbr + ' ' + evaluation.course.number + ': ' + evaluation.course.title}</Link>
-                : ''
-              : <Link to={`/professors/${evaluation.professor.id}`}>{evaluation.professor.last_name + ', ' + evaluation.professor.first_name}</Link>}
-            </div>
+            :
+            <div styleName='evalInfo' className='row'>
+              <div className='col-12 col-sm-6'>
+                {quartersList ? quartersList.object[evaluation.quarter_id].name + ' ' + quartersList.object[evaluation.quarter_id].year : ''}
+              </div>
+              <div className='col-12 col-sm-6'>
+                {evaluation.course ?
+                  departmentsList ?
+                  <Link to={`/courses/${evaluation.course.id}`}>{departmentsList[evaluation.course.department_id].abbr + ' ' + evaluation.course.number + ': ' + evaluation.course.title}</Link>
+                  : ''
+                : <Link to={`/professors/${evaluation.professor.id}`}>{evaluation.professor.last_name + ', ' + evaluation.professor.first_name}</Link>}
+              </div>
           </div>
+          }
           <Slider {...settings}>
             <div styleName='scoreBlock'>
               <div styleName='scoreTitle'>Average</div>
@@ -248,16 +265,16 @@ class Eval extends Component {
             </div>
             <div className='row'>
               <div className='col-xs-12 col-sm-11' styleName='commentInfo'>
-                {evaluation.author.majors && majorsList ?
+                {evaluation.author && evaluation.author.majors && majorsList ?
                   <div>
-                    {evaluation.author.majors.length > 1 ?
+                    {evaluation.author && evaluation.author.majors.length > 1 ?
                        'Majors: ' + majorsString
                        : 'Major: ' + majorsString
                      }
                   </div>
                   : ''
                 }
-                {evaluation.author.graduation_year ?
+                {evaluation.author && evaluation.author.graduation_year ?
                   <div>
                     Graduation year: {evaluation.author.graduation_year}
                   </div>

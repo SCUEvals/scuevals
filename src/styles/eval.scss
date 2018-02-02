@@ -7,6 +7,10 @@ $voteWidth: 35px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 0.25rem;
 
+  &:not(:last-of-type) {
+    margin-bottom: 30px;
+  }
+
   .vote {
     float: left;
     width: $voteWidth;
@@ -14,10 +18,10 @@ $voteWidth: 35px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    //border-right: 1px solid $backgroundColor;
     position: absolute;
     height: 100%;
     background: $SCUred;
+    border-radius: $defaultBorderRadius 0 0 $defaultBorderRadius;
 
     i {
       @include alternateLink;
@@ -121,6 +125,25 @@ $voteWidth: 35px;
     margin: 0;
     background: $SCUred;
     color: white;
+    border-radius: 0 $defaultBorderRadius 0 0;
+
+    > div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    @media (min-width: $sm) {
+      .col-sm-custom {
+        max-width: 36.9%;
+        flex: 0 0 36.9%; //copying bootstrap column css
+
+        &:first-of-type {
+          max-width: 26.2%;
+          flex: 0 0 26.2%; //copying bootstrap column css
+        }
+      }
+    }
 
     a {
       @include alternateLink;
@@ -131,13 +154,6 @@ $voteWidth: 35px;
       text-overflow: ellipsis;
       overflow: hidden;
       padding: 0 15px;
-    }
-
-    :global(.col-sm-6) {
-      padding: 0 !important;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
   }
 

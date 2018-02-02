@@ -19,14 +19,6 @@ class Profile extends Component {
     delUserInfo: PropTypes.func,
   }
 
-  componentWillMount() {
-    if (this.props.majorsList) return;
-    let client = new API();
-    client.get('/majors', responseData => {
-      this.props.setMajorsList(responseData);
-    });
-  }
-
   renderMajors(field) {
     const { input, majorsList } = field;
     const { meta: {submitFailed, error} } = field;
