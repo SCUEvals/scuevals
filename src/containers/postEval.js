@@ -142,9 +142,12 @@ class PostEval extends Component {
 
 
   onSubmit(values) {
-    this.props.match.params.evaluation = values; //typically don't want to alter params, but submission redirects after post so OK. No need to make deep copy to preserve params
+    const { quarter_id, course_id, professor_id } = this.props.match.params;
+    const { display_majors, display_grad_year } = values;
+    let evaluation = {...values};
+    let returnedObj = { quarter_id, course_id, professor_id, display_majors, display_grad_year, evaluation };
     let client = new API();
-    return client.post('/evaluations', this.props.match.params, () => this.props.history.push('/'));
+    return client.post('/evaluations', returnedObj, () => this.props.history.push('/'));
   };
 
 
@@ -293,7 +296,7 @@ class PostEval extends Component {
           <p>Max characters: {this.state.term.length} / 750</p>
           <label>
             {`Display ${userInfo.majors.length > 1 ? 'majors' : 'major'}`}
-            <Field name='displayMajors' component='input' type='checkbox' />
+            <Field name='display_majors' component='input' type='checkbox' />
           </label>
           <label>
             Display graduation year
