@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
+import DeleteModal from '../components/deleteModal';
 
+import { setMyEvalsList } from '../actions'
 import Eval from '../components/eval';
 import API from '../services/api';
 import '../styles/viewEvals.scss';
@@ -18,35 +20,35 @@ class ViewMyEvals extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      info: null,
       orderedInfo: null,
-      modalOpen: false
+      deleteModal: { open: false, quarter_id: undefined, course_id: undefined, professor_id: undefined, eval_id: undefined }
     };
   }
 
   render() {
-    const { info, orderedInfo, modalOpen } = this.state;
-    const { userInfo, myEvalsList, departmentsList, quartersList } = this.props;
+    const { info, orderedInfo, deleteModal } = this.state;
+    const { userInfo, myEvalsList, quartersList, coursesList, departmentsList, professorsList, setMyEvalsList } = this.props;
     return (
       <div className="content">
-        <ReactModal isOpen={modalOpen} className='Modal' appElement={document.getElementById('app')}>
-          <div className='container'>
-          <div className='modalPanel'>
-            <div className='modalHeader'>
-              <h5>Are you sure?</h5>
-              <i tabIndex='0' className='fa fa-times'
-                onClick={() => this.setState({modalOpen: false})}
-                onKeyPress={event => {
-                  if (event.key === 'Enter') this.setState({modalOpen: false});
-                }}
-              />
-            </div>
-            <div className='modalBlock'>
-              Are you sure you want to delete this post?
-            </div>
-          </div>
-        </div>
-        </ReactModal>
+        <DeleteModal
+          deleteModalOpen={deleteModal.open}
+          closeDeleteModal={() => this.setState({deleteModal: {open: false}})}
+          quarter={quartersList && deleteModal.quarter_id ? quartersList.object[deleteModal.quarter_id].label : null}
+          course={coursesList && coursesList.departmentsListLoaded && deleteModal.course_id ? coursesList.object[deleteModal.course_id].label : null }
+          professor={professorsList && deleteModal.professor_id ? professorsList.object[deleteModal.professor_id].label : null}
+          eval_id={deleteModal.eval_id}
+          deletePost={() => {
+            let client = new API();
+            client.delete(`/evaluations/${deleteModal.eval_id}`);
+            myEvalsList.map((obj, key) => {
+              if (obj.id === deleteModal.eval_id) {
+                let newList = myEvalsList.slice();
+                newList.splice(myEvalsList[key], 1);
+                setMyEvalsList(newList);
+              };
+            });
+          }}
+        />
         <h4 className='banner'>{userInfo.first_name}'s Evals</h4>
         <Select
           className='sort'
@@ -57,7 +59,18 @@ class ViewMyEvals extends Component {
         {myEvalsList ?
            myEvalsList.length === 0 ?
             'You haven\'t posted anything yet.'
-          : myEvalsList.map(evaluation => { return <Eval key={evaluation.id} evaluation={evaluation} quartersList={quartersList} departmentsList={departmentsList} openModal={() => this.setState({modalOpen: true})}/> })
+          : myEvalsList.map(evaluation => {
+            return <Eval
+              key={evaluation.id}
+              evaluation={evaluation}
+              quartersList={quartersList}
+              departmentsList={departmentsList}
+              openModal={() => { //type, quarter_id, secondId, eval_id passed in, but not needed in viewMyEvals
+                this.setState({deleteModal: {open: true, quarter_id: evaluation.quarter_id, course_id: evaluation.course.id, professor_id: evaluation.professor.id, eval_id: evaluation.id}});
+              }}
+            />
+          })
+
         : <h5>Loading...</h5>}
       </div>
     );
@@ -69,8 +82,10 @@ function mapStateToProps(state) {
     userInfo: state.userInfo,
     myEvalsList: state.myEvalsList,
     departmentsList: state.departmentsList,
-    quartersList: state.quartersList
+    quartersList: state.quartersList,
+    coursesList: state.coursesList,
+    professorsList: state.professorsList
   };
 }
 
-export default connect(mapStateToProps, null)(ViewMyEvals);
+export default connect(mapStateToProps, { setMyEvalsList })(ViewMyEvals);

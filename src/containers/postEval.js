@@ -5,8 +5,7 @@ import Slider from 'rc-slider';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import ReactModal from 'react-modal';
-import { Link } from 'react-router-dom';
+import RedirectModal from '../components/redirectModal';
 
 import API from '../services/api';
 import '../../node_modules/rc-slider/dist/rc-slider.min.css?global';
@@ -131,8 +130,7 @@ class PostEval extends Component {
     super(props);
     this.state = {
       term: '',
-      classInfo: undefined,
-      seconds: undefined
+      classInfo: undefined
     };
     let client = new API();
     //course and professor swapped because API currently has different order than site
@@ -193,16 +191,9 @@ class PostEval extends Component {
     );
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.seconds !== this.state.seconds) {
-      if (this.state.seconds === 0) this.props.history.replace('/');
-      else setTimeout(() => this.setState({seconds: this.state.seconds - 1}), 1000); //note debounce not appropriate here, new updates shouldn't cancel old debounced function
-    }
-  }
-
   render() {
-    const { quartersList, coursesList, professorsList, handleSubmit, submitting, userInfo, location } = this.props;
-    const { classInfo, seconds } = this.state;
+    const { quartersList, coursesList, professorsList, handleSubmit, submitting, userInfo, location, history } = this.props;
+    const { classInfo } = this.state;
     let quarter, course, professor;
     if (quartersList && coursesList && coursesList.departmentsListLoaded && professorsList) {
       if (location.state) {
@@ -219,21 +210,7 @@ class PostEval extends Component {
     if (location.state || classInfo !== undefined) { //passed values from postSearch
       return (
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
-          <ReactModal isOpen={classInfo === null} onAfterOpen={() => this.setState({seconds: 3})} className='Modal' appElement={document.getElementById('app')}>
-            <div className='container'>
-              <div className='modalPanel'>
-                <div className='modalHeader'>
-                  <h5>
-                    <Link className='homeBtn' to='/'><i className='fa fa-home' /></Link>
-                    Class does not exist for this page.
-                  </h5>
-                </div>
-              <div className='modalBlock'>
-                Redirecting to home in {seconds}...
-              </div>
-            </div>
-          </div>
-          </ReactModal>
+          <RedirectModal history={history} redirectModalOpen={classInfo === null} />
           <div styleName='postInfo'>
             <h3>{quarter}</h3>
             <h3>{course ? course : classInfo === null ? 'No class exists for this page.': 'Loading...'}</h3>

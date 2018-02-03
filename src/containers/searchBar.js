@@ -34,7 +34,7 @@ class SearchBar extends Component {
     }
     if (!this.props.majorsList) {
       let client = new API();
-      client.get('/majors', majorsList =>this.props.setMajorsList(majorsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+      client.get('/majors', majorsList =>this.props.setMajorsList(majorsList));
     }
     if (!this.props.myEvalsList) {
       let client = new API();

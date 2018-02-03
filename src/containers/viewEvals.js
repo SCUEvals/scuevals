@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
-import ReactModal from 'react-modal';
-import { setQuartersList, setMajorsList } from '../actions';
 import { Link } from 'react-router-dom';
+import FlagModal from '../components/flagModal';
+import DeleteModal from '../components/deleteModal';
 
+import { setMyEvalsList } from '..'
 import Eval from '../components/eval';
 import API from '../services/api';
 import '../styles/viewEvals.scss';
@@ -22,7 +23,8 @@ class ViewEvals extends Component {
     this.state = {
       info: null,
       orderedInfo: null,
-      modalOpen: false
+      flagModal: { open: false, comment: undefined, id: undefined },
+      deleteModal: { open: false, quarter_id: undefined, course_id: undefined, professor_id: undefined, eval_id: undefined }
     };
   }
 
@@ -46,28 +48,32 @@ class ViewEvals extends Component {
   }
 
   render() { //1-1.74 score1, 1.75-2.49 score2, 2.50-3.24 score3, 3.25-4 score4
-    const { info, orderedInfo, modalOpen } = this.state;
-    const { majorsList, quartersList, departmentsList } = this.props;
+    const { info, orderedInfo, flagModal, deleteModal } = this.state;
+    const { majorsList, quartersList, coursesList, professorsList, departmentsList } = this.props;
     return (
       <div className="content">
-        <ReactModal isOpen={modalOpen} className='Modal' appElement={document.getElementById('app')}>
-          <div className='container'>
-          <div className='modalPanel'>
-            <div className='modalHeader'>
-              <h5>Flag comment</h5>
-              <i tabIndex='0' className='fa fa-times'
-                onClick={() => this.setState({modalOpen: false})}
-                onKeyPress={event => {
-                  if (event.key === 'Enter') this.setState({modalOpen: false});
-                }}
-              />
-            </div>
-            <div className='modalBlock'>
-              Content
-            </div>
-          </div>
-        </div>
-        </ReactModal>
+        <FlagModal
+          flagModalOpen={flagModal.open}
+          closeFlagModal={() => this.setState({flagModal: {open: false }})}
+        />
+        <DeleteModal
+          deleteModalOpen={deleteModal.open}
+          closeDeleteModal={() => this.setState({deleteModal: {open: false}})}
+          quarter={quartersList && deleteModal.quarter_id ? quartersList.object[deleteModal.quarter_id].label : null}
+          course={coursesList && coursesList.departmentsListLoaded && deleteModal.course_id ? coursesList.object[deleteModal.course_id].label : null }
+          professor={professorsList && deleteModal.professor_id ? professorsList.object[deleteModal.professor_id].label : null}
+          eval_id={deleteModal.eval_id}
+          deletePost={() => {
+            let client = new API();
+            client.delete(`/evaluations/${deleteModal.eval_id}`);
+            info.evaluations.map((obj, key) => {
+              if (obj.id === deleteModal.eval_id) {
+                info.evaluations.splice(info.evaluations[key], 1);
+                this.setState({info});
+              };
+             });
+          }}
+        />
         <h2>
           {info ?
             this.props.type === 'professors' ?
@@ -186,8 +192,8 @@ class ViewEvals extends Component {
                       e.target.className = 'fa fa-sort-desc';
                     else e.target.className = 'fa fa-sort-asc';
                   }}
-                  onKeyDown={e => {
-                    if (e.keyCode === 13) e.target.click();
+                  onKeyPress={event => {
+                    if (event.key === 'Enter') event.target.click();
                   }}
 
                  />
@@ -196,7 +202,24 @@ class ViewEvals extends Component {
                   majorsList={majorsList}
                   quartersList={quartersList}
                   departmentsList={departmentsList}
-                  evaluation={evaluation} openModal={() => this.setState({modalOpen: true})}
+                  evaluation={evaluation}
+                  openModal={(type, x, secondId, eval_id) => {
+                    switch (type) {
+                      case 'flag': //x = comment
+                        this.setState({flagModal: {open: true, comment: x}});
+                        break;
+                      case 'delete': //x = quarter_id
+                        switch(this.props.type) {
+                          case 'courses':
+                            this.setState({deleteModal: {open: true, quarter_id: x, course_id: info.id, professor_id: secondId, eval_id}})
+                            break;
+                          case 'professors':
+                            this.setState({deleteModal: {open: true, quarter_id: x, course_id: secondId, professor_id: info.id, eval_id}});
+                            break;
+                        }
+                        break;
+                    }
+                  }}
                 />
               </div>
             );
@@ -211,9 +234,11 @@ function mapStateToProps(state) {
   return {
     userInfo: state.userInfo,
     departmentsList: state.departmentsList,
+    majorsList: state.majorsList,
     quartersList: state.quartersList,
-    majorsList: state.majorsList
+    coursesList: state.coursesList,
+    professorsList: state.professorsList
   };
 }
 
-export default connect(mapStateToProps, { setQuartersList, setMajorsList })(ViewEvals);
+export default connect(mapStateToProps, null)(ViewEvals);

@@ -71,19 +71,17 @@ class Eval extends Component {
         : 11
       : 15
     : 18;
-    let upVote, downVote = null;
     let majorsString = '';
     if (evaluation.author && majorsList) {
        for (let i of evaluation.author.majors) majorsString += majorsList.object[i].name + ', ';
        if (majorsString) majorsString = majorsString.substring(0, majorsString.length - 2); //cut off last comma and space
     };
-
     return (
       <div styleName='eval'>
         <div styleName='vote'>
           {evaluation.author && !evaluation.author.self ?
               <i tabIndex='0'
-              ref={node => upVote = node}
+              ref={node => this.upVote = node}
               styleName={user_vote == 1 ? 'active' : ''}
               className='fa fa-caret-up'
               onClick={user_vote == 1 ?
@@ -108,15 +106,15 @@ class Eval extends Component {
                      user_vote: 1
                    })
                 }}
-                onKeyDown={e => {
-                  if (e.keyCode === 13) upVote.click();
+                onKeyPress={event => {
+                  if (event.key === 'Enter') upVote.click();
                 }}
             />
           : ''}
           <span style={{fontSize: votesFontSize + 'px'}} styleName='voteScore'>{votes_score}</span>
           {evaluation.author && !evaluation.author.self ?
             <i tabIndex='0'
-              ref={node => downVote = node}
+              ref={node => this.downVote = node}
               styleName={user_vote == -1 ? 'active' : ''}
                className='fa fa-caret-down'
                onClick={user_vote == -1 ?
@@ -141,8 +139,8 @@ class Eval extends Component {
                       user_vote: -1
                     })
                  }}
-                 onKeyDown={e => {
-                   if (e.keyCode === 13) downVote.click();
+                 onKeyPress={event => {
+                   if (event.key === 'Enter') downVote.click();
                  }}
             />
           : ''}
@@ -281,12 +279,24 @@ class Eval extends Component {
                 : ''
                 }
               </div>
-              <div className='col-xs-12 col-sm-1' styleName='flagComment'>
-                <i className='fa fa-flag' tabIndex='0'
-                  onClick={() => openModal()}
-                  onKeyPress={event => {
-                    if (event.key === 'Enter') openModal();
-                  }} />
+              <div className='col-xs-12 col-sm-1' styleName='triggerModal'>
+                {!evaluation.author || evaluation.author.self ?
+                  <i className='fa fa-trash'
+                    tabIndex='0'
+                    onClick={() => openModal('delete', evaluation.quarter_id, evaluation.professor ? evaluation.professor.id : evaluation.course.id, evaluation.id)}
+                    onKeyPress={event => {
+                      if (event.key === 'Enter') openModal('delete', evaluation.quarter_id, evaluation.professor ? evaluation.professor.id : evaluation.course.id, evaluation.id);
+                    }}
+                  />
+                  :
+                  <i className='fa fa-flag'
+                    tabIndex='0'
+                    onClick={() => openModal('flag', evaluation.data.comment, evaluation.id)}
+                    onKeyPress={event => {
+                      if (event.key === 'Enter') openModal('flag', evaluation.data.comment, evaluation.id);
+                    }}
+                   />
+                }
               </div>
             </div>
           </div>

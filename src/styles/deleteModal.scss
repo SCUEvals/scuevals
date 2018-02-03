@@ -1,0 +1,20 @@
+@import "theme";
+
+:global(.modalBlock) {
+  button {
+    margin: 15px;
+    width: 65px;
+  }
+
+  div {
+    padding: 0 15px;
+  }
+
+  div:first-of-type {
+    margin-top: 15px;
+  }
+
+  div:last-of-type {
+    margin-top: 15px;
+  }
+}

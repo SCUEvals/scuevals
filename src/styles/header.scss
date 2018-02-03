@@ -14,6 +14,7 @@ header {
 
   :global(.input-group-btn) > button {
     border-radius: 0 $defaultBorderRadius $defaultBorderRadius 0;
+    width: 43px;
 
     &:focus {
       box-shadow: none;
