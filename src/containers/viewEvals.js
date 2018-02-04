@@ -104,7 +104,7 @@ class ViewEvals extends Component {
             </svg>
           </div>
           <div styleName='avgScore'>
-            <div styleName='scoreTitle'>Difficulty</div>
+            <div styleName='scoreTitle'>Easiness</div>
             <svg styleName='score4'>
               <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(3.8)}} />
               <text x='50%' y='50%'>

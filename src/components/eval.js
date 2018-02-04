@@ -23,8 +23,8 @@ class Eval extends Component {
   render() {
     const { evaluation, openModal, majorsList, quartersList, departmentsList } = this.props;
     const { votes_score, user_vote } = this.state;
-    const { attitude, availability, clarity, difficulty, grading_speed, recommended, resourcefulness, workload } = evaluation.data;
-    const average = (attitude + availability + clarity + difficulty + grading_speed + recommended + resourcefulness + workload) / (Object.values(evaluation.data).length - 1); //-1 for comments
+    const { attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload } = evaluation.data;
+    const average = (attitude + availability + clarity + easiness + grading_speed + recommended + resourcefulness + workload) / (Object.values(evaluation.data).length - 1); //-1 for comments
     const settings = { //set speed = slidesToShow * 75
       dots: false,
       arrows: false,
@@ -196,11 +196,11 @@ class Eval extends Component {
               </svg>
             </div>
             <div styleName='scoreBlock'>
-              <div styleName='scoreTitle'>Difficulty</div>
+              <div styleName='scoreTitle'>Easiness</div>
               <svg>
-                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.difficulty}`}/>
+                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.easiness}`}/>
                 <text x='50%' y='50%'>
-                  {evaluation.data.difficulty}
+                  {evaluation.data.easiness}
                 </text>
               </svg>
             </div>
