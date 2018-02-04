@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import ReactGA from 'react-ga';
 
-import { delUserInfo } from '../actions';
+import { delUserInfo, setSearchResults } from '../actions';
 import SearchBar from './searchBar';
 import '../styles/header.scss';
 
@@ -33,7 +33,7 @@ class Header extends Component {
   }
 
   render() {
-    const { delUserInfo, userInfo } = this.props;
+    const { delUserInfo, userInfo, setSearchResults } = this.props;
     if (this.props.userInfo && !this.props.userInfo.roles.includes(0)) {
       return (
         <header>
@@ -47,6 +47,7 @@ class Header extends Component {
               {userInfo.first_name}
             </Link>
             <button className='btn' styleName='signOutBtn' type='button' onClick={() => {
+              setSearchResults(null);
               localStorage.removeItem('jwt');
               delUserInfo();
               ReactGA.set({ userId: undefined });
@@ -70,4 +71,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, { delUserInfo })(Header));
+export default withRouter(connect(mapStateToProps, { delUserInfo, setSearchResults })(Header));

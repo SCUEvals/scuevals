@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
-import { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList, setMyEvalsList } from '../actions';
+import { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList } from '../actions';
 import debounce from 'lodash.debounce';
 import { Link } from 'react-router-dom';
 
@@ -35,10 +35,6 @@ class SearchBar extends Component {
     if (!this.props.majorsList) {
       let client = new API();
       client.get('/majors', majorsList =>this.props.setMajorsList(majorsList));
-    }
-    if (!this.props.myEvalsList) {
-      let client = new API();
-      client.get('/evaluations', myEvalsList => this.props.setMyEvalsList(myEvalsList));
     }
   }
 
@@ -164,7 +160,7 @@ class SearchBar extends Component {
               );
             })
           }
-          {response.courses.length > 0 ? <li><h6 onMouseDown={event => event.preventDefault()}>Classes</h6></li> : ''}
+          {response.courses.length > 0 ? <li><h6 onMouseDown={event => event.preventDefault()}>Courses</h6></li> : ''}
           {
             response.courses.map(course => {
               return(
@@ -261,4 +257,4 @@ const mapStateToProps = state => {
 export default reduxForm({
   validate,
   form: 'searchBar'
-})(connect(mapStateToProps, { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList, setMyEvalsList })(SearchBar));
+})(connect(mapStateToProps, { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList })(SearchBar));

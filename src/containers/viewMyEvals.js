@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import DeleteModal from '../components/deleteModal';
 
-import { setMyEvalsList } from '../actions'
 import Eval from '../components/eval';
 import API from '../services/api';
 import '../styles/viewEvals.scss';
@@ -21,13 +20,19 @@ class ViewMyEvals extends Component {
     super(props);
     this.state = {
       orderedInfo: null,
-      deleteModal: { open: false, quarter_id: undefined, course_id: undefined, professor_id: undefined, eval_id: undefined }
+      deleteModal: { open: false, quarter_id: undefined, course_id: undefined, professor_id: undefined, eval_id: undefined },
+      myEvalsList: null
     };
   }
 
+  componentDidMount() {
+    let client = new API();
+    client.get('/evaluations', myEvalsList => this.setState({myEvalsList}));
+  }
+
   render() {
-    const { info, orderedInfo, deleteModal } = this.state;
-    const { userInfo, myEvalsList, quartersList, coursesList, departmentsList, professorsList, setMyEvalsList } = this.props;
+    const { info, orderedInfo, deleteModal, myEvalsList } = this.state;
+    const { userInfo, quartersList, coursesList, departmentsList, professorsList } = this.props;
     return (
       <div className="content">
         <DeleteModal
@@ -44,33 +49,34 @@ class ViewMyEvals extends Component {
               if (obj.id === deleteModal.eval_id) {
                 let newList = myEvalsList.slice();
                 newList.splice(myEvalsList[key], 1);
-                setMyEvalsList(newList);
+                this.setState({ myEvalsList: newList });
               };
             });
           }}
         />
         <h4 className='banner'>{userInfo.first_name}'s Evals</h4>
-        <Select
-          className='sort'
-          simpleValue
-          options={null}
-          placeholder="Sort"
-        />
         {myEvalsList ?
            myEvalsList.length === 0 ?
-            'You haven\'t posted anything yet.'
-          : myEvalsList.map(evaluation => {
-            return <Eval
-              key={evaluation.id}
-              evaluation={evaluation}
-              quartersList={quartersList}
-              departmentsList={departmentsList}
-              openModal={() => { //type, quarter_id, secondId, eval_id passed in, but not needed in viewMyEvals
-                this.setState({deleteModal: {open: true, quarter_id: evaluation.quarter_id, course_id: evaluation.course.id, professor_id: evaluation.professor.id, eval_id: evaluation.id}});
-              }}
-            />
-          })
-
+            <h5>You haven't posted anything yet.</h5>
+            : <div>
+                <Select
+                  className='sort'
+                  simpleValue
+                  options={null}
+                  placeholder="Sort"
+                />
+                {myEvalsList.map(evaluation => {
+                  return <Eval
+                    key={evaluation.id}
+                    evaluation={evaluation}
+                    quartersList={quartersList}
+                    departmentsList={departmentsList}
+                    openModal={() => { //type, quarter_id, secondId, eval_id passed in, but not needed in viewMyEvals
+                      this.setState({deleteModal: {open: true, quarter_id: evaluation.quarter_id, course_id: evaluation.course.id, professor_id: evaluation.professor.id, eval_id: evaluation.id}});
+                    }}
+                  />
+                })}
+            </div>
         : <h5>Loading...</h5>}
       </div>
     );
@@ -80,7 +86,6 @@ class ViewMyEvals extends Component {
 function mapStateToProps(state) {
   return {
     userInfo: state.userInfo,
-    myEvalsList: state.myEvalsList,
     departmentsList: state.departmentsList,
     quartersList: state.quartersList,
     coursesList: state.coursesList,
@@ -88,4 +93,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { setMyEvalsList })(ViewMyEvals);
+export default connect(mapStateToProps, null)(ViewMyEvals);

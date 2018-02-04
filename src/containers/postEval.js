@@ -16,7 +16,7 @@ const Handle = Slider.Handle;
 const textOptions = {
   attitude: {
     one: 'Unapproachable',
-    two: 'Negative or mean',
+    two: 'Generally negative',
     three: 'Nice enough',
     four: 'Fantastic',
     info: 'How did you feel the professor acted towards students?'
@@ -26,12 +26,12 @@ const textOptions = {
     two: 'Barely available',
     three: 'Usually reachable',
     four: 'Super flexible',
-    info: 'How easy is it to contact or meet with the professor?'
+    info: 'How easy was it to contact or meet with the professor?'
   },
   clarity: {
-    one: 'Cannot understand',
+    one: 'Could not understand',
     two: 'Often unclear',
-    three: 'Usually get it',
+    three: 'Usually understood',
     four: 'Great explainer',
     info: 'Were the professor\'s notes and explanations clear (word choice, handwriting, etc.)?'
   },
@@ -40,28 +40,28 @@ const textOptions = {
     two: 'Extremely slow',
     three: 'After a few classes',
     four: 'By\xA0next class',
-    info: 'How quickly does the professor grade assignments?'
+    info: 'How quickly did the professor grade assignments?'
   },
   resourcefulness: {
-    one: 'Provides nothing',
+    one: 'Provided nothing',
     two: 'Occasional handouts',
-    three: 'Shares most things',
-    four: 'Shares everything',
-    info: 'How much material does the professor share to help students learn?'
+    three: 'Shared most things',
+    four: 'Shared everything',
+    info: 'How much material did the professor share to help students learn?'
   },
   workload: {
-    one: 'There\'s work?',
-    two: 'Easy stuff',
-    three: 'You\'ll survive',
-    four: 'Good luck',
+    one: 'Constantly busy',
+    two: 'You\'ll survive',
+    three: 'Easy stuff',
+    four: 'There\'s work?',
     info: 'How much work was assigned compared to other classes?'
   },
-  difficulty: {
-    one: 'Easy\xA0"A"',
-    two: 'Study the\xA0week before',
-    three: 'Challenging',
-    four: 'You\xA0will suffer',
-    info: 'How hard was the material for this course?'
+  easiness: {
+    one: 'Extremely difficult',
+    two: 'Challenging',
+    three: 'Study the\xA0week before',
+    four: 'Easy\xA0"A"',
+    info: 'How easy was the material for this course?'
   },
   recommend: {
     one: 'No,\xA0avoid\xA0at all costs',
@@ -260,8 +260,8 @@ class PostEval extends Component {
           <Field name='resourcefulness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.resourcefulness} component={this.renderSlider} />
 
           <h3>Class</h3>
-          <h6>Difficulty {infoTooltip(textOptions.difficulty.info)}</h6>
-          <Field name='difficulty' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.difficulty} component={this.renderSlider} />
+          <h6>Easiness {infoTooltip(textOptions.easiness.info)}</h6>
+          <Field name='easiness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.easiness} component={this.renderSlider} />
           <h6>Workload {infoTooltip(textOptions.workload.info)}</h6>
           <Field name='workload' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.workload} component={this.renderSlider} />
 
@@ -300,7 +300,7 @@ const validate = values => {
   if (!values.availability) errors.availability = 'Required';
   if (!values.clarity) errors.clarity = 'Required';
   if (!values.comment) errors.comment = 'Required';
-  if (!values.difficulty) errors.difficulty = 'Required';
+  if (!values.easiness) errors.easiness = 'Required';
   if (!values.grading_speed) errors.grading_speed = 'Required';
   if (!values.recommended) errors.recommended = 'Required';
   if (!values.resourcefulness) errors.resourcefulness = 'Required';

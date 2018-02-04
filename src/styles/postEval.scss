@@ -107,26 +107,6 @@
   background-color: $score4Color;
 }
 
-:global(.workload .track1),
-:global(.difficulty .track1) {
-  background-color: $score4Color;
-}
-
-:global(.workload .track2),
-:global(.difficulty .track2) {
-  background-color: $score3Color;
-}
-
-:global(.workload .track3),
-:global(.difficulty .track3) {
-  background-color: $score2Color;
-}
-
-:global(.workload .track4),
-:global(.difficulty .track4) {
-  background-color: $score1Color;
-}
-
 :global(.slider-error .rc-slider-rail) {
   border: 3px solid $SCUred;
 }

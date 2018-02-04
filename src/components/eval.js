@@ -23,6 +23,8 @@ class Eval extends Component {
   render() {
     const { evaluation, openModal, majorsList, quartersList, departmentsList } = this.props;
     const { votes_score, user_vote } = this.state;
+    const { attitude, availability, clarity, difficulty, grading_speed, recommended, resourcefulness, workload } = evaluation.data;
+    const average = (attitude + availability + clarity + difficulty + grading_speed + recommended + resourcefulness + workload) / (Object.values(evaluation.data).length - 1); //-1 for comments
     const settings = { //set speed = slidesToShow * 75
       dots: false,
       arrows: false,
@@ -72,7 +74,7 @@ class Eval extends Component {
       : 15
     : 18;
     let majorsString = '';
-    if (evaluation.author && majorsList) {
+    if (evaluation.author && evaluation.author.majors && majorsList) {
        for (let i of evaluation.author.majors) majorsString += majorsList.object[i].name + ', ';
        if (majorsString) majorsString = majorsString.substring(0, majorsString.length - 2); //cut off last comma and space
     };
@@ -180,7 +182,7 @@ class Eval extends Component {
               <svg>
                 <circle cx="18" cy="18" r="16" />
                 <text x='50%' y='50%'>
-                  X
+                  {average}
                 </text>
               </svg>
             </div>

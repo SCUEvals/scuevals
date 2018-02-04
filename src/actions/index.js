@@ -6,7 +6,6 @@ export const SET_QUARTERS_LIST = 'set_quarters_list';
 export const SET_DEPARTMENTS_LIST = 'set_departments_list';
 export const SET_PROFESSORS_LIST = 'set_professors_list';
 export const SET_COURSES_LIST = 'set_courses_list';
-export const SET_MY_EVALS_LIST = 'set_my_evals_list';
 
 /*Note: May store both object and sorted array since sorting a big array once and storing is more efficient than converting object to array and sorting each render
   Storing as object to use dot notation for O(1) lookup instead of looking through entire array O(n)
@@ -100,11 +99,4 @@ export function setCoursesList(coursesList, departmentsList) {
     type: SET_COURSES_LIST,
     payload: returnedObj
   };
-}
-
-export function setMyEvalsList(myEvalsList) {
-  return {
-    type: SET_MY_EVALS_LIST,
-    payload: myEvalsList
-  }
 }
