@@ -85,7 +85,7 @@ class Eval extends Component {
               <i tabIndex='0'
               ref={node => this.upVote = node}
               styleName={user_vote == 1 ? 'active' : ''}
-              className='fa fa-caret-up'
+              className='fa fa-thumbs-up'
               onClick={user_vote == 1 ?
                 e => {
                   let client = new API();
@@ -118,7 +118,7 @@ class Eval extends Component {
             <i tabIndex='0'
               ref={node => this.downVote = node}
               styleName={user_vote == -1 ? 'active' : ''}
-               className='fa fa-caret-down'
+               className='fa fa-thumbs-down'
                onClick={user_vote == -1 ?
                  e => {
                    let client = new API();

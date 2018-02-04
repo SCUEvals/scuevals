@@ -1,6 +1,6 @@
 @import "theme";
 
-$voteWidth: 35px;
+$voteWidth: 50px;
 
 .eval {
   position: relative;
@@ -26,7 +26,7 @@ $voteWidth: 35px;
     i {
       @include alternateLink;
 
-      font-size: 32px;
+      font-size: 28px;
       cursor: pointer;
 
       &.active {
