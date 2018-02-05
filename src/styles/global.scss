@@ -72,6 +72,7 @@ a {
   font-weight: bold;
   text-decoration: none !important;
   color: $SCUred;
+  word-wrap: break-word;
 
   &:focus {
     color: $SCUred;
@@ -414,6 +415,7 @@ a.homeBtn {
   &.noAuthHomeBtn {
     position: absolute;
     left: 0;
+    top: -2px;
   }
 
   &:focus {
@@ -440,9 +442,8 @@ a.homeBtn {
       background: $backgroundColor;
 
       a.homeBtn {
-        position: absolute;
-        top: -1px;
-        left: 5px;
+        float: left;
+        margin-top: -6px;
       }
 
       i.fa-times {
@@ -455,6 +456,7 @@ a.homeBtn {
 
     .modalBlock {
       background: white;
+      padding: 15px;
     }
   }
 

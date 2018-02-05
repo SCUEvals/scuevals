@@ -75,7 +75,7 @@ const textOptions = {
   }
 };
 
-const infoTooltip = (info) => {
+const infoTooltip = info => {
   return (
     <Manager styleName='popper-manager'>
       <Target tabIndex='0' styleName='popper-target'>
@@ -214,7 +214,7 @@ class PostEval extends Component {
     if (location.state || classInfo !== undefined) { //passed values from postSearch
       return (
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
-          <RedirectModal history={history} redirectModalOpen={classInfo === null} />
+          <RedirectModal history={history} redirectModalOpen={classInfo === null || classInfo && classInfo.user_posted} classInfoExists={classInfo && classInfo.user_posted ? true : false} />
           <div styleName='postInfo'>
             <h3>{quarter}</h3>
             <h3>{course ? course : classInfo === null ? 'No class exists for this page.': 'Loading...'}</h3>

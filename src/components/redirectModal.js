@@ -20,7 +20,7 @@ class RedirectModal extends Component {
   }
 
   render() {
-    const { redirectModalOpen } = this.props;
+    const { redirectModalOpen, classInfoExists } = this.props;
     const { seconds } = this.state;
     return (
       <ReactModal isOpen={redirectModalOpen} onAfterOpen={() => setTimeout(() => this.setState({seconds: seconds - 1}), 1000)} className='Modal' appElement={document.getElementById('app')}>
@@ -29,7 +29,7 @@ class RedirectModal extends Component {
             <div className='modalHeader'>
               <h5>
                 <Link className='homeBtn' to='/'><i className='fa fa-home' /></Link>
-                Class does not exist for this page.
+                {classInfoExists ? 'Oops, looks like you already posted for this class.' : 'Class does not exist for this page.'}
               </h5>
             </div>
           <div className='modalBlock'>
