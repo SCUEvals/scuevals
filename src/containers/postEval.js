@@ -50,10 +50,10 @@ const textOptions = {
     info: 'How much material did the professor share to help students learn?'
   },
   workload: {
-    one: 'Constantly busy\n"<3 hrs/wk"',
-    two: 'You\'ll survive\n"3-6 hrs/wk"',
-    three: 'Easy stuff\n"7-10 hrs/wk"',
-    four: 'There\'s work?\n"10+ hrs/wk"',
+    one: 'Constantly busy\n"10+ hrs/wk"',
+    two: 'You\'ll survive\n"7-10 hrs/wk"',
+    three: 'Easy stuff\n"3-6 hrs/wk"',
+    four: 'There\'s work?\n"<3 hrs/wk"',
     info: 'How much work was assigned compared to other classes?'
   },
   easiness: {
