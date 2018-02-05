@@ -93,17 +93,18 @@ class Eval extends Component {
         : 11
       : 15
     : 18;
-    let majorsString = '';
+    let userString = '';
     if (evaluation.author && evaluation.author.majors && majorsList) {
-       for (let i of evaluation.author.majors) majorsString += majorsList.object[i].name + ', ';
-       if (majorsString) majorsString = majorsString.substring(0, majorsString.length - 2); //cut off last comma and space
-    };
+       for (let i of evaluation.author.majors) userString += majorsList.object[i].name + ', ';
+       if (userString && !evaluation.author.graduation_year) userString = userString.substring(0, userString.length - 2); //cut off last comma and space
+       else userString += 'Class of ' + evaluation.author.graduation_year;
+    }
+    else if (evaluation.author && evaluation.author.graduation_year) userString = 'Class of ' + evaluation.author.graduation_year;
     return (
       <div styleName='eval'>
         <div styleName='vote'>
           {evaluation.author && !evaluation.author.self ?
               <i tabIndex='0'
-              ref={node => this.upVote = node}
               styleName={user_vote == 1 ? 'active' : ''}
               className='fa fa-thumbs-up'
               onClick={user_vote == 1 ?
@@ -129,14 +130,14 @@ class Eval extends Component {
                    })
                 }}
                 onKeyPress={event => {
-                  if (event.key === 'Enter') upVote.click();
+                  if (event.key === 'Enter') event.target.click();
                 }}
+
             />
           : ''}
           <span style={{fontSize: votesFontSize + 'px'}} styleName='voteScore'>{votes_score}</span>
           {evaluation.author && !evaluation.author.self ?
             <i tabIndex='0'
-              ref={node => this.downVote = node}
               styleName={user_vote == -1 ? 'active' : ''}
                className='fa fa-thumbs-down'
                onClick={user_vote == -1 ?
@@ -162,7 +163,7 @@ class Eval extends Component {
                     })
                  }}
                  onKeyPress={event => {
-                   if (event.key === 'Enter') downVote.click();
+                   if (event.key === 'Enter') event.target.click();
                  }}
             />
           : ''}
@@ -209,25 +210,11 @@ class Eval extends Component {
           </Slider>
           <div styleName='comment'>
             <div styleName='commentQuote'>
-              "{evaluation.data.comment}"
+              {evaluation.data.comment}
             </div>
             <div className='row'>
-              <div className='col-xs-12 col-sm-11' styleName='commentInfo'>
-                {evaluation.author && evaluation.author.majors && majorsList ?
-                  <div>
-                    {evaluation.author && evaluation.author.majors.length > 1 ?
-                       'Majors: ' + majorsString
-                       : 'Major: ' + majorsString
-                     }
-                  </div>
-                  : ''
-                }
-                {evaluation.author && evaluation.author.graduation_year ?
-                  <div>
-                    Graduation year: {evaluation.author.graduation_year}
-                  </div>
-                : ''
-                }
+              <div className='col-xs-12 col-sm-11' styleName='posterInfo'>
+                {userString}
               </div>
               <div className='col-xs-12 col-sm-1' styleName='triggerModal'>
                 {!evaluation.author || evaluation.author.self ?

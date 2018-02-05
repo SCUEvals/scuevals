@@ -109,8 +109,8 @@ class Profile extends Component {
     });
   }
 
-  componentDidUpdate() {
-    if (!this.props.majorsList) {
+  componentDidMount() {
+    if (this.props.userInfo.roles.includes(0)) { //don't need to check if majorsList or userInfo exists, majorsList shouldn't exist and userInfo should
       let client = new API();
       client.get('/majors', majorsList =>this.props.setMajorsList(majorsList));
     }
