@@ -50,10 +50,10 @@ const textOptions = {
     info: 'How much material did the professor share to help students learn?'
   },
   workload: {
-    one: 'Constantly busy',
-    two: 'You\'ll survive',
-    three: 'Easy stuff',
-    four: 'There\'s work?',
+    one: 'Constantly busy\n"<3 hrs/wk"',
+    two: 'You\'ll survive\n"3-6 hrs/wk"',
+    three: 'Easy stuff\n"7-10 hrs/wk"',
+    four: 'There\'s work?\n"10+ hrs/wk"',
     info: 'How much work was assigned compared to other classes?'
   },
   easiness: {
@@ -64,9 +64,9 @@ const textOptions = {
     info: 'How easy was the material for this course?'
   },
   recommend: {
-    one: 'No,\xA0avoid\xA0at all costs',
+    one: 'No, avoid at all costs',
     two: 'I do not recommend',
-    three: 'Yes, but\xA0it could\xA0be better',
+    three: 'Yes, but it could be better',
     four: 'Absolutely',
     info: 'Overall, was this course with this professor a good option to take?'
   },
@@ -94,7 +94,7 @@ const handle = (props, textProps) => {
   let trackerStyle = {
     top: '-12px',
     left: 'calc(' + props.offset + '% - 2px)',
-    position: 'absolute'
+    position: 'absolute',
   };
 
   let popperStyle = {};
