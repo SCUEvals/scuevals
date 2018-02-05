@@ -1,5 +1,7 @@
 @import "theme";
 
+$sliderTransition: all 0.15s ease-in-out;
+
 :global(.rc-slider-handle) {
   border-color: black !important;
   height: 33px;
@@ -56,12 +58,12 @@
 
   &-track {
     background-color: $overlayBackground;
-    transition: $defaultTransition;
+    transition: $sliderTransition;
     height: 15px;
   }
 
   &-handle {
-    transition: $defaultTransition;
+    transition: $sliderTransition !important;
   }
 }
 
@@ -88,7 +90,7 @@
 
 .popper-manager,
 .popper {
-  transition: $defaultTransition;
+  transition: $sliderTransition;
 }
 
 :global(.track1) {
@@ -179,14 +181,6 @@
   margin-right: 0;
 }
 
-:global(.rc-slider-handle) + .popper {
-  visibility: hidden;
-}
-
-:global(.rc-slider-handle:focus) + .popper {
-  visibility: visible;
-}
-
 @mixin popperTarget {
   width: 22px;
   height: 22px;
@@ -215,19 +209,27 @@
 
 .popper-manager {
   display: inline-block;
+}
 
-  .popper-target + .popper {
-    visibility: hidden;
-  }
+.popper-target + .popper {
+  visibility: hidden;
+}
 
-  .popper-target:hover + .popper,
-  .popper-target:focus + .popper {
-    visibility: visible;
-  }
+.popper-target:hover + .popper,
+.popper-target:focus + .popper {
+  visibility: visible;
+}
 
-  .popper-target {
-    @include popperTarget;
-  }
+.popper-target {
+  @include popperTarget;
+}
+
+:global(.rc-slider-handle) ~ .popper {
+  visibility: hidden;
+}
+
+:global(.rc-slider-handle:focus) ~ .popper {
+  visibility: visible;
 }
 
 .postInfo h3 {

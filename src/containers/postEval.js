@@ -91,25 +91,29 @@ const infoTooltip = (info) => {
 
 const handle = (props, textProps) => {
   const { value, dragging, ...restProps } = props;
-  let managerStyle = {};
-  managerStyle.left = props.offset + '%'; //to fix transitions with popper
-  managerStyle.position = 'absolute';
+  let trackerStyle = {
+    top: '-12px',
+    left: 'calc(' + props.offset + '% - 2px)',
+    position: 'absolute'
+  };
 
   let popperStyle = {};
+
   if (value === 0) {
     popperStyle.visibility = 'hidden';
     popperStyle.opacity = '0'; //needed for transition animation
   }
 
   return (
-    <Manager style={managerStyle} styleName='popper-manager'>
-      <Target>
+    <Manager tag={false}>
+      <Handle value={value} {...restProps}>
+        <div styleName='handleNum'>
+          {value !== 0 ? value : ''}
+        </div>
+      </Handle>
+      <Target styleName='popper-target'>
         {({ targetProps }) => (
-          <Handle value={value} {...restProps}>
-            <div {...targetProps} styleName='handleNum'>
-              {value !== 0 ? value : ''}
-            </div>
-          </Handle>
+          <div style={trackerStyle} {...targetProps}/>
         )}
       </Target>
       <Popper style={popperStyle} placement="top" styleName="popper">
