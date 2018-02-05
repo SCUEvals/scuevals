@@ -10,7 +10,7 @@
 }
 
 .scores {
-  margin: 50px 0;
+  margin-top: 30px;
   display: flex;
   justify-content: center;
 
@@ -84,4 +84,8 @@
   from {
     stroke-dashoffset: 157.08;
   }
+}
+
+.quickPost {
+  margin: 30px;
 }

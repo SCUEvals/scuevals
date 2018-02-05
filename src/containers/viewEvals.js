@@ -47,9 +47,53 @@ class ViewEvals extends Component {
     return  157.08 - (n / 4 * 157.08);
   }
 
+  renderAverage(name, value) {
+    let style = value < 1.75 ? 'score1' : value < 2.5 ? 'score2' : value < 3.25 ? 'score3' : 'score4';
+    if (value) {
+      return (
+        <div styleName='avgScore'>
+          <div styleName='scoreTitle'>{name}</div>
+          <svg styleName={style}>
+            <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(value)}} />
+            <text x='50%' y='50%'>
+              {value}
+            </text>
+          </svg>
+        </div>
+      );
+    }
+  }
+
   render() { //1-1.74 score1, 1.75-2.49 score2, 2.50-3.24 score3, 3.25-4 score4
     const { info, orderedInfo, flagModal, deleteModal } = this.state;
     const { majorsList, quartersList, coursesList, professorsList, departmentsList } = this.props;
+    let average, attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload;
+    if (info && info.evaluations.length > 0) {
+      average = attitude = availability = clarity = easiness = grading_speed = recommended = resourcefulness = workload = 0;
+      const avgDivideNum = Object.values(info.evaluations[0].data).length - 1; //comment not part of average
+      const divideNum = info.evaluations.length;
+      info.evaluations.map(evaluation => {
+        const { data } = evaluation;
+        attitude += data.attitude;
+        availability += data.availability;
+        clarity += data.clarity;
+        easiness += data.easiness;
+        grading_speed += data.grading_speed;
+        recommended += data.recommended;
+        resourcefulness += data.resourcefulness;
+        workload += data.workload;
+        average += (data.attitude + data.availability + data.clarity + data.easiness + data.grading_speed + data.recommended + data.resourcefulness + data.workload) / avgDivideNum;
+      });
+      average = Number((average / divideNum * 10) / 10).toFixed(1);
+      attitude = Number((attitude / divideNum * 10) / 10).toFixed(1);
+      availability = Number((availability / divideNum * 10) / 10).toFixed(1);
+      clarity = Number((clarity / divideNum * 10) / 10).toFixed(1);
+      easiness = Number((easiness / divideNum * 10) / 10).toFixed(1);
+      grading_speed = Number((grading_speed / divideNum * 10) / 10).toFixed(1);
+      recommended = Number((recommended / divideNum * 10) / 10).toFixed(1);
+      resourcefulness = Number((resourcefulness / divideNum * 10) / 10).toFixed(1);
+      workload = Number((workload / divideNum * 10) / 10).toFixed(1);
+    };
     return (
       <div className="content">
         <FlagModal
@@ -84,119 +128,53 @@ class ViewEvals extends Component {
             : 'Loading...'
           }
         </h2>
-        <div className='row' styleName='scores'>
-          <div styleName='avgScore'>
-            <div styleName='scoreTitle'>Average</div>
-            <svg styleName='score1'>
-              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(1.3)}} />
-              <text x='50%' y='50%'>
-                1.3
-              </text>
-            </svg>
+        {info && info.evaluations.length > 0 ?
+          <div className='row' styleName='scores'>
+            {this.renderAverage('Average', average)}
+            {this.renderAverage('Recommend?', recommended)}
+            {this.renderAverage('Easiness', easiness)}
+            {this.renderAverage('Workload', workload)}
+            {this.renderAverage('Grading Speed', grading_speed)}
+            {this.renderAverage('Clarity', clarity)}
+            {this.renderAverage('Resourcefulness', resourcefulness)}
+            {this.renderAverage('Attitude', attitude)}
+            {this.renderAverage('Availability', availability)}
           </div>
-          <div styleName='avgScore'>
-            <div styleName='scoreTitle'>Recommend?</div>
-            <svg styleName='score3'>
-              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(2.6)}} />
-              <text x='50%' y='50%'>
-                2.6
-              </text>
-            </svg>
-          </div>
-          <div styleName='avgScore'>
-            <div styleName='scoreTitle'>Easiness</div>
-            <svg styleName='score4'>
-              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(3.8)}} />
-              <text x='50%' y='50%'>
-                3.8
-              </text>
-            </svg>
-          </div>
-          <div styleName='avgScore'>
-            <div styleName='scoreTitle'>Workload</div>
-            <svg styleName='score2'>
-              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(2.1)}} />
-              <text x='50%' y='50%'>
-                2.1
-              </text>
-            </svg>
-          </div>
-          <div styleName='avgScore'>
-            <div styleName='scoreTitle'>Grading Speed</div>
-            <svg styleName='score4'>
-              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(3.4)}} />
-              <text x='50%' y='50%'>
-                3.4
-              </text>
-            </svg>
-          </div>
-          <div styleName='avgScore'>
-            <div styleName='scoreTitle'>Clarity</div>
-            <svg styleName='score2'>
-              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(1.9)}} />
-              <text x='50%' y='50%'>
-                1.9
-              </text>
-            </svg>
-          </div>
-          <div styleName='avgScore'>
-            <div styleName='scoreTitle'>Resourcefulness</div>
-            <svg styleName='score3'>
-              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(2.5)}} />
-              <text x='50%' y='50%'>
-                2.5
-              </text>
-            </svg>
-          </div>
-          <div styleName='avgScore'>
-            <div styleName='scoreTitle'>Attitude</div>
-            <svg styleName='score3'>
-              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(3.1)}} />
-              <text x='50%' y='50%'>
-                3.1
-              </text>
-            </svg>
-          </div>
-          <div styleName='avgScore'>
-            <div styleName='scoreTitle'>Availability</div>
-            <svg styleName='score1'>
-              <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(1.7)}} />
-              <text x='50%' y='50%'>
-                1.7
-              </text>
-            </svg>
-          </div>
-        </div>
-        <Link className='btn' to={this.props.type === 'professors' ?
+          : ''
+        }
+        <Link styleName='quickPost' className='btn' to={this.props.type === 'professors' ?
           `/professors/${this.props.match.params.id}/post`
           :`/courses/${this.props.match.params.id}/post`}>
           Quick Post
         </Link>
+        {info && info.evaluations.length > 0 ?
+          <div>
+            <Select
+              className='sort'
+              simpleValue
+              options={null}
+              placeholder="Sort"
+            />
+            <i
+              tabIndex='0'
+              className='fa fa-sort'
+              onClick={e => {
+                if (e.target.className === 'fa fa-sort' || e.target.className === 'fa fa-sort-asc')
+                  e.target.className = 'fa fa-sort-desc';
+                else e.target.className = 'fa fa-sort-asc';
+              }}
+              onKeyPress={event => {
+                if (event.key === 'Enter') event.target.click();
+              }}
+
+             />
+           </div>
+        : ''}
         {info ?
           info.evaluations.length === 0 ?
             <h5>No evaluations posted yet.</h5>
           : info.evaluations.map(evaluation => {
-            return (
-              <div key={evaluation.id}>
-                <Select
-                  className='sort'
-                  simpleValue
-                  options={null}
-                  placeholder="Sort"
-                />
-                <i
-                  tabIndex='0'
-                  className='fa fa-sort'
-                  onClick={e => {
-                    if (e.target.className === 'fa fa-sort' || e.target.className === 'fa fa-sort-asc')
-                      e.target.className = 'fa fa-sort-desc';
-                    else e.target.className = 'fa fa-sort-asc';
-                  }}
-                  onKeyPress={event => {
-                    if (event.key === 'Enter') event.target.click();
-                  }}
-
-                 />
+              return (
                 <Eval
                   key={evaluation.id}
                   majorsList={majorsList}
@@ -221,9 +199,8 @@ class ViewEvals extends Component {
                     }
                   }}
                 />
-              </div>
-            );
-          })
+              );
+            })
         : ''}
       </div>
     );

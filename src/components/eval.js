@@ -20,11 +20,31 @@ class Eval extends Component {
     };
   }
 
+  calculatePath(n) { //circumference = 100.53
+    return  100.53 - (n / 4 * 100.53);
+  }
+
+  renderScore(name, value) {
+    let style;
+    if (name === 'Average') style = {strokeDashoffset: this.calculatePath(value)};
+    return (
+      <div styleName='scoreBlock'>
+        <div styleName='scoreTitle'>{name}</div>
+        <svg>
+          <circle style={style} cx="18" cy="18" r="16" styleName={`score${value < 1.75 ? '1' : value < 2.5 ? '2' : value < 3.25 ? '3' : '4'}`}/>
+          <text x='50%' y='50%'>
+            {value}
+          </text>
+        </svg>
+      </div>
+    );
+  }
+
   render() {
     const { evaluation, openModal, majorsList, quartersList, departmentsList } = this.props;
     const { votes_score, user_vote } = this.state;
     const { attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload } = evaluation.data;
-    const average = (attitude + availability + clarity + easiness + grading_speed + recommended + resourcefulness + workload) / (Object.values(evaluation.data).length - 1); //-1 for comments
+    const average =  Number((attitude + availability + clarity + easiness + grading_speed + recommended + resourcefulness + workload) / (Object.values(evaluation.data).length - 1)).toFixed(1); //-1 for comments
     const settings = { //set speed = slidesToShow * 75
       dots: false,
       arrows: false,
@@ -177,87 +197,15 @@ class Eval extends Component {
           </div>
           }
           <Slider {...settings}>
-            <div styleName='scoreBlock'>
-              <div styleName='scoreTitle'>Average</div>
-              <svg>
-                <circle cx="18" cy="18" r="16" />
-                <text x='50%' y='50%'>
-                  {average}
-                </text>
-              </svg>
-            </div>
-            <div styleName='scoreBlock'>
-              <div styleName='scoreTitle'>Recommend?</div>
-              <svg>
-                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.recommended}`}/>
-                <text x='50%' y='50%'>
-                  {evaluation.data.recommended}
-                </text>
-              </svg>
-            </div>
-            <div styleName='scoreBlock'>
-              <div styleName='scoreTitle'>Easiness</div>
-              <svg>
-                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.easiness}`}/>
-                <text x='50%' y='50%'>
-                  {evaluation.data.easiness}
-                </text>
-              </svg>
-            </div>
-            <div styleName='scoreBlock'>
-              <div styleName='scoreTitle'>Workload</div>
-              <svg>
-                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.workload}`}/>
-                <text x='50%' y='50%'>
-                  {evaluation.data.workload}
-                </text>
-              </svg>
-            </div>
-            <div styleName='scoreBlock'>
-              <div styleName='scoreTitle'>Grading Speed</div>
-              <svg>
-                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.grading_speed}`}/>
-                <text x='50%' y='50%'>
-                  {evaluation.data.grading_speed}
-                </text>
-              </svg>
-            </div>
-            <div styleName='scoreBlock'>
-              <div styleName='scoreTitle'>Clarity</div>
-              <svg>
-                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.clarity}`}/>
-                <text x='50%' y='50%'>
-                  {evaluation.data.clarity}
-                </text>
-              </svg>
-            </div>
-            <div styleName='scoreBlock'>
-              <div styleName='scoreTitle'>Resourcefulness</div>
-              <svg>
-                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.resourcefulness}`}/>
-                <text x='50%' y='50%'>
-                  {evaluation.data.resourcefulness}
-                </text>
-              </svg>
-            </div>
-            <div styleName='scoreBlock'>
-              <div styleName='scoreTitle'>Attitude</div>
-              <svg>
-                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.attitude}`}/>
-                <text x='50%' y='50%'>
-                  {evaluation.data.attitude}
-                </text>
-              </svg>
-            </div>
-            <div styleName='scoreBlock'>
-              <div styleName='scoreTitle'>Availability</div>
-              <svg>
-                <circle cx="18" cy="18" r="16" styleName={`score${evaluation.data.availability}`}/>
-                <text x='50%' y='50%'>
-                  {evaluation.data.availability}
-                </text>
-              </svg>
-            </div>
+            {this.renderScore('Average', average)}
+            {this.renderScore('Recommend?', recommended)}
+            {this.renderScore('Easiness', easiness)}
+            {this.renderScore('Workload', workload)}
+            {this.renderScore('Grading Speed', grading_speed)}
+            {this.renderScore('Clarity', clarity)}
+            {this.renderScore('Resourcefulness', resourcefulness)}
+            {this.renderScore('Attitude', attitude)}
+            {this.renderScore('Availability', availability)}
           </Slider>
           <div styleName='comment'>
             <div styleName='commentQuote'>

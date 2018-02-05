@@ -101,11 +101,11 @@ $voteWidth: 50px;
 
   :global(.unslicked) {
     border-bottom: 1px solid $backgroundColor;
+    background: $sandColor;
 
     .scoreBlock {
       display: inline-block;
       width: percentage(1 / $xlBP);
-      background: $sandColor;
     }
   }
 
@@ -209,7 +209,7 @@ $voteWidth: 50px;
       dominant-baseline: central;
       text-anchor: middle;
       fill: white;
-      font-size: 20px;
+      font-size: 16px;
     }
 
     .score1 {
