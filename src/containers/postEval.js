@@ -40,7 +40,7 @@ class PostEval extends Component {
     let client = new API();
     return client.post('/evaluations', returnedObj, () => {
       this.setState({submitted: true});
-      ReactGA.event({category: 'User', action: 'Submitted Evaluation'});
+      ReactGA.event({category: 'Evaluation', action: 'Submitted'});
     });
   };
 

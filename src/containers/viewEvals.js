@@ -125,7 +125,7 @@ class ViewEvals extends Component {
           eval_id={deleteModal.eval_id}
           deletePost={() => {
             let client = new API();
-            client.delete(`/evaluations/${deleteModal.eval_id}`, ReactGA.event({category: 'User', action: 'Deleted Evaluation'}));
+            client.delete(`/evaluations/${deleteModal.eval_id}`, ReactGA.event({category: 'Evaluation', action: 'Deleted'}));
             info.evaluations.map((obj, key) => {
               if (obj.id === deleteModal.eval_id) {
                 info.evaluations.splice(info.evaluations[key], 1);
