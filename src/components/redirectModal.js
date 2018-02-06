@@ -20,7 +20,7 @@ class RedirectModal extends Component {
   }
 
   render() {
-    const { redirectModalOpen, classInfoExists } = this.props;
+    const { redirectModalOpen, classInfoExists, submitted } = this.props;
     const { seconds } = this.state;
     return (
       <ReactModal isOpen={redirectModalOpen} onAfterOpen={() => setTimeout(() => this.setState({seconds: seconds - 1}), 1000)} className='Modal' appElement={document.getElementById('app')}>
@@ -29,10 +29,21 @@ class RedirectModal extends Component {
             <div className='modalHeader'>
               <h5>
                 <Link className='homeBtn' to='/'><i className='fa fa-home' /></Link>
-                {classInfoExists ? 'Oops, looks like you already posted for this class.' : 'Class does not exist for this page.'}
+                {classInfoExists || !submitted ?
+                  'Oops!'
+                : 'Thank you!'
+                }
               </h5>
             </div>
           <div className='modalBlock'>
+            <p>{
+              classInfoExists ?
+                'Looks like you already posted for this class.'
+              : submitted ?
+                'Good job submitting an eval!'
+              : 'Class does not exist for this page.'
+            }</p>
+            <hr />
             Redirecting to home in {seconds}...
           </div>
         </div>

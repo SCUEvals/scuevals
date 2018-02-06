@@ -244,6 +244,8 @@ class PostSearch extends Component {
     const { localQuartersList, localCoursesList, localProfessorsList } = this.state;
     return (
       <form ref={node => this.postSearchForm = node} className='content' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+        <small>In any order, select the correct combination and select "Continue" to start filling your eval.</small>
+        <hr />
         <Field
           name='quarter' //responsible for object's key name for values
           component={this.renderQuarters}

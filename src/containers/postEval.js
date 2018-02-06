@@ -133,7 +133,8 @@ class PostEval extends Component {
     super(props);
     this.state = {
       term: '',
-      classInfo: undefined
+      classInfo: undefined,
+      submitted: false
     };
     let client = new API();
     //course and professor swapped because API currently has different order than site
@@ -148,7 +149,7 @@ class PostEval extends Component {
     let evaluation = {...values};
     let returnedObj = { quarter_id, course_id, professor_id, display_majors, display_grad_year, evaluation };
     let client = new API();
-    return client.post('/evaluations', returnedObj, () => this.props.history.push('/'));
+    return client.post('/evaluations', returnedObj, () => this.setState({submitted: true}));
   };
 
 
@@ -196,7 +197,7 @@ class PostEval extends Component {
 
   render() {
     const { quartersList, coursesList, professorsList, handleSubmit, submitting, userInfo, location, history } = this.props;
-    const { classInfo } = this.state;
+    const { classInfo, submitted } = this.state;
     let quarter, course, professor;
     if (quartersList && coursesList && coursesList.departmentsListLoaded && professorsList) {
       if (location.state) {
@@ -213,7 +214,7 @@ class PostEval extends Component {
     if (location.state || classInfo !== undefined) { //passed values from postSearch
       return (
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
-          <RedirectModal history={history} redirectModalOpen={classInfo === null || classInfo && classInfo.user_posted} classInfoExists={classInfo && classInfo.user_posted ? true : false} />
+          <RedirectModal history={history} redirectModalOpen={classInfo === null || classInfo && classInfo.user_posted || submitted} submitted={submitted} classInfoExists={classInfo && classInfo.user_posted ? true : false} />
           <div styleName='postInfo'>
             <h5>{quarter}</h5>
             <h3>{course ? course : classInfo === null ? 'No class exists for this page.': 'Loading...'}</h3>
