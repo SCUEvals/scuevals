@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import FlagModal from '../components/flagModal';
 import DeleteModal from '../components/deleteModal';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
+import ReactGA from 'react-ga';
 
 import { setMyEvalsList } from '..'
 import Eval from '../components/eval';
@@ -124,7 +125,7 @@ class ViewEvals extends Component {
           eval_id={deleteModal.eval_id}
           deletePost={() => {
             let client = new API();
-            client.delete(`/evaluations/${deleteModal.eval_id}`);
+            client.delete(`/evaluations/${deleteModal.eval_id}`, ReactGA.event({category: 'User', action: 'Deleted Evaluation'}));
             info.evaluations.map((obj, key) => {
               if (obj.id === deleteModal.eval_id) {
                 info.evaluations.splice(info.evaluations[key], 1);

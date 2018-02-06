@@ -110,7 +110,7 @@ class Eval extends Component {
               onClick={user_vote == 1 ?
                 e => {
                   let client = new API();
-                  client.delete(`/evaluations/${evaluation.id}/vote`);
+                  client.delete(`/evaluations/${evaluation.id}/vote`, ReactGA.event({category: 'User', action: 'Deleted Vote'}));
                   this.setState({
                     votes_score: votes_score - 1,
                     user_vote: null
@@ -118,7 +118,7 @@ class Eval extends Component {
                 }
                 : e => {
                   let client = new API();
-                  client.put(`/evaluations/${evaluation.id}/vote`, 'u');
+                  client.put(`/evaluations/${evaluation.id}/vote`, 'u',  ReactGA.event({category: 'User', action: 'Added Vote'}));
                   user_vote == -1 ?
                   this.setState({
                     votes_score: votes_score + 2,
@@ -143,7 +143,7 @@ class Eval extends Component {
                onClick={user_vote == -1 ?
                  e => {
                    let client = new API();
-                   client.delete(`/evaluations/${evaluation.id}/vote`);
+                   client.delete(`/evaluations/${evaluation.id}/vote`,  ReactGA.event({category: 'User', action: 'Deleted Vote'}));
                    this.setState({
                      votes_score: votes_score + 1,
                      user_vote: null
@@ -151,7 +151,7 @@ class Eval extends Component {
                  }
                  : e => { //user_vote 1 or null
                    let client = new API();
-                   client.put(`/evaluations/${evaluation.id}/vote`, 'd');
+                   client.put(`/evaluations/${evaluation.id}/vote`, 'd',  ReactGA.event({category: 'User', action: 'Added Vote'}));
                    user_vote == 1 ?
                     this.setState({
                       votes_score: votes_score - 2,

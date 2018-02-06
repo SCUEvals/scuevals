@@ -63,7 +63,7 @@ class API {
   }
 
   delete(path, callback) {
-    return this.api.delete(path).catch(error => {this.handleError(error); throw error;});
+    return this.api.delete(path).then(response => {callback(response.data); return response;}).catch(error => {this.handleError(error); throw error;});
   }
 }
 

@@ -44,7 +44,7 @@ class ViewMyEvals extends Component {
           eval_id={deleteModal.eval_id}
           deletePost={() => {
             let client = new API();
-            client.delete(`/evaluations/${deleteModal.eval_id}`);
+            client.delete(`/evaluations/${deleteModal.eval_id}`,  ReactGA.event({category: 'User', action: 'Deleted Evaluation'}));
             myEvalsList.map((obj, key) => {
               if (obj.id === deleteModal.eval_id) {
                 let newList = myEvalsList.slice();

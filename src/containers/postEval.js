@@ -38,7 +38,10 @@ class PostEval extends Component {
     let evaluation = {...values};
     let returnedObj = { quarter_id, course_id, professor_id, display_majors, display_grad_year, evaluation };
     let client = new API();
-    return client.post('/evaluations', returnedObj, () => this.setState({submitted: true}));
+    return client.post('/evaluations', returnedObj, () => {
+      this.setState({submitted: true});
+      ReactGA.event({category: 'User', action: 'Submitted Evaluation'});
+    });
   };
 
 
