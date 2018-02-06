@@ -55,3 +55,33 @@ $xsBP: 2;
     color: $hoverOverlayLinkColor;
   }
 }
+
+@mixin popperTarget {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: $SCUred;
+  border: 2px solid white !important;
+
+  &:hover {
+    background-color: $SCUdarkred;
+  }
+
+  &:focus {
+    border: 2px solid $focusColor !important;
+  }
+
+  i {
+    font-size: 14px;
+    color: white;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      color: white;
+    }
+  }
+}

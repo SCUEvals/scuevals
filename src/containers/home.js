@@ -60,7 +60,7 @@ class Home extends Component {
           <p>Welcome to SCU Evals, the best platform for rating and reviewing professors and courses at Santa Clara University.</p>
           <hr />
           <br />
-          <Link to='/post' className='btn'>Quick post</Link>
+          <Link to='/post' className='btn'>Post Evaluation</Link>
         </div>
       );
     }

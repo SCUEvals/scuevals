@@ -2,306 +2,176 @@
 
 $sliderTransition: all 0.15s ease-in-out;
 
-:global(.rc-slider-handle) {
-  border-color: black !important;
-  height: 33px;
-  width: 33px;
-  margin-left: -18px;
-  margin-top: -10.5px;
-  background-color: white;
-
-  .handleNum {
-    font-weight: bold;
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    margin-top: 2px;
-  }
-}
-
-:global(.rc-slider-handle:hover),
-:global(.rc-slider-handle:active) {
-  border-color: black !important;
-  box-shadow: 0 0 0 2px $focusColor !important;
-}
-
-:global(.rc-slider-handle:focus) {
-  border-color: $focusColor !important;
-  box-shadow: 0 0 0 2px $focusColor !important;
-}
-
-:global(.rc-slider) {
-  margin: 9px auto;
-  width: 300px;
-  max-width: 90%;
-  height: 15px;
-  padding: 0;
-
-  &-rail {
-    background-color: $overlayBackground;
-    height: 15px;
-  }
-
-  &-step {
-    bottom: 0;
-  }
-
-  &-dot {
-    border: 0;
-    bottom: 0;
-    width: 2px;
-    color: white;
-    border-radius: 0;
+.postEval {
+  :global(.rc-slider-handle) {
+    border-color: black !important;
+    height: 33px;
+    width: 33px;
+    margin-left: -18px;
+    margin-top: -10.5px;
     background-color: white;
-    height: 15px;
-  }
 
-  &-track {
-    background-color: $overlayBackground;
-    transition: $sliderTransition;
-    height: 15px;
-  }
-
-  &-handle {
-    transition: $sliderTransition !important;
-  }
-}
-
-:global(.rc-slider-dot:first-child),
-:global(.rc-slider-dot:last-child) {
-  display: none;
-}
-
-.popper {
-  position: absolute;
-  background: $SCUred;
-  color: white;
-  border-radius: $defaultBorderRadius;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-  padding: 10px;
-  text-align: center;
-  white-space: pre-wrap;
-  z-index: 1;
-}
-
-.tooltip-popper {
-  font-size: 14px;
-  z-index: 2;
-}
-
-.popper-manager,
-.popper {
-  transition: $sliderTransition;
-}
-
-:global(.track1) {
-  background-color: $score1Color;
-}
-
-:global(.track2) {
-  background-color: $score2Color;
-}
-
-:global(.track3) {
-  background-color: $score3Color;
-}
-
-:global(.track4) {
-  background-color: $score4Color;
-}
-
-:global(.slider-error .rc-slider-rail) {
-  border: 3px solid $SCUred;
-}
-
-.popper .popper__arrow {
-  width: 0;
-  height: 0;
-  position: absolute;
-  margin: 5px;
-  border: solid $SCUred;
-}
-
-.popper[data-placement="top"] {
-  margin-bottom: 5px;
-}
-
-.popper[data-placement="top"] .popper__arrow {
-  border-width: 5px 5px 0 5px;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  bottom: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.popper[data-placement="bottom"] {
-  margin-top: 5px;
-}
-
-:global(.rc-slider-handle) ~ .popper[data-placement="bottom"] {
-  top: 35px !important;
-}
-
-.popper[data-placement="bottom"] .popper__arrow {
-  border-width: 0 5px 5px 5px;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-top-color: transparent;
-  top: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.popper[data-placement="right"] {
-  margin-left: 5px;
-}
-
-.popper[data-placement="right"] .popper__arrow {
-  border-width: 5px 5px 5px 0;
-  border-left-color: transparent;
-  border-top-color: transparent;
-  border-bottom-color: transparent;
-  left: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.popper[data-placement="left"] {
-  margin-right: 5px;
-}
-
-.popper[data-placement="left"] .popper__arrow {
-  border-width: 5px 0 5px 5px;
-  border-top-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  right: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
-}
-
-@mixin popperTarget {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background-color: $SCUred;
-  border: 2px solid white !important;
-
-  &:hover {
-    background-color: $SCUdarkred;
-  }
-
-  &:focus {
-    border: 2px solid $focusColor !important;
-  }
-
-  i {
-    font-size: 14px;
-    color: white;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-
-    &:hover {
-      color: white;
+    .handleNum {
+      font-weight: bold;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+      margin-top: 2px;
     }
   }
-}
 
-.popper-manager {
-  display: inline-block;
-}
-
-.popper-target + .popper {
-  visibility: hidden;
-}
-
-.popper-target:hover + .popper,
-.popper-target:focus + .popper {
-  visibility: visible;
-}
-
-.popper-target {
-  @include popperTarget;
-}
-
-:global(.rc-slider-handle) ~ .popper {
-  visibility: hidden;
-}
-
-:global(.rc-slider-handle:focus) ~ .popper {
-  visibility: visible;
-}
-
-.postInfo h3,
-.postInfo h5 {
-  margin-bottom: 0;
-  font-weight: bold;
-}
-
-.postGuidelines {
-  text-align: left;
-
-  :global(.card) {
-    height: 100%;
+  :global(.popper-manager),
+  :global(.popper) {
+    transition: $sliderTransition;
   }
 
-  :global(.card-header) {
-    color: white;
+  :global(.rc-slider-handle:hover),
+  :global(.rc-slider-handle:active) {
+    border-color: black !important;
+    box-shadow: 0 0 0 2px $focusColor !important;
+  }
+
+  :global(.rc-slider-handle:focus) {
+    border-color: $focusColor !important;
+    box-shadow: 0 0 0 2px $focusColor !important;
+  }
+
+  :global(.rc-slider) {
+    margin: 9px auto;
+    width: 300px;
+    max-width: 90%;
+    height: 15px;
+    padding: 0;
+
+    &-rail {
+      background-color: $overlayBackground;
+      height: 15px;
+    }
+
+    &-step {
+      bottom: 0;
+    }
+
+    &-dot {
+      border: 0;
+      bottom: 0;
+      width: 2px;
+      color: white;
+      border-radius: 0;
+      background-color: white;
+      height: 15px;
+    }
+
+    &-track {
+      background-color: $overlayBackground;
+      transition: $sliderTransition;
+      height: 15px;
+    }
+
+    &-handle {
+      transition: $sliderTransition !important;
+    }
+  }
+
+  :global(.rc-slider-dot:first-child),
+  :global(.rc-slider-dot:last-child) {
+    display: none;
+  }
+
+  :global(.track1) {
+    background-color: $score1Color;
+  }
+
+  :global(.track2) {
+    background-color: $score2Color;
+  }
+
+  :global(.track3) {
+    background-color: $score3Color;
+  }
+
+  :global(.track4) {
+    background-color: $score4Color;
+  }
+
+  :global(.slider-error .rc-slider-rail) {
+    border: 3px solid $SCUred;
+  }
+
+  .postInfo h3,
+  .postInfo h5 {
+    margin-bottom: 0;
     font-weight: bold;
-    background-color: $SCUred;
-    text-align: center;
   }
 
-  .popper-target-guidelines {
-    @include popperTarget;
+  .postGuidelines {
+    text-align: left;
 
-    display: inline-block;
+    :global(.card) {
+      height: 100%;
+    }
+
+    :global(.card-header) {
+      color: white;
+      font-weight: bold;
+      background-color: $SCUred;
+      text-align: center;
+    }
+
+    .popper-target-guidelines {
+      @include popperTarget;
+
+      display: inline-block;
+    }
+
+    ~ h3 + h6 {
+      margin-top: 25px;
+    }
+
+    + h3 {
+      margin-top: 25px;
+    }
+
+    ~ h3:not(:first-of-type) {
+      margin-top: 75px;
+    }
   }
 
-  ~ h3 + h6 {
-    margin-top: 25px;
+  :global(.rc-slider-handle) ~ :global(.popper) {
+    visibility: hidden;
   }
 
-  + h3 {
-    margin-top: 25px;
+  :global(.rc-slider-handle:focus) ~ :global(.popper) {
+    visibility: visible;
   }
 
-  ~ h3:not(:first-of-type) {
-    margin-top: 75px;
+  :global(.rc-slider-handle) ~ :global(.popper[data-placement="bottom"]) {
+    top: 35px !important;
   }
-}
 
-.postInfo {
-  border: 1px solid $backgroundColor;
-  border-radius: $defaultBorderRadius;
-  margin-bottom: 15px;
-  padding: 15px;
+  .postInfo {
+    border: 1px solid $backgroundColor;
+    border-radius: $defaultBorderRadius;
+    margin-bottom: 15px;
+    padding: 15px;
 
-  h3:first-of-type {
-    padding: 15px 0;
+    h3:first-of-type {
+      padding: 15px 0;
+    }
   }
-}
 
-label {
-  font-size: 1.1rem; //h6 size
-  display: flex;
-  justify-content: center;
-}
+  label {
+    font-size: 1.1rem; //h6 size
+    display: flex;
+    justify-content: center;
+  }
 
-textarea:global(.comment-error) {
-  border: 2px solid $SCUred !important;
-}
+  textarea:global(.comment-error) {
+    border: 2px solid $SCUred !important;
+  }
 
-small {
-  margin: 15px;
+  small {
+    margin: 15px;
+  }
 }

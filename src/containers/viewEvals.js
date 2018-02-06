@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import FlagModal from '../components/flagModal';
 import DeleteModal from '../components/deleteModal';
+import { Manager, Target, Popper, Arrow } from 'react-popper';
 
 import { setMyEvalsList } from '..'
 import Eval from '../components/eval';
@@ -63,6 +64,20 @@ class ViewEvals extends Component {
       );
     }
   }
+
+  renderInfoTooltip(info) {
+    return (
+      <Manager className='popper-manager'>
+        <Target tabIndex='0' className='popper-target'>
+        <i className='fa fa-question'/>
+        </Target>
+        <Popper placement="top" className="popper tooltip-popper">
+          {info}
+          <Arrow className="popper__arrow" />
+        </Popper>
+      </Manager>
+    );
+  };
 
   render() { //1-1.74 score1, 1.75-2.49 score2, 2.50-3.24 score3, 3.25-4 score4
     const { info, orderedInfo, flagModal, deleteModal } = this.state;
@@ -145,7 +160,7 @@ class ViewEvals extends Component {
         <Link styleName='quickPost' className='btn' to={this.props.type === 'professors' ?
           `/professors/${this.props.match.params.id}/post`
           :`/courses/${this.props.match.params.id}/post`}>
-          Quick Post
+          Post Evaluation
         </Link>
         {info && info.evaluations.length > 0 ?
           <div>

@@ -8,120 +8,9 @@ import { connect } from 'react-redux';
 import RedirectModal from '../components/redirectModal';
 
 import API from '../services/api';
+import textOptions from '../components/textOptions';
 import '../../node_modules/rc-slider/dist/rc-slider.min.css?global';
 import '../styles/postEval.scss';
-
-const Handle = Slider.Handle;
-const textOptions = {
-  attitude: {
-    one: 'Unapproachable',
-    two: 'Generally negative',
-    three: 'Nice enough',
-    four: 'Fantastic',
-    info: 'How did you feel the professor acted towards students?'
-  },
-  availability: {
-    one: 'Impossible to reach',
-    two: 'Barely available',
-    three: 'Usually reachable',
-    four: 'Super flexible',
-    info: 'How easy was it to contact or meet with the professor?'
-  },
-  clarity: {
-    one: 'Incomprehensible',
-    two: 'Often unclear',
-    three: 'Graspable',
-    four: 'Great explainer',
-    info: 'Were the professor\'s notes and explanations clear (word choice, handwriting, etc.)?'
-  },
-  grading_speed: {
-    one: 'Terribly slow',
-    two: 'Sluggish',
-    three: 'After a few classes',
-    four: 'By next class',
-    info: 'How quickly did the professor grade assignments, exams, etc.?'
-  },
-  resourcefulness: {
-    one: 'Inadequate',
-    two: 'Sparse',
-    three: 'Sufficient',
-    four: 'Plentiful',
-    info: 'How much material (solutions, slides, handouts, etc.)\ndid the professor share to help students learn?'
-  },
-  easiness: {
-    one: 'You will suffer',
-    two: 'Challenging',
-    three: 'Straightforward',
-    four: 'Cakewalk',
-    info: 'How easy were the concepts and work for this class?'
-  },
-  workload: {
-    one: 'Monstrous',
-    two: 'You\'ll survive',
-    three: 'Manageable',
-    four: 'Effortless',
-    info: 'How much work was assigned compared to other classes?'
-  },
-  recommend: {
-    one: 'Avoid at all costs',
-    two: 'Dodge if possible',
-    three: 'Good option',
-    four: 'Absolutely',
-    info: 'Overall, was this course with this professor a good option to take?'
-  },
-  comment: {
-    info: 'Write anything you feel other students would benefit from knowing that the questions above left unanswered.'
-  }
-};
-
-const infoTooltip = info => {
-  return (
-    <Manager styleName='popper-manager'>
-      <Target tabIndex='0' styleName='popper-target'>
-      <i className='fa fa-question'/>
-      </Target>
-      <Popper placement="top" styleName="popper tooltip-popper">
-        {info}
-        <Arrow styleName="popper__arrow"/>
-      </Popper>
-    </Manager>
-  );
-};
-
-const handle = (props, textProps) => {
-  const { value, dragging, ...restProps } = props;
-  let trackerStyle = {
-    top: '-12px',
-    left: 'calc(' + props.offset + '% - 2px)',
-    position: 'absolute',
-  };
-
-  let popperStyle = {};
-
-  if (value === 0) {
-    popperStyle.visibility = 'hidden';
-    popperStyle.opacity = '0'; //needed for transition animation
-  }
-
-  return (
-    <Manager tag={false}>
-      <Handle value={value} {...restProps}>
-        <div styleName='handleNum'>
-          {value !== 0 ? value : ''}
-        </div>
-      </Handle>
-      <Target styleName='popper-target'>
-        {({ targetProps }) => (
-          <div style={trackerStyle} {...targetProps}/>
-        )}
-      </Target>
-      <Popper style={popperStyle} placement="top" styleName="popper">
-          {value === 0 || value === 1 ? textProps.one : value === 2 ? textProps.two : value === 3 ? textProps.three : value === 4 ? textProps.four : ''}
-        <Arrow styleName="popper__arrow"/>
-      </Popper>
-    </Manager>
-  );
-};
 
 class PostEval extends Component {
 
@@ -160,6 +49,57 @@ class PostEval extends Component {
     )
   }
 
+  renderHandle(props, textProps) {
+
+    const Handle = Slider.Handle;
+    const { value, dragging, ...restProps } = props;
+    let trackerStyle = {
+      top: '-12px',
+      left: 'calc(' + props.offset + '% - 2px)',
+      position: 'absolute',
+    };
+
+    let popperStyle = {};
+
+    if (value === 0) {
+      popperStyle.visibility = 'hidden';
+      popperStyle.opacity = '0'; //needed for transition animation
+    }
+
+    return (
+      <Manager tag={false}>
+        <Handle value={value} {...restProps}>
+          <div styleName='handleNum'>
+            {value !== 0 ? value : ''}
+          </div>
+        </Handle>
+        <Target className='popper-target'>
+          {({ targetProps }) => (
+            <div style={trackerStyle} {...targetProps}/>
+          )}
+        </Target>
+        <Popper style={popperStyle} placement="top" className="popper">
+            {value === 0 || value === 1 ? textProps.one : value === 2 ? textProps.two : value === 3 ? textProps.three : value === 4 ? textProps.four : ''}
+          <Arrow className="popper__arrow" />
+        </Popper>
+      </Manager>
+    );
+  };
+
+  renderInfoToolTip(info) {
+    return (
+      <Manager className='popper-manager'>
+        <Target tabIndex='0' className='popper-target'>
+        <i className='fa fa-question'/>
+        </Target>
+        <Popper placement="top" className="popper tooltip-popper">
+          {info}
+          <Arrow className="popper__arrow" />
+        </Popper>
+      </Manager>
+    );
+  };
+
   renderSlider(field) {
     const { meta: {submitFailed, error}, input, textProps } = field;
     let track = $('.' + input.name + ' .rc-slider-track');
@@ -181,6 +121,7 @@ class PostEval extends Component {
       }
     }
     const sliderClass = submitFailed && error ? input.name + ' slider-error' : input.name;
+    const { renderHandle } = field;
     return (
       <Slider
         onBeforeChange={() => $('.' + input.name + ' div[role="slider"]').focus()}
@@ -188,7 +129,7 @@ class PostEval extends Component {
         name={input.name}
         {...input}
         dots
-        handle={passedProps => handle(passedProps, textProps)}
+        handle={passedProps => renderHandle(passedProps, textProps)}
         max={4}
         defaultValue={0}
       />
@@ -213,7 +154,7 @@ class PostEval extends Component {
     }
     if (location.state || classInfo !== undefined) { //passed values from postSearch
       return (
-        <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
+        <form styleName='postEval' onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
           <RedirectModal history={history} redirectModalOpen={classInfo === null || classInfo && classInfo.user_posted || submitted} submitted={submitted} classInfoExists={classInfo && classInfo.user_posted ? true : false} />
           <div styleName='postInfo'>
             <h5>{quarter}</h5>
@@ -251,29 +192,29 @@ class PostEval extends Component {
             </div>
           </div>
           <h3>Professor</h3>
-          <h6>Attitude {infoTooltip(textOptions.attitude.info)}</h6>
-          <Field name='attitude' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.attitude} component={this.renderSlider} />
-          <h6>Availability {infoTooltip(textOptions.availability.info)}</h6>
-          <Field name='availability' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.availability} component={this.renderSlider} />
-          <h6>Clarity {infoTooltip(textOptions.clarity.info)}</h6>
-          <Field name='clarity' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.clarity} component={this.renderSlider} />
-          <h6>Grading Speed {infoTooltip(textOptions.grading_speed.info)}</h6>
-          <Field name='grading_speed' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.grading_speed} component={this.renderSlider} />
-          <h6>Resourcefulness {infoTooltip(textOptions.resourcefulness.info)}</h6>
-          <Field name='resourcefulness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.resourcefulness} component={this.renderSlider} />
+          <h6>Attitude {this.renderInfoToolTip(textOptions.attitude.info)}</h6>
+          <Field name='attitude' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.attitude} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <h6>Availability {this.renderInfoToolTip(textOptions.availability.info)}</h6>
+          <Field name='availability' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.availability} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <h6>Clarity {this.renderInfoToolTip(textOptions.clarity.info)}</h6>
+          <Field name='clarity' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.clarity} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <h6>Grading Speed {this.renderInfoToolTip(textOptions.grading_speed.info)}</h6>
+          <Field name='grading_speed' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.grading_speed} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <h6>Resourcefulness {this.renderInfoToolTip(textOptions.resourcefulness.info)}</h6>
+          <Field name='resourcefulness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.resourcefulness} renderHandle={this.renderHandle} component={this.renderSlider} />
 
           <h3>Class</h3>
-          <h6>Easiness {infoTooltip(textOptions.easiness.info)}</h6>
-          <Field name='easiness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.easiness} component={this.renderSlider} />
-          <h6>Workload {infoTooltip(textOptions.workload.info)}</h6>
-          <Field name='workload' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.workload} component={this.renderSlider} />
+          <h6>Easiness {this.renderInfoToolTip(textOptions.easiness.info)}</h6>
+          <Field name='easiness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.easiness} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <h6>Workload {this.renderInfoToolTip(textOptions.workload.info)}</h6>
+          <Field name='workload' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.workload} renderHandle={this.renderHandle} component={this.renderSlider} />
 
           <h3>General</h3>
-          <h6>Would you recommend this course with this professor? {infoTooltip(textOptions.recommend.info)}</h6>
-          <Field name='recommended' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.recommend} component={this.renderSlider} />
-          <h6>Comments {infoTooltip(textOptions.comment.info)}</h6>
+          <h6>Would you recommend this course with this professor? {this.renderInfoToolTip(textOptions.recommend.info)}</h6>
+          <Field name='recommended' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.recommend} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <h6>Comments {this.renderInfoToolTip(textOptions.comment.info)}</h6>
           <Field name="comment" onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
-          <p>Max characters: {this.state.term.length} / 750</p>
+          <p>Max characters: {this.state.term.length} / 1000</p>
           <label>
             {`Display ${userInfo.majors.length > 1 ? 'majors' : 'major'}`}
             <Field name='display_majors' component='input' type='checkbox' />
@@ -303,6 +244,7 @@ const validate = values => {
   if (!values.availability) errors.availability = 'Required';
   if (!values.clarity) errors.clarity = 'Required';
   if (!values.comment) errors.comment = 'Required';
+  if (values.comment && values.comment.length > 1000) 'Message longer than 1000 characters.';
   if (!values.easiness) errors.easiness = 'Required';
   if (!values.grading_speed) errors.grading_speed = 'Required';
   if (!values.recommended) errors.recommended = 'Required';

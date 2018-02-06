@@ -40,7 +40,7 @@ class RedirectModal extends Component {
               classInfoExists ?
                 'Looks like you already posted for this class.'
               : submitted ?
-                'Good job submitting an eval!'
+                'Great job submitting an eval!'
               : 'Class does not exist for this page.'
             }</p>
             <hr />
