@@ -11,6 +11,7 @@ import API from '../services/api';
 import textOptions from '../components/textOptions';
 import '../../node_modules/rc-slider/dist/rc-slider.min.css?global';
 import '../styles/postEval.scss';
+import ReactGA from "react-ga";
 
 class PostEval extends Component {
 

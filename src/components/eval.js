@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import ReactGA from 'react-ga';
 
 import API from '../services/api';
 import '../styles/eval.scss';

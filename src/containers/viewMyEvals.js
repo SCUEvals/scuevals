@@ -4,10 +4,12 @@ import Select from 'react-select';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import DeleteModal from '../components/deleteModal';
+import ReactGA from 'react-ga';
 
 import Eval from '../components/eval';
 import API from '../services/api';
 import '../styles/viewEvals.scss';
+
 
 class ViewMyEvals extends Component {
 
