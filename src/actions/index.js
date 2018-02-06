@@ -46,7 +46,7 @@ export function setMajorsList(majorsList) {
 
 export function setQuartersList(quartersList) {
   quartersList.sort((a, b) => { //convert object with ids as keys into array of objects, then sort
-    return a.year > b.year ? 1 : a.year < b.year ? -1 : a.name == 'Winter' ? -1 : a.name == 'Fall' ? 1 : b.name == 'Fall' ? -1 : 1;
+    return a.year > b.year ? -1 : a.year < b.year ? 1 : a.name == 'Winter' ? 1 : a.name == 'Fall' ? -1 : b.name == 'Fall' ? 1 : -1;
   }).map(quarter => {quarter.label = quarter.name + ' ' + quarter.year; return quarter;});
   let quartersListObj = quartersList ? quartersList.reduce((obj, item) => (obj[item.id] = item, obj) ,{}) : null;
   let returnedObj = {object: quartersListObj, array: quartersList};

@@ -204,7 +204,7 @@ class PostSearch extends Component {
       case 'quarter':
         this.setState({localQuartersList: null}, () => client.get('/quarters', quarters => {
           quarters.sort((a, b) => { //convert object with ids as keys into array of objects, then sort
-            return a.year > b.year ? 1 : a.year < b.year ? -1 : a.name == 'Winter' ? -1 : a.name == 'Fall' ? 1 : b.name == 'Fall' ? -1 : 1;
+            return a.year > b.year ? -1 : a.year < b.year ? 1 : a.name == 'Winter' ? 1 : a.name == 'Fall' ? -1 : b.name == 'Fall' ? 1 : -1;
           })
           .map(quarter => quarter.label = quarter.name + ' ' + quarter.year);
           this.setState({localQuartersList: quarters});
@@ -244,7 +244,7 @@ class PostSearch extends Component {
     const { localQuartersList, localCoursesList, localProfessorsList } = this.state;
     return (
       <form ref={node => this.postSearchForm = node} className='content' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-        <small>In any order, select the correct combination and select "Continue" to start filling your eval.</small>
+        <small style={{marginTop: '5px'}}>In any order, select the correct combination and select "Continue" to start filling your eval.</small>
         <hr />
         <Field
           name='quarter' //responsible for object's key name for values
