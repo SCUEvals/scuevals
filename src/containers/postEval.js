@@ -12,7 +12,6 @@ import '../../node_modules/rc-slider/dist/rc-slider.min.css?global';
 import '../styles/postEval.scss';
 
 const Handle = Slider.Handle;
-// \xA0 is used for non-breaking whitespace,
 const textOptions = {
   attitude: {
     one: 'Unapproachable',
@@ -29,44 +28,44 @@ const textOptions = {
     info: 'How easy was it to contact or meet with the professor?'
   },
   clarity: {
-    one: 'Could not understand',
+    one: 'Incomprehensible',
     two: 'Often unclear',
-    three: 'Usually understood',
+    three: 'Graspable',
     four: 'Great explainer',
     info: 'Were the professor\'s notes and explanations clear (word choice, handwriting, etc.)?'
   },
   grading_speed: {
-    one: 'Not\xA0until end of quarter',
-    two: 'Extremely slow',
+    one: 'Terribly slow',
+    two: 'Sluggish',
     three: 'After a few classes',
-    four: 'By\xA0next class',
-    info: 'How quickly did the professor grade assignments?'
+    four: 'By next class',
+    info: 'How quickly did the professor grade assignments, exams, etc.?'
   },
   resourcefulness: {
-    one: 'Provided nothing',
-    two: 'Occasional handouts',
-    three: 'Shared most things',
-    four: 'Shared everything',
-    info: 'How much material did the professor share to help students learn?'
-  },
-  workload: {
-    one: 'Constantly busy\n"10+ hrs/wk"',
-    two: 'You\'ll survive\n"7-10 hrs/wk"',
-    three: 'Easy stuff\n"3-6 hrs/wk"',
-    four: 'There\'s work?\n"<3 hrs/wk"',
-    info: 'How much work was assigned compared to other classes?'
+    one: 'Inadequate',
+    two: 'Sparse',
+    three: 'Sufficient',
+    four: 'Plentiful',
+    info: 'How much material (solutions, slides, handouts, etc.)\ndid the professor share to help students learn?'
   },
   easiness: {
-    one: 'Extremely difficult',
+    one: 'You will suffer',
     two: 'Challenging',
-    three: 'Study the\xA0week before',
-    four: 'Easy\xA0"A"',
-    info: 'How easy was the material for this course?'
+    three: 'Straightforward',
+    four: 'Cakewalk',
+    info: 'How easy were the concepts and work for this class?'
+  },
+  workload: {
+    one: 'Monstrous',
+    two: 'You\'ll survive',
+    three: 'Manageable',
+    four: 'Effortless',
+    info: 'How much work was assigned compared to other classes?'
   },
   recommend: {
-    one: 'No, avoid at all costs',
-    two: 'I do not recommend',
-    three: 'Yes, but it could be better',
+    one: 'Avoid at all costs',
+    two: 'Dodge if possible',
+    three: 'Good option',
     four: 'Absolutely',
     info: 'Overall, was this course with this professor a good option to take?'
   },
@@ -216,7 +215,7 @@ class PostEval extends Component {
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
           <RedirectModal history={history} redirectModalOpen={classInfo === null || classInfo && classInfo.user_posted} classInfoExists={classInfo && classInfo.user_posted ? true : false} />
           <div styleName='postInfo'>
-            <h3>{quarter}</h3>
+            <h5>{quarter}</h5>
             <h3>{course ? course : classInfo === null ? 'No class exists for this page.': 'Loading...'}</h3>
             <h3>{professor}</h3>
           </div>
@@ -226,12 +225,11 @@ class PostEval extends Component {
                 <div className='card-header'>GUIDELINES TO FOLLOW</div>
                   <div className='card-body'>
                     <ul>
-                      <li>When moving the sliders, refer to the pop-up texts</li>
                       <li>If unsure about a question, select <div tabIndex='0' styleName='popper-target-guidelines'><i className='fa fa-question'/></div> for more details</li>
-                      <li>Remove unfair bias from your review</li>
-                      <li>Proofread your comments before submission</li>
-                      <li>Make respectful comments</li>
-                      <li>Give useful feedback that you would have liked to know before taking the class</li>
+                      <li>Remove unfair bias</li>
+                      <li>Proofread your comments</li>
+                      <li>Write respectfully</li>
+                      <li>Share information you wish you knew before taking this class</li>
                     </ul>
                 </div>
               </div>
@@ -241,11 +239,11 @@ class PostEval extends Component {
                 <div className='card-header'>THINGS TO AVOID</div>
                 <div className='card-body'>
                   <ul >
-                    <li>Using hate speech or excessive profanity</li>
+                    <li>Hate speech or excessive profanity</li>
                     <li>Speaking on behalf of others</li>
-                    <li>Using personally identfiable information of yourself or other students or faculty</li>
+                    <li>Sharing personally identfiable information</li>
                     <li>Sharing links</li>
-                    <li>Sharing names other than the professor being rated</li>
+                    <li>Making accusations</li>
                   </ul>
                 </div>
               </div>
@@ -283,7 +281,7 @@ class PostEval extends Component {
             Display graduation year
             <Field name='display_grad_year' component='input' type='checkbox' />
           </label>
-          <br />
+          <small>Your name and gender will always be kept hidden when posting.</small>
           <button disabled={submitting} type="submit" className="btn">{submitting ? 'Submitting...' : 'Submit'}</button>
         </form>
       );
