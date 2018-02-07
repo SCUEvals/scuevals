@@ -31,8 +31,8 @@ class Eval extends Component {
     return (
       <div styleName='scoreBlock'>
         <div styleName='scoreTitle'>{name}</div>
-        <svg>
-          <circle style={style} cx="18" cy="18" r="16" styleName={`score${value < 1.75 ? '1' : value < 2.5 ? '2' : value < 3.25 ? '3' : '4'}`}/>
+        <svg className='score'>
+          <circle style={style} cx="18" cy="18" r="16" className={`score${value < 1.75 ? '1' : value < 2.5 ? '2' : value < 3.25 ? '3' : '4'}`}/>
           <text x='50%' y='50%'>
             {value}
           </text>

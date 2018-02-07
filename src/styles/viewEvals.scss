@@ -60,23 +60,6 @@
       stroke-dashoffset: 157.08;
       stroke: $overlayBackground;
     }
-
-    //circumference w/ r=25 = 157.080
-    &.score1 circle {
-      fill: $score1Color;
-    }
-
-    &.score2 circle {
-      fill: $score2Color;
-    }
-
-    &.score3 circle {
-      fill: $score3Color;
-    }
-
-    &.score4 circle {
-      fill: $score4Color;
-    }
   }
 }
 

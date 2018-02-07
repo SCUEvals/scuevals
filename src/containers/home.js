@@ -8,8 +8,8 @@ import { Link } from 'react-router-dom';
 
 import API from '../services/api';
 import '../styles/home.scss';
-
 import { setUserInfo } from '../actions';
+import RecentEvals from './recentEvals';
 
 class Home extends Component {
 
@@ -61,6 +61,9 @@ class Home extends Component {
           <hr />
           <br />
           <Link to='/post' className='btn'>Post Evaluation</Link>
+          <br />
+          <br />
+          <RecentEvals />
         </div>
       );
     }

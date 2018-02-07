@@ -50,12 +50,12 @@ class ViewEvals extends Component {
   }
 
   renderAverage(name, value) {
-    let style = value < 1.75 ? 'score1' : value < 2.5 ? 'score2' : value < 3.25 ? 'score3' : 'score4';
+    let avgClass = value < 1.75 ? 'score1' : value < 2.5 ? 'score2' : value < 3.25 ? 'score3' : 'score4';
     if (value) {
       return (
         <div styleName='avgScore'>
           <div styleName='scoreTitle'>{name}</div>
-          <svg styleName={style}>
+          <svg className={avgClass}>
             <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(value)}} />
             <text x='50%' y='50%'>
               {value}

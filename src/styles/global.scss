@@ -617,3 +617,62 @@ img {
   font-size: 14px;
   z-index: 2;
 }
+
+.score1 {
+  fill: $score1Color;
+}
+
+.score2 {
+  fill: $score2Color;
+}
+
+.score3 {
+  fill: $score3Color;
+}
+
+.score4 {
+  fill: $score4Color;
+}
+
+svg.score {
+  width: 36px; //2x cx
+  height: 36px; //2x cy
+
+  circle { //r = 16, circumference = 2 * pi * 16 ≈ 100.531
+    transform: rotate(-90deg) scaleY(-1);
+    transform-origin: center;
+    animation: score 1s;
+    stroke-dasharray: 100.531;
+    stroke: black;
+    stroke-width: 3;
+
+    &.score1 {
+      stroke-dashoffset: 75.398; // == * -3/4 circumference
+    }
+
+    &.score2 {
+      stroke-dashoffset: 50.266; // == * -1/2 circumference
+    }
+
+    &.score3 {
+      stroke-dashoffset: 25.133; // == * -1/4 circumference
+    }
+
+    &.score4 {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  text {
+    dominant-baseline: central;
+    text-anchor: middle;
+    fill: white;
+    font-size: 16px;
+  }
+}
+
+@keyframes score {
+  from {
+    stroke-dashoffset: 100.531;
+  }
+}
