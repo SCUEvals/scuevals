@@ -1,0 +1,26 @@
+.recentEvals {
+  margin-top: 30px;
+  margin-bottom: 15px;
+
+  :global(.list-group-item) {
+    padding: 5px 0;
+
+    circle {
+      transform: rotate(-90deg) scaleY(-1) scale(0.8) !important;
+    }
+
+    text {
+      font-size: 12px !important;
+    }
+  }
+
+  .widthStyle {
+    min-width: 478px;
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  h5 {
+    margin-bottom: 0;
+  }
+}
