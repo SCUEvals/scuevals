@@ -46,11 +46,11 @@ class ViewMyEvals extends Component {
           eval_id={deleteModal.eval_id}
           deletePost={() => {
             let client = new API();
-            client.delete(`/evaluations/${deleteModal.eval_id}`,  ReactGA.event({category: 'Evaluation', action: 'Deleted'}));
+            client.delete(`/evaluations/${deleteModal.eval_id}`, () => ReactGA.event({category: 'Evaluation', action: 'Deleted'}));
             myEvalsList.map((obj, key) => {
               if (obj.id === deleteModal.eval_id) {
                 let newList = myEvalsList.slice();
-                newList.splice(myEvalsList[key], 1);
+                newList.splice(key, 1);
                 this.setState({ myEvalsList: newList });
               };
             });
@@ -61,12 +61,12 @@ class ViewMyEvals extends Component {
            myEvalsList.length === 0 ?
             <h5>You haven't posted anything yet.</h5>
             : <div>
-                <Select
+                {/* <Select
                   className='sort'
                   simpleValue
                   options={null}
                   placeholder="Sort"
-                />
+                /> */}
                 {myEvalsList.map(evaluation => {
                   return <Eval
                     key={evaluation.id}

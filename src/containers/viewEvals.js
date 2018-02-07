@@ -125,11 +125,12 @@ class ViewEvals extends Component {
           eval_id={deleteModal.eval_id}
           deletePost={() => {
             let client = new API();
-            client.delete(`/evaluations/${deleteModal.eval_id}`, ReactGA.event({category: 'Evaluation', action: 'Deleted'}));
+            client.delete(`/evaluations/${deleteModal.eval_id}`, () => ReactGA.event({category: 'Evaluation', action: 'Deleted'}));
             info.evaluations.map((obj, key) => {
               if (obj.id === deleteModal.eval_id) {
-                info.evaluations.splice(info.evaluations[key], 1);
-                this.setState({info});
+                let newList = info.evaluations.slice();
+                newList.splice(key, 1);
+                this.setState({info: newList});
               };
              });
           }}
@@ -163,7 +164,7 @@ class ViewEvals extends Component {
           :`/courses/${this.props.match.params.id}/post`}>
           Post Evaluation
         </Link>
-        {info && info.evaluations.length > 0 ?
+        {/* {info && info.evaluations.length > 0 ?
           <div>
             <Select
               className='sort'
@@ -185,7 +186,7 @@ class ViewEvals extends Component {
 
              />
            </div>
-        : ''}
+        : ''} */}
         {info ?
           info.evaluations.length === 0 ?
             <h5>No evaluations posted yet.</h5>

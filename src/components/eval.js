@@ -111,7 +111,7 @@ class Eval extends Component {
               onClick={user_vote == 1 ?
                 e => {
                   let client = new API();
-                  client.delete(`/evaluations/${evaluation.id}/vote`, ReactGA.event({category: 'Vote', action: 'Deleted'}));
+                  client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({category: 'Vote', action: 'Deleted'}));
                   this.setState({
                     votes_score: votes_score - 1,
                     user_vote: null
@@ -119,7 +119,7 @@ class Eval extends Component {
                 }
                 : e => {
                   let client = new API();
-                  client.put(`/evaluations/${evaluation.id}/vote`, 'u',  ReactGA.event({category: 'Vote', action: 'Added'}));
+                  client.put(`/evaluations/${evaluation.id}/vote`, 'u',  () => ReactGA.event({category: 'Vote', action: 'Added'}));
                   user_vote == -1 ?
                   this.setState({
                     votes_score: votes_score + 2,
@@ -144,7 +144,7 @@ class Eval extends Component {
                onClick={user_vote == -1 ?
                  e => {
                    let client = new API();
-                   client.delete(`/evaluations/${evaluation.id}/vote`,  ReactGA.event({category: 'Vote', action: 'Deleted'}));
+                   client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({category: 'Vote', action: 'Deleted'}));
                    this.setState({
                      votes_score: votes_score + 1,
                      user_vote: null
@@ -152,7 +152,7 @@ class Eval extends Component {
                  }
                  : e => { //user_vote 1 or null
                    let client = new API();
-                   client.put(`/evaluations/${evaluation.id}/vote`, 'd',  ReactGA.event({category: 'Vote', action: 'Added'}));
+                   client.put(`/evaluations/${evaluation.id}/vote`, 'd', () =>  ReactGA.event({category: 'Vote', action: 'Added'}));
                    user_vote == 1 ?
                     this.setState({
                       votes_score: votes_score - 2,
