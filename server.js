@@ -17,7 +17,7 @@ var sslRedirect = function(environments, status) {
 app.use(sslRedirect());
 app.use(compression());
 app.use(express.static(__dirname + '/build'));
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public', {maxAge: 2629746}));
 app.use('/scripts', express.static(__dirname + '/node_modules/popper.js/dist/umd'));
 
 app.get('*', (req, res) => {
