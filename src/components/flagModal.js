@@ -20,7 +20,7 @@ class FlagModal extends Component {
             />
           </div>
           <div className='modalBlock'>
-            Content
+            Flagging options coming soon!
           </div>
         </div>
       </div>
