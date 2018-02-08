@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import RedirectModal from '../components/redirectModal';
 
 import API from '../services/api';
-import textOptions from '../components/textOptions';
+import TextOptions from '../components/textOptions';
 import '../../node_modules/rc-slider/dist/rc-slider.min.css?global';
 import '../styles/postEval.scss';
 import ReactGA from "react-ga";
@@ -196,27 +196,27 @@ class PostEval extends Component {
             </div>
           </div>
           <h3>Professor</h3>
-          <h6>Attitude {this.renderInfoToolTip(textOptions.attitude.info)}</h6>
-          <Field name='attitude' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.attitude} renderHandle={this.renderHandle} component={this.renderSlider} />
-          <h6>Availability {this.renderInfoToolTip(textOptions.availability.info)}</h6>
-          <Field name='availability' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.availability} renderHandle={this.renderHandle} component={this.renderSlider} />
-          <h6>Clarity {this.renderInfoToolTip(textOptions.clarity.info)}</h6>
-          <Field name='clarity' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.clarity} renderHandle={this.renderHandle} component={this.renderSlider} />
-          <h6>Grading Speed {this.renderInfoToolTip(textOptions.grading_speed.info)}</h6>
-          <Field name='grading_speed' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.grading_speed} renderHandle={this.renderHandle} component={this.renderSlider} />
-          <h6>Resourcefulness {this.renderInfoToolTip(textOptions.resourcefulness.info)}</h6>
-          <Field name='resourcefulness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.resourcefulness} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <h6>Attitude {this.renderInfoToolTip(TextOptions.attitude.info)}</h6>
+          <Field name='attitude' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.attitude} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <h6>Availability {this.renderInfoToolTip(TextOptions.availability.info)}</h6>
+          <Field name='availability' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.availability} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <h6>Clarity {this.renderInfoToolTip(TextOptions.clarity.info)}</h6>
+          <Field name='clarity' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.clarity} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <h6>Grading Speed {this.renderInfoToolTip(TextOptions.grading_speed.info)}</h6>
+          <Field name='grading_speed' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.grading_speed} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <h6>Resourcefulness {this.renderInfoToolTip(TextOptions.resourcefulness.info)}</h6>
+          <Field name='resourcefulness' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.resourcefulness} renderHandle={this.renderHandle} component={this.renderSlider} />
 
           <h3>Class</h3>
-          <h6>Easiness {this.renderInfoToolTip(textOptions.easiness.info)}</h6>
-          <Field name='easiness' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.easiness} renderHandle={this.renderHandle} component={this.renderSlider} />
-          <h6>Workload {this.renderInfoToolTip(textOptions.workload.info)}</h6>
-          <Field name='workload' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.workload} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <h6>Easiness {this.renderInfoToolTip(TextOptions.easiness.info)}</h6>
+          <Field name='easiness' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.easiness} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <h6>Workload {this.renderInfoToolTip(TextOptions.workload.info)}</h6>
+          <Field name='workload' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.workload} renderHandle={this.renderHandle} component={this.renderSlider} />
 
           <h3>General</h3>
-          <h6>Would you recommend this course with this professor? {this.renderInfoToolTip(textOptions.recommend.info)}</h6>
-          <Field name='recommended' format={(value, name) => value === '' ? 0 : value} textProps={textOptions.recommend} renderHandle={this.renderHandle} component={this.renderSlider} />
-          <h6>Comments {this.renderInfoToolTip(textOptions.comment.info)}</h6>
+          <h6>Would you recommend this course with this professor? {this.renderInfoToolTip(TextOptions.recommended.info)}</h6>
+          <Field name='recommended' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.recommended} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <h6>Comments {this.renderInfoToolTip(TextOptions.comment.info)}</h6>
           <Field name="comment" onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
           <p>Max characters: {this.state.term.length} / 1000</p>
           <label>

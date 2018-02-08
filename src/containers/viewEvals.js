@@ -8,7 +8,7 @@ import DeleteModal from '../components/deleteModal';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
 import ReactGA from 'react-ga';
 
-import { setMyEvalsList } from '..'
+import TextOptions from '../components/textOptions';
 import Eval from '../components/eval';
 import API from '../services/api';
 import '../styles/viewEvals.scss';
@@ -54,13 +54,22 @@ class ViewEvals extends Component {
     if (value) {
       return (
         <div styleName='avgScore'>
-          <div styleName='scoreTitle'>{name}</div>
+          <div styleName='scoreTitle'>
+            {name}
+          </div>
           <svg className={avgClass}>
             <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(value)}} />
             <text x='50%' y='50%'>
               {value}
             </text>
           </svg>
+          {name ==='Recommend?' ?
+            this.renderInfoTooltip(TextOptions['recommended'].info)
+            : name === 'Average' ?
+             ''
+            : name === 'Grading Speed' ?
+              this.renderInfoTooltip(TextOptions['grading_speed'].info)
+            : this.renderInfoTooltip(TextOptions[name.toLowerCase()].info)}
         </div>
       );
     }

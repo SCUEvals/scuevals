@@ -19,7 +19,7 @@ class RecentEvals extends Component {
 
   componentDidMount() {
     let client = new API();
-    client.get('/evaluations/recent', evals => this.setState({evals}), {count: 5});
+    client.get('/evaluations/recent', evals => this.setState({evals}), {count: this.props.count});
   }
 
   calculatePath(n) { //circumference = 100.53

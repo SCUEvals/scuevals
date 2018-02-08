@@ -32,7 +32,7 @@ const textOptions = {
     two: 'Sparse',
     three: 'Sufficient',
     four: 'Plentiful',
-    info: 'How much material (solutions, slides, handouts, etc.)\ndid the professor share to help students learn?'
+    info: 'How much material (solutions, slides, handouts, etc.) did the professor share?'
   },
   easiness: {
     one: 'You will suffer',
@@ -48,7 +48,7 @@ const textOptions = {
     four: 'Effortless',
     info: 'How much work was assigned compared to other classes?'
   },
-  recommend: {
+  recommended: {
     one: 'Avoid at all costs',
     two: 'Dodge if possible',
     three: 'Good option',

@@ -57,12 +57,12 @@ class Home extends Component {
       return(
         <div className='content'>
           <h3>SCU Evals</h3>
-          <p>Welcome to SCU Evals, the best platform for rating and reviewing professors and courses at Santa Clara University.</p>
+          <p>Welcome to SCU Evals, the best platform for writing and reading evaluations for professors and courses at Santa Clara University.</p>
           <hr />
           <br />
           <Link to='/post' className='btn'>Post Evaluation</Link>
           <br />
-          <RecentEvals />
+          <RecentEvals count={5} />
         </div>
       );
     }
@@ -79,8 +79,8 @@ class Home extends Component {
             className='btn'
             styleName='loginBtn'
           >
-              <img className='pull-left' alt='Google "G" logo' src='/images/googleG.jpg' />
-              <span>Sign in with Google</span>
+            <img className='pull-left' alt='Google "G" logo' src='/images/googleG.jpg' />
+            <span>Sign in with Google</span>
           </GoogleLogin>
         </div>
       );

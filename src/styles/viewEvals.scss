@@ -61,6 +61,20 @@
       stroke: $overlayBackground;
     }
   }
+
+  :global(.popper-manager) {
+    position: relative;
+
+    :global(.popper-target) {
+      position: absolute;
+      top: -55px;
+      left: -15px;
+    }
+
+    :global(.tooltip-popper) {
+      width: 115px;
+    }
+  }
 }
 
 @keyframes score {
