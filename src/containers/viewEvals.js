@@ -128,8 +128,10 @@ class ViewEvals extends Component {
             client.delete(`/evaluations/${deleteModal.eval_id}`, () => ReactGA.event({category: 'Evaluation', action: 'Deleted'}));
             info.evaluations.map((obj, key) => {
               if (obj.id === deleteModal.eval_id) {
-                let newList = info.evaluations.slice();
-                newList.splice(key, 1);
+                let newList = Object.assign({}, info); //multiple shallow copies best way to handle nested state change while respecting immutable state
+                let evals = info.evaluations.slice();
+                evals.splice(key, 1);
+                newList.evaluations = evals;
                 this.setState({info: newList});
               };
              });
