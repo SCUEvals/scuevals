@@ -62,7 +62,7 @@ class Home extends Component {
           <br />
           <Link to='/post' className='btn'>Post Evaluation</Link>
           <br />
-          <RecentEvals count={5} />
+          <RecentEvals count={10} />
         </div>
       );
     }

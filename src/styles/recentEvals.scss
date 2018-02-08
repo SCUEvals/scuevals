@@ -5,6 +5,14 @@
   :global(.list-group-item) {
     padding: 5px 0;
 
+    :global(.flex) {
+      font-size: 14px;
+
+      a {
+        margin-top: 6px;
+      }
+    }
+
     circle {
       transform: rotate(-90deg) scaleY(-1) scale(0.8) !important;
     }

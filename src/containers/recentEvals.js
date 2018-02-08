@@ -28,10 +28,10 @@ class RecentEvals extends Component {
 
   render() {
     const { evals } = this.state;
-    const { quartersList, coursesList, professorsList, departmentsList } = this.props;
+    const { quartersList, coursesList, professorsList, departmentsList, count } = this.props;
     if (evals && quartersList && coursesList && coursesList.departmentsListLoaded && professorsList) return (
       <div styleName='recentEvals'>
-      <h5>Most Recent Evaluations</h5>
+      <h5>{count} Most Recent Evaluations</h5>
       <div style={{overflow: 'auto'}}>
         <div styleName='widthStyle'>
           <small className='offset-10'>Scale is 1-4</small>
