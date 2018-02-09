@@ -106,9 +106,9 @@ class Eval extends Component {
         <div styleName='vote'>
           {evaluation.author && !evaluation.author.self ?
               <i tabIndex='0'
-              styleName={user_vote == 1 ? 'active' : ''}
+              styleName={user_vote === 'u' ? 'active' : ''}
               className='fa fa-thumbs-up'
-              onClick={user_vote == 1 ?
+              onClick={user_vote === 'u' ?
                 e => {
                   let client = new API();
                   client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({category: 'Vote', action: 'Deleted'}));
@@ -120,14 +120,14 @@ class Eval extends Component {
                 : e => {
                   let client = new API();
                   client.put(`/evaluations/${evaluation.id}/vote`, 'u',  () => ReactGA.event({category: 'Vote', action: 'Added'}));
-                  user_vote == -1 ?
+                  user_vote == 'd' ?
                   this.setState({
                     votes_score: votes_score + 2,
-                    user_vote: 1
+                    user_vote: 'u'
                   })
                    : this.setState({
                      votes_score: votes_score + 1,
-                     user_vote: 1
+                     user_vote: 'u'
                    })
                 }}
                 onKeyPress={event => {
@@ -139,9 +139,9 @@ class Eval extends Component {
           <span style={{fontSize: votesFontSize + 'px'}} styleName='voteScore'>{votes_score}</span>
           {evaluation.author && !evaluation.author.self ?
             <i tabIndex='0'
-              styleName={user_vote == -1 ? 'active' : ''}
+              styleName={user_vote === 'd' ? 'active' : ''}
                className='fa fa-thumbs-down'
-               onClick={user_vote == -1 ?
+               onClick={user_vote === 'd' ?
                  e => {
                    let client = new API();
                    client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({category: 'Vote', action: 'Deleted'}));
@@ -153,14 +153,14 @@ class Eval extends Component {
                  : e => { //user_vote 1 or null
                    let client = new API();
                    client.put(`/evaluations/${evaluation.id}/vote`, 'd', () =>  ReactGA.event({category: 'Vote', action: 'Added'}));
-                   user_vote == 1 ?
+                   user_vote === 'u' ?
                     this.setState({
                       votes_score: votes_score - 2,
-                      user_vote: -1
+                      user_vote: 'd'
                     })
                     : this.setState({ ///user_vote null
                       votes_score: votes_score - 1,
-                      user_vote: -1
+                      user_vote: 'd'
                     })
                  }}
                  onKeyPress={event => {

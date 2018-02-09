@@ -63,13 +63,13 @@ class Home extends Component {
               at Santa Clara University!
             </p>
             <p>
-              You are probably here because you are wondering whether a professor will be a good choice for next quarter,
-              or maybe because you want to share how awesome that class you just took was. Either/or, you have come to
-              the right place. We are here to make it a lot simpler for you to find classes to take that you not only
-              would learn something useful from, but also have a good time in.
+              You are probably here because you are wondering whether a professor or course will be a good choice for next quarter,
+              or maybe because you want to share your thoughts on that awesome class you just finished. Either way, you have come to
+              the right place. We are here to make it simpler for you to find classes that you
+              would not only learn something useful from, but also enjoy.
             </p>
             <p>
-              This platform aims to solve all of the issues with the already existing ones! For example, only verified
+              This platform aims to solve all of the issues where other platforms failed. For example, only verified
               SCU students are able to post evaluations here. In fact, only people affiliated with SCU can even use
               the website. Think of it as an extension of the SCU community with the goal to make your life easier.
             </p>
