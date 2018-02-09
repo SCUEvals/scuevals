@@ -10,6 +10,7 @@ import API from '../services/api';
 import '../styles/home.scss';
 import { setUserInfo } from '../actions';
 import RecentEvals from './recentEvals';
+import NonStudentModal from '../components/nonStudentModal';
 
 class Home extends Component {
 
@@ -20,27 +21,36 @@ class Home extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { loading: false };
+    this.state = {
+      loading: false,
+      nonStudentModalOpen: false
+    };
   }
 
   authWithBackEnd(token, referrer) {
     const client = new API();
     client.post('/auth', {id_token: token}, responseData => {
-      let decodedJwt = jwtDecode(responseData.jwt);
-      ReactGA.set({ userId: decodedJwt.sub.id });
-      this.setState({loading: false}, () => {
-        this.props.setUserInfo(responseData.jwt);
-        try {
-          localStorage.setItem("jwt", responseData.jwt);
-        } catch(err) {
-          console.error("Cannot execute localStorage.setItem (perhaps private mode is enabled). Error:", err);
-        };
-        if (referrer) {
-          if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile', { referrer });
-          else this.props.history.push(referrer);
-        }
-        else if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile');
-      });
+      if (responseData.status === 'non-student') {
+        this.setState({nonStudentModalOpen: true});
+      }
+      else {
+        if (responseData.status === 'new') ReactGA.event({category: 'User', action: 'Signed Up'});
+        let decodedJwt = jwtDecode(responseData.jwt);
+        ReactGA.set({ userId: decodedJwt.sub.id });
+        this.setState({loading: false}, () => {
+          this.props.setUserInfo(responseData.jwt);
+          try {
+            localStorage.setItem("jwt", responseData.jwt);
+          } catch(err) {
+            console.error("Cannot execute localStorage.setItem (perhaps private mode is enabled). Error:", err);
+          };
+          if (referrer) {
+            if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile', { referrer });
+            else this.props.history.push(referrer);
+          }
+          else if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile');
+        });
+      }
     });
   }
 
@@ -86,8 +96,10 @@ class Home extends Component {
       );
     }
     else { //if not logged in
+      console.log(this.state.nonStudentModalMopen);
       return (
         <div styleName="login">
+          <NonStudentModal nonStudentModalOpen={this.state.nonStudentModalOpen} closeNonStudentModal={() => this.setState({nonStudentModalOpen: false})} />
           <h1>SCU Evals</h1>
           <GoogleLogin
             hostedDomain="scu.edu"

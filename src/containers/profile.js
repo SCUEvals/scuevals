@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import ReactGA from 'react-ga';
 
 import { setUserInfo, delUserInfo, setMajorsList } from '../actions';
 import API from '../services/api';
@@ -102,6 +103,7 @@ class Profile extends Component {
   onSubmit(values) {
     const client = new API();
     return client.patch(`/students/${this.props.userInfo.id}`, values, responseData => {
+      if (this.props.userInfo.roles.includes(0)) ReactGA.event({category: 'User', action: 'Completed Profile'});
       localStorage.jwt = responseData.jwt;
       this.props.setUserInfo(responseData.jwt);
       if (this.props.location.state) this.props.history.push(this.props.location.state.referrer);
