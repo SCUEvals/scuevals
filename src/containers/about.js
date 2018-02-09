@@ -36,7 +36,7 @@ class About extends Component {
         <div className="row">
           <div className="col-sm-6">
             <button className="btn" type="button" data-toggle="collapse" data-target="#webAppDesc" aria-expanded="false" aria-controls="webAppDesc">
-              Web App Info <i className="fa fa-chevron-down"></i>
+              Front-End Info <i className="fa fa-chevron-down" />
               <br />
             </button>
             <div className="collapse" id="webAppDesc">
@@ -64,12 +64,21 @@ class About extends Component {
           </div>
           <div className="col-sm-6">
             <button className="btn" type="button" data-toggle="collapse" data-target="#databaseDesc" aria-expanded="false" aria-controls="databaseDesc">
-              Database Info <i className="fa fa-chevron-down"></i>
+              Back-End Info <i className="fa fa-chevron-down" />
               <br />
             </button>
             <div className="collapse" id="databaseDesc">
               <div className="card card-body">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                <p>
+                  The back-end is built on a core of <a href="https://www.python.org/">Python</a> with
+                  <a href="http://flask.pocoo.org/">Flask</a>. All the data is stored in a
+                  <a href="https://www.postgresql.org/">PostgreSQL</a> database. To manage the db models and
+                  transactions <a href="https://www.sqlalchemy.org/">SQLAlchemy</a> is used. DB migrations are
+                  handled by <a href="http://alembic.zzzcomputing.com/en/latest/">alembic</a>. The test suite is
+                  written in <a href="https://docs.python.org/3/library/unittest.html">unittest</a> and utilizes
+                  various other libraries for easier test writing. For API backbone,
+                  <a href="https://flask-restful.readthedocs.io/en/latest/">Flask-RESTful</a> is used.
+                </p>
               </div>
             </div>
           </div>
