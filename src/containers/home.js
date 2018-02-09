@@ -56,12 +56,31 @@ class Home extends Component {
     else if (this.props.userInfo) {
       return(
         <div className='content'>
-          <h3>SCU Evals</h3>
-          <p>Welcome to SCU Evals, the best platform for writing and reading evaluations for professors and courses at Santa Clara University.</p>
+          <section>
+            <h3>SCU Evals</h3>
+            <p>
+              Welcome to the best platform for writing and reading evaluations for professors and courses
+              at Santa Clara University!
+            </p>
+            <p>
+              You are probably here because you are wondering whether a professor will be a good choice for next quarter,
+              or maybe because you want to share how awesome that class you just took was. Either/or, you have come to
+              the right place. We are here to make it a lot simpler for you to find classes to take that you not only
+              would learn something useful from, but also have a good time in.
+            </p>
+            <p>
+              This platform aims to solve all of the issues with the already existing ones! For example, only verified
+              SCU students are able to post evaluations here. In fact, only people affiliated with SCU can even use
+              the website. Think of it as an extension of the SCU community with the goal to make your life easier.
+            </p>
+            <p>
+              Use the search bar above to look for a specific course or professor, or, why not post an evaluation
+              for a class you've taken? In that case, hit the "Post Evaluation" button below and we'll get you started!
+            </p>
+          </section>
           <hr />
-          <br />
           <Link to='/post' className='btn'>Post Evaluation</Link>
-          <br />
+          <hr />
           <RecentEvals count={10} />
         </div>
       );
