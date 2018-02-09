@@ -57,7 +57,7 @@ class Home extends Component {
       return(
         <div className='content'>
           <section>
-            <h3>SCU Evals</h3>
+            <h3 styleName='title'>SCU Evals</h3>
             <p>
               Welcome to the best platform for writing and reading evaluations for professors and courses
               at Santa Clara University!
