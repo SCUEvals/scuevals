@@ -5,16 +5,15 @@ import { storeWithMiddleware } from '../index';
 class API {
 
   constructor() {
-    var headers = {'Content-Type': 'application/json'}; //Content-Type will be stripped in GET requests automatically by axios
+    let headers = {'Content-Type': 'application/json'}; //Content-Type will be stripped in GET requests automatically by axios
     if (storeWithMiddleware.getState().userInfo) //userInfo initial state looks for localStorage and initializes with it if exists. Assume jwt exists if userInfo exists
       headers.Authorization = 'Bearer ' + storeWithMiddleware.getState().userInfo.jwt;
 
-    let api = axios.create({
+    this.api = axios.create({
       headers: headers,
-      baseURL: 'https://api.scuevals.com',
+      baseURL: API_URL,
       timeout: 10000
     });
-    this.api = api;
   }
 
   handleError = (error, customHandleError) => {

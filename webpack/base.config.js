@@ -1,8 +1,13 @@
+const webpack = require('webpack');
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
+
+const defineAPIURL = new webpack.DefinePlugin({
+    'API_URL': JSON.stringify(process.env.API_URL)
+});
 
 const htmlWebpackPluginConfig = new HTMLWebpackPlugin({
   template: './src/index.html',
@@ -116,5 +121,8 @@ module.exports = {
     publicPath: '/'
   },
 
-  plugins: [htmlWebpackPluginConfig, scriptExtHtmlWebpackPluginConfig, extractStyle, styleLintPluginConfig],
+  plugins: [
+    defineAPIURL, htmlWebpackPluginConfig, scriptExtHtmlWebpackPluginConfig,
+    extractStyle, styleLintPluginConfig
+  ],
 };
