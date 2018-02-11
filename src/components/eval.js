@@ -16,7 +16,6 @@ class Eval extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      votes_score: this.props.evaluation.votes_score,
       user_vote: this.props.evaluation.user_vote
     };
   }
@@ -42,8 +41,9 @@ class Eval extends Component {
   }
 
   render() {
-    const { evaluation, openModal, majorsList, quartersList, departmentsList } = this.props;
-    const { votes_score, user_vote } = this.state;
+    const { evaluation, openModal, majorsList, quartersList, departmentsList, updateScore, majorsString } = this.props;
+    const { user_vote } = this.state;
+    const { votes_score } = evaluation;
     const { attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload } = evaluation.data;
     const average =  Number((attitude + availability + clarity + easiness + grading_speed + recommended + resourcefulness + workload) / (Object.values(evaluation.data).length - 1)).toFixed(1); //-1 for comments
     const settings = { //set speed = slidesToShow * 75
@@ -94,13 +94,9 @@ class Eval extends Component {
         : 11
       : 15
     : 18;
-    let userString = '';
-    if (evaluation.author && evaluation.author.majors && majorsList) {
-       for (let i of evaluation.author.majors) userString += majorsList.object[i].name + ', ';
-       if (userString && !evaluation.author.graduation_year) userString = userString.substring(0, userString.length - 2); //cut off last comma and space
-       else userString += 'Class of ' + evaluation.author.graduation_year;
-    }
-    else if (evaluation.author && evaluation.author.graduation_year) userString = 'Class of ' + evaluation.author.graduation_year;
+    let userString = majorsString;
+    if (userString && !evaluation.author.graduation_year) userString = userString.substring(0, userString.length - 2); //cut off last comma and space
+    else if (evaluation.author && evaluation.author.graduation_year) userString += 'Class of ' + evaluation.author.graduation_year;
     return (
       <div styleName='eval'>
         <div styleName='vote'>
@@ -112,23 +108,26 @@ class Eval extends Component {
                 e => {
                   let client = new API();
                   client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({category: 'Vote', action: 'Deleted'}));
+                  updateScore(votes_score - 1);
                   this.setState({
-                    votes_score: votes_score - 1,
-                    user_vote: null
-                  });
+                     user_vote: null
+                   });
                 }
-                : e => {
+                : e => { //user_vote 'd' or not voted
                   let client = new API();
                   client.put(`/evaluations/${evaluation.id}/vote`, 'u',  () => ReactGA.event({category: 'Vote', action: 'Added'}));
-                  user_vote == 'd' ?
-                  this.setState({
-                    votes_score: votes_score + 2,
-                    user_vote: 'u'
-                  })
-                   : this.setState({
-                     votes_score: votes_score + 1,
-                     user_vote: 'u'
-                   })
+                  if (user_vote == 'd') {
+                    updateScore(votes_score + 2);
+                    this.setState({
+                       user_vote: 'u'
+                    });
+                  }
+                  else {
+                    updateScore(votes_score + 1);
+                    this.setState({
+                      user_vote: 'u'
+                    });
+                  }
                 }}
                 onKeyPress={event => {
                   if (event.key === 'Enter') event.target.click();
@@ -145,23 +144,26 @@ class Eval extends Component {
                  e => {
                    let client = new API();
                    client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({category: 'Vote', action: 'Deleted'}));
+                   updateScore(votes_score + 1);
                    this.setState({
-                     votes_score: votes_score + 1,
                      user_vote: null
                    });
                  }
                  : e => { //user_vote 1 or null
                    let client = new API();
                    client.put(`/evaluations/${evaluation.id}/vote`, 'd', () =>  ReactGA.event({category: 'Vote', action: 'Added'}));
-                   user_vote === 'u' ?
-                    this.setState({
-                      votes_score: votes_score - 2,
-                      user_vote: 'd'
-                    })
-                    : this.setState({ ///user_vote null
-                      votes_score: votes_score - 1,
-                      user_vote: 'd'
-                    })
+                   if (user_vote === 'u') {
+                     updateScore(votes_score - 2);
+                     this.setState({
+                       user_vote: 'd'
+                     });
+                    }
+                    else {
+                      updateScore(votes_score - 1);
+                      this.setState({ ///user_vote null
+                        user_vote: 'd'
+                      });
+                    }
                  }}
                  onKeyPress={event => {
                    if (event.key === 'Enter') event.target.click();

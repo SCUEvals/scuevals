@@ -96,7 +96,6 @@ class Home extends Component {
       );
     }
     else { //if not logged in
-      console.log(this.state.nonStudentModalMopen);
       return (
         <div styleName="login">
           <NonStudentModal nonStudentModalOpen={this.state.nonStudentModalOpen} closeNonStudentModal={() => this.setState({nonStudentModalOpen: false})} />
