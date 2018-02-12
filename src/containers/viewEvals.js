@@ -33,10 +33,10 @@ class ViewEvals extends Component {
   componentWillMount() {
     let client = new API();
     client.get('/' + this.props.type + '/' + this.props.match.params.id, info => {
-      info.evaluations.sort((a, b) => {
-        return a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1  //bigger number quarter ids assumed to be always most recent
-        : a.post_time > b.post_time ? -1 : 1;
-      });
+      info.evaluations.sort((a, b) =>
+        a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1  //bigger number quarter ids assumed to be always most recent
+        : a.post_time > b.post_time ? -1 : 1
+      );
       this.setState({info});
     });
   }
@@ -47,10 +47,10 @@ class ViewEvals extends Component {
       this.setState({info: null}, () => {
         let client = new API();
         client.get('/' + this.props.type + '/' + this.props.match.params.id, info => {
-          info.evaluations.sort((a, b) => {
-            return a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1
-            : a.post_time > b.post_time ? -1 : 1;
-          });
+          info.evaluations.sort((a, b) =>
+            a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1
+            : a.post_time > b.post_time ? -1 : 1
+          );
           this.setState({info});
         });
       });
@@ -134,8 +134,8 @@ class ViewEvals extends Component {
     };
 
     let sortOptions = [
-      {value: this.props.type === 'professors' ? 'course' : 'professor', label: `Sort by ${this.props.type === 'professors' ? 'Course' : 'Professor'}`},
       {value: 'quarter', label: 'Sort by Quarter'},
+      {value: this.props.type === 'professors' ? 'course' : 'professor', label: `Sort by ${this.props.type === 'professors' ? 'Course' : 'Professor'}`},
       {value: 'score', label: 'Sort by Score'},
       {value: 'major', label: 'Sort By Major'},
       {value: 'grad_year', label: 'Sort By Graduation Year'}
@@ -210,13 +210,6 @@ class ViewEvals extends Component {
                 let evals = info.evaluations.slice();
                 newInfo.evaluations = evals;
                 switch (sortValue) {
-                  case 'professor':
-                    newInfo.evaluations.sort((a, b) => {
-                      return professorsList.object[a.professor.id].label > professorsList.object[b.professor.id].label ? 1
-                      : professorsList.object[a.professor.id].label < professorsList.object[b.professor.id].label ? -1
-                      : 0;
-                    });
-                    break;
                   case 'course':
                     newInfo.evaluations.sort((a, b) => {
                       if (a.department_id === b.department_id) {
@@ -224,25 +217,27 @@ class ViewEvals extends Component {
                         let parsedANum = parseInt(a.number, 10);
                         let parsedBNum = parseInt(b.number, 10);
                         //if integers same, check for letters to decide
-                        if (parsedANum === parsedBNum) return a.number > b.number ? 1
-                        : a.number < b.number ? -1
+                        if (parsedANum === parsedBNum) return a.course.number > b.course.number ? 1
+                        : a.course.number < b.course.number ? -1
                         : a.post_time > b.post_time ? -1 : 1;
                         else return parsedANum > parsedBNum ? 1 : -1;
                       }
-                      else return departmentsList[a.department_id].abbr > departmentsList[b.department_id].abbr ? 1 : -1;
+                      else return departmentsList[a.course.department_id].abbr > departmentsList[b.course.department_id].abbr ? 1 : -1;
                     });
                     break;
-                  case 'quarter':
-                    newInfo.evaluations.sort((a, b) => { //could sort by quarter id number itself, but no guarantee that newest will be biggest number in future (though it currently looks like the pattern)
-                      return a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1 : a.post_time > b.post_time ? -1 : 1;
-                    });
+                  case 'professor':
+                    newInfo.evaluations.sort((a, b) =>
+                      professorsList.object[a.professor.id].label > professorsList.object[b.professor.id].label ? 1
+                      : professorsList.object[a.professor.id].label < professorsList.object[b.professor.id].label ? -1
+                      : 0
+                    );
                     break;
                   case 'score':
-                    newInfo.evaluations.sort((a, b) => {
-                      return a.votes_score > b.votes_score ? -1
+                    newInfo.evaluations.sort((a, b) =>
+                      a.votes_score > b.votes_score ? -1
                       : a.votes_score < b.votes_score ? 1
-                      : a.post_time > b.post_time ? -1 : 1;;
-                    });
+                      : a.post_time > b.post_time ? -1 : 1
+                    );
                     break;
                   case 'major':
                     newInfo.evaluations.sort((a, b) => {
@@ -281,12 +276,18 @@ class ViewEvals extends Component {
                       : a.post_time > b.post_time ? -1 : 1;;
                     });
                     break;
+                  default: //will capture 'quarter' case too since sorts by quarter by default in viewEvals
+                    newInfo.evaluations.sort((a, b) => {
+                      return a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1  //bigger number quarter ids assumed to be always most recent
+                      : a.post_time > b.post_time ? -1 : 1;
+                    });
                 }
                 this.setState({info: newInfo, sortValue});
-
+                this.sortArrows.className='fa fa-sort';
               }}
             />
             <i
+              ref={obj => this.sortArrows = obj}
               tabIndex='0'
               className='fa fa-sort'
               onClick={e => {
