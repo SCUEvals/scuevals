@@ -260,6 +260,44 @@ label:not(:first-child) input[type='radio'] {
   }
 }
 
+.Select-control {
+  border-radius: $defaultBorderRadius;
+  border: 2px solid $backgroundColor;
+
+  &:focus {
+    border-color: $focusColor;
+  }
+}
+
+.error .Select-control {
+  border: 2px solid $SCUred;
+}
+
+.Select.is-disabled > .Select-control {
+  .Select-input {
+    width: calc(100% + 25px) !important;
+    background: #f9f9f9;
+
+    &:focus {
+      border: 2px solid $focusColor !important;
+    }
+  }
+}
+
+.Select.is-focused:not(.is-open) > .Select-control {
+  box-shadow: none;
+  border: 2px solid $focusColor;
+}
+
+.Select--multi:not(.is-focused):not(.is-open).has-value .Select-control {
+  padding-bottom: 4px;
+
+  .Select-input {
+    width: 0 !important;
+    margin-left: 0 !important;
+  }
+}
+
 .Select--multi {
   .Select-value-icon {
     display: flex;
@@ -300,19 +338,6 @@ label:not(:first-child) input[type='radio'] {
   border-radius: 0 $defaultBorderRadius $defaultBorderRadius 0;
 }
 
-.Select-control {
-  border-radius: $defaultBorderRadius;
-  border: 2px solid $backgroundColor;
-
-  &:focus {
-    border-color: $focusColor;
-  }
-}
-
-.error .Select-control {
-  border: 2px solid $SCUred;
-}
-
 @media (max-width: $xs) {
   .col-sm-6:not(:last-child) {
     padding-bottom: 15px;
@@ -323,22 +348,6 @@ label:not(:first-child) input[type='radio'] {
   .col-md-6:not(:last-child) {
     padding-bottom: 15px;
   }
-}
-
-.Select.is-disabled > .Select-control {
-  .Select-input {
-    width: calc(100% + 25px) !important;
-    background: #f9f9f9;
-
-    &:focus {
-      border: 2px solid $focusColor !important;
-    }
-  }
-}
-
-.Select.is-focused:not(.is-open) > .Select-control {
-  box-shadow: none;
-  border: 2px solid $focusColor;
 }
 
 textarea {
