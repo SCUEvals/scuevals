@@ -121,11 +121,6 @@ label:not(:first-child) input[type='radio'] {
   margin-left: 15px;
 }
 
-#app,
-#app > div {
-  height: 100%;
-}
-
 .content {
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: $defaultBorderRadius;
@@ -289,13 +284,9 @@ label:not(:first-child) input[type='radio'] {
   border: 2px solid $focusColor;
 }
 
-.Select--multi:not(.is-focused):not(.is-open).has-value .Select-control {
-  padding-bottom: 4px;
-
-  .Select-input {
-    width: 0 !important;
-    margin-left: 0 !important;
-  }
+.Select--multi:not(.is-focused):not(.is-open).has-value .Select-control .Select-input {
+  width: 0 !important;
+  margin-left: 0 !important;
 }
 
 .Select--multi {
@@ -308,6 +299,10 @@ label:not(:first-child) input[type='radio'] {
     padding-right: 20px;
     display: flex;
     flex-wrap: wrap;
+
+    div:nth-last-of-type(2):not(.Select-placeholder) {
+      margin-bottom: 4px;
+    }
 
     .Select-value {
       margin: 4px 0 0 4px;
@@ -322,6 +317,11 @@ label:not(:first-child) input[type='radio'] {
       }
     }
   }
+}
+
+#app,
+#app > div {
+  height: 100%;
 }
 
 .Select--single > .Select-control .Select-value,
