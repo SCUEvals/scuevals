@@ -253,8 +253,7 @@ class ViewEvals extends Component {
                         bMajors.sort((a, b) => {
                           return majorsList.object[a].name > majorsList.object[b].name ? 1 : -1; //alphabetically sort majors if multiple
                         });
-                        let i = 0;
-                        while (true) {
+                        for (let i = 0; i < Math.max(aMajors.length, bMajors.length); i++) {
                           if (!aMajors[i] && !bMajors[i]) return a.post_time > b.post_time ? -1 : 1;
                           else if (!aMajors[i]) return -1;
                           else if (!bMajors[i]) return 1;
