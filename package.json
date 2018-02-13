@@ -18,6 +18,7 @@
   "author": "Joseph Théberge & Fredrik Blomqvist",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "babel-eslint": "^8.2.1",
     "eslint": "^4.17.0",
     "eslint-plugin-react": "^7.6.1",
     "eslint-watch": "^3.1.3",
@@ -36,6 +37,7 @@
     "express": "^4.16.2",
     "extract-text-webpack-plugin": "^3.0.2",
     "html-webpack-plugin": "^2.30.1",
+    "jquery": "^3.3.1",
     "jwt-decode": "^2.2.0",
     "lodash.debounce": "^4.0.8",
     "node-sass": "^4.7.2",
