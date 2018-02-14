@@ -159,7 +159,7 @@ class SearchBar extends Component {
   renderSearchResults(response, search, departmentsList) { //searchResults can exist while search value length < 3. Edge case: Old GET request still processing, but value length no longer > 2
     if (response && response.term && response.term.length > 2) {
       if (response.courses.length === 0 && response.professors.length === 0) return null;
-
+      
       //onMouseDown prevents losing focus if clicking on h6 elements (will also prevent potential unnecessary hideOnMouseDownOutside events which are called on refocusing on input)
       return (
         <ul id='searchBarResults'>
@@ -194,7 +194,7 @@ class SearchBar extends Component {
                     onMouseDown={event => event.preventDefault()}
                      to={`/courses/${course.id}`}
                     >
-                     {departmentsList[course.department_id].abbr} {course.number}: {course.title}
+                     {departmentsList ? departmentsList[course.department_id].abbr : '...'} {course.number}: {course.title}
                   </Link>
                 </li>
               );
@@ -232,7 +232,7 @@ class SearchBar extends Component {
         <Field
           name='search' //responsible for object's key name for values
           component={this.renderSearch}
-          renderSearchResults={(results, term) => this.renderSearchResults(results, term)}
+          renderSearchResults={(results, term) => this.renderSearchResults(results, term, departmentsList)}
           departmentsList={departmentsList}
           searchResults={searchResults}
           setSearchResults={response => setSearchResults(response)}
