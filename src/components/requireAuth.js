@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import jwtDecode from 'jwt-decode';
 import Profile from '../containers/profile';
 import Home from '../containers/home';
-import PropTypes from 'prop-types';
 
 export default function requireAuth(PassedComponent, extraProps={}) {
 
   class AuthenticatedPassedComponent extends Component {
 
-    static defaultProps = {
-      history: PropTypes.object
+    static propTypes = {
+      location: PropTypes.object.isRequired,
+      history: PropTypes.object.isRequired
     }
 
     componentWillMount() { //check auth

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
 class About extends Component {
 
-  static defaultProps = {
+  static propTypes = {
     userInfo: PropTypes.object
   }
 
@@ -21,12 +21,12 @@ class About extends Component {
           About Us
         </h3>
         <p>
-          While registering for classes at Santa Clara University, we often wonder
+          {`While registering for classes at Santa Clara University, we often wonder
           what types of courses we're actually enrolling in. Sure, there are
           course evaluations to rummage through, but many of these questions
           didn't address what we as students want answered. That's where we come
           in. We are dedicated to serving a platform that helps SCU students make
-          informed decisions about registering for classes.
+          informed decisions about registering for classes.`}
         </p>
         <h6>
           We want a place where you can read and write relevant evaluations that are
@@ -43,17 +43,17 @@ class About extends Component {
               <div className="card card-body">
                 <p>
                   The web app is built from
-                  Facebook's <a href="https://facebook.github.io/react/">React</a> combined
+                  {`Facebook's`} <a href="https://facebook.github.io/react/">React</a> combined
                   with <a href="http://redux.js.org">Redux</a> and Redux middleware. For URL navigation of the single
                   page web app, <a href="https://github.com/ReactTraining/react-router"> React
-                  Router</a> is used. Because it is written with Javascript's new release ES6,
+                  Router</a> is used. Because it is written with {`JavaScript's`} new release ES6,
                   the web app uses <a href="https://babeljs.io">Babel</a> to translate ES6 code into
                   ES5 code for better compatibility between browsers, uses <a
                   href="https://webpack.js.org">Webpack</a> to do things like compiling SCSS and running code through Babel
                   for transformation, and uses <a href="https://expressjs.com">Express</a> to
                   configure the server. For managing packages, <a
                   href="https://www.npmjs.com/">npm</a> is used. For design purposes and browser
-                  flexibility, the web app uses a CDN for Twitter's <a
+                  flexibility, the web app uses a CDN for {`Twitter's`} <a
                   href="https://getbootstrap.com/">Bootstrap</a> framework. <a
                   href="http://sass-lang.com/">SCSS</a> is implemented for consistent,
                   compressed, and programmatic creation of CSS.

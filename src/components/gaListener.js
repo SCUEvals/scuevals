@@ -1,16 +1,19 @@
-import React, { Component, props } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactGA from 'react-ga';
+import { withRouter } from 'react-router';
 
 class GAListener extends Component {
 
-  static contextTypes = {
-    router: PropTypes.object
+  static propTypes = {
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+    children: PropTypes.array
   };
 
   componentDidMount() {
-    this.sendPageView(this.context.router.history.location);
-    this.context.router.history.listen(this.sendPageView);
+    this.sendPageView(this.props.location);
+    this.props.history.listen(this.sendPageView);
   }
 
   sendPageView(location) {
@@ -27,4 +30,4 @@ class GAListener extends Component {
   }
 }
 
-export default GAListener;
+export default withRouter(GAListener);

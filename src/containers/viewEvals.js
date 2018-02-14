@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Select from 'react-select';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import FlagModal from '../components/flagModal';
 import DeleteModal from '../components/deleteModal';
@@ -15,9 +15,16 @@ import '../styles/viewEvals.scss';
 
 class ViewEvals extends Component {
 
-  static defaultProps = {
-    type: PropTypes.string,
-    match: PropTypes.object
+  static propTypes = {
+    type: PropTypes.string.isRequired,
+    userInfo: PropTypes.object,
+    majorsList: PropTypes.object,
+    quartersList: PropTypes.object,
+    coursesList: PropTypes.object,
+    departmentsList: PropTypes.object,
+    professorsList: PropTypes.object,
+    location: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired
   }
 
   constructor(props) {
@@ -42,7 +49,6 @@ class ViewEvals extends Component {
   }
 
   componentWillUpdate(nextProps) {
-    let { quartersList } = this.props;
     if (this.props.location.pathname !== nextProps.location.pathname) {
       this.setState({info: null}, () => {
         let client = new API();
@@ -100,7 +106,7 @@ class ViewEvals extends Component {
         </Popper>
       </Manager>
     );
-  };
+  }
 
   render() { //1-1.74 score1, 1.75-2.49 score2, 2.50-3.24 score3, 3.25-4 score4
     const { info, flagModal, deleteModal, sortValue } = this.state;
@@ -131,7 +137,7 @@ class ViewEvals extends Component {
       recommended = Number((recommended / divideNum * 10) / 10).toFixed(1);
       resourcefulness = Number((resourcefulness / divideNum * 10) / 10).toFixed(1);
       workload = Number((workload / divideNum * 10) / 10).toFixed(1);
-    };
+    }
 
     let sortOptions = [
       {value: 'quarter', label: 'Sort by Quarter'},
@@ -152,7 +158,6 @@ class ViewEvals extends Component {
           quarter={quartersList && deleteModal.quarter_id ? quartersList.object[deleteModal.quarter_id].label : null}
           course={coursesList && coursesList.departmentsListLoaded && deleteModal.course_id ? coursesList.object[deleteModal.course_id].label : null }
           professor={professorsList && deleteModal.professor_id ? professorsList.object[deleteModal.professor_id].label : null}
-          eval_id={deleteModal.eval_id}
           deletePost={() => {
             let client = new API();
             client.delete(`/evaluations/${deleteModal.eval_id}`, () => ReactGA.event({category: 'Evaluation', action: 'Deleted'}));
@@ -163,8 +168,8 @@ class ViewEvals extends Component {
                 evals.splice(key, 1);
                 newList.evaluations = evals;
                 this.setState({info: newList});
-              };
-             });
+              }
+             })
           }}
         />
         <h2>
@@ -261,8 +266,7 @@ class ViewEvals extends Component {
                              return majorsList.object[aMajors[i]].name > majorsList.object[bMajors[i]].name ? 1 : -1;
                           }
                         }
-                      };
-
+                      }
                     });
                     break;
                   case 'grad_year':
@@ -272,7 +276,7 @@ class ViewEvals extends Component {
                       else if (!b.author.graduation_year) return -1;
                       else return a.author.graduation_year > b.author.graduation_year ? -1
                       : a.author.graduation_year < b.author.graduation_year ? 1
-                      : a.post_time > b.post_time ? -1 : 1;;
+                      : a.post_time > b.post_time ? -1 : 1;
                     });
                     break;
                   default: //will capture 'quarter' case too since sorts by quarter by default in viewEvals
@@ -309,22 +313,22 @@ class ViewEvals extends Component {
           info.evaluations.length === 0 ?
             <h5>No evaluations posted yet.</h5>
           : info.evaluations.map((evaluation, index) => {
-            let majorsString = '';
+            let userString = '';
             if (evaluation.author && evaluation.author.majors && majorsList) {
               let authorMajors = evaluation.author.majors.slice();
-              authorMajors.sort((a, b) => {
-                return majorsList.object[a].name > majorsList.object[b].name ? 1 : -1; //alphabetically sort majors if multiple
-              });
-              for (let i of authorMajors) majorsString += majorsList.object[i].name + ', ';
-            };
+              //alphabetically sort majors if multiple
+              authorMajors.sort((a, b) => majorsList.object[a].name > majorsList.object[b].name ? 1 : -1);
+              for (let i of authorMajors) userString += majorsList.object[i].name + ', ';
+            }
+            if (userString && !evaluation.author.graduation_year) userString = userString.substring(0, userString.length - 2); //cut off last comma and space
+            else if (evaluation.author && evaluation.author.graduation_year) userString += 'Class of ' + evaluation.author.graduation_year;
               return (
                 <Eval
                   key={evaluation.id}
-                  majorsList={majorsList}
-                  quartersList={quartersList}
-                  departmentsList={departmentsList}
+                  quarter={quartersList ? quartersList.object[evaluation.quarter_id].name + ' ' + quartersList.object[evaluation.quarter_id].year : null}
+                  department={departmentsList ? departmentsList[evaluation.course.department_id].abbr + ' ' + evaluation.course.number + ': ' + evaluation.course.title : null}
                   evaluation={evaluation}
-                  majorsString={majorsString}
+                  userString={userString}
                   updateScore={newScore => { //score must be updated in info array so sorting works with new values (or else could just update in local state inside Eval)
                     let newInfo = Object.assign({}, info); //multiple shallow copies best way to handle nested state change while respecting immutable state
                     let evals = info.evaluations.slice();

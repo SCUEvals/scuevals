@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Field, reduxForm, formValueSelector } from 'redux-form';
+import PropTypes from 'prop-types';
+import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList } from '../actions';
 import debounce from 'lodash.debounce';
@@ -10,6 +11,27 @@ import API from '../services/api';
 
 class SearchBar extends Component {
 
+  static propTypes = {
+    searchResults: PropTypes.object,
+    quartersList: PropTypes.object,
+    coursesList: PropTypes.object,
+    departmentsList: PropTypes.object,
+    professorsList: PropTypes.object,
+    majorsList: PropTypes.object,
+    setSearchResults: PropTypes.func,
+    setDepartmentsList: PropTypes.func,
+    setProfessorsList: PropTypes.func,
+    setQuartersList: PropTypes.func,
+    setCoursesList: PropTypes.func,
+    setMajorsList: PropTypes.func,
+    match: PropTypes.object,
+    history: PropTypes.object,
+    location: PropTypes.object,
+    handleSubmit: PropTypes.func
+  }
+
+  /*searchBar always loaded after auth as full user, so make ajax requests after auth
+  (not on authWithBackEnd on home because if going to non-home page from link, then won't load)*/
   constructor(props) {
     super(props);
     this.state = {
@@ -38,9 +60,9 @@ class SearchBar extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) { //if coursesList fetched before departmentsList, then need to retroactively search for department name from id and sort
+  componentDidUpdate() { //if coursesList fetched before departmentsList, then need to retroactively search for department name from id and sort
     if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList)
-      this.props.setCoursesList(JSON.parse(JSON.stringify(this.props.coursesList.array)), this.props.departmentsList); //make deep copy of current, state immutable
+      this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList); //make deep copy of current, state immutable
   }
 
   getResponse(searchVal, setSearchResults) { //same as debouncedGetResponse but without delay
@@ -91,7 +113,7 @@ class SearchBar extends Component {
   }
 
   renderSearch(field) {
-    const { meta: { error, submitFailed, touched }, renderSearchResults, departmentsList, input, searchResults, loading } = field;
+    const { meta: { error, submitFailed }, renderSearchResults, departmentsList, input, searchResults, loading } = field;
     function hideOnMouseDownOutside(searchBar, searchBarResults) { //must not be DOM objects passed, since each click needs to re-search DOM to see if exists
       const outsideMouseDownListener = event => {
         if (!$(event.target).closest($(searchBar)).length) {
@@ -111,10 +133,10 @@ class SearchBar extends Component {
             type='text'
             placeholder='Search for professor or class'
             autoComplete='off'
-            {...field.input}
+            {...input}
             onFocus={ event => {
               $('#searchBarResults').show();
-              field.input.onFocus(event);
+              input.onFocus(event);
               hideOnMouseDownOutside('#searchBar', '#searchBarResults');
             }}
 
@@ -128,7 +150,7 @@ class SearchBar extends Component {
             </div>
             : ''
           }
-          {field.renderSearchResults(searchResults, input.value, departmentsList)}
+          {renderSearchResults(searchResults, input.value, departmentsList)}
         </div>
       </div>
     );
@@ -136,7 +158,6 @@ class SearchBar extends Component {
 
   renderSearchResults(response, search, departmentsList) { //searchResults can exist while search value length < 3. Edge case: Old GET request still processing, but value length no longer > 2
     if (response && response.term && response.term.length > 2) {
-      const { departmentsList } = this.props;
       if (response.courses.length === 0 && response.professors.length === 0) return null;
 
       //onMouseDown prevents losing focus if clicking on h6 elements (will also prevent potential unnecessary hideOnMouseDownOutside events which are called on refocusing on input)
@@ -149,7 +170,7 @@ class SearchBar extends Component {
                 <li key={professor.id}>
                   <Link
                     onMouseDown={event => event.preventDefault()}
-                    onClick={event => {
+                    onClick={() => {
                       $('#searchBarResults').hide();
                       $('#searchBar input').blur();
                      }}

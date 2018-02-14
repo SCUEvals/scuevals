@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Select from 'react-select';
-import PropTypes from 'prop-types';
-import ReactModal from 'react-modal';
 import DeleteModal from '../components/deleteModal';
 import ReactGA from 'react-ga';
 
@@ -13,9 +12,12 @@ import '../styles/viewEvals.scss';
 
 class ViewMyEvals extends Component {
 
-  static defaultProps = {
-    type: PropTypes.string,
-    match: PropTypes.object
+  static propTypes = {
+    userInfo: PropTypes.object,
+    quartersList: PropTypes.object,
+    coursesList: PropTypes.object,
+    departmentsList: PropTypes.object,
+    professorsList: PropTypes.object
   }
 
   constructor(props) {
@@ -62,14 +64,14 @@ class ViewMyEvals extends Component {
                 let newList = myEvalsList.slice();
                 newList.splice(key, 1);
                 this.setState({ myEvalsList: newList });
-              };
-            });
+              }
+            })
           }}
         />
-        <h4 className='banner'>{userInfo.first_name}'s Evals</h4>
+        <h4 className='banner'>{userInfo.first_name}&#8217;s Evals</h4>
         {myEvalsList ?
            myEvalsList.length === 0 ?
-            <h5>You haven't posted anything yet.</h5>
+            <h5>You haven&#8217;t posted anything yet.</h5>
             : <div>
               <Select
                 isLoading={!coursesList && !departmentsList && !professorsList}

@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
-import ReactModal from 'react-modal';
 import PropTypes from 'prop-types';
+import ReactModal from 'react-modal';
 
 class FlagModal extends Component {
+
+  static propTypes = {
+    flagModalOpen: PropTypes.bool.isRequired,
+    closeFlagModal: PropTypes.func.isRequired
+  }
 
   render() {
     const { flagModalOpen, closeFlagModal } = this.props;

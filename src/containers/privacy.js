@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
 class Privacy extends Component {
 
-    static defaultProps = {
+    static propTypes = {
       userInfo: PropTypes.object
     }
 
@@ -21,14 +21,14 @@ class Privacy extends Component {
           Privacy Policy
         </h3>
           <p>
-            The only cookies in use on our site are for Google Analytics, Oauth 2.0 for Google, and a
+            {`The only cookies in use on our site are for Google Analytics, Oauth 2.0 for Google, and a
             JSON web token which is deleted after signing out for serverside verification containing information
             given while creating your account (major, graduation year, and gender). Google Analytics is
             a tool that helps us understand how visitors interact with our website. Oauth 2.0 allows users
             to securely login through Google's services without us managing or having access to
             passwords. We use this so we may ensure those who wish to post reviews are from Santa Clara
             University while keeping you secure. We also have access to Google Analytics's 3rd-party
-            audience data to better understand the demographics of our users.
+            audience data to better understand the demographics of our users.`}
           </p>
           <p>We do not store nor have access to your personal passwords.</p>
           <p>

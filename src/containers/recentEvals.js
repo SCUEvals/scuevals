@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import Slider from 'react-slick';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import ReactGA from 'react-ga';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import API from '../services/api';
 import '../styles/recentEvals.scss';
@@ -17,10 +15,19 @@ class RecentEvals extends Component {
     }
   }
 
+  static propTypes = {
+    quartersList: PropTypes.object,
+    coursesList: PropTypes.object,
+    departmentsList: PropTypes.object,
+    professorsList: PropTypes.object,
+    count: PropTypes.number.isRequired
+  }
+
   componentDidMount() {
     let client = new API();
-    client.get('/evaluations/recent', evals => this.setState({evals}), {count: this.props.count});
+    client.get('/evaluations/recent', evals => {if (this.recentEvals) this.setState({evals})}, {count: this.props.count});
   }
+
 
   calculatePath(n) { //circumference = 100.53
     return  100.53 - (n / 4 * 100.53);
@@ -44,7 +51,7 @@ class RecentEvals extends Component {
               return (
                 <li key={evaluation.id} className="list-group-item d-flex justify-content-between align-items-center">
                   <div  className='flex col-2'>
-                    {quartersList.object[evaluation.quarter_id].label }
+                    {quartersList.object[evaluation.quarter_id].label}
                   </div>
                   <div className='flex col-4'>
                     <Link to={`/courses/${evaluation.course.id}`} >{departmentsList[coursesList.object[evaluation.course.id].department_id].abbr + ' ' + coursesList.object[evaluation.course.id].number}</Link>
@@ -62,13 +69,13 @@ class RecentEvals extends Component {
                   </div>
               </li>
             );
-            })}
+          })}
         </ul>
+      </div>
     </div>
-  </div>
     );
     else return (
-      <h5 styleName='recentEvals'>Loading Most Recent Evaluations...</h5>
+      <h5 ref={node => this.recentEvals = node} styleName='recentEvals'>Loading Most Recent Evaluations...</h5>
     );
   }
 }

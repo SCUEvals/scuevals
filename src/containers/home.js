@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { GoogleLogin } from 'react-google-login';
 import jwtDecode from 'jwt-decode';
-import PropTypes from 'prop-types';
 import ReactGA from 'react-ga';
 import { Link } from 'react-router-dom';
 
@@ -14,9 +14,11 @@ import NonStudentModal from '../components/nonStudentModal';
 
 class Home extends Component {
 
-  static defaultProps = {
-    setUserInfo: PropTypes.func,
-    history: PropTypes.object
+  static propTypes = {
+    userInfo: PropTypes.object,
+    setUserInfo: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -42,8 +44,10 @@ class Home extends Component {
           try {
             localStorage.setItem("jwt", responseData.jwt);
           } catch(err) {
+            /* eslint-disable no-console */
             console.error("Cannot execute localStorage.setItem (perhaps private mode is enabled). Error:", err);
-          };
+            /* eslint-enable no-console */
+          }
           if (referrer) {
             if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile', { referrer });
             else this.props.history.push(referrer);
@@ -84,8 +88,8 @@ class Home extends Component {
               the website. Think of it as an extension of the SCU community with the goal to make your life easier.
             </p>
             <p>
-              Use the search bar above to look for a specific course or professor, or, why not post an evaluation
-              for a class you've taken? In that case, hit the "Post Evaluation" button below and we'll get you started!
+              {`Use the search bar above to look for a specific course or professor, or, why not post an evaluation
+              for a class you've taken? In that case, hit the "Post Evaluation" button below and we'll get you started!`}
             </p>
           </section>
           <hr />
@@ -105,7 +109,7 @@ class Home extends Component {
             clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
             buttonText=''
             onSuccess={info => this.setState({loading: true}, this.authWithBackEnd(info.tokenObj.id_token, referrer))}
-            onFailure={err => console.error('Google Login Error: ', err)}
+            onFailure={err => /*eslint-disable no-console*/ console.error('Google Login Error: ', err) /*eslint-enable no-console*/}
             className='btn'
             styleName='loginBtn'
           >

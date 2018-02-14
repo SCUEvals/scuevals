@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import Select from 'react-select';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import ReactGA from 'react-ga';
 
@@ -12,12 +12,16 @@ import '../styles/profile.scss';
 
 class Profile extends Component {
 
-  static defaultProps = {
+  static propTypes = {
     userInfo: PropTypes.object,
-    setUserInfo: PropTypes.func,
-    history: PropTypes.obj,
-    handleSubmit: PropTypes.obj,
-    delUserInfo: PropTypes.func,
+    majorsList: PropTypes.object,
+    setUserInfo: PropTypes.func.isRequired,
+    setMajorsList: PropTypes.func.isRequired,
+    submitting: PropTypes.bool.isRequired,
+    history: PropTypes.object.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+    delUserInfo: PropTypes.func.isRequired,
+    location: PropTypes.object.isRequired
   }
 
   renderMajors(field) {
@@ -125,7 +129,7 @@ class Profile extends Component {
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
           {userInfo && !userInfo.roles.includes(0) ?
             <div>
-              <h4 className='banner'>{userInfo.first_name}'s Profile</h4>
+              <h4 className='banner'>{`${userInfo.first_name}'s Profile`}</h4>
               <small>{profileInfo}</small>
             </div>
             :
@@ -199,10 +203,7 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(
-  mapStateToProps, { setUserInfo, delUserInfo, setMajorsList }
-)
-(reduxForm({
-    validate,
-    form:'profile'
+export default connect(mapStateToProps, { setUserInfo, delUserInfo, setMajorsList })(reduxForm({
+  validate,
+  form:'profile'
 })(Profile));

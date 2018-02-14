@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import ReactGA from 'react-ga';
 
 import API from '../services/api';
@@ -9,8 +9,14 @@ import '../styles/eval.scss';
 
 class Eval extends Component {
 
-  static defaultProps = {
-    evaluation: PropTypes.obj
+  static propTypes = {
+    openModal: PropTypes.func.isRequired,
+    evaluation: PropTypes.object.isRequired,
+    updateScore: PropTypes.func,
+    userString: PropTypes.string,
+    quarter: PropTypes.string,
+    department: PropTypes.string
+
   }
 
   constructor(props) {
@@ -41,7 +47,7 @@ class Eval extends Component {
   }
 
   render() {
-    const { evaluation, openModal, majorsList, quartersList, departmentsList, updateScore, majorsString } = this.props;
+    const { evaluation, openModal, quarter, department, updateScore, userString } = this.props;
     const { user_vote } = this.state;
     const { votes_score } = evaluation;
     const { attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload } = evaluation.data;
@@ -94,9 +100,6 @@ class Eval extends Component {
         : 11
       : 15
     : 18;
-    let userString = majorsString;
-    if (userString && !evaluation.author.graduation_year) userString = userString.substring(0, userString.length - 2); //cut off last comma and space
-    else if (evaluation.author && evaluation.author.graduation_year) userString += 'Class of ' + evaluation.author.graduation_year;
     return (
       <div styleName='eval'>
         <div styleName='vote'>
@@ -105,7 +108,7 @@ class Eval extends Component {
               styleName={user_vote === 'u' ? 'active' : ''}
               className='fa fa-thumbs-up'
               onClick={user_vote === 'u' ?
-                e => {
+                () => {
                   let client = new API();
                   client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({category: 'Vote', action: 'Deleted'}));
                   updateScore(votes_score - 1);
@@ -113,7 +116,7 @@ class Eval extends Component {
                      user_vote: null
                    });
                 }
-                : e => { //user_vote 'd' or not voted
+                : () => { //user_vote 'd' or not voted
                   let client = new API();
                   client.put(`/evaluations/${evaluation.id}/vote`, 'u',  () => ReactGA.event({category: 'Vote', action: 'Added'}));
                   if (user_vote == 'd') {
@@ -141,7 +144,7 @@ class Eval extends Component {
               styleName={user_vote === 'd' ? 'active' : ''}
                className='fa fa-thumbs-down'
                onClick={user_vote === 'd' ?
-                 e => {
+                 () => {
                    let client = new API();
                    client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({category: 'Vote', action: 'Deleted'}));
                    updateScore(votes_score + 1);
@@ -149,7 +152,7 @@ class Eval extends Component {
                      user_vote: null
                    });
                  }
-                 : e => { //user_vote 1 or null
+                 : () => { //user_vote 1 or null
                    let client = new API();
                    client.put(`/evaluations/${evaluation.id}/vote`, 'd', () =>  ReactGA.event({category: 'Vote', action: 'Added'}));
                    if (user_vote === 'u') {
@@ -175,26 +178,26 @@ class Eval extends Component {
           {evaluation.course && evaluation.professor ? //for viewing own evals on viewMyEvals, both sent
             <div styleName='evalInfo' className='row'>
               <div styleName='col-sm-custom' className='col-12 col-md-2'>
-                {quartersList ? quartersList.object[evaluation.quarter_id].name + ' ' + quartersList.object[evaluation.quarter_id].year : ''}
+                {quarter}
               </div>
               <div styleName='col-sm-custom' className='col-12 col-md-5'>
                 <Link to={`/professors/${evaluation.professor.id}`}>{evaluation.professor.last_name + ', ' + evaluation.professor.first_name}</Link>
               </div>
               <div styleName='col-sm-custom' className='col-12 col-md-5'>
-                {departmentsList ?
-                  <Link to={`/courses/${evaluation.course.id}`}>{departmentsList[evaluation.course.department_id].abbr + ' ' + evaluation.course.number + ': ' + evaluation.course.title}</Link>
+                {department ?
+                  <Link to={`/courses/${evaluation.course.id}`}>{department}</Link>
                 : ''}
               </div>
             </div>
             :
             <div styleName='evalInfo' className='row'>
               <div className='col-12 col-sm-6'>
-                {quartersList ? quartersList.object[evaluation.quarter_id].name + ' ' + quartersList.object[evaluation.quarter_id].year : ''}
+                {quarter}
               </div>
               <div className='col-12 col-sm-6'>
                 {evaluation.course ?
-                  departmentsList ?
-                  <Link to={`/courses/${evaluation.course.id}`}>{departmentsList[evaluation.course.department_id].abbr + ' ' + evaluation.course.number + ': ' + evaluation.course.title}</Link>
+                  department ?
+                  <Link to={`/courses/${evaluation.course.id}`}>{department}</Link>
                   : ''
                 : <Link to={`/professors/${evaluation.professor.id}`}>{evaluation.professor.last_name + ', ' + evaluation.professor.first_name}</Link>}
               </div>

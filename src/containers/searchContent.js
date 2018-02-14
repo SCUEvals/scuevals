@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 import { setSearchResults } from '../actions';
 import API from '../services/api';
@@ -10,10 +10,12 @@ import '../styles/searchContent.scss';
 
 class SearchContent extends Component {
 
-  static defaultProps = {
+  static propTypes = {
     searchResults: PropTypes.object,
     setSearchResults: PropTypes.func,
-    match: PropTypes.object
+    departmentsList: PropTypes.object,
+    match: PropTypes.object,
+    history: PropTypes.object
   }
 
   shouldComponentUpdate(nextProps) {
@@ -100,9 +102,9 @@ class SearchContent extends Component {
       return (
         <div styleName= "results" className="content">
           {searchResults.professors.length === 0 && searchResults.courses.length === 0 ?
-            <h5>No results found for "{this.props.match.params.search}"</h5>
+            <h5>{`No results found for "${this.props.match.params.search}"`}</h5>
             :
-            <h5>Showing results for "{this.props.match.params.search}"</h5>
+            <h5>{`Showing results for "${this.props.match.params.search}"`}</h5>
           }
           {searchResults.professors.length > 0 ?
             <div>

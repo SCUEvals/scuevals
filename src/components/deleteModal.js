@@ -1,14 +1,22 @@
 import React, { Component } from 'react';
-import ReactModal from 'react-modal';
-import API from '../services/api';
 import PropTypes from 'prop-types';
+import ReactModal from 'react-modal';
 
 import '../styles/deleteModal.scss';
 
 class DeleteModal extends Component {
 
+  static propTypes = {
+    deleteModalOpen: PropTypes.bool.isRequired,
+    closeDeleteModal: PropTypes.func.isRequired,
+    deletePost: PropTypes.func.isRequired,
+    quarter: PropTypes.string,
+    course: PropTypes.string,
+    professor: PropTypes.string
+  }
+
   render() {
-    const { deleteModalOpen, closeDeleteModal, quarter, course, professor, eval_id, deletePost } = this.props;
+    const { deleteModalOpen, closeDeleteModal, quarter, course, professor, deletePost } = this.props;
     return (
       <ReactModal isOpen={deleteModalOpen} className='Modal' appElement={document.getElementById('app')}>
         <div className='container'>

@@ -1,17 +1,28 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Field, reduxForm, change, formValueSelector } from 'redux-form';
 import Select from 'react-select';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
 import { storeWithMiddleware } from '../index';
 import API from '../services/api';
 
 class PostSearch extends Component {
 
-  static defaultProps = {
-    history: PropTypes.obj,
-    handleSubmit: PropTypes.obj
+  static propTypes = {
+    quartersList: PropTypes.object,
+    coursesList: PropTypes.object,
+    departmentsList: PropTypes.object,
+    professorsList: PropTypes.object,
+    match: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+    quarter: PropTypes.number,
+    course: PropTypes.number,
+    professor: PropTypes.number,
+    initialValues: PropTypes.object,
+
   }
 
   constructor(props) {
@@ -144,23 +155,23 @@ class PostSearch extends Component {
   }
 
   populateFields(currentField, field1, field2, newValue) {
-    const { quartersList, coursesList, professorsList, departmentsList } = this.props;
+    const { quartersList, coursesList, professorsList, departmentsList, quarter, course, professor } = this.props;
     const { selectionOrder } = this.state;
     let quarter_id, course_id, professor_id; //= currently selected values
     switch (currentField) {
       case 'quarter':
         quarter_id = newValue;
-        course_id = this.props.course;
-        professor_id = this.props.professor;
+        course_id = course;
+        professor_id = professor;
         break;
       case 'course':
-        quarter_id = this.props.quarter;
+        quarter_id = quarter;
         course_id = newValue;
-        professor_id = this.props.professor;
+        professor_id = professor;
         break;
       case 'professor':
-        quarter_id = this.props.quarter;
-        course_id = this.props.course;
+        quarter_id = quarter;
+        course_id = course;
         professor_id = newValue;
         break;
     }
@@ -240,11 +251,11 @@ class PostSearch extends Component {
   }
 
   render() {
-    const { handleSubmit, quartersList, coursesList, professorsList, setQuartersList, quarter } = this.props;
+    const { handleSubmit } = this.props;
     const { localQuartersList, localCoursesList, localProfessorsList } = this.state;
     return (
       <form ref={node => this.postSearchForm = node} className='content' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-        <small style={{marginTop: '5px'}}>In any order, select the correct combination and select "Continue" to start filling your evaluation.</small>
+        <small style={{marginTop: '5px'}}>{`In any order, select the correct combination and select "Continue" to start filling your evaluation.`}</small>
         <hr />
         <Field
           name='quarter' //responsible for object's key name for values
@@ -282,7 +293,7 @@ function validate(values) {
   return errors;
 }
 
-PostSearch = reduxForm({
+let PostSearchWithReduxForm = reduxForm({
   validate,
   form: 'postSearch'
 })(PostSearch);
@@ -299,11 +310,11 @@ const mapStateToProps = (state, ownProps) => {
       coursesList: state.coursesList,
       professorsList: state.professorsList,
       initialValues: ownProps.type === 'professors' ?
-        {professor: ownProps.match.params.id}
+        {professor: parseInt(ownProps.match.params.id)}
       : ownProps.type === 'courses' ?
-        {course: ownProps.match.params.id}
+        {course: parseInt(ownProps.match.params.id)}
       : null
   }
 }
 
-export default connect(mapStateToProps, null)(PostSearch);
+export default connect(mapStateToProps, null)(PostSearchWithReduxForm);

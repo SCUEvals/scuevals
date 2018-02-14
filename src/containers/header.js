@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import PropTypes from 'prop-types';
 import ReactGA from 'react-ga';
 
 import { delUserInfo, setSearchResults } from '../actions';
@@ -11,11 +11,13 @@ import '../styles/header.scss';
 
 class Header extends Component {
 
-  static defaultProps = {
+  static propTypes = {
     userInfo: PropTypes.object,
     setUserInfo: PropTypes.func,
-    history: PropTypes.obj,
     delUserInfo: PropTypes.func,
+    setSearchResults: PropTypes.func,
+    location: PropTypes.object,
+    history: PropTypes.object
   }
 
   componentDidMount() {

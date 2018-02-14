@@ -1,22 +1,30 @@
- import React, { Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import TextareaAutoSize from 'react-textarea-autosize';
 import Slider from 'rc-slider';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import RedirectModal from '../components/redirectModal';
+import ReactGA from "react-ga";
 
 import API from '../services/api';
 import TextOptions from '../components/textOptions';
 import '../../node_modules/rc-slider/dist/rc-slider.min.css?global';
 import '../styles/postEval.scss';
-import ReactGA from "react-ga";
+import RedirectModal from '../components/redirectModal';
 
 class PostEval extends Component {
 
-  static defaultProps = {
-    userInfo: PropTypes.object
+  static propTypes = {
+    userInfo: PropTypes.object,
+    quartersList: PropTypes.object,
+    coursesList: PropTypes.object,
+    professorsList: PropTypes.object,
+    handleSubmit: PropTypes.func.isRequired,
+    submitting: PropTypes.bool.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -29,7 +37,7 @@ class PostEval extends Component {
     let client = new API();
     //course and professor swapped because API currently has different order than site
     client.get(`/classes/${props.match.params.quarter_id}/${props.match.params.professor_id}/${props.match.params.course_id}`, classInfo => this.setState({classInfo}))
-    .catch(e => this.setState({classInfo: null}));
+    .catch(() => this.setState({classInfo: null}));
   }
 
 
@@ -43,8 +51,7 @@ class PostEval extends Component {
       this.setState({submitted: true});
       ReactGA.event({category: 'Evaluation', action: 'Submitted'});
     });
-  };
-
+  }
 
   renderTextArea(field) {
     const { meta: {submitFailed, error} } = field;
@@ -56,11 +63,12 @@ class PostEval extends Component {
   renderHandle(props, textProps) {
 
     const Handle = Slider.Handle;
-    const { value, dragging, ...restProps } = props;
+    const { value, ...restProps } = props;
+    delete restProps.dragging; //don't include dragging prop, breaks Handle
     let trackerStyle = {
       top: '-12px',
       left: 'calc(' + props.offset + '% - 2px)',
-      position: 'absolute',
+      position: 'absolute'
     };
 
     let popperStyle = {};
@@ -69,7 +77,7 @@ class PostEval extends Component {
       popperStyle.visibility = 'hidden';
       popperStyle.opacity = '0'; //needed for transition animation
     }
-
+    
     return (
       <Manager tag={false}>
         <Handle value={value} {...restProps}>
@@ -88,7 +96,7 @@ class PostEval extends Component {
         </Popper>
       </Manager>
     );
-  };
+  }
 
   renderInfoToolTip(info) {
     return (
@@ -102,7 +110,7 @@ class PostEval extends Component {
         </Popper>
       </Manager>
     );
-  };
+  }
 
   renderSlider(field) {
     const { meta: {submitFailed, error}, input, textProps } = field;
@@ -197,25 +205,25 @@ class PostEval extends Component {
           </div>
           <h3>Professor</h3>
           <h6>Attitude {this.renderInfoToolTip(TextOptions.attitude.info)}</h6>
-          <Field name='attitude' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.attitude} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='attitude' format={value => value === '' ? 0 : value} textProps={TextOptions.attitude} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Availability {this.renderInfoToolTip(TextOptions.availability.info)}</h6>
-          <Field name='availability' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.availability} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='availability' format={value => value === '' ? 0 : value} textProps={TextOptions.availability} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Clarity {this.renderInfoToolTip(TextOptions.clarity.info)}</h6>
-          <Field name='clarity' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.clarity} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='clarity' format={value => value === '' ? 0 : value} textProps={TextOptions.clarity} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Grading Speed {this.renderInfoToolTip(TextOptions.grading_speed.info)}</h6>
-          <Field name='grading_speed' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.grading_speed} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='grading_speed' format={value => value === '' ? 0 : value} textProps={TextOptions.grading_speed} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Resourcefulness {this.renderInfoToolTip(TextOptions.resourcefulness.info)}</h6>
-          <Field name='resourcefulness' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.resourcefulness} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='resourcefulness' format={value => value === '' ? 0 : value} textProps={TextOptions.resourcefulness} renderHandle={this.renderHandle} component={this.renderSlider} />
 
           <h3>Class</h3>
           <h6>Easiness {this.renderInfoToolTip(TextOptions.easiness.info)}</h6>
-          <Field name='easiness' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.easiness} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='easiness' format={value => value === '' ? 0 : value} textProps={TextOptions.easiness} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Workload {this.renderInfoToolTip(TextOptions.workload.info)}</h6>
-          <Field name='workload' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.workload} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='workload' format={value => value === '' ? 0 : value} textProps={TextOptions.workload} renderHandle={this.renderHandle} component={this.renderSlider} />
 
           <h3>General</h3>
           <h6>Would you recommend this course with this professor? {this.renderInfoToolTip(TextOptions.recommended.info)}</h6>
-          <Field name='recommended' format={(value, name) => value === '' ? 0 : value} textProps={TextOptions.recommended} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='recommended' format={value => value === '' ? 0 : value} textProps={TextOptions.recommended} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Comments {this.renderInfoToolTip(TextOptions.comment.info)}</h6>
           <Field name="comment" onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
           <p>Max characters: {this.state.term.length} / 1000</p>
@@ -270,5 +278,4 @@ export default reduxForm({
   validate,
   form: 'postEval',
   initialValues: { display_majors: true, display_grad_year: true }
-})
-(connect(mapStateToProps, null)(PostEval));
+})(connect(mapStateToProps, null)(PostEval));
