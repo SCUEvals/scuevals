@@ -326,7 +326,7 @@ class ViewEvals extends Component {
                 <Eval
                   key={evaluation.id}
                   quarter={quartersList ? quartersList.object[evaluation.quarter_id].name + ' ' + quartersList.object[evaluation.quarter_id].year : null}
-                  department={departmentsList ? departmentsList[evaluation.course.department_id].abbr + ' ' + evaluation.course.number + ': ' + evaluation.course.title : null}
+                  department={departmentsList && evaluation.course ? departmentsList[evaluation.course.department_id].abbr + ' ' + evaluation.course.number + ': ' + evaluation.course.title : null}
                   evaluation={evaluation}
                   userString={userString}
                   updateScore={newScore => { //score must be updated in info array so sorting works with new values (or else could just update in local state inside Eval)
