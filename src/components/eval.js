@@ -100,6 +100,10 @@ class Eval extends Component {
         : 11
       : 15
     : 18;
+    let cutOffTextIndex = 275;
+    let visibleComment = evaluation.data.comment.slice(0, cutOffTextIndex);
+    let lastIndex = visibleComment.lastIndexOf(' ');
+    visibleComment = visibleComment.slice(0, lastIndex);
     return (
       <div styleName='eval'>
         <div styleName='vote'>
@@ -215,9 +219,36 @@ class Eval extends Component {
             {this.renderScore('Availability', availability)}
           </Slider>
           <div styleName='comment'>
-            <div styleName='commentQuote'>
-              {evaluation.data.comment}
-            </div>
+              {evaluation.data.comment.length <= cutOffTextIndex ?
+                <div styleName='commentQuote'>
+                  {evaluation.data.comment}
+                </div>
+                :
+                <div styleName='commentQuote'>
+                  {evaluation.data.comment.slice(0, lastIndex)}<span styleName='ellipsis' ref={node => this.ellipsis = node}>...</span>
+                  <div id={evaluation.id} className="collapse">
+                    {evaluation.data.comment.slice(lastIndex)}
+                  </div>
+                  <button
+                    ref={node => this.showMoreBtn = node}
+                    id='test'
+                    styleName='showMoreBtn'
+                    data-toggle='collapse'
+                    onClick={() => {
+                      if (this.showMoreBtn.getAttribute('aria-expanded') === 'false') {
+                        this.showMoreBtn.textContent = 'Show more';
+                         this.ellipsis.textContent = '...';
+                      }
+                      else {
+                        this.showMoreBtn.textContent = 'Show less';
+                        this.ellipsis.textContent = '';
+                      }
+                    }}
+                    data-target={`#${evaluation.id}`}>
+                      Show more
+                  </button>
+                </div>
+              }
             <div className='row'>
               <div className='col-xs-12 col-sm-11' styleName='posterInfo'>
                 {userString}

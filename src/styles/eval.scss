@@ -171,6 +171,26 @@ $voteWidth: 50px;
     .commentQuote {
       text-align: center;
       padding: 15px;
+
+      .ellipsis {
+        position: absolute;
+      }
+
+      :global(.collapse.show) {
+        display: inline;
+      }
+
+      .showMoreBtn {
+        background: transparent;
+        color: $SCUred;
+        font-weight: bold;
+        display: block;
+        margin: 0 auto;
+
+        &:hover {
+          color: $SCUdarkred;
+        }
+      }
     }
 
     .posterInfo {
@@ -183,12 +203,8 @@ $voteWidth: 50px;
 
     .triggerModal {
       text-align: right;
-      margin-bottom: 15px;
       padding-right: 30px;
-      padding-left: 0;
-      display: flex;
-      justify-content: flex-end;
-      align-items: flex-end;
+      padding-bottom: 5px;
 
       i:global(.fa-trash) {
         font-size: 20px;
