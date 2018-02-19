@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
 import ReactGA from 'react-ga';
+import Truncate from 'react-truncate';
 
 import API from '../services/api';
 import '../styles/eval.scss';
@@ -15,15 +16,30 @@ class Eval extends Component {
     updateScore: PropTypes.func,
     userString: PropTypes.string,
     quarter: PropTypes.string,
-    department: PropTypes.string
+    department: PropTypes.string,
+    lines: PropTypes.number.isRequired,
+    more: PropTypes.string.isRequired,
+    less: PropTypes.string.isRequired
+  }
 
+  static defaultProps = {
+    lines: 3, //keep at 3 unless also changing pixel heights in collapseComment and expandComment
+    more: 'Show more',
+    less: 'Show less'
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      user_vote: this.props.evaluation.user_vote
+      user_vote: this.props.evaluation.user_vote,
+      expanded: false,
+      truncated: false
     };
+    this.handleTruncate = this.handleTruncate.bind(this);
+  }
+
+  handleTruncate(truncated) {
+    if (this.state.truncated !== truncated) this.setState({ truncated });
   }
 
   calculatePath(n) { //circumference = 100.53
@@ -46,9 +62,40 @@ class Eval extends Component {
     );
   }
 
+  collapseComment(element) {
+    //set height to get ready for transition
+    element.style.height = element.getBoundingClientRect().height + 'px';
+    requestAnimationFrame(function() {
+      element.style.height = '72px';
+    });
+    //no need to add event listener to remove height after transition, won't affect anything to have height still in-line
+    this.setState({ expanded: false});
+  }
+
+  expandComment(element) {
+    // height will change to inner content
+    element.style.height = '';
+    // get height of inner content
+    requestAnimationFrame(function() {
+      let height = element.scrollHeight;
+        element.style.height = '72px';
+          requestAnimationFrame(function() {
+            element.style.height = height + 'px';
+          });
+    });
+    const resetHeight = () => {
+      //after firing once, remove it to prevent duplicate event listeners
+      element.removeEventListener('transitionend', resetHeight);
+      //return height to initial value (allows flexible heights when readjusting browser)
+      element.style.height = null;
+    };
+    element.addEventListener('transitionend', resetHeight);
+    this.setState({ expanded: true });
+  }
+
   render() {
-    const { evaluation, openModal, quarter, department, updateScore, userString } = this.props;
-    const { user_vote } = this.state;
+    const { evaluation, openModal, quarter, department, updateScore, userString, more, less, lines } = this.props;
+    const { user_vote, expanded, truncated } = this.state;
     const { votes_score } = evaluation;
     const { attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload } = evaluation.data;
     const average =  Number((attitude + availability + clarity + easiness + grading_speed + recommended + resourcefulness + workload) / (Object.values(evaluation.data).length - 1)).toFixed(1); //-1 for comments
@@ -100,10 +147,7 @@ class Eval extends Component {
         : 11
       : 15
     : 18;
-    let cutOffTextIndex = 275;
-    let visibleComment = evaluation.data.comment.slice(0, cutOffTextIndex);
-    let lastIndex = visibleComment.lastIndexOf(' ');
-    visibleComment = visibleComment.slice(0, lastIndex);
+    let showBtnStyle = !truncated && !expanded ? {display: 'none'} : {};
     return (
       <div styleName='eval'>
         <div styleName='vote'>
@@ -219,41 +263,32 @@ class Eval extends Component {
             {this.renderScore('Availability', availability)}
           </Slider>
           <div styleName='comment'>
-              {evaluation.data.comment.length <= cutOffTextIndex ?
-                <div styleName='commentQuote'>
-                  {evaluation.data.comment}
-                </div>
-                :
-                <div styleName='commentQuote'>
-                  {evaluation.data.comment.slice(0, lastIndex)}<span styleName='ellipsis' ref={node => this.ellipsis = node}>...</span>
-                  <div id={evaluation.id} className="collapse">
-                    {evaluation.data.comment.slice(lastIndex)}
-                  </div>
-                  <button
-                    ref={node => this.showMoreBtn = node}
-                    id='test'
-                    styleName='showMoreBtn'
-                    data-toggle='collapse'
-                    onClick={() => {
-                      if (this.showMoreBtn.getAttribute('aria-expanded') === 'false') {
-                        this.showMoreBtn.textContent = 'Show more';
-                         this.ellipsis.textContent = '...';
-                      }
-                      else {
-                        this.showMoreBtn.textContent = 'Show less';
-                        this.ellipsis.textContent = '';
-                      }
-                    }}
-                    data-target={`#${evaluation.id}`}>
-                      Show more
-                  </button>
-                </div>
-              }
+            <div styleName='commentQuote'>
+              <div styleName='truncate' ref={node => this.truncate = node}>
+                <Truncate
+                    lines={!expanded && lines}
+                    onTruncate={this.handleTruncate}
+                    ellipsis={'...'}
+                >
+                    {evaluation.data.comment}
+                </Truncate>
+              </div>
+              {truncated && (<hr styleName='fadeBar' />)}
+              {/* button has display none style if not expandable (not conditionally rendered because if so, then new node created each re-render and unfocuses the button each new render) */}
+                <button
+                   style={showBtnStyle}
+                   styleName='showBtn'
+                   onClick={() => {
+                     if (!expanded) this.expandComment(this.truncate);
+                     else this.collapseComment(this.truncate);
+                   }}
+                >{truncated ? more : expanded ? less : ''}</button>
+            </div>
             <div className='row'>
-              <div className='col-xs-12 col-sm-11' styleName='posterInfo'>
+              <div className='col-xs-12 col-sm-10' styleName='posterInfo'>
                 {userString}
               </div>
-              <div className='col-xs-12 col-sm-1' styleName='triggerModal'>
+              <div className='col-xs-12 col-sm-2' styleName='triggerModal'>
                 {!evaluation.author || evaluation.author.self ?
                   <i className='fa fa-trash'
                     tabIndex='0'
