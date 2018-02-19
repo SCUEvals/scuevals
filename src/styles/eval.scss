@@ -175,7 +175,7 @@ $voteWidth: 50px;
 
       .truncate {
         overflow: hidden;
-        transition: height 0.3s ease-out;
+        transition: $defaultTransition;
         height: auto;
       }
 
