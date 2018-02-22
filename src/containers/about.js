@@ -42,8 +42,7 @@ class About extends Component {
             <div className="collapse" id="webAppDesc">
               <div className="card card-body">
                 <p>
-                  The web app is built from
-                  {`Facebook's`} <a href="https://facebook.github.io/react/">React</a> combined
+                  The web app is built from {`Facebook's`} <a href="https://facebook.github.io/react/">React</a> combined
                   with <a href="http://redux.js.org">Redux</a> and Redux middleware. For URL navigation of the single
                   page web app, <a href="https://github.com/ReactTraining/react-router"> React
                   Router</a> is used. Because it is written with {`JavaScript's`} new release ES6,
@@ -79,6 +78,7 @@ class About extends Component {
                   various other libraries for easier test writing. For API backbone,
                   <a href="https://flask-restful.readthedocs.io/en/latest/">Flask-RESTful</a> is used.
                 </p>
+                <h6>Check it out at the <a href="https://github.com/SCUEvals/scuevals-api"> GitHub repository.</a></h6>
               </div>
             </div>
           </div>
