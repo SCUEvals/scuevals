@@ -1,4 +1,4 @@
-import { SET_USER_INFO, DEL_USER_INFO } from '../actions';
+import { SET_USER_INFO } from '../actions';
 import jwtDecode from 'jwt-decode';
 
 var obj = {};
@@ -17,12 +17,10 @@ export default function(state = initState, action) {
   switch (action.type) {
 
     case SET_USER_INFO:
+      if (!action.payload) return null; //if deleting userInfo
       var obj = {};
       obj.jwt = action.payload;
       return Object.assign(obj, jwtDecode(action.payload).sub);
-
-    case DEL_USER_INFO:
-      return null;
 
     default:
       return state;

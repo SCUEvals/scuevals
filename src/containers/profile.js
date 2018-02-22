@@ -6,7 +6,7 @@ import Select from 'react-select';
 import { Link } from 'react-router-dom';
 import ReactGA from 'react-ga';
 
-import { setUserInfo, delUserInfo, setMajorsList } from '../actions';
+import { setUserInfo, setMajorsList } from '../actions';
 import API from '../services/api';
 import '../styles/profile.scss';
 
@@ -20,7 +20,6 @@ class Profile extends Component {
     submitting: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    delUserInfo: PropTypes.func.isRequired,
     location: PropTypes.object.isRequired
   }
 
@@ -123,7 +122,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { handleSubmit, history, delUserInfo, userInfo, submitting, majorsList } = this.props;
+    const { handleSubmit, history, setUserInfo, userInfo, submitting, majorsList } = this.props;
     const profileInfo = 'This information may only be used anonymously for statistical purposes.\nYour name is kept hidden at all times.';
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
@@ -139,7 +138,7 @@ class Profile extends Component {
             <small>{profileInfo}<br/>
             <button type="button" onClick={() => {
               localStorage.removeItem('jwt');
-              delUserInfo();
+              setUserInfo(null);
               history.push('/');
               }}
               styleName="signOutBtn">
@@ -203,7 +202,7 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { setUserInfo, delUserInfo, setMajorsList })(reduxForm({
+export default connect(mapStateToProps, { setUserInfo, setMajorsList })(reduxForm({
   validate,
   form:'profile'
 })(Profile));

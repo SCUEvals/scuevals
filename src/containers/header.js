@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import ReactGA from 'react-ga';
 
-import { delUserInfo, setSearchResults } from '../actions';
+import { setUserInfo, setSearchResults } from '../actions';
 import SearchBar from './searchBar';
 import '../styles/header.scss';
 
@@ -14,7 +14,6 @@ class Header extends Component {
   static propTypes = {
     userInfo: PropTypes.object,
     setUserInfo: PropTypes.func,
-    delUserInfo: PropTypes.func,
     setSearchResults: PropTypes.func,
     location: PropTypes.object,
     history: PropTypes.object
@@ -35,7 +34,7 @@ class Header extends Component {
   }
 
   render() {
-    const { delUserInfo, userInfo, setSearchResults } = this.props;
+    const { setUserInfo, userInfo, setSearchResults } = this.props;
     if (this.props.userInfo && !this.props.userInfo.roles.includes(0)) {
       return (
         <header>
@@ -51,7 +50,7 @@ class Header extends Component {
             <button className='btn' styleName='signOutBtn' type='button' onClick={() => {
               setSearchResults(null);
               localStorage.removeItem('jwt');
-              delUserInfo();
+              setUserInfo(null);
               ReactGA.set({ userId: undefined });
               if (this.props.history.location.pathname !== '/') this.props.history.push('/');
             }} >
@@ -73,4 +72,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, { delUserInfo, setSearchResults })(Header));
+export default withRouter(connect(mapStateToProps, { setUserInfo, setSearchResults })(Header));

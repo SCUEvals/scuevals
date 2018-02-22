@@ -82,15 +82,19 @@ class SearchBar extends Component {
   debouncedGetResponse(searchVal, setSearchResults) {
     if (searchVal && setSearchResults) {
       let client = new API();
-      this.setState({loading: true}, () => client.get('/search', responseData => {
-          responseData.term = searchVal;
-          this.sortResponseData(responseData);
-          setSearchResults(responseData);
-          this.setState({loading: false});
-          if (responseData.courses.length > 0 || responseData.professors.length > 0) $('#searchBar input').focus(); //focus on input after appears, which will also enable searchResults
-        },
-        {q: searchVal}
-      ));
+      if (this.form) {
+        this.setState({loading: true}, () => client.get('/search', responseData => {
+            if (this.form) {
+              responseData.term = searchVal;
+              this.sortResponseData(responseData);
+              setSearchResults(responseData);
+              this.setState({loading: false});
+              if (responseData.courses.length > 0 || responseData.professors.length > 0) $('#searchBar input').focus(); //focus on input after appears, which will also enable searchResults
+            }
+          },
+          {q: searchVal}
+        ));
+      }
     }
   }
 
@@ -129,17 +133,16 @@ class SearchBar extends Component {
         <label className="sr-only">{field.label}</label>
         <div id='searchBar' styleName={submitFailed && error ? 'search-error' : ''} className='col-12 col-md-8 mx-auto input-group'>
           <input
+            onChange={event => input.onChange(event)}
             className='form-control'
             type='text'
             placeholder='Search for professor or class'
             autoComplete='off'
-            {...input}
             onFocus={ event => {
               $('#searchBarResults').show();
               input.onFocus(event);
               hideOnMouseDownOutside('#searchBar', '#searchBarResults');
             }}
-
           />
           <span className="input-group-btn">
             <button type="submit" className="btn"><i className={submitBtnClass} /></button>
@@ -159,7 +162,7 @@ class SearchBar extends Component {
   renderSearchResults(response, search, departmentsList) { //searchResults can exist while search value length < 3. Edge case: Old GET request still processing, but value length no longer > 2
     if (response && response.term && response.term.length > 2) {
       if (response.courses.length === 0 && response.professors.length === 0) return null;
-      
+
       //onMouseDown prevents losing focus if clicking on h6 elements (will also prevent potential unnecessary hideOnMouseDownOutside events which are called on refocusing on input)
       return (
         <ul id='searchBarResults'>
@@ -228,7 +231,7 @@ class SearchBar extends Component {
     const { handleSubmit, setSearchResults, searchResults, departmentsList } = this.props;
     const { loading } = this.state;
     return(
-      <form className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+      <form ref={node => this.form = node} className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
           name='search' //responsible for object's key name for values
           component={this.renderSearch}
@@ -275,7 +278,16 @@ const mapStateToProps = state => {
    }
 }
 
+const mapDispatchToProps = {
+ setSearchResults,
+ setDepartmentsList,
+ setProfessorsList,
+ setQuartersList,
+ setCoursesList,
+ setMajorsList
+};
+
 export default reduxForm({
   validate,
   form: 'searchBar'
-})(connect(mapStateToProps, { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList })(SearchBar));
+})(connect(mapStateToProps, mapDispatchToProps)(SearchBar));

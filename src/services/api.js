@@ -2,6 +2,7 @@
 import axios from 'axios';
 
 import { storeWithMiddleware } from '../index';
+import { setUserInfo } from '../actions';
 
 class API {
 
@@ -27,6 +28,8 @@ class API {
         'Header:', error.response.headers, '\n\n',
         'Request config:', error.config,
       );
+      //sign out if 401
+      if (error.response.status === 401) storeWithMiddleware.dispatch(setUserInfo(null));
     }
     else if (error.request) {
       // The request was made but no response was received
