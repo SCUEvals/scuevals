@@ -25,6 +25,7 @@
     "webpack-dev-server": "^2.11.1"
   },
   "dependencies": {
+    "autoprefixer": "^8.0.0",
     "axios": "^0.17.1",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -41,6 +42,7 @@
     "jwt-decode": "^2.2.0",
     "lodash.debounce": "^4.0.8",
     "node-sass": "^4.7.2",
+    "postcss-loader": "^2.1.0",
     "postcss-sass": "^0.2.0",
     "postcss-scss": "^1.0.3",
     "prop-types": "^15.6.0",

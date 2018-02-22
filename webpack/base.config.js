@@ -6,7 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 const defineAPIURL = new webpack.DefinePlugin({
-    'API_URL': JSON.stringify(process.env.API_URL)
+  'API_URL': JSON.stringify(process.env.API_URL)
 });
 
 const htmlWebpackPluginConfig = new HTMLWebpackPlugin({
@@ -41,6 +41,11 @@ const cssGlobalLoaderOptions = {
   sourceMap: true,
 };
 
+const postCSSLoaderOptions = {
+  sourceMap: true,
+  plugins: [require('autoprefixer')()]
+};
+
 
 module.exports = {
   entry: './src/index.js',
@@ -57,9 +62,7 @@ module.exports = {
             'plugins': [['react-css-modules',
               {
                 'filetypes': {
-                  '.scss': {
-                    'syntax': 'postcss-scss'
-                  }
+                  '.scss': {'syntax': 'postcss-scss'}
                 }
               }
             ]]
@@ -71,17 +74,19 @@ module.exports = {
         oneOf: [{
           resourceQuery: /global/,
           use: extractStyle.extract({
-            use: [{
-              loader: 'css-loader', options: cssGlobalLoaderOptions
-            }],
             fallback: 'style-loader',
+            use: [
+              {loader: 'css-loader', options: cssGlobalLoaderOptions},
+              {loader: 'postcss-loader', options: postCSSLoaderOptions}
+            ]
           })
         }, {
           use: extractStyle.extract({
-            use: [{
-              loader: 'css-loader', options: cssLoaderOptions
-            }],
             fallback: 'style-loader',
+            use: [
+              {loader: 'css-loader', options: cssLoaderOptions},
+              {loader: 'postcss-loader', options: postCSSLoaderOptions}
+            ]
           })
         }],
       },
@@ -90,25 +95,21 @@ module.exports = {
         oneOf: [{
           resourceQuery: /global/,
           use: extractStyle.extract({
-            use: [{
-              loader: 'css-loader', options: cssGlobalLoaderOptions
-            }, {
-              loader: 'sass-loader', options: {
-                sourceMap: true
-              }
-            }],
             fallback: 'style-loader',
+            use: [
+              {loader: 'css-loader', options: cssGlobalLoaderOptions},
+              {loader: 'postcss-loader', options: postCSSLoaderOptions},
+              {loader: 'sass-loader', options: {sourceMap: true}}
+            ]
           })
         }, {
           use: extractStyle.extract({
-            use: [{
-              loader: 'css-loader', options: cssLoaderOptions
-            }, {
-              loader: 'sass-loader', options: {
-                sourceMap: true
-              }
-            }],
             fallback: 'style-loader',
+            use: [
+              {loader: 'css-loader', options: cssLoaderOptions},
+              {loader: 'postcss-loader', options: postCSSLoaderOptions},
+              {loader: 'sass-loader', options: {sourceMap: true}}
+            ]
           })
         }]
       }
