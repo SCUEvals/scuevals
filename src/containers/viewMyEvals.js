@@ -4,20 +4,27 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import DeleteModal from '../components/deleteModal';
 import ReactGA from 'react-ga';
+import { Link } from 'react-router-dom';
 
 import Eval from '../components/eval';
 import API from '../services/api';
 import '../styles/viewEvals.scss';
+import { STUDENT_READ } from '../index';
+import { setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } from '../actions';
 
 
 class ViewMyEvals extends Component {
 
   static propTypes = {
-    userInfo: PropTypes.object,
+    userInfo: PropTypes.object.isRequired,
     quartersList: PropTypes.object,
     coursesList: PropTypes.object,
     departmentsList: PropTypes.object,
-    professorsList: PropTypes.object
+    professorsList: PropTypes.object,
+    setDepartmentsList: PropTypes.func.isRequired,
+    setQuartersList: PropTypes.func.isRequired,
+    setCoursesList: PropTypes.func.isRequired,
+    setProfessorsList: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -30,17 +37,42 @@ class ViewMyEvals extends Component {
   }
 
   componentDidMount() {
+    const { userInfo, departmentsList, quartersList, coursesList, professorsList, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } = this.props;
     let client = new API();
     client.get('/evaluations', myEvalsList => {
       myEvalsList.sort((a, b) => a.post_time > b.post_time ? -1 : 1); //sort by most recent by default when viewing own evals
       this.setState({myEvalsList});
     });
+    if (!userInfo.roles.includes(STUDENT_READ)) {
+      if (!departmentsList) {
+        let client = new API();
+        client.get('/departments', departments => setDepartmentsList(departments));
+      }
+      if (!quartersList) {
+        let client = new API();
+        client.get('/quarters', quarters => setQuartersList(quarters));
+      }
+      if (!coursesList) {
+        let client = new API();
+        client.get('/courses', courses => setCoursesList(courses, departmentsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+      }
+      if (!professorsList) {
+        let client = new API();
+        client.get('/professors', professors => setProfessorsList(professors));
+      }
+    }
+  }
+
+  componentDidUpdate() { //if coursesList fetched before departmentsList, then need to retroactively search for department name from id and sort
+    if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList)
+      this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList); //make deep copy of current, state immutable
   }
 
   render() {
     const { deleteModal, myEvalsList, sortValue } = this.state;
     const { userInfo, quartersList, coursesList, departmentsList, professorsList } = this.props;
-    let sortOptions = [
+    const student_read = userInfo && userInfo.roles.includes(STUDENT_READ);
+    const sortOptions = [
       {value: 'recent', label: 'Sort by Most Recent'},
       {value: 'quarter', label: 'Sort by Quarter'},
       {value: 'course', label: 'Sort by Course'},
@@ -49,6 +81,13 @@ class ViewMyEvals extends Component {
     ];
     return (
       <div className="content">
+        {!student_read && (
+          <div className='noWriteDiv'>
+            <Link className='homeBtn noWriteHomeBtn' to={'/'}>
+              <i className="fa fa-home" />
+            </Link>
+          </div>
+        )}
         <DeleteModal
           deleteModalOpen={deleteModal.open}
           closeDeleteModal={() => this.setState({deleteModal: {open: false}})}
@@ -145,8 +184,8 @@ class ViewMyEvals extends Component {
                   return <Eval
                     key={evaluation.id}
                     evaluation={evaluation}
-                    quartersList={quartersList}
-                    departmentsList={departmentsList}
+                    department={departmentsList && evaluation.course ? departmentsList[evaluation.course.department_id].abbr + ' ' + evaluation.course.number + ': ' + evaluation.course.title : null}
+                    quarter={quartersList ? quartersList.object[evaluation.quarter_id].name + ' ' + quartersList.object[evaluation.quarter_id].year : null}
                     openModal={() => { //type, quarter_id, secondId, eval_id passed in, but not needed in viewMyEvals
                       this.setState({deleteModal: {open: true, quarter_id: evaluation.quarter_id, course_id: evaluation.course.id, professor_id: evaluation.professor.id, eval_id: evaluation.id}});
                     }}
@@ -169,4 +208,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, null)(ViewMyEvals);
+export default connect(mapStateToProps, { setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList })(ViewMyEvals);

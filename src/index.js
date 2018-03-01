@@ -23,10 +23,16 @@ import ViewMyEvals from './containers/viewMyEvals';
 
 import requireAuth from './components/requireAuth';
 import API from './services/api';
-import { delUserInfo } from './actions';
+import { setUserInfo } from './actions';
 
 import './styles/global.scss?global';
 import './styles/index.scss';
+
+export const INCOMPLETE = 0;
+export const STUDENT_READ = 1;
+export const STUDENT_WRITE = 2;
+export const ADMINISTRATOR = 10;
+export const API_KEY = 20;
 
 ReactGA.initialize('UA-102751367-1');
 
@@ -40,7 +46,7 @@ if (localStorage.getItem('jwt')) {
   let decodedJwt = jwtDecode(localStorage.getItem('jwt')); //won't fail, reducers above took care of undecodeable jwt (check note for reducers above)
   if (new Date().getTime() / 1000 > decodedJwt.exp) { //if token expired, delete it
     localStorage.removeItem('jwt');
-    storeWithMiddleware.dispatch(delUserInfo()); //userInfo decoded from expired token, so delete it
+    storeWithMiddleware.dispatch(setUserInfo(null)); //userInfo decoded from expired token, so delete it
     renderDOM();
   }
   else { //else verify with back end
@@ -57,7 +63,7 @@ if (localStorage.getItem('jwt')) {
       null, //no passedParams
       () => { //custom handleError function, if error returned assume jwt invalid
         localStorage.removeItem('jwt');
-        storeWithMiddleware.dispatch(delUserInfo()); //userInfo incorrect (decoded invalid jwt), so delete it
+        storeWithMiddleware.dispatch(setUserInfo(null)); //userInfo incorrect (decoded invalid jwt), so delete it
         renderDOM();
       }
     );
@@ -76,17 +82,17 @@ function renderDOM () {
             <Header />
             <div className='container'>
               <Switch>
-                <Route exact path='/search/:search' component={requireAuth(SearchContent)} />
-                <Route exact path='/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)' component={requireAuth(PostEval)} />
-                <Route exact path='/professors/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'professors'})} />
-                <Route exact path='/courses/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'courses'})} />
-                <Route exact path='/professors/:id(\d+)' component={requireAuth(ViewEvals, {type: 'professors'})} />
-                <Route exact path='/courses/:id(\d+)' component={requireAuth(ViewEvals, {type: 'courses'})} />
+                <Route exact path='/search/:search' component={requireAuth(SearchContent, null, [STUDENT_READ])} />
+                <Route exact path='/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)' component={requireAuth(PostEval, null, [STUDENT_WRITE])} />
+                <Route exact path='/professors/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'professors'}, [STUDENT_WRITE])} />
+                <Route exact path='/courses/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'courses'}, [STUDENT_WRITE])} />
+                <Route exact path='/professors/:id(\d+)' component={requireAuth(ViewEvals, {type: 'professors'}, [STUDENT_READ])} />
+                <Route exact path='/courses/:id(\d+)' component={requireAuth(ViewEvals, {type: 'courses'}, [STUDENT_READ])} />
                 <Route exact path='/about' component={About} />
                 <Route exact path='/privacy' component={Privacy} />
                 <Route exact path='/profile/evals' component={requireAuth(ViewMyEvals)} />
                 <Route exact path='/profile' component={requireAuth(Profile)} />
-                <Route exact path='/post' component={requireAuth(PostSearch)} />
+                <Route exact path='/post' component={requireAuth(PostSearch, null, [STUDENT_WRITE])} />
                 <Route exact path='/' component={requireAuth(Home)} />
                 <Redirect to='/' />
               </Switch>

@@ -6,6 +6,8 @@ import Slider from 'rc-slider';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
 import { connect } from 'react-redux';
 import ReactGA from "react-ga";
+import { Link } from 'react-router-dom';
+import { STUDENT_READ } from '../index';
 
 import API from '../services/api';
 import TextOptions from '../components/textOptions';
@@ -77,7 +79,7 @@ class PostEval extends Component {
       popperStyle.visibility = 'hidden';
       popperStyle.opacity = '0'; //needed for transition animation
     }
-    
+
     return (
       <Manager tag={false}>
         <Handle value={value} {...restProps}>
@@ -151,6 +153,7 @@ class PostEval extends Component {
   render() {
     const { quartersList, coursesList, professorsList, handleSubmit, submitting, userInfo, location, history } = this.props;
     const { classInfo, submitted } = this.state;
+    const student_read = userInfo.roles.includes(STUDENT_READ);
     let quarter, course, professor;
     if (quartersList && coursesList && coursesList.departmentsListLoaded && professorsList) {
       if (location.state) {
@@ -167,6 +170,13 @@ class PostEval extends Component {
     if (location.state || classInfo !== undefined) { //passed values from postSearch
       return (
         <form styleName='postEval' onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
+          {!student_read && (
+            <div className='noWriteDiv'>
+            <Link className='homeBtn' to={'/'}>
+              <i className="fa fa-home" />
+            </Link>
+          </div>
+          )}
           <RedirectModal history={history} redirectModalOpen={classInfo === null || classInfo && classInfo.user_posted || submitted} submitted={submitted} classInfoExists={classInfo && classInfo.user_posted ? true : false} />
           <div styleName='postInfo'>
             <h5>{quarter}</h5>

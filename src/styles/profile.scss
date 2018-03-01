@@ -1,18 +1,5 @@
 @import "theme";
 
-.signOutBtn {
-  margin-top: 15px;
-  font-weight: bold;
-  padding: 0;
-  color: $SCUred;
-  background: initial;
-  border: none;
-
-  &:hover {
-    color: $SCUdarkred;
-  }
-}
-
 .form-container {
   max-width: 350px;
   margin-right: auto !important;

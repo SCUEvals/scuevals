@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 import { Field, reduxForm, change, formValueSelector } from 'redux-form';
 import Select from 'react-select';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { storeWithMiddleware } from '../index';
 import API from '../services/api';
+import { STUDENT_READ } from '../index';
+import { setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } from '../actions';
 
 class PostSearch extends Component {
 
@@ -18,10 +21,15 @@ class PostSearch extends Component {
     history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    userInfo: PropTypes.object.isRequired,
     quarter: PropTypes.number,
     course: PropTypes.number,
     professor: PropTypes.number,
     initialValues: PropTypes.object,
+    setDepartmentsList: PropTypes.func.isRequired,
+    setQuartersList: PropTypes.func.isRequired,
+    setCoursesList: PropTypes.func.isRequired,
+    setProfessorsList: PropTypes.func.isRequired
 
   }
 
@@ -37,17 +45,34 @@ class PostSearch extends Component {
 
   componentDidMount() {
     const { id } = this.props.match.params;
-    const { departmentsList, initialValues, professorsList } = this.props;
+    const { departmentsList, quartersList, coursesList, professorsList, initialValues, userInfo, setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList } = this.props;
     let client = new API();
     if (initialValues && initialValues.course) {
       this.setState({selectionOrder: ['course']});
       this.getField('quarter', client, null, id, null);
       this.getField('professor', client, null, id, null);
     } else if (initialValues && initialValues.professor && departmentsList) {
-      this.setState({selectionOrder: ['professor']});
+      this.setState({selectionOrder: ['professor'], localProfessorsList: professorsList.array});
       this.getField('quarter', client, null, null, id);
       this.getField('course', client, null, null, id, departmentsList);
-      this.setState({localProfessorsList: professorsList.array});
+    }
+    if (!userInfo.roles.includes(STUDENT_READ)) {
+      if (!departmentsList) {
+        let client = new API();
+        client.get('/departments', departments => setDepartmentsList(departments));
+      }
+      if (!quartersList) {
+        let client = new API();
+        client.get('/quarters', quarters => setQuartersList(quarters));
+      }
+      if (!coursesList) {
+        let client = new API();
+        client.get('/courses', courses => setCoursesList(courses, departmentsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+      }
+      if (!professorsList) {
+        let client = new API();
+        client.get('/professors', professors => setProfessorsList(professors));
+      }
     }
   }
 
@@ -67,6 +92,8 @@ class PostSearch extends Component {
       this.getField('course', client, null, null, id, departmentsList);
       this.setState({localProfessorsList: professorsList.array});
     }
+      if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList)
+        this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList); //make deep copy of current, state immutable
   }
 
   onSubmit(values) {
@@ -147,7 +174,9 @@ class PostSearch extends Component {
             if (newProfessor != input.value) populateFields(newProfessor);
           }}
           placeholder="Select your professor"
-          onOpen={() => postSearchForm.style.marginBottom='115px'}
+          onOpen={() => {
+            if (window.innerHeight < postSearchForm.clientHeight + 240) postSearchForm.style.marginBottom = '115px';
+          }}
           onClose={() => postSearchForm.style.marginBottom=''}
         />
       </div>
@@ -251,10 +280,18 @@ class PostSearch extends Component {
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, userInfo } = this.props;
     const { localQuartersList, localCoursesList, localProfessorsList } = this.state;
+    const student_read = userInfo.roles.includes(STUDENT_READ);
     return (
       <form ref={node => this.postSearchForm = node} className='content' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+        {!student_read && (
+        <div className='noWriteDiv'>
+          <Link className='homeBtn' to={'/'}>
+            <i className="fa fa-home" />
+          </Link>
+        </div>
+        )}
         <small style={{marginTop: '5px'}}>{`In any order, select the correct combination and select "Continue" to start filling your evaluation.`}</small>
         <hr />
         <Field
@@ -305,6 +342,7 @@ const mapStateToProps = (state, ownProps) => {
       quarter,
       course,
       professor,
+      userInfo: state.userInfo,
       quartersList: state.quartersList,
       departmentsList: state.departmentsList,
       coursesList: state.coursesList,
@@ -317,4 +355,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps, null)(PostSearchWithReduxForm);
+export default connect(mapStateToProps, { setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList })(PostSearchWithReduxForm);

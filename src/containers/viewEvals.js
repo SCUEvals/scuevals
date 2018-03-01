@@ -12,6 +12,7 @@ import TextOptions from '../components/textOptions';
 import Eval from '../components/eval';
 import API from '../services/api';
 import '../styles/viewEvals.scss';
+import { STUDENT_WRITE } from '../index';
 
 class ViewEvals extends Component {
 
@@ -110,7 +111,8 @@ class ViewEvals extends Component {
 
   render() { //1-1.74 score1, 1.75-2.49 score2, 2.50-3.24 score3, 3.25-4 score4
     const { info, flagModal, deleteModal, sortValue } = this.state;
-    const { majorsList, quartersList, coursesList, professorsList, departmentsList } = this.props;
+    const { majorsList, quartersList, coursesList, professorsList, departmentsList, userInfo , type, match } = this.props;
+    const student_write = userInfo.roles.includes(STUDENT_WRITE);
     let average, attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload;
     if (info && info.evaluations.length > 0) {
       average = attitude = availability = clarity = easiness = grading_speed = recommended = resourcefulness = workload = 0;
@@ -141,7 +143,7 @@ class ViewEvals extends Component {
 
     let sortOptions = [
       {value: 'quarter', label: 'Sort by Quarter'},
-      {value: this.props.type === 'professors' ? 'course' : 'professor', label: `Sort by ${this.props.type === 'professors' ? 'Course' : 'Professor'}`},
+      {value: type === 'professors' ? 'course' : 'professor', label: `Sort by ${type === 'professors' ? 'Course' : 'Professor'}`},
       {value: 'score', label: 'Sort by Score'},
       {value: 'major', label: 'Sort By Major'},
       {value: 'grad_year', label: 'Sort By Graduation Year'}
@@ -174,7 +176,7 @@ class ViewEvals extends Component {
         />
         <h2>
           {info ?
-            this.props.type === 'professors' ?
+            type === 'professors' ?
               info.first_name + ' ' + info.last_name
               : departmentsList ?
                 departmentsList[info.department_id].abbr + ' ' + info.number + ': ' + info.title
@@ -196,15 +198,17 @@ class ViewEvals extends Component {
           </div>
           : ''
         }
-        <Link styleName='quickPost' className='btn' to={this.props.type === 'professors' ?
-          `/professors/${this.props.match.params.id}/post`
-          :`/courses/${this.props.match.params.id}/post`}>
-          Post Evaluation
-        </Link>
+        {student_write && (
+          <Link styleName='quickPost' className='btn' to={type === 'professors' ?
+            `/professors/${match.params.id}/post`
+            :`/courses/${match.params.id}/post`}>
+            Post Evaluation
+          </Link>
+        )}
         {info && info.evaluations.length > 0 ?
           <div>
             <Select
-              isLoading={this.props.type === 'courses' ? !professorsList && !majorsList && !departmentsList : !coursesList && !majorsList && !departmentsList}
+              isLoading={type === 'courses' ? !professorsList && !majorsList && !departmentsList : !coursesList && !majorsList && !departmentsList}
               value={sortValue}
               className='sort'
               simpleValue
@@ -342,7 +346,7 @@ class ViewEvals extends Component {
                         this.setState({flagModal: {open: true, comment: x}});
                         break;
                       case 'delete': //x = quarter_id
-                        switch(this.props.type) {
+                        switch (type) {
                           case 'courses':
                             this.setState({deleteModal: {open: true, quarter_id: x, course_id: info.id, professor_id: secondId, eval_id}})
                             break;

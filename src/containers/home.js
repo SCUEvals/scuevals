@@ -11,6 +11,8 @@ import '../styles/home.scss';
 import { setUserInfo } from '../actions';
 import RecentEvals from './recentEvals';
 import NonStudentModal from '../components/nonStudentModal';
+import WriteOnly from '../components/writeOnly';
+import { INCOMPLETE, STUDENT_READ, STUDENT_WRITE } from '../index';
 
 class Home extends Component {
 
@@ -35,40 +37,41 @@ class Home extends Component {
       if (responseData.status === 'non-student') {
         this.setState({nonStudentModalOpen: true});
       }
-      else {
-        if (responseData.status === 'new') ReactGA.event({category: 'User', action: 'Signed Up'});
-        let decodedJwt = jwtDecode(responseData.jwt);
-        ReactGA.set({ userId: decodedJwt.sub.id });
-        this.setState({loading: false}, () => {
-          this.props.setUserInfo(responseData.jwt);
-          try {
-            localStorage.setItem("jwt", responseData.jwt);
-          } catch(err) {
-            /* eslint-disable no-console */
-            console.error("Cannot execute localStorage.setItem (perhaps private mode is enabled). Error:", err);
-            /* eslint-enable no-console */
-          }
-          if (referrer) {
-            if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile', { referrer });
-            else this.props.history.push(referrer);
-          }
-          else if (decodedJwt.sub.roles.includes(0)) this.props.history.push('/profile');
-        });
-      }
+      if (responseData.status === 'new') ReactGA.event({category: 'User', action: 'Signed Up'});
+      let decodedJwt = jwtDecode(responseData.jwt);
+      ReactGA.set({ userId: decodedJwt.sub.id });
+      this.setState({loading: false}, () => {
+        this.props.setUserInfo(responseData.jwt);
+        try {
+          localStorage.setItem("jwt", responseData.jwt);
+        } catch(err) {
+          /* eslint-disable no-console */
+          console.error("Cannot execute localStorage.setItem (perhaps private mode is enabled). Error:", err);
+          /* eslint-enable no-console */
+        }
+        if (referrer) {
+          if (decodedJwt.sub.roles.includes(INCOMPLETE)) this.props.history.push('/profile', { referrer });
+          else this.props.history.push(referrer);
+        }
+        else if (decodedJwt.sub.roles.includes(INCOMPLETE)) this.props.history.push('/profile');
+      });
     });
   }
 
   render() {
-    const referrer = this.props.location.state ? this.props.location.state.referrer : null;
-    if (!this.props.userInfo && this.state.loading) { //if Google login succeeded, and in process of sending to backend
+    const { userInfo, setUserInfo, location } = this.props;
+    const referrer = location.state ? location.state.referrer : null;
+    const student_read = userInfo && userInfo.roles.includes(STUDENT_READ);
+    const student_write = userInfo && userInfo.roles.includes(STUDENT_WRITE);
+    if (!userInfo && this.state.loading) { //if Google login succeeded, and in process of sending to backend
       return (
         <div className="loadingWrapper">
           <i className="fa fa-spinner fa-spin fa-3x fa-fw" />
         </div>
       );
     }
-    else if (this.props.userInfo) {
-      return(
+    else if (student_read) {
+      return (
         <div className='content'>
           <section>
             <h3 styleName='title'>SCU Evals</h3>
@@ -93,10 +96,19 @@ class Home extends Component {
             </p>
           </section>
           <hr />
-          <Link to='/post' className='btn'>Post Evaluation</Link>
-          <hr />
+          {student_write && (
+            <Link to='/post' className='btn'>Post Evaluation</Link>
+          )}
+          {student_write && (
+            <hr />
+          )}
           <RecentEvals count={10} />
         </div>
+      );
+    }
+    else if (userInfo) {
+      return (
+        <WriteOnly setUserInfo={setUserInfo} />
       );
     }
     else { //if not logged in

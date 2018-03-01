@@ -319,8 +319,7 @@ label:not(:first-child) input[type='radio'] {
   }
 }
 
-#app,
-#app > div {
+#app {
   height: 100%;
 }
 
@@ -683,5 +682,36 @@ svg.score {
 @keyframes score {
   from {
     stroke-dashoffset: 100.531;
+  }
+}
+
+.signOutBtn {
+  margin-top: 15px;
+  font-weight: bold;
+  padding: 0;
+  color: $SCUred;
+  background: initial;
+  border: none;
+
+  &:hover {
+    color: $SCUdarkred;
+  }
+}
+
+.noWriteDiv {
+  display: block;
+  text-align: left;
+}
+
+.noWriteDivBanner {
+  position: absolute;
+  left: 30px;
+
+  .homeBtn {
+    color: white;
+
+    i:hover {
+      color: $hoverOverlayLinkColor;
+    }
   }
 }

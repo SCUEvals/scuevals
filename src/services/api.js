@@ -7,7 +7,7 @@ import { setUserInfo } from '../actions';
 class API {
 
   constructor() {
-    let headers = {'Content-Type': 'application/json'}; //Content-Type will be stripped in GET requests automatically by axios
+    const headers = {'Content-Type': 'application/json'}; //Content-Type will be stripped in GET requests automatically by axios
     if (storeWithMiddleware.getState().userInfo) //userInfo initial state looks for localStorage and initializes with it if exists. Assume jwt exists if userInfo exists
       headers.Authorization = 'Bearer ' + storeWithMiddleware.getState().userInfo.jwt;
 
@@ -29,7 +29,10 @@ class API {
         'Request config:', error.config,
       );
       //sign out if 401
-      if (error.response.status === 401) storeWithMiddleware.dispatch(setUserInfo(null));
+      if (error.response.status === 401) {
+        //todo: redirect to '/'
+        storeWithMiddleware.dispatch(setUserInfo(null));
+      }
     }
     else if (error.request) {
       // The request was made but no response was received
