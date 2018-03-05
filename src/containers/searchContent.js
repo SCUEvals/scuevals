@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import BootstrapTable from 'react-bootstrap-table-next';
 import { Link } from 'react-router-dom';
 
 import { setSearchResults } from '../actions';
@@ -96,6 +96,36 @@ class SearchContent extends Component {
 
   render() {
     const { searchResults, departmentsList } = this.props;
+    const coursesColumns = [
+      {
+        dataField: 'course',
+        text: 'Course',
+        sort: true,
+        dataAlign: 'center'
+      },
+      {
+        dataField: 'title',
+        text: 'Title',
+        sort: true,
+        dataAlign: 'center'
+      }
+    ];
+    const professorsColumns = [{
+      dataField: 'name',
+      text: 'Name',
+      sort: true,
+      dataAlign: 'center'
+    }];
+    const labeledSearchResults = searchResults ? Object.assign({}, searchResults) : null;
+    if (searchResults && departmentsList) {
+      labeledSearchResults.courses.map(obj => {
+        obj.course = departmentsList[obj.department_id].abbr + ' ' + obj.number;
+        obj.title = obj.title;
+        obj.key = obj.course + obj.title;
+      });
+      labeledSearchResults.professors.map(obj => obj.name = obj.last_name + ', ' + obj.first_name);
+    }
+
     $('#searchBarResults').hide();
 
     if (searchResults && !searchResults.loading) {
@@ -106,28 +136,36 @@ class SearchContent extends Component {
             :
             <h5>{`Showing results for "${this.props.match.params.search}"`}</h5>
           }
-          {searchResults.professors.length > 0 ?
+          {searchResults.professors.length > 0 && (
             <div>
               <h4>Professors</h4>
-              <BootstrapTable withoutTabIndex version='4' data={searchResults.professors} striped={true} hover={true}>
-                <TableHeaderColumn dataFormat={nameFormatter} dataField="last_name" isKey={true} dataAlign="center" dataSort={true}>Name</TableHeaderColumn>
-              </BootstrapTable>
+              <BootstrapTable
+                data={labeledSearchResults.professors}
+                columns={professorsColumns}
+                keyField='name'
+                withoutTabIndex
+                version='4'
+                striped
+                hover
+              />
             </div>
-            : ''
-          }
-          {searchResults.courses.length > 0  && departmentsList ?
+          )}
+          {searchResults.courses.length > 0  && departmentsList && (
             <div>
               <h4>Courses</h4>
-              <BootstrapTable withoutTabIndex version='4' data={searchResults.courses} striped={true} hover={true}>
-                <TableHeaderColumn dataFormat={(cell, row) => courseNumberFormatter(cell, row, departmentsList)} dataField="number" dataSort sortFunc={(a, b, order) => this.sortCourseTitles(a, b, order, departmentsList) } dataAlign="center">Course</TableHeaderColumn>
-                <TableHeaderColumn dataFormat={courseTitleFormatter} dataField="title" isKey={true} dataSort sortFunc={ this.revertSortFunc } dataAlign="center">Title</TableHeaderColumn>
-              </BootstrapTable>
+              <BootstrapTable
+                data={labeledSearchResults.courses}
+                columns={coursesColumns}
+                keyField='key'
+                withoutTabIndex
+                version='4'
+                striped
+                hover
+              />
             </div>
-            : ''
-          }
+          )}
         </div>
-      ); /* note: isKey={true} is not correctly set since there is no column displayed that is entirely unique,
-      but it is needed to render. However, it does not affect functionality in this case*/
+      );
     } else if (this.props.match.params.search.length > 2) {
       return (
         <div className="loadingWrapper">

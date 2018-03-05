@@ -148,25 +148,47 @@ label:not(:first-child) input[type='radio'] {
   }
 }
 
-.react-bs-table-container {
-  td {
-    padding: 0;
+// .react-bs-table table {
+//   td {
+//     padding: 0;
+//     overflow: visible;
+//
+//     a {
+//       padding: 0.75rem;
+//       display: block;
+//
+//       &:hover {
+//         transition: none;
+//       }
+//     }
+//   }
+//
+//   tr {
+//     width: 100%;
+//     overflow: visible;
+//
+//     &:hover {
+//       a {
+//         color: $SCUdarkred;
+//       }
+//     }
+//   }
+// }
 
-    a {
-      padding: 0.75rem;
-      display: block;
+.react-bootstrap-table {
+  overflow: auto;
 
-      &:hover {
-        transition: none;
-      }
+  table {
+    margin-bottom: 0;
+
+    td,
+    th {
+      padding: 5px;
+      vertical-align: middle;
     }
-  }
 
-  tr {
-    &:hover {
-      a {
-        color: $SCUdarkred;
-      }
+    @media (max-width: $xs) {
+      table-layout: initial;
     }
   }
 }
@@ -713,5 +735,16 @@ svg.score {
     i:hover {
       color: $hoverOverlayLinkColor;
     }
+  }
+}
+
+.widgetWrapper {
+  overflow: auto;
+
+  .widget {
+    min-width: 478px;
+    max-width: 750px;
+    margin: 0 auto;
+    overflow: auto;
   }
 }

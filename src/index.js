@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import { Router, Route, Redirect, Switch } from 'react-router-dom';
 import promise from 'redux-promise';
 import ReactGA from 'react-ga';
 import jwtDecode from 'jwt-decode';
@@ -22,6 +22,7 @@ import PostSearch from './containers/postSearch';
 import ViewMyEvals from './containers/viewMyEvals';
 
 import requireAuth from './components/requireAuth';
+import history from './components/history';
 import API from './services/api';
 import { setUserInfo } from './actions';
 
@@ -29,8 +30,8 @@ import './styles/global.scss?global';
 import './styles/index.scss';
 
 export const INCOMPLETE = 0;
-export const STUDENT_READ = 1;
-export const STUDENT_WRITE = 2;
+export const READ_EVALUATIONS = 1;
+export const WRITE_EVALUATIONS = 2;
 export const ADMINISTRATOR = 10;
 export const API_KEY = 20;
 
@@ -76,23 +77,24 @@ else { //no jwt found
 function renderDOM () {
   ReactDOM.render(
     <Provider store={storeWithMiddleware}>
-      <BrowserRouter>
+      {/*Use Router with history={history} rather than BrowserRouter because need to access history outside of React components (API service) */}
+      <Router history={history}>
         <GAListener>
           <div id='push-footer' styleName='push-footer'>
             <Header />
             <div className='container'>
               <Switch>
-                <Route exact path='/search/:search' component={requireAuth(SearchContent, null, [STUDENT_READ])} />
-                <Route exact path='/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)' component={requireAuth(PostEval, null, [STUDENT_WRITE])} />
-                <Route exact path='/professors/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'professors'}, [STUDENT_WRITE])} />
-                <Route exact path='/courses/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'courses'}, [STUDENT_WRITE])} />
-                <Route exact path='/professors/:id(\d+)' component={requireAuth(ViewEvals, {type: 'professors'}, [STUDENT_READ])} />
-                <Route exact path='/courses/:id(\d+)' component={requireAuth(ViewEvals, {type: 'courses'}, [STUDENT_READ])} />
+                <Route exact path='/search/:search' component={requireAuth(SearchContent, null, [READ_EVALUATIONS])} />
+                <Route exact path='/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)' component={requireAuth(PostEval, null, [WRITE_EVALUATIONS])} />
+                <Route exact path='/professors/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'professors'}, [WRITE_EVALUATIONS])} />
+                <Route exact path='/courses/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'courses'}, [WRITE_EVALUATIONS])} />
+                <Route exact path='/professors/:id(\d+)' component={requireAuth(ViewEvals, {type: 'professors'}, [READ_EVALUATIONS])} />
+                <Route exact path='/courses/:id(\d+)' component={requireAuth(ViewEvals, {type: 'courses'})} />
                 <Route exact path='/about' component={About} />
                 <Route exact path='/privacy' component={Privacy} />
                 <Route exact path='/profile/evals' component={requireAuth(ViewMyEvals)} />
                 <Route exact path='/profile' component={requireAuth(Profile)} />
-                <Route exact path='/post' component={requireAuth(PostSearch, null, [STUDENT_WRITE])} />
+                <Route exact path='/post' component={requireAuth(PostSearch, null, [WRITE_EVALUATIONS])} />
                 <Route exact path='/' component={requireAuth(Home)} />
                 <Redirect to='/' />
               </Switch>
@@ -100,7 +102,7 @@ function renderDOM () {
           </div>
           <Footer />
         </GAListener>
-      </BrowserRouter>
+      </Router>
     </Provider>,
     document.getElementById('app')
   )

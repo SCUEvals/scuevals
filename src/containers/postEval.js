@@ -7,7 +7,7 @@ import { Manager, Target, Popper, Arrow } from 'react-popper';
 import { connect } from 'react-redux';
 import ReactGA from "react-ga";
 import { Link } from 'react-router-dom';
-import { STUDENT_READ } from '../index';
+import { READ_EVALUATIONS } from '../index';
 
 import API from '../services/api';
 import TextOptions from '../components/textOptions';
@@ -153,7 +153,7 @@ class PostEval extends Component {
   render() {
     const { quartersList, coursesList, professorsList, handleSubmit, submitting, userInfo, location, history } = this.props;
     const { classInfo, submitted } = this.state;
-    const student_read = userInfo.roles.includes(STUDENT_READ);
+    const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
     let quarter, course, professor;
     if (quartersList && coursesList && coursesList.departmentsListLoaded && professorsList) {
       if (location.state) {
@@ -170,7 +170,7 @@ class PostEval extends Component {
     if (location.state || classInfo !== undefined) { //passed values from postSearch
       return (
         <form styleName='postEval' onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
-          {!student_read && (
+          {!read_access && (
             <div className='noWriteDiv'>
             <Link className='homeBtn' to={'/'}>
               <i className="fa fa-home" />

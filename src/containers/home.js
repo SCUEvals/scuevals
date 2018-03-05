@@ -12,7 +12,7 @@ import { setUserInfo } from '../actions';
 import RecentEvals from './recentEvals';
 import NonStudentModal from '../components/nonStudentModal';
 import WriteOnly from '../components/writeOnly';
-import { INCOMPLETE, STUDENT_READ, STUDENT_WRITE } from '../index';
+import { INCOMPLETE, READ_EVALUATIONS, WRITE_EVALUATIONS } from '../index';
 
 class Home extends Component {
 
@@ -50,10 +50,10 @@ class Home extends Component {
           /* eslint-enable no-console */
         }
         if (referrer) {
-          if (decodedJwt.sub.roles.includes(INCOMPLETE)) this.props.history.push('/profile', { referrer });
+          if (decodedJwt.sub.permissions.includes(INCOMPLETE)) this.props.history.push('/profile', { referrer });
           else this.props.history.push(referrer);
         }
-        else if (decodedJwt.sub.roles.includes(INCOMPLETE)) this.props.history.push('/profile');
+        else if (decodedJwt.sub.permissions.includes(INCOMPLETE)) this.props.history.push('/profile');
       });
     });
   }
@@ -61,8 +61,8 @@ class Home extends Component {
   render() {
     const { userInfo, setUserInfo, location } = this.props;
     const referrer = location.state ? location.state.referrer : null;
-    const student_read = userInfo && userInfo.roles.includes(STUDENT_READ);
-    const student_write = userInfo && userInfo.roles.includes(STUDENT_WRITE);
+    const read_access = userInfo && userInfo.permissions.includes(READ_EVALUATIONS);
+    const write_access = userInfo && userInfo.permissions.includes(WRITE_EVALUATIONS);
     if (!userInfo && this.state.loading) { //if Google login succeeded, and in process of sending to backend
       return (
         <div className="loadingWrapper">
@@ -70,7 +70,7 @@ class Home extends Component {
         </div>
       );
     }
-    else if (student_read) {
+    else if (read_access) {
       return (
         <div className='content'>
           <section>
@@ -96,10 +96,10 @@ class Home extends Component {
             </p>
           </section>
           <hr />
-          {student_write && (
+          {write_access && (
             <Link to='/post' className='btn'>Post Evaluation</Link>
           )}
-          {student_write && (
+          {write_access && (
             <hr />
           )}
           <RecentEvals count={10} />

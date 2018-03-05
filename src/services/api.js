@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { storeWithMiddleware } from '../index';
 import { setUserInfo } from '../actions';
+import history from '../components/history';
 
 class API {
 
@@ -13,7 +14,7 @@ class API {
 
     this.api = axios.create({
       headers: headers,
-      baseURL: API_URL,
+      baseURL: 'https://staging.api.scuevals.com',
       timeout: 10000
     });
   }
@@ -30,7 +31,7 @@ class API {
       );
       //sign out if 401
       if (error.response.status === 401) {
-        //todo: redirect to '/'
+        if (history.location.pathname !== '/') history.push('/');
         storeWithMiddleware.dispatch(setUserInfo(null));
       }
     }

@@ -13,11 +13,11 @@ class Privacy extends Component {
     return (
       <div className="content">
         <h3>
-          {this.props.userInfo && !this.props.userInfo.roles.includes(0) ? '' :
+          {(!this.props.userInfo || this.props.userInfo.permissions.includes(0)) && (
             <Link className='homeBtn noAuthHomeBtn' to={'/'}>
               <i className="fa fa-home" />
             </Link>
-          }
+          )}
           Privacy Policy
         </h3>
           <p>

@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 import { storeWithMiddleware } from '../index';
 import API from '../services/api';
-import { STUDENT_READ } from '../index';
+import { READ_EVALUATIONS } from '../index';
 import { setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } from '../actions';
 
 class PostSearch extends Component {
@@ -56,7 +56,7 @@ class PostSearch extends Component {
       this.getField('quarter', client, null, null, id);
       this.getField('course', client, null, null, id, departmentsList);
     }
-    if (!userInfo.roles.includes(STUDENT_READ)) {
+    if (!userInfo.permissions.includes(READ_EVALUATIONS)) {
       if (!departmentsList) {
         let client = new API();
         client.get('/departments', departments => setDepartmentsList(departments));
@@ -282,10 +282,10 @@ class PostSearch extends Component {
   render() {
     const { handleSubmit, userInfo } = this.props;
     const { localQuartersList, localCoursesList, localProfessorsList } = this.state;
-    const student_read = userInfo.roles.includes(STUDENT_READ);
+    const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
     return (
       <form ref={node => this.postSearchForm = node} className='content' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-        {!student_read && (
+        {!read_access && (
         <div className='noWriteDiv'>
           <Link className='homeBtn' to={'/'}>
             <i className="fa fa-home" />

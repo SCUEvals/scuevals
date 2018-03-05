@@ -12,7 +12,8 @@ import TextOptions from '../components/textOptions';
 import Eval from '../components/eval';
 import API from '../services/api';
 import '../styles/viewEvals.scss';
-import { STUDENT_WRITE } from '../index';
+import { WRITE_EVALUATIONS } from '../index';
+import RelatedInfo from '../components/relatedInfo';
 
 class ViewEvals extends Component {
 
@@ -46,7 +47,7 @@ class ViewEvals extends Component {
         : a.post_time > b.post_time ? -1 : 1
       );
       this.setState({info});
-    });
+    }, {embed: (this.props.type === 'courses' ? 'professors' : 'courses')});
   }
 
   componentWillUpdate(nextProps) {
@@ -112,7 +113,7 @@ class ViewEvals extends Component {
   render() { //1-1.74 score1, 1.75-2.49 score2, 2.50-3.24 score3, 3.25-4 score4
     const { info, flagModal, deleteModal, sortValue } = this.state;
     const { majorsList, quartersList, coursesList, professorsList, departmentsList, userInfo , type, match } = this.props;
-    const student_write = userInfo.roles.includes(STUDENT_WRITE);
+    const write_access = userInfo.permissions.includes(WRITE_EVALUATIONS);
     let average, attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload;
     if (info && info.evaluations.length > 0) {
       average = attitude = availability = clarity = easiness = grading_speed = recommended = resourcefulness = workload = 0;
@@ -184,6 +185,24 @@ class ViewEvals extends Component {
             : 'Loading...'
           }
         </h2>
+        {info && (info.courses || info.professors) && departmentsList && (
+          <div>
+            <button className='btn' type='button' data-toggle='collapse' data-target='#relatedInfo' aria-expanded='false' aria-controls='relatedInfo'>
+              {info.courses ? 'Courses taught' : 'Professors'} <i className="fa fa-chevron-down" />
+              <br />
+            </button>
+            <div id='relatedInfo' className='collapse'>
+              <br />
+              <RelatedInfo
+                departmentsList={departmentsList}
+                type={type}
+                match={match}
+                info={type === 'professors' ? info.courses : info.professors}
+                desc={type === 'professors' ? info.first_name + ' ' + info.last_name : departmentsList[info.department_id].abbr + ' ' + info.number}
+             />
+           </div>
+         </div>
+       )}
         {info && info.evaluations.length > 0 ?
           <div className='row' styleName='scores'>
             {this.renderAverage('Average', average)}
@@ -198,7 +217,7 @@ class ViewEvals extends Component {
           </div>
           : ''
         }
-        {student_write && (
+        {write_access && (
           <Link styleName='quickPost' className='btn' to={type === 'professors' ?
             `/professors/${match.params.id}/post`
             :`/courses/${match.params.id}/post`}>

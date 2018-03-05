@@ -9,7 +9,7 @@ import ReactGA from 'react-ga';
 import { setUserInfo, setMajorsList } from '../actions';
 import API from '../services/api';
 import '../styles/profile.scss';
-import { INCOMPLETE, STUDENT_READ } from '../index';
+import { INCOMPLETE, READ_EVALUATIONS } from '../index';
 
 class Profile extends Component {
 
@@ -107,7 +107,7 @@ class Profile extends Component {
   onSubmit(values) {
     const client = new API();
     return client.patch(`/students/${this.props.userInfo.id}`, values, responseData => {
-      if (this.props.userInfo.roles.includes(INCOMPLETE)) ReactGA.event({category: 'User', action: 'Completed Profile'});
+      if (this.props.userInfo.permissions.includes(INCOMPLETE)) ReactGA.event({category: 'User', action: 'Completed Profile'});
       localStorage.jwt = responseData.jwt;
       this.props.setUserInfo(responseData.jwt);
       if (this.props.location.state) this.props.history.push(this.props.location.state.referrer);
@@ -116,7 +116,7 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    if (this.props.userInfo.roles.includes(INCOMPLETE) || !this.props.userInfo.roles.includes(STUDENT_READ)) { //don't need to check if majorsList or userInfo exists, majorsList shouldn't exist and userInfo should
+    if (this.props.userInfo.permissions.includes(INCOMPLETE) || !this.props.userInfo.permissions.includes(READ_EVALUATIONS)) { //don't need to check if majorsList or userInfo exists, majorsList shouldn't exist and userInfo should
       let client = new API();
       client.get('/majors', majorsList =>this.props.setMajorsList(majorsList));
     }
@@ -124,12 +124,12 @@ class Profile extends Component {
 
   render() {
     const { handleSubmit, history, setUserInfo, userInfo, submitting, majorsList } = this.props;
-    const incomplete = userInfo.roles.includes(INCOMPLETE);
-    const student_read = userInfo.roles.includes(STUDENT_READ);
+    const incomplete = userInfo.permissions.includes(INCOMPLETE);
+    const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
     const profileInfo = 'This information may only be used anonymously for statistical purposes.\nYour name is kept hidden at all times.';
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
-        {!student_read && (
+        {!read_access && (
           <div className='noWriteDiv'>
             <Link className='homeBtn noWriteHomeBtn' to={'/'}>
               <i className="fa fa-home" />

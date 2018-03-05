@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import Eval from '../components/eval';
 import API from '../services/api';
 import '../styles/viewEvals.scss';
-import { STUDENT_READ } from '../index';
+import { READ_EVALUATIONS } from '../index';
 import { setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } from '../actions';
 
 
@@ -43,7 +43,7 @@ class ViewMyEvals extends Component {
       myEvalsList.sort((a, b) => a.post_time > b.post_time ? -1 : 1); //sort by most recent by default when viewing own evals
       this.setState({myEvalsList});
     });
-    if (!userInfo.roles.includes(STUDENT_READ)) {
+    if (!userInfo.permissions.includes(READ_EVALUATIONS)) {
       if (!departmentsList) {
         let client = new API();
         client.get('/departments', departments => setDepartmentsList(departments));
@@ -71,7 +71,7 @@ class ViewMyEvals extends Component {
   render() {
     const { deleteModal, myEvalsList, sortValue } = this.state;
     const { userInfo, quartersList, coursesList, departmentsList, professorsList } = this.props;
-    const student_read = userInfo && userInfo.roles.includes(STUDENT_READ);
+    const read_access = userInfo && userInfo.permissions.includes(READ_EVALUATIONS);
     const sortOptions = [
       {value: 'recent', label: 'Sort by Most Recent'},
       {value: 'quarter', label: 'Sort by Quarter'},
@@ -81,7 +81,7 @@ class ViewMyEvals extends Component {
     ];
     return (
       <div className="content">
-        {!student_read && (
+        {!read_access && (
           <div className='noWriteDiv'>
             <Link className='homeBtn noWriteHomeBtn' to={'/'}>
               <i className="fa fa-home" />
