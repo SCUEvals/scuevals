@@ -188,7 +188,7 @@ class ViewEvals extends Component {
         {info && (info.courses || info.professors) && departmentsList && (
           <div>
             <button className='btn' type='button' data-toggle='collapse' data-target='#relatedInfo' aria-expanded='false' aria-controls='relatedInfo'>
-              {info.courses ? 'Courses taught' : 'Professors'} <i className="fa fa-chevron-down" />
+              {info.courses ? 'Past courses' : 'Past professors'} <i className="fa fa-chevron-down" />
               <br />
             </button>
             <div id='relatedInfo' className='collapse'>
