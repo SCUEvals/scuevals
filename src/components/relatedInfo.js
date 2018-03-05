@@ -48,31 +48,27 @@ class RelatedInfo extends Component {
       }
     });
     return (
-      <div>
-        <h5>{type === 'professors' ? 'Courses taught by ' + desc + ':' : 'Professors who taught ' + desc + ':'}</h5>
-          {type === 'professors' ?
-            <BootstrapTable
-              ref={node => this.table = node}
-              data={labeledInfo}
-              columns={professorsColumns}
-              keyField='key'
-              withoutTabIndex
-              version='4'
-              striped
-              hover
-            />
-          : <BootstrapTable
-              ref={node => this.table = node}
-              data={labeledInfo}
-              columns={coursesColumns}
-              keyField='name'
-              withoutTabIndex
-              version='4'
-              striped
-              hover
-            />
-          }
-      </div>
+      type === 'professors' ?
+        <BootstrapTable
+          ref={node => this.table = node}
+          data={labeledInfo}
+          columns={professorsColumns}
+          keyField='key'
+          withoutTabIndex
+          version='4'
+          striped
+          hover
+        />
+      : <BootstrapTable
+          ref={node => this.table = node}
+          data={labeledInfo}
+          columns={coursesColumns}
+          keyField='name'
+          withoutTabIndex
+          version='4'
+          striped
+          hover
+        />
     );
   }
 }
