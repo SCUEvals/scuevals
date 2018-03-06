@@ -148,43 +148,24 @@ label:not(:first-child) input[type='radio'] {
   }
 }
 
-// .react-bs-table table {
-//   td {
-//     padding: 0;
-//     overflow: visible;
-//
-//     a {
-//       padding: 0.75rem;
-//       display: block;
-//
-//       &:hover {
-//         transition: none;
-//       }
-//     }
-//   }
-//
-//   tr {
-//     width: 100%;
-//     overflow: visible;
-//
-//     &:hover {
-//       a {
-//         color: $SCUdarkred;
-//       }
-//     }
-//   }
-// }
-
 .react-bootstrap-table {
   overflow: auto;
 
   table {
     margin-bottom: 0;
 
-    td,
-    th {
-      padding: 5px;
+    td {
+      padding: 0;
       vertical-align: middle;
+
+      a {
+        display: block;
+      }
+    }
+
+    td a,
+    th {
+      padding: 10px;
     }
 
     @media (max-width: $xs) {
@@ -738,13 +719,16 @@ svg.score {
   }
 }
 
+.widget {
+  max-width: 750px;
+  margin: 0 auto;
+  overflow: auto;
+}
+
 .widgetWrapper {
   overflow: auto;
 
   .widget {
     min-width: 478px;
-    max-width: 750px;
-    margin: 0 auto;
-    overflow: auto;
   }
 }

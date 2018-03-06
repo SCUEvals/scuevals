@@ -19,7 +19,8 @@ class Eval extends Component {
     department: PropTypes.string,
     lines: PropTypes.number.isRequired,
     more: PropTypes.string.isRequired,
-    less: PropTypes.string.isRequired
+    less: PropTypes.string.isRequired,
+    vote_access: PropTypes.bool.isRequired
   }
 
   static defaultProps = {
@@ -94,7 +95,7 @@ class Eval extends Component {
   }
 
   render() {
-    const { evaluation, openModal, quarter, department, updateScore, userString, more, less, lines } = this.props;
+    const { vote_access, evaluation, openModal, quarter, department, updateScore, userString, more, less, lines } = this.props;
     const { user_vote, expanded, truncated } = this.state;
     const { votes_score } = evaluation;
     const { attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload } = evaluation.data;
@@ -140,7 +141,7 @@ class Eval extends Component {
         }
       ]
     };
-    let votesFontSize = votes_score > 999 ? //make score smaller to prevent overflow
+    const votesFontSize = votes_score > 999 ? //make score smaller to prevent overflow
       votes_score > 9999 ?
         votes_score > 99999 ?
           9
@@ -151,7 +152,7 @@ class Eval extends Component {
     return (
       <div styleName='eval'>
         <div styleName='vote'>
-          {evaluation.author && !evaluation.author.self ?
+          {vote_access && evaluation.author && !evaluation.author.self && (
               <i tabIndex='0'
               styleName={user_vote === 'u' ? 'active' : ''}
               className='fa fa-thumbs-up'
@@ -185,9 +186,9 @@ class Eval extends Component {
                 }}
 
             />
-          : ''}
+          )}
           <span style={{fontSize: votesFontSize + 'px'}} styleName='voteScore'>{votes_score}</span>
-          {evaluation.author && !evaluation.author.self ?
+          {vote_access && evaluation.author && !evaluation.author.self ?
             <i tabIndex='0'
               styleName={user_vote === 'd' ? 'active' : ''}
                className='fa fa-thumbs-down'

@@ -12,7 +12,7 @@ import TextOptions from '../components/textOptions';
 import Eval from '../components/eval';
 import API from '../services/api';
 import '../styles/viewEvals.scss';
-import { WRITE_EVALUATIONS } from '../index';
+import { WRITE_EVALUATIONS, VOTE_EVALUATIONS } from '../index';
 import RelatedInfo from '../components/relatedInfo';
 
 class ViewEvals extends Component {
@@ -150,7 +150,7 @@ class ViewEvals extends Component {
       {value: 'grad_year', label: 'Sort By Graduation Year'}
     ];
     return (
-      <div className="content">
+      <div className="content" styleName='viewEvals'>
         <FlagModal
           flagModalOpen={flagModal.open}
           closeFlagModal={() => this.setState({flagModal: {open: false }})}
@@ -187,12 +187,10 @@ class ViewEvals extends Component {
         </h2>
         {info && (info.courses || info.professors) && departmentsList && (
           <div>
-            <button className='btn' type='button' data-toggle='collapse' data-target='#relatedInfo' aria-expanded='false' aria-controls='relatedInfo'>
+            <button styleName='relatedInfoBtn' className='btn' type='button' data-toggle='collapse' data-target='#relatedInfo' aria-expanded='false' aria-controls='relatedInfo'>
               {info.courses ? 'Past courses' : 'Past professors'} <i className="fa fa-chevron-down" />
-              <br />
             </button>
             <div id='relatedInfo' className='collapse'>
-              <br />
               <RelatedInfo
                 departmentsList={departmentsList}
                 type={type}
@@ -349,6 +347,7 @@ class ViewEvals extends Component {
                 <Eval
                   key={evaluation.id}
                   quarter={quartersList ? quartersList.object[evaluation.quarter_id].name + ' ' + quartersList.object[evaluation.quarter_id].year : null}
+                  vote_access={userInfo.permissions.includes(VOTE_EVALUATIONS)}
                   department={departmentsList && evaluation.course ? departmentsList[evaluation.course.department_id].abbr + ' ' + evaluation.course.number + ': ' + evaluation.course.title : null}
                   evaluation={evaluation}
                   userString={userString}

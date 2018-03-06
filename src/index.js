@@ -32,6 +32,7 @@ import './styles/index.scss';
 export const INCOMPLETE = 0;
 export const READ_EVALUATIONS = 1;
 export const WRITE_EVALUATIONS = 2;
+export const VOTE_EVALUATIONS = 3;
 export const ADMINISTRATOR = 10;
 export const API_KEY = 20;
 

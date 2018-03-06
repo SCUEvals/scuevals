@@ -14,6 +14,7 @@ import TextOptions from '../components/textOptions';
 import '../../node_modules/rc-slider/dist/rc-slider.min.css?global';
 import '../styles/postEval.scss';
 import RedirectModal from '../components/redirectModal';
+import { setUserInfo } from '../actions';
 
 class PostEval extends Component {
 
@@ -26,7 +27,8 @@ class PostEval extends Component {
     submitting: PropTypes.bool.isRequired,
     location: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
-    match: PropTypes.object.isRequired
+    match: PropTypes.object.isRequired,
+    setUserInfo: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -47,11 +49,12 @@ class PostEval extends Component {
     const { quarter_id, course_id, professor_id } = this.props.match.params;
     const { display_majors, display_grad_year } = values;
     let evaluation = {...values};
-    let returnedObj = { quarter_id, course_id, professor_id, display_majors, display_grad_year, evaluation };
+    let sendingObj = { quarter_id, course_id, professor_id, display_majors, display_grad_year, evaluation };
     let client = new API();
-    return client.post('/evaluations', returnedObj, () => {
+    return client.post('/evaluations', sendingObj, responseData => {
       this.setState({submitted: true});
       ReactGA.event({category: 'Evaluation', action: 'Submitted'});
+      this.props.setUserInfo(responseData.jwt);
     });
   }
 
@@ -288,4 +291,4 @@ export default reduxForm({
   validate,
   form: 'postEval',
   initialValues: { display_majors: true, display_grad_year: true }
-})(connect(mapStateToProps, null)(PostEval));
+})(connect(mapStateToProps, { setUserInfo })(PostEval));
