@@ -14,7 +14,7 @@ class API {
 
     this.api = axios.create({
       headers: headers,
-      baseURL: 'https://staging.api.scuevals.com',  //API_URL,
+      baseURL: API_URL,
       timeout: 10000
     });
   }
