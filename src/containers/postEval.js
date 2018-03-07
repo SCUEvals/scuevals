@@ -20,6 +20,7 @@ class PostEval extends Component {
 
   static propTypes = {
     userInfo: PropTypes.object.isRequired,
+    departmentsList: PropTypes.object,
     quartersList: PropTypes.object,
     coursesList: PropTypes.object,
     professorsList: PropTypes.object,
@@ -41,7 +42,7 @@ class PostEval extends Component {
       term: '',
       classInfo: undefined,
       submitted: false,
-      initial_read_access: !props.userInfo.permissions.includes(READ_EVALUATIONS)
+      initial_read_access: props.userInfo.permissions.includes(READ_EVALUATIONS)
     };
     const client = new API();
     //course and professor swapped because API currently has different order than site

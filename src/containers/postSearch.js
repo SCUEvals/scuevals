@@ -35,7 +35,7 @@ class PostSearch extends Component {
 
   constructor(props) {
     super(props);
-    const { course, professor, departmentsList, quartersList, coursesList, professorsList, initialValues, userInfo, setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList } = props;
+    const { departmentsList, quartersList, coursesList, professorsList, initialValues, userInfo, setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList } = props;
     this.state = {
       localQuartersList: quartersList ? quartersList.array : undefined,
       localCoursesList: coursesList && coursesList.departmentsListLoaded ? coursesList.array : undefined,
@@ -272,7 +272,7 @@ class PostSearch extends Component {
               }).map(course => course.label = departmentsList[course.department_id].abbr + ' ' + course.number + ': ' + course.title);
 
             this.setState({localCoursesList: courses});
-          };
+          }
         }, {quarter_id, course_id, professor_id}));
         break;
       case 'professor':

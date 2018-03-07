@@ -9,7 +9,8 @@ class RedirectModal extends Component {
     history: PropTypes.object.isRequired,
     redirectModalOpen: PropTypes.bool.isRequired,
     submitted: PropTypes.bool,
-    classInfoExists: PropTypes.bool
+    classInfoExists: PropTypes.bool,
+    permissionsUpgrade: PropTypes.bool
   }
 
   constructor(props) {
