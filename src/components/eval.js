@@ -158,7 +158,7 @@ class Eval extends Component {
               className='fa fa-thumbs-up'
               onClick={user_vote === 'u' ?
                 () => {
-                  let client = new API();
+                  const client = new API();
                   client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({category: 'Vote', action: 'Deleted'}));
                   updateScore(votes_score - 1);
                   this.setState({
@@ -166,7 +166,7 @@ class Eval extends Component {
                    });
                 }
                 : () => { //user_vote 'd' or not voted
-                  let client = new API();
+                  const client = new API();
                   client.put(`/evaluations/${evaluation.id}/vote`, 'u',  () => ReactGA.event({category: 'Vote', action: 'Added'}));
                   if (user_vote == 'd') {
                     updateScore(votes_score + 2);
@@ -194,7 +194,7 @@ class Eval extends Component {
                className='fa fa-thumbs-down'
                onClick={user_vote === 'd' ?
                  () => {
-                   let client = new API();
+                   const client = new API();
                    client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({category: 'Vote', action: 'Deleted'}));
                    updateScore(votes_score + 1);
                    this.setState({
@@ -202,7 +202,7 @@ class Eval extends Component {
                    });
                  }
                  : () => { //user_vote 1 or null
-                   let client = new API();
+                   const client = new API();
                    client.put(`/evaluations/${evaluation.id}/vote`, 'd', () =>  ReactGA.event({category: 'Vote', action: 'Added'}));
                    if (user_vote === 'u') {
                      updateScore(votes_score - 2);

@@ -27,7 +27,7 @@ class RedirectModal extends Component {
   }
 
   render() {
-    const { redirectModalOpen, classInfoExists, submitted } = this.props;
+    const { redirectModalOpen, classInfoExists, submitted, permissionsUpgrade } = this.props;
     const { seconds } = this.state;
     return (
       <ReactModal
@@ -55,6 +55,9 @@ class RedirectModal extends Component {
                 'Great job submitting an eval!'
               : 'Class does not exist for this page.'
             }</p>
+            {submitted && permissionsUpgrade && (
+              <p>You now have unlimited access to the site again until the end of this quarter.</p>
+            )}
             <hr />
             Redirecting to home in {seconds}...
           </div>

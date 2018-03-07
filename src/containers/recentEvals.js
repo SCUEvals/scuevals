@@ -24,7 +24,7 @@ class RecentEvals extends Component {
   }
 
   componentDidMount() {
-    let client = new API();
+    const client = new API();
     client.get('/evaluations/recent', evals => {if (this.recentEvals) this.setState({evals})}, {count: this.props.count});
   }
 

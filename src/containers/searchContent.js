@@ -26,7 +26,7 @@ class SearchContent extends Component {
 
   componentWillMount() {
     if (this.props.match.params.search.length > 2 && this.props.history.action === 'POP') { //if loading this component straight from GET request (rather than being routed with React Router (action would be PUSH))
-      let client = new API();
+      const client = new API();
       client.get('/search', responseData => {
           this.sortResponseData(responseData);
           this.props.setSearchResults(responseData);

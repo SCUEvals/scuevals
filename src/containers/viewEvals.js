@@ -40,7 +40,7 @@ class ViewEvals extends Component {
   }
 
   componentWillMount() {
-    let client = new API();
+    const client = new API();
     client.get('/' + this.props.type + '/' + this.props.match.params.id, info => {
       info.evaluations.sort((a, b) =>
         a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1  //bigger number quarter ids assumed to be always most recent
@@ -53,7 +53,7 @@ class ViewEvals extends Component {
   componentWillUpdate(nextProps) {
     if (this.props.location.pathname !== nextProps.location.pathname) {
       this.setState({info: null}, () => {
-        let client = new API();
+        const client = new API();
         client.get('/' + this.props.type + '/' + this.props.match.params.id, info => {
           info.evaluations.sort((a, b) =>
             a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1
@@ -162,7 +162,7 @@ class ViewEvals extends Component {
           course={coursesList && coursesList.departmentsListLoaded && deleteModal.course_id ? coursesList.object[deleteModal.course_id].label : null }
           professor={professorsList && deleteModal.professor_id ? professorsList.object[deleteModal.professor_id].label : null}
           deletePost={() => {
-            let client = new API();
+            const client = new API();
             client.delete(`/evaluations/${deleteModal.eval_id}`, () => ReactGA.event({category: 'Evaluation', action: 'Deleted'}));
             info.evaluations.map((obj, key) => {
               if (obj.id === deleteModal.eval_id) {

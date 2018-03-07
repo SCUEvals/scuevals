@@ -39,23 +39,23 @@ class SearchBar extends Component {
     };
     this.debouncedGetResponse = debounce(this.debouncedGetResponse, 250);
     if (!this.props.departmentsList) {
-      let client = new API();
+      const client = new API();
       client.get('/departments', departments => this.props.setDepartmentsList(departments));
     }
     if (!this.props.quartersList) {
-      let client = new API();
+      const client = new API();
       client.get('/quarters', quarters => this.props.setQuartersList(quarters));
     }
     if (!this.props.coursesList) {
-      let client = new API();
+      const client = new API();
       client.get('/courses', courses =>this.props.setCoursesList(courses, this.props.departmentsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
     }
     if (!this.props.professorsList) {
-      let client = new API();
+      const client = new API();
       client.get('/professors', professors => this.props.setProfessorsList(professors));
     }
     if (!this.props.majorsList) {
-      let client = new API();
+      const client = new API();
       client.get('/majors', majors =>this.props.setMajorsList(majors));
     }
   }
@@ -68,7 +68,7 @@ class SearchBar extends Component {
   getResponse(searchVal, setSearchResults) { //same as debouncedGetResponse but without delay
     $('#searchBarResults').hide(); //hide results dropdown after new results in until new input entered after
     if (searchVal && setSearchResults) {
-      let client = new API();
+      const client = new API();
       client.get('/search', responseData => {
           responseData.term = searchVal;
           this.sortResponseData(responseData);
@@ -81,7 +81,7 @@ class SearchBar extends Component {
 
   debouncedGetResponse(searchVal, setSearchResults) {
     if (searchVal && setSearchResults) {
-      let client = new API();
+      const client = new API();
       if (this.form) {
         this.setState({loading: true}, () => client.get('/search', responseData => {
             if (this.form) {

@@ -17,8 +17,8 @@ const WriteOnly = (props)  => {
         </p>
         <p>
           Congratulations on completing that last quarter! In order for us to stay relevant, we always need new evaluations.
-          Therefore, {`we're`} asking users to spend a couple minutes writing at least one evaluation before returning to
-          free access to the site. We promise it {`won't`} take long!
+          Therefore, {`we're`} asking users to spend a couple minutes writing at least one evaluation before you get continued
+          unlimited access to the site. We promise it {`won't`} take long!
         </p>
           <Link to='/profile'>Go to profile</Link>
           <br />

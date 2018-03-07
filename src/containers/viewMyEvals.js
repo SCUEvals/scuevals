@@ -38,26 +38,26 @@ class ViewMyEvals extends Component {
 
   componentDidMount() {
     const { userInfo, departmentsList, quartersList, coursesList, professorsList, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } = this.props;
-    let client = new API();
+    const client = new API();
     client.get('/evaluations', myEvalsList => {
       myEvalsList.sort((a, b) => a.post_time > b.post_time ? -1 : 1); //sort by most recent by default when viewing own evals
       this.setState({myEvalsList});
     });
     if (!userInfo.permissions.includes(READ_EVALUATIONS)) {
       if (!departmentsList) {
-        let client = new API();
+        const client = new API();
         client.get('/departments', departments => setDepartmentsList(departments));
       }
       if (!quartersList) {
-        let client = new API();
+        const client = new API();
         client.get('/quarters', quarters => setQuartersList(quarters));
       }
       if (!coursesList) {
-        let client = new API();
+        const client = new API();
         client.get('/courses', courses => setCoursesList(courses, departmentsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
       }
       if (!professorsList) {
-        let client = new API();
+        const client = new API();
         client.get('/professors', professors => setProfessorsList(professors));
       }
     }
@@ -96,7 +96,7 @@ class ViewMyEvals extends Component {
           professor={professorsList && deleteModal.professor_id ? professorsList.object[deleteModal.professor_id].label : null}
           eval_id={deleteModal.eval_id}
           deletePost={() => {
-            let client = new API();
+            const client = new API();
             client.delete(`/evaluations/${deleteModal.eval_id}`, () => ReactGA.event({category: 'Evaluation', action: 'Deleted'}));
             myEvalsList.map((obj, key) => {
               if (obj.id === deleteModal.eval_id) {

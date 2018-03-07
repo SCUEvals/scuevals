@@ -287,9 +287,10 @@ label:not(:first-child) input[type='radio'] {
   border: 2px solid $focusColor;
 }
 
-.Select--multi:not(.is-focused):not(.is-open).has-value .Select-control .Select-input {
+.Select--multi.has-value:not(.is-focused):not(.is-open) > .Select-control .Select-input {
   width: 0 !important;
   margin-left: 0 !important;
+  height: 0;
 }
 
 .Select--multi {

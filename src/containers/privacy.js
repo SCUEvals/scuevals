@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import { INCOMPLETE, READ_EVALUATIONS } from '../index';
+
 class Privacy extends Component {
 
     static propTypes = {
@@ -10,10 +12,11 @@ class Privacy extends Component {
     }
 
   render() {
+    const { userInfo } = this.props;
     return (
       <div className="content">
         <h3>
-          {(!this.props.userInfo || this.props.userInfo.permissions.includes(0)) && (
+          {(!userInfo || userInfo.permissions.includes(INCOMPLETE) || !userInfo.permissions.includes(READ_EVALUATIONS)) && (
             <Link className='homeBtn noAuthHomeBtn' to={'/'}>
               <i className="fa fa-home" />
             </Link>

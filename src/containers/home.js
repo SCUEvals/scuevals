@@ -34,10 +34,13 @@ class Home extends Component {
   authWithBackEnd(token, referrer) {
     const client = new API();
     client.post('/auth', {id_token: token}, responseData => {
-      if (responseData.status === 'non-student') {
+      if (responseData.status === 'suspended') {
+
+      }
+      else if (responseData.status === 'non-student') {
         this.setState({nonStudentModalOpen: true});
       }
-      if (responseData.status === 'new') ReactGA.event({category: 'User', action: 'Signed Up'});
+      else if (responseData.status === 'new') ReactGA.event({category: 'User', action: 'Signed Up'});
       let decodedJwt = jwtDecode(responseData.jwt);
       ReactGA.set({ userId: decodedJwt.sub.id });
       this.setState({loading: false}, () => {
@@ -114,7 +117,9 @@ class Home extends Component {
     else { //if not logged in
       return (
         <div styleName="login">
-          <NonStudentModal nonStudentModalOpen={this.state.nonStudentModalOpen} closeNonStudentModal={() => this.setState({nonStudentModalOpen: false})} />
+          {this.state.nonStudentModalOpen && (
+            <NonStudentModal nonStudentModalOpen={true} closeNonStudentModal={() => this.setState({nonStudentModalOpen: false})} />
+          )}
           <h1>SCU Evals</h1>
           <GoogleLogin
             hostedDomain="scu.edu"
