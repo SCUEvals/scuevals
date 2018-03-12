@@ -204,7 +204,7 @@ class PostEval extends Component {
       return (
         <form styleName='postEval' onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
           <Prompt
-            when={dirty}
+            when={dirty && !submitted}
             message='Are you sure you want to go to navigate away before submitting your evaluation?'
           />
           {!read_access && (
