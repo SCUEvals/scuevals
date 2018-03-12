@@ -108,7 +108,6 @@ class Profile extends Component {
     const client = new API();
     return client.patch(`/students/${this.props.userInfo.id}`, values, responseData => {
       if (this.props.userInfo.permissions.includes(INCOMPLETE)) ReactGA.event({category: 'User', action: 'Completed Profile'});
-      localStorage.jwt = responseData.jwt;
       this.props.setUserInfo(responseData.jwt);
       if (this.props.location.state) this.props.history.push(this.props.location.state.referrer);
       else this.props.history.push('/');
@@ -147,7 +146,6 @@ class Profile extends Component {
             <p>Before we start, we need to know a few things about you.</p>
             <small>{profileInfo}<br/>
             <button type="button" onClick={() => {
-              localStorage.removeItem('jwt');
               setUserInfo(null);
               history.push('/');
               }}

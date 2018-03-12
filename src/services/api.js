@@ -14,7 +14,7 @@ class API {
 
     this.api = axios.create({
       headers: headers,
-      baseURL: 'https://staging.api.scuevals.com',
+      baseURL: API_URL,
       timeout: 10000
     });
   }
@@ -29,8 +29,6 @@ class API {
           if (history.location.pathname !== '/') history.push('/');
           storeWithMiddleware.dispatch(setUserInfo(null));
         });
-
-        return;
       }
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx

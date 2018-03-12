@@ -11,6 +11,16 @@ export const SET_COURSES_LIST = 'set_courses_list';
 */
 
 export function setUserInfo(jwt) {
+  if (!jwt) localStorage.removeItem('jwt');
+  else {
+    try {
+      localStorage.setItem('jwt', jwt);
+    } catch(err) {
+      /* eslint-disable no-console */
+      console.error('Cannot execute localStorage.setItem(). Is private mode enabled? Error:', err);
+      /* eslint-enable no-console */
+    }
+  }
   return {
     type: SET_USER_INFO,
     payload: jwt

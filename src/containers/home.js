@@ -45,13 +45,6 @@ class Home extends Component {
       ReactGA.set({ userId: decodedJwt.sub.id });
       this.setState({loading: false}, () => {
         this.props.setUserInfo(responseData.jwt);
-        try {
-          localStorage.setItem("jwt", responseData.jwt);
-        } catch(err) {
-          /* eslint-disable no-console */
-          console.error("Cannot execute localStorage.setItem (perhaps private mode is enabled). Error:", err);
-          /* eslint-enable no-console */
-        }
         if (referrer) {
           if (decodedJwt.sub.permissions.includes(INCOMPLETE)) this.props.history.push('/profile', { referrer });
           else this.props.history.push(referrer);
@@ -68,8 +61,8 @@ class Home extends Component {
     const write_access = userInfo && userInfo.permissions.includes(WRITE_EVALUATIONS);
     if (!userInfo && this.state.loading) { //if Google login succeeded, and in process of sending to backend
       return (
-        <div className="loadingWrapper">
-          <i className="fa fa-spinner fa-spin fa-3x fa-fw" />
+        <div className='loadingWrapper'>
+          <i className='fa fa-spinner fa-spin fa-3x fa-fw' />
         </div>
       );
     }
@@ -116,14 +109,14 @@ class Home extends Component {
     }
     else { //if not logged in
       return (
-        <div styleName="login">
+        <div styleName='login'>
           {this.state.nonStudentModalOpen && (
             <NonStudentModal nonStudentModalOpen={true} closeNonStudentModal={() => this.setState({nonStudentModalOpen: false})} />
           )}
           <h1>SCU Evals</h1>
           <GoogleLogin
-            hostedDomain="scu.edu"
-            clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
+            hostedDomain='scu.edu'
+            clientId='471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com'
             buttonText=''
             onSuccess={info => this.setState({loading: true}, this.authWithBackEnd(info.tokenObj.id_token, referrer))}
             onFailure={err => /*eslint-disable no-console*/ console.error('Google Login Error: ', err) /*eslint-enable no-console*/}

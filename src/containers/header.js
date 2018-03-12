@@ -51,7 +51,6 @@ class Header extends Component {
             </Link>
             <button className='btn' styleName='signOutBtn' type='button' onClick={() => {
               setSearchResults(null);
-              localStorage.removeItem('jwt');
               setUserInfo(null);
               ReactGA.set({ userId: undefined });
               if (this.props.history.location.pathname !== '/') this.props.history.push('/');
