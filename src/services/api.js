@@ -14,13 +14,22 @@ class API {
 
     this.api = axios.create({
       headers: headers,
-      baseURL: API_URL,
+      baseURL: 'https://staging.api.scuevals.com',
       timeout: 10000
     });
   }
 
-  handleError = (error, customHandleError) => {
+  handleError = error => {
     if (error.response) {
+      //sign out if 401
+      if (error.response.status === 401) {
+        if (error.url === error.baseURL + '/auth/refresh') return; //don't handle error twice
+        this.get('/auth/refresh', responseData => storeWithMiddleware.dispatch(setUserInfo(responseData.jwt)))
+        .catch(() => {
+          if (history.location.pathname !== '/') history.push('/');
+          storeWithMiddleware.dispatch(setUserInfo(null));
+        });
+      }
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
       console.error('Server responded with status code out of range of 2xx.\n',
@@ -29,11 +38,6 @@ class API {
         'Header:', error.response.headers, '\n\n',
         'Request config:', error.config,
       );
-      //sign out if 401
-      if (error.response.status === 401) {
-        if (history.location.pathname !== '/') history.push('/');
-        storeWithMiddleware.dispatch(setUserInfo(null));
-      }
     }
     else if (error.request) {
       // The request was made but no response was received
@@ -50,27 +54,27 @@ class API {
       'Request config:', error.config
      );
     }
-    if (customHandleError) customHandleError();
+    throw error;
   }
 
-  get(path, callback, passedParams, customHandleError) { //passedParams (obj) and customHandleError (func) optional
-    return this.api.get(path, {params: passedParams}).then(response => {callback(response.data); return response;}).catch(error => {this.handleError(error, customHandleError); throw error;});
+  get(path, callback, passedParams) { //passedParams (obj) and customHandleError (func) optional
+    return this.api.get(path, {params: passedParams}).then(response => {callback(response.data); return response;}).catch(this.handleError);
   }
 
   patch(path, payload, callback) {
-    return this.api.patch(path, payload).then(response => {callback(response.data); return response;}).catch(error => {this.handleError(error); throw error;});
+    return this.api.patch(path, payload).then(response => {callback(response.data); return response;}).catch(this.handleError);
   }
 
   post(path, payload, callback) {
-    return this.api.post(path, payload).then(response => {callback(response.data); return response;}).catch(error => {this.handleError(error); throw error;});
+    return this.api.post(path, payload).then(response => {callback(response.data); return response;}).catch(this.handleError);
   }
 
   put(path, value, callback) {
-    return this.api.put(path, {value: value}).then(response => {callback(response.data); return response;}).catch(error => {this.handleError(error); throw error;});
+    return this.api.put(path, {value: value}).then(response => {callback(response.data); return response;}).catch(this.handleError);
   }
 
   delete(path, callback) {
-    return this.api.delete(path).then(response => {callback(response.data); return response;}).catch(error => {this.handleError(error); throw error;});
+    return this.api.delete(path).then(response => {callback(response.data); return response;}).catch(this.handleError);
   }
 }
 

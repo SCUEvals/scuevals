@@ -53,22 +53,18 @@ if (localStorage.getItem('jwt')) {
   }
   else { //else verify with back end
     const client = new API();
-    client.get('auth/validate',
-      responseData => {
-        if (responseData.jwt) {
-          ReactGA.set({ userId: decodedJwt.sub.id }); //id will be same from prev json token, no need to decode new one from responseData and find id
-          localStorage.setItem('jwt', responseData.jwt);
-        }
-        else localStorage.removeItem('jwt'); //else responseData.msg error msg occurs if not valid
-        renderDOM();
-      },
-      null, //no passedParams
-      () => { //custom handleError function, if error returned assume jwt invalid
-        localStorage.removeItem('jwt');
-        storeWithMiddleware.dispatch(setUserInfo(null)); //userInfo incorrect (decoded invalid jwt), so delete it
-        renderDOM();
+    client.get('auth/validate', responseData => {
+      if (responseData.jwt) {
+        ReactGA.set({ userId: decodedJwt.sub.id }); //id will be same from prev json token, no need to decode new one from responseData and find id
+        localStorage.setItem('jwt', responseData.jwt);
       }
-    );
+      else localStorage.removeItem('jwt'); //else responseData.msg error msg occurs if not valid
+      renderDOM();
+    }).catch(() => { //decodeable JWT, but not authorized on back-end
+      localStorage.removeItem('jwt');
+      storeWithMiddleware.dispatch(setUserInfo(null));
+      renderDOM();
+    })
   }
 }
 else { //no jwt found
