@@ -6,7 +6,7 @@ import Slider from 'rc-slider';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
 import { connect } from 'react-redux';
 import ReactGA from "react-ga";
-import { Link } from 'react-router-dom';
+import { Link, Prompt } from 'react-router-dom';
 
 import API from '../services/api';
 import TextOptions from '../components/textOptions';
@@ -184,7 +184,7 @@ class PostEval extends Component {
   }
 
   render() {
-    const { quartersList, coursesList, professorsList, handleSubmit, submitting, userInfo, location, history } = this.props;
+    const { quartersList, coursesList, professorsList, handleSubmit, submitting, userInfo, location, history, dirty } = this.props;
     const { classInfo, submitted, initial_read_access } = this.state;
     const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
     let quarter, course, professor;
@@ -203,6 +203,10 @@ class PostEval extends Component {
     if (location.state || classInfo !== undefined) { //passed values from postSearch
       return (
         <form styleName='postEval' onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
+          <Prompt
+            when={dirty}
+            message='Are you sure you want to go to navigate away before submitting your evaluation?'
+          />
           {!read_access && (
             <div className='noWriteDiv'>
             <Link className='homeBtn' to={'/'}>
