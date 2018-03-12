@@ -16,8 +16,8 @@ const WriteOnly = (props)  => {
           at Santa Clara University!
         </p>
         <p>
-          Congratulations on completing that last quarter! In order for us to stay relevant, we always need new evaluations.
-          Therefore, {`we're`} asking users to spend a couple minutes writing at least one evaluation before you get continued
+          Congratulations on completing that last quarter! In order for us to stay relevant, we always need new evaluations.<br />
+          Therefore, {`we're`} asking users to <strong><u>write at least one evaluation per quarter</u></strong> to maintain continued
           unlimited access to the site. We promise it {`won't`} take long!
         </p>
           <Link to='/profile'>Go to profile</Link>

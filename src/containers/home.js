@@ -34,10 +34,7 @@ class Home extends Component {
   authWithBackEnd(token, referrer) {
     const client = new API();
     client.post('/auth', {id_token: token}, responseData => {
-      if (responseData.status === 'suspended') {
-
-      }
-      else if (responseData.status === 'non-student') {
+      if (responseData.status === 'non-student') {
         this.setState({nonStudentModalOpen: true});
       }
       else if (responseData.status === 'new') ReactGA.event({category: 'User', action: 'Signed Up'});
@@ -45,12 +42,21 @@ class Home extends Component {
       ReactGA.set({ userId: decodedJwt.sub.id });
       this.setState({loading: false}, () => {
         this.props.setUserInfo(responseData.jwt);
-        if (referrer) {
-          if (decodedJwt.sub.permissions.includes(INCOMPLETE)) this.props.history.push('/profile', { referrer });
-          else this.props.history.push(referrer);
-        }
-        else if (decodedJwt.sub.permissions.includes(INCOMPLETE)) this.props.history.push('/profile');
+        // if (decodedJwt.sub.type === 's') {
+          if (referrer) {
+            if (decodedJwt.sub.permissions.includes(INCOMPLETE)) this.props.history.push('/profile', { referrer });
+            else this.props.history.push(referrer);
+          }
+          else if (decodedJwt.sub.permissions.includes(INCOMPLETE)) this.props.history.push('/profile');
+        //}
       });
+    })
+    .catch(e => {
+      if (e.status === 'suspended') {
+        this.setState({loading: false}, () => {
+          //Show modal for suspended message
+        });
+      }
     });
   }
 

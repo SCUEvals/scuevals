@@ -185,22 +185,6 @@ class ViewEvals extends Component {
             : 'Loading...'
           }
         </h2>
-        {info && (info.courses || info.professors) && departmentsList && (
-          <div>
-            <button styleName='relatedInfoBtn' className='btn' type='button' data-toggle='collapse' data-target='#relatedInfo' aria-expanded='false' aria-controls='relatedInfo'>
-              {info.courses ? 'Past courses' : 'Past professors'} <i className="fa fa-chevron-down" />
-            </button>
-            <div id='relatedInfo' className='collapse'>
-              <RelatedInfo
-                departmentsList={departmentsList}
-                type={type}
-                match={match}
-                info={type === 'professors' ? info.courses : info.professors}
-                desc={type === 'professors' ? info.first_name + ' ' + info.last_name : departmentsList[info.department_id].abbr + ' ' + info.number}
-             />
-           </div>
-         </div>
-       )}
         {info && info.evaluations.length > 0 ?
           <div className='row' styleName='scores'>
             {this.renderAverage('Average', average)}
@@ -215,6 +199,22 @@ class ViewEvals extends Component {
           </div>
           : ''
         }
+        {info && (info.courses || info.professors) && departmentsList && (
+          <div>
+            <button styleName='relatedInfoBtn' className='btn' type='button' data-toggle='collapse' data-target='#relatedInfo' aria-expanded='false' aria-controls='relatedInfo'>
+              {info.courses ? 'Past Courses' : 'Past Professors'} <i className="fa fa-chevron-down" />
+            </button>
+            <div id='relatedInfo' className='collapse'>
+              <RelatedInfo
+                departmentsList={departmentsList}
+                type={type}
+                match={match}
+                info={type === 'professors' ? info.courses : info.professors}
+                desc={type === 'professors' ? info.first_name + ' ' + info.last_name : departmentsList[info.department_id].abbr + ' ' + info.number}
+             />
+           </div>
+         </div>
+       )}
         {write_access && (
           <Link styleName='quickPost' className='btn' to={type === 'professors' ?
             `/professors/${match.params.id}/post`

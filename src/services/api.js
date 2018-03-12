@@ -23,9 +23,12 @@ class API {
     if (error.response) {
       //sign out if 401
       if (error.response.status === 401) {
-        if (error.url === error.baseURL + '/auth/refresh') return; //don't handle error twice
-        this.get('/auth/refresh', responseData => storeWithMiddleware.dispatch(setUserInfo(responseData.jwt)))
-        .catch(() => {
+        if (error.url === error.baseURL + '/auth/refresh' || error.url === error.baseURL + '/auth') return; //don't handle error twice
+        this.get('/auth/refresh', responseData => {
+          if (history.location.pathname !== '/') history.push('/');
+          storeWithMiddleware.dispatch(setUserInfo(responseData.jwt));
+        })
+        .catch(() => { //ex. user suspended
           if (history.location.pathname !== '/') history.push('/');
           storeWithMiddleware.dispatch(setUserInfo(null));
         });
