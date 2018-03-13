@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import { Router, Route, Redirect, Switch } from 'react-router-dom';
 import promise from 'redux-promise';
 import ReactGA from 'react-ga';
 import jwtDecode from 'jwt-decode';
@@ -22,11 +22,19 @@ import PostSearch from './containers/postSearch';
 import ViewMyEvals from './containers/viewMyEvals';
 
 import requireAuth from './components/requireAuth';
+import history from './components/history';
 import API from './services/api';
-import { delUserInfo } from './actions';
+import { setUserInfo } from './actions';
 
 import './styles/global.scss?global';
 import './styles/index.scss';
+
+export const INCOMPLETE = 0;
+export const READ_EVALUATIONS = 1;
+export const WRITE_EVALUATIONS = 2;
+export const VOTE_EVALUATIONS = 3;
+export const ADMINISTRATOR = 10;
+export const API_KEY = 20;
 
 ReactGA.initialize('UA-102751367-1');
 
@@ -40,27 +48,23 @@ if (localStorage.getItem('jwt')) {
   let decodedJwt = jwtDecode(localStorage.getItem('jwt')); //won't fail, reducers above took care of undecodeable jwt (check note for reducers above)
   if (new Date().getTime() / 1000 > decodedJwt.exp) { //if token expired, delete it
     localStorage.removeItem('jwt');
-    storeWithMiddleware.dispatch(delUserInfo()); //userInfo decoded from expired token, so delete it
+    storeWithMiddleware.dispatch(setUserInfo(null)); //userInfo decoded from expired token, so delete it
     renderDOM();
   }
   else { //else verify with back end
     const client = new API();
-    client.get('auth/validate',
-      responseData => {
-        if (responseData.jwt) {
-          ReactGA.set({ userId: decodedJwt.sub.id }); //id will be same from prev json token, no need to decode new one from responseData and find id
-          localStorage.setItem('jwt', responseData.jwt);
-        }
-        else localStorage.removeItem('jwt'); //else responseData.msg error msg occurs if not valid
-        renderDOM();
-      },
-      null, //no passedParams
-      () => { //custom handleError function, if error returned assume jwt invalid
-        localStorage.removeItem('jwt');
-        storeWithMiddleware.dispatch(delUserInfo()); //userInfo incorrect (decoded invalid jwt), so delete it
-        renderDOM();
+    client.get('auth/validate', responseData => {
+      if (responseData.jwt) {
+        ReactGA.set({ userId: decodedJwt.sub.id }); //id will be same from prev json token, no need to decode new one from responseData and find id
+        localStorage.setItem('jwt', responseData.jwt);
       }
-    );
+      else localStorage.removeItem('jwt'); //else responseData.msg error msg occurs if not valid
+      renderDOM();
+    }).catch(() => { //decodeable JWT, but not authorized on back-end
+      localStorage.removeItem('jwt');
+      storeWithMiddleware.dispatch(setUserInfo(null));
+      renderDOM();
+    })
   }
 }
 else { //no jwt found
@@ -70,23 +74,24 @@ else { //no jwt found
 function renderDOM () {
   ReactDOM.render(
     <Provider store={storeWithMiddleware}>
-      <BrowserRouter>
+      {/*Use Router with history={history} rather than BrowserRouter because need to access history outside of React components (API service) */}
+      <Router history={history}>
         <GAListener>
           <div id='push-footer' styleName='push-footer'>
             <Header />
             <div className='container'>
               <Switch>
-                <Route exact path='/search/:search' component={requireAuth(SearchContent)} />
-                <Route exact path='/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)' component={requireAuth(PostEval)} />
-                <Route exact path='/professors/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'professors'})} />
-                <Route exact path='/courses/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'courses'})} />
-                <Route exact path='/professors/:id(\d+)' component={requireAuth(ViewEvals, {type: 'professors'})} />
+                <Route exact path='/search/:search' component={requireAuth(SearchContent, null, [READ_EVALUATIONS])} />
+                <Route exact path='/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)' component={requireAuth(PostEval, null, [WRITE_EVALUATIONS])} />
+                <Route exact path='/professors/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'professors'}, [WRITE_EVALUATIONS])} />
+                <Route exact path='/courses/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'courses'}, [WRITE_EVALUATIONS])} />
+                <Route exact path='/professors/:id(\d+)' component={requireAuth(ViewEvals, {type: 'professors'}, [READ_EVALUATIONS])} />
                 <Route exact path='/courses/:id(\d+)' component={requireAuth(ViewEvals, {type: 'courses'})} />
                 <Route exact path='/about' component={About} />
                 <Route exact path='/privacy' component={Privacy} />
                 <Route exact path='/profile/evals' component={requireAuth(ViewMyEvals)} />
                 <Route exact path='/profile' component={requireAuth(Profile)} />
-                <Route exact path='/post' component={requireAuth(PostSearch)} />
+                <Route exact path='/post' component={requireAuth(PostSearch, null, [WRITE_EVALUATIONS])} />
                 <Route exact path='/' component={requireAuth(Home)} />
                 <Redirect to='/' />
               </Switch>
@@ -94,7 +99,7 @@ function renderDOM () {
           </div>
           <Footer />
         </GAListener>
-      </BrowserRouter>
+      </Router>
     </Provider>,
     document.getElementById('app')
   )

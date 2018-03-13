@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactGA from 'react-ga';
 import { withRouter } from 'react-router';
@@ -22,11 +22,7 @@ class GAListener extends Component {
   }
 
   render() {
-    return (
-      <div>
-        {this.props.children}
-      </div>
-    );
+    return [this.props.children];
   }
 }
 

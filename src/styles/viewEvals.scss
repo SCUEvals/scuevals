@@ -1,88 +1,98 @@
 @import "theme";
 
-.scoreBlock {
-  padding: 5px 0;
-  font-size: 15px;
-
-  .scoreTitle {
-    margin-bottom: 5px;
+.viewEvals {
+  h2 {
+    margin-bottom: 0;
   }
-}
 
-.scores {
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
+  .relatedInfoBtn {
+    margin: 30px 0 15px 0;
+  }
 
-  .avgScore {
-    @media (max-width: $xs) {
-      width: (100% / $xsBP);
-    }
+  .scoreBlock {
+    padding: 5px 0;
+    font-size: 15px;
 
-    @media (min-width: $sm) {
-      width: (100% / $smBP);
-    }
-
-    @media (min-width: $md) {
-      width: (100% / $mdBP);
-    }
-
-    @media (min-width: $lg) {
-      width: (100% / $lgBP);
-    }
-
-    @media (min-width: $xl) {
-      width: (100% / $xlBP);
+    .scoreTitle {
+      margin-bottom: 5px;
     }
   }
 
-  + :global(.btn) {
+  .scores {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+
+    .avgScore {
+      @media (max-width: $xs) {
+        width: (100% / $xsBP);
+      }
+
+      @media (min-width: $sm) {
+        width: (100% / $smBP);
+      }
+
+      @media (min-width: $md) {
+        width: (100% / $mdBP);
+      }
+
+      @media (min-width: $lg) {
+        width: (100% / $lgBP);
+      }
+
+      @media (min-width: $xl) {
+        width: (100% / $xlBP);
+      }
+    }
+
+    svg {
+      width: 55px;
+      height: 55px;
+
+      text {
+        dominant-baseline: central;
+        text-anchor: middle;
+        fill: white;
+        font-size: 20px;
+      }
+
+      circle {
+        transform: rotate(-90deg) scaleY(-1);
+        transform-origin: center;
+        stroke-width: 4;
+        animation: score 1s;
+        stroke-dasharray: 157.08;
+        stroke-dashoffset: 157.08;
+        stroke: $overlayBackground;
+      }
+    }
+
+    :global(.popper-manager) {
+      position: relative;
+
+      :global(.popper-target) {
+        position: absolute;
+        top: -55px;
+        left: -15px;
+      }
+
+      :global(.tooltip-popper) {
+        width: 115px;
+      }
+    }
+  }
+
+  @keyframes score {
+    from {
+      stroke-dashoffset: 157.08;
+    }
+  }
+
+  .quickPost {
+    margin: 20px 0 30px 0;
+  }
+
+  :global(#relatedInfo) table {
     margin-bottom: 30px;
   }
-
-  svg {
-    width: 55px;
-    height: 55px;
-
-    text {
-      dominant-baseline: central;
-      text-anchor: middle;
-      fill: white;
-      font-size: 20px;
-    }
-
-    circle {
-      transform: rotate(-90deg) scaleY(-1);
-      transform-origin: center;
-      stroke-width: 4;
-      animation: score 1s;
-      stroke-dasharray: 157.08;
-      stroke-dashoffset: 157.08;
-      stroke: $overlayBackground;
-    }
-  }
-
-  :global(.popper-manager) {
-    position: relative;
-
-    :global(.popper-target) {
-      position: absolute;
-      top: -55px;
-      left: -15px;
-    }
-
-    :global(.tooltip-popper) {
-      width: 115px;
-    }
-  }
-}
-
-@keyframes score {
-  from {
-    stroke-dashoffset: 157.08;
-  }
-}
-
-.quickPost {
-  margin: 30px;
 }

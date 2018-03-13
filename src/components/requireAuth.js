@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import jwtDecode from 'jwt-decode';
-import Profile from '../containers/profile';
-import Home from '../containers/home';
+import { storeWithMiddleware, INCOMPLETE } from '../index';
 
-export default function requireAuth(PassedComponent, extraProps={}) {
+export default function requireAuth(PassedComponent, extraProps = {}, reqPermissions) {
 
+  //note that each time new route accessed, this class will be re-mounted
   class AuthenticatedPassedComponent extends Component {
 
     static propTypes = {
@@ -14,24 +13,26 @@ export default function requireAuth(PassedComponent, extraProps={}) {
       history: PropTypes.object.isRequired
     }
 
+    constructor(props) {
+      super(props);
+      this.userInfo = storeWithMiddleware.getState().userInfo;
+      this.permissionsSatisfied = !reqPermissions || this.userInfo && reqPermissions.every(reqRole => this.userInfo.permissions.includes(reqRole)) ? true : false;
+    }
+
     componentWillMount() { //check auth
-      if (!localStorage.jwt) {
-        if (this.props.location.pathname != '/') {
-          this.props.history.push('/', {referrer: this.props.location.pathname});
-        }
+      const { location, history } = this.props;
+      if (!this.userInfo) {
+        if (location.pathname !== '/') history.push('/', {referrer: location.pathname});
       }
-      else if (jwtDecode(localStorage.jwt).sub.roles.includes(0) && this.props.location.pathname != '/profile') {
-        this.props.history.push('/profile', {referrer: this.props.location.pathname});
+      else {
+        if (this.userInfo.permissions.includes(INCOMPLETE) && location.pathname !== '/profile') history.push('/profile', {referrer: location.pathname});
+        else if (!this.permissionsSatisfied && location.pathname !== '/') history.push('/'); //in this case, don't want to pass referrer
       }
     }
 
     render() {
-      return localStorage.jwt ?
-        jwtDecode(localStorage.jwt).sub.roles.includes(0) ?
-          PassedComponent === Profile ? <PassedComponent {...this.props} {...extraProps} /> : null
-        :
-         <PassedComponent { ...this.props }  {...extraProps} />
-      : PassedComponent === Home ? <PassedComponent {...this.props} {...extraProps} /> : null
+        if (this.permissionsSatisfied) return <PassedComponent {...this.props} {...extraProps} />;
+        else return null;
     }
   }
 

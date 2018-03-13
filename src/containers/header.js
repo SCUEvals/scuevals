@@ -8,34 +8,36 @@ import ReactGA from 'react-ga';
 import { setUserInfo, setSearchResults } from '../actions';
 import SearchBar from './searchBar';
 import '../styles/header.scss';
+import { INCOMPLETE, READ_EVALUATIONS } from '../index';
 
 class Header extends Component {
 
   static propTypes = {
     userInfo: PropTypes.object,
-    setUserInfo: PropTypes.func,
-    setSearchResults: PropTypes.func,
-    location: PropTypes.object,
-    history: PropTypes.object
+    setUserInfo: PropTypes.func.isRequired,
+    setSearchResults: PropTypes.func.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
   }
 
   componentDidMount() {
+    const { userInfo } = this.props;
     let pushFooter = document.getElementById('push-footer');
-    if (this.props.userInfo && !this.props.userInfo.roles.includes(0)) pushFooter.classList.remove('flex');
+    if (userInfo && !userInfo.permissions.includes(INCOMPLETE) && userInfo.permissions.includes(READ_EVALUATIONS)) pushFooter.classList.remove('flex');
     else pushFooter.classList.add('flex');
   }
 
   componentWillUpdate(nextProps) {
     if (nextProps.userInfo !== this.props.userInfo) {
       let pushFooter = document.getElementById('push-footer');
-      if (nextProps.userInfo && !nextProps.userInfo.roles.includes(0)) pushFooter.classList.remove('flex');
+      if (nextProps.userInfo && !nextProps.userInfo.permissions.includes(INCOMPLETE) && nextProps.userInfo.permissions.includes(READ_EVALUATIONS)) pushFooter.classList.remove('flex');
       else pushFooter.classList.add('flex');
     }
   }
 
   render() {
     const { setUserInfo, userInfo, setSearchResults } = this.props;
-    if (this.props.userInfo && !this.props.userInfo.roles.includes(0)) {
+    if (userInfo && !userInfo.permissions.includes(INCOMPLETE) && userInfo.permissions.includes(READ_EVALUATIONS)) {
       return (
         <header>
           <SearchBar location={this.props.location} history={this.props.history} />
@@ -49,7 +51,6 @@ class Header extends Component {
             </Link>
             <button className='btn' styleName='signOutBtn' type='button' onClick={() => {
               setSearchResults(null);
-              localStorage.removeItem('jwt');
               setUserInfo(null);
               ReactGA.set({ userId: undefined });
               if (this.props.history.location.pathname !== '/') this.props.history.push('/');

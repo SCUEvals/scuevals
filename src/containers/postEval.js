@@ -6,17 +6,21 @@ import Slider from 'rc-slider';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
 import { connect } from 'react-redux';
 import ReactGA from "react-ga";
+import { Link, Prompt } from 'react-router-dom';
 
 import API from '../services/api';
 import TextOptions from '../components/textOptions';
 import '../../node_modules/rc-slider/dist/rc-slider.min.css?global';
 import '../styles/postEval.scss';
 import RedirectModal from '../components/redirectModal';
+import { setUserInfo, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } from '../actions';
+import { READ_EVALUATIONS } from '../index';
 
 class PostEval extends Component {
 
   static propTypes = {
-    userInfo: PropTypes.object,
+    userInfo: PropTypes.object.isRequired,
+    departmentsList: PropTypes.object,
     quartersList: PropTypes.object,
     coursesList: PropTypes.object,
     professorsList: PropTypes.object,
@@ -24,7 +28,12 @@ class PostEval extends Component {
     submitting: PropTypes.bool.isRequired,
     location: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
-    match: PropTypes.object.isRequired
+    match: PropTypes.object.isRequired,
+    setUserInfo: PropTypes.func.isRequired,
+    setDepartmentsList: PropTypes.func.isRequired,
+    setProfessorsList: PropTypes.func.isRequired,
+    setQuartersList: PropTypes.func.isRequired,
+    setCoursesList: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -32,24 +41,50 @@ class PostEval extends Component {
     this.state = {
       term: '',
       classInfo: undefined,
-      submitted: false
+      submitted: false,
+      initial_read_access: props.userInfo.permissions.includes(READ_EVALUATIONS)
     };
-    let client = new API();
+    const client = new API();
     //course and professor swapped because API currently has different order than site
     client.get(`/classes/${props.match.params.quarter_id}/${props.match.params.professor_id}/${props.match.params.course_id}`, classInfo => this.setState({classInfo}))
     .catch(() => this.setState({classInfo: null}));
+
+    const { userInfo, departmentsList, quartersList, coursesList, professorsList, setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList } = props;
+    if (!userInfo.permissions.includes(READ_EVALUATIONS)) {
+      if (!departmentsList) {
+        const client = new API();
+        client.get('/departments', departments => setDepartmentsList(departments));
+      }
+      if (!quartersList) {
+        const client = new API();
+        client.get('/quarters', quarters => setQuartersList(quarters));
+      }
+      if (!coursesList) {
+        const client = new API();
+        client.get('/courses', courses => setCoursesList(courses, departmentsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+      }
+      if (!professorsList) {
+        const client = new API();
+        client.get('/professors', professors => setProfessorsList(professors));
+      }
+    }
   }
 
+  componentDidUpdate() {
+    if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList)
+      this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList); //make deep copy of current, state immutable
+  }
 
   onSubmit(values) {
     const { quarter_id, course_id, professor_id } = this.props.match.params;
     const { display_majors, display_grad_year } = values;
     let evaluation = {...values};
-    let returnedObj = { quarter_id, course_id, professor_id, display_majors, display_grad_year, evaluation };
-    let client = new API();
-    return client.post('/evaluations', returnedObj, () => {
+    let sendingObj = { quarter_id, course_id, professor_id, display_majors, display_grad_year, evaluation };
+    const client = new API();
+    return client.post('/evaluations', sendingObj, responseData => {
       this.setState({submitted: true});
       ReactGA.event({category: 'Evaluation', action: 'Submitted'});
+      this.props.setUserInfo(responseData.jwt);
     });
   }
 
@@ -77,7 +112,7 @@ class PostEval extends Component {
       popperStyle.visibility = 'hidden';
       popperStyle.opacity = '0'; //needed for transition animation
     }
-    
+
     return (
       <Manager tag={false}>
         <Handle value={value} {...restProps}>
@@ -149,30 +184,51 @@ class PostEval extends Component {
   }
 
   render() {
-    const { quartersList, coursesList, professorsList, handleSubmit, submitting, userInfo, location, history } = this.props;
-    const { classInfo, submitted } = this.state;
+    const { quartersList, coursesList, professorsList, handleSubmit, submitting, userInfo, location, history, dirty } = this.props;
+    const { classInfo, submitted, initial_read_access } = this.state;
+    const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
     let quarter, course, professor;
     if (quartersList && coursesList && coursesList.departmentsListLoaded && professorsList) {
-      if (location.state) {
-        quarter = quartersList.object[location.state.quarter_id].label;
-        course = coursesList.object[location.state.course_id].label;
-        professor = professorsList.object[location.state.professor_id].label;
-      }
-      else if (classInfo) {
+      if (classInfo) {
         quarter = quartersList.object[classInfo.quarter.id].label;
         course = coursesList.object[classInfo.course.id].label;
         professor = professorsList.object[classInfo.professor.id].label;
+      }
+      else if (location.state) {
+        quarter = quartersList.object[location.state.quarter_id].label;
+        course = coursesList.object[location.state.course_id].label;
+        professor = professorsList.object[location.state.professor_id].label;
       }
     }
     if (location.state || classInfo !== undefined) { //passed values from postSearch
       return (
         <form styleName='postEval' onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
-          <RedirectModal history={history} redirectModalOpen={classInfo === null || classInfo && classInfo.user_posted || submitted} submitted={submitted} classInfoExists={classInfo && classInfo.user_posted ? true : false} />
-          <div styleName='postInfo'>
-            <h5>{quarter}</h5>
-            <h3>{course ? course : classInfo === null ? 'No class exists for this page.': 'Loading...'}</h3>
-            <h3>{professor}</h3>
+          <Prompt
+            when={dirty && !submitted}
+            message='Are you sure you want to go to navigate away before submitting your evaluation?'
+          />
+          {!read_access && (
+            <div className='noWriteDiv'>
+            <Link className='homeBtn' to={'/'}>
+              <i className="fa fa-home" />
+            </Link>
           </div>
+          )}
+          <RedirectModal permissionsUpgrade={!initial_read_access} history={history} redirectModalOpen={classInfo === null || classInfo && classInfo.user_posted || submitted} submitted={submitted} classInfoExists={classInfo && classInfo.user_posted} />
+          {quarter && course && professor ?
+            <div styleName='postInfo'>
+              <h5>{quarter}</h5>
+              <h3>{course}</h3>
+              <h3>{professor}</h3>
+            </div>
+          : classInfo === null ?
+            <div styleName='postInfo'>
+              <h3>No class exists for this page.</h3>
+            </div>
+          : <div styleName='postInfo'>
+              <h3>Loading...</h3>
+            </div>
+          }
           <div styleName='postGuidelines' className='row'>
             <div className='col-12 col-md-6'>
               <div className='card'>
@@ -268,6 +324,7 @@ const validate = values => {
 function mapStateToProps(state) {
   return {
     userInfo: state.userInfo,
+    departmentsList: state.departmentsList,
     quartersList: state.quartersList,
     coursesList: state.coursesList,
     professorsList: state.professorsList
@@ -278,4 +335,4 @@ export default reduxForm({
   validate,
   form: 'postEval',
   initialValues: { display_majors: true, display_grad_year: true }
-})(connect(mapStateToProps, null)(PostEval));
+})(connect(mapStateToProps, { setUserInfo, setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList })(PostEval));

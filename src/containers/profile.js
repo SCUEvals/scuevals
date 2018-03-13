@@ -9,6 +9,7 @@ import ReactGA from 'react-ga';
 import { setUserInfo, setMajorsList } from '../actions';
 import API from '../services/api';
 import '../styles/profile.scss';
+import { INCOMPLETE, READ_EVALUATIONS } from '../index';
 
 class Profile extends Component {
 
@@ -106,8 +107,7 @@ class Profile extends Component {
   onSubmit(values) {
     const client = new API();
     return client.patch(`/students/${this.props.userInfo.id}`, values, responseData => {
-      if (this.props.userInfo.roles.includes(0)) ReactGA.event({category: 'User', action: 'Completed Profile'});
-      localStorage.jwt = responseData.jwt;
+      if (this.props.userInfo.permissions.includes(INCOMPLETE)) ReactGA.event({category: 'User', action: 'Completed Profile'});
       this.props.setUserInfo(responseData.jwt);
       if (this.props.location.state) this.props.history.push(this.props.location.state.referrer);
       else this.props.history.push('/');
@@ -115,18 +115,27 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    if (this.props.userInfo.roles.includes(0)) { //don't need to check if majorsList or userInfo exists, majorsList shouldn't exist and userInfo should
-      let client = new API();
+    if (this.props.userInfo.permissions.includes(INCOMPLETE) || !this.props.userInfo.permissions.includes(READ_EVALUATIONS)) { //don't need to check if majorsList or userInfo exists, majorsList shouldn't exist and userInfo should
+      const client = new API();
       client.get('/majors', majorsList =>this.props.setMajorsList(majorsList));
     }
   }
 
   render() {
     const { handleSubmit, history, setUserInfo, userInfo, submitting, majorsList } = this.props;
+    const incomplete = userInfo.permissions.includes(INCOMPLETE);
+    const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
     const profileInfo = 'This information may only be used anonymously for statistical purposes.\nYour name is kept hidden at all times.';
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
-          {userInfo && !userInfo.roles.includes(0) ?
+        {!read_access && (
+          <div className='noWriteDiv'>
+            <Link className='homeBtn noWriteHomeBtn' to={'/'}>
+              <i className="fa fa-home" />
+            </Link>
+          </div>
+        )}
+          {!incomplete ?
             <div>
               <h4 className='banner'>{`${userInfo.first_name}'s Profile`}</h4>
               <small>{profileInfo}</small>
@@ -137,19 +146,18 @@ class Profile extends Component {
             <p>Before we start, we need to know a few things about you.</p>
             <small>{profileInfo}<br/>
             <button type="button" onClick={() => {
-              localStorage.removeItem('jwt');
               setUserInfo(null);
               history.push('/');
               }}
-              styleName="signOutBtn">
+              className="signOutBtn">
               Sign Out
             </button>
           </small>
         </div>
         }
         <hr />
-        {userInfo && !userInfo.roles.includes(0) ? <Link className='btn' to='/profile/evals'>Manage my Evals</Link> : ''}
-        {userInfo && !userInfo.roles.includes(0) ? <hr /> : ''}
+        {!incomplete && (<Link className='btn' to='/profile/evals'>Manage my Evals</Link>)}
+        {!incomplete &&  (<hr />)}
         <div styleName='form-container'>
           <h5>Major(s)</h5>
           <Field

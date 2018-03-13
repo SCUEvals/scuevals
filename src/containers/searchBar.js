@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList } from '../actions';
 import debounce from 'lodash.debounce';
 import { Link } from 'react-router-dom';
 
 import '../styles/searchBar.scss';
 import API from '../services/api';
+import { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList } from '../actions';
 
 class SearchBar extends Component {
 
@@ -39,24 +39,24 @@ class SearchBar extends Component {
     };
     this.debouncedGetResponse = debounce(this.debouncedGetResponse, 250);
     if (!this.props.departmentsList) {
-      let client = new API();
-      client.get('/departments', departmentsList => this.props.setDepartmentsList(departmentsList));
-    }
-    if (!this.props.professorsList) {
-      let client = new API();
-      client.get('/professors', professorsList => this.props.setProfessorsList(professorsList));
+      const client = new API();
+      client.get('/departments', departments => this.props.setDepartmentsList(departments));
     }
     if (!this.props.quartersList) {
-      let client = new API();
-      client.get('/quarters', quartersList => this.props.setQuartersList(quartersList));
+      const client = new API();
+      client.get('/quarters', quarters => this.props.setQuartersList(quarters));
     }
     if (!this.props.coursesList) {
-      let client = new API();
-      client.get('/courses', coursesList =>this.props.setCoursesList(coursesList, this.props.departmentsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+      const client = new API();
+      client.get('/courses', courses =>this.props.setCoursesList(courses, this.props.departmentsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+    }
+    if (!this.props.professorsList) {
+      const client = new API();
+      client.get('/professors', professors => this.props.setProfessorsList(professors));
     }
     if (!this.props.majorsList) {
-      let client = new API();
-      client.get('/majors', majorsList =>this.props.setMajorsList(majorsList));
+      const client = new API();
+      client.get('/majors', majors =>this.props.setMajorsList(majors));
     }
   }
 
@@ -68,7 +68,7 @@ class SearchBar extends Component {
   getResponse(searchVal, setSearchResults) { //same as debouncedGetResponse but without delay
     $('#searchBarResults').hide(); //hide results dropdown after new results in until new input entered after
     if (searchVal && setSearchResults) {
-      let client = new API();
+      const client = new API();
       client.get('/search', responseData => {
           responseData.term = searchVal;
           this.sortResponseData(responseData);
@@ -81,7 +81,7 @@ class SearchBar extends Component {
 
   debouncedGetResponse(searchVal, setSearchResults) {
     if (searchVal && setSearchResults) {
-      let client = new API();
+      const client = new API();
       if (this.form) {
         this.setState({loading: true}, () => client.get('/search', responseData => {
             if (this.form) {

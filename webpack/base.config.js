@@ -1,9 +1,8 @@
 const webpack = require('webpack');
-const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
-const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 
 const defineAPIURL = new webpack.DefinePlugin({
   'API_URL': JSON.stringify(process.env.API_URL)
@@ -11,12 +10,12 @@ const defineAPIURL = new webpack.DefinePlugin({
 
 const htmlWebpackPluginConfig = new HTMLWebpackPlugin({
   template: './src/index.html',
-  filename: 'index.html',
-  inject: 'head'
+  filename: './index.html',
+  // inject: 'head'
 });
 
 const scriptExtHtmlWebpackPluginConfig = new ScriptExtHtmlWebpackPlugin({
-  defaultAttribute: 'async'
+  defaultAttribute: 'defer'
 });
 
 const extractStyle = new ExtractTextPlugin({
@@ -118,12 +117,11 @@ module.exports = {
 
   output: {
     filename: 'bundle.[hash].min.js',
-    path: path.join(__dirname, '..', 'build'),
     publicPath: '/'
   },
 
   plugins: [
-    defineAPIURL, htmlWebpackPluginConfig, scriptExtHtmlWebpackPluginConfig,
-    extractStyle, styleLintPluginConfig
+    defineAPIURL, htmlWebpackPluginConfig, //scriptExtHtmlWebpackPluginConfig,
+    extractStyle, //styleLintPluginConfig
   ],
 };

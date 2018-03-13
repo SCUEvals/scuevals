@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import BootstrapTable from 'react-bootstrap-table-next';
 import { Link } from 'react-router-dom';
 
 import { setSearchResults } from '../actions';
@@ -26,7 +26,7 @@ class SearchContent extends Component {
 
   componentWillMount() {
     if (this.props.match.params.search.length > 2 && this.props.history.action === 'POP') { //if loading this component straight from GET request (rather than being routed with React Router (action would be PUSH))
-      let client = new API();
+      const client = new API();
       client.get('/search', responseData => {
           this.sortResponseData(responseData);
           this.props.setSearchResults(responseData);
@@ -67,35 +67,85 @@ class SearchContent extends Component {
     });
   }
 
-  sortCourseTitles(a, b, order, departmentsList) {
-    if (departmentsList) {
-      if (order=='asc') {
-        if (a.department_id == b.department_id) {
-          //nums can have letters in them too (ex. 12L), so parse integers and compare
-          let parsedANum = parseInt(a.number, 10);
-          let parsedBNum = parseInt(b.number, 10);
-          //if integers same, check for letters to decide
-          if (parsedANum == parsedBNum) return a.number > b.number ? 1 : a.number < b.number ? -1 : 0;
-          return parsedANum > parsedBNum ? 1 : parsedANum < parsedBNum ? -1 : 0;
-        }
-        else return departmentsList[a.department_id].abbr > departmentsList[b.department_id].abbr ? 1 : departmentsList[a.department_id].abbr < departmentsList[b.department_id].abbr ? -1 : 0;
+  sortCourseTitles(a, b, order) {
+    const splitA = a.split(' ');
+    const splitB = b.split(' ');
+    let aDepartment = splitA[0];
+    let bDepartment = splitB[0];
+    if (order === 'asc') {
+      if (aDepartment === bDepartment) {
+        //nums can have letters in them too (ex. 12L), so parse integers and compare
+        let parsedANum = parseInt(splitA[1], 10);
+        let parsedBNum = parseInt(splitB[1], 10);
+        //if integers same, check for letters to decide
+        if (parsedANum === parsedBNum) return a > b ? 1 : a < b ? -1 : 0;
+        else return parsedANum > parsedBNum ? 1 : parsedANum < parsedBNum ? -1 : 0;
       }
-      else {
-        if (a.department_id == b.department_id) {
-          //nums can have letters in them too (ex. 12L), so parse integers and compare
-          let parsedANum = parseInt(a.number, 10);
-          let parsedBNum = parseInt(b.number, 10);
-          //if integers same, check for letters to decide
-          if (parsedANum == parsedBNum) return a.number > b.number ? -1 : a.number < b.number ? 1 : 0;
-          return parsedANum > parsedBNum ? -1 : parsedANum < parsedBNum ? 1 : 0;
-        }
-        else return departmentsList[a.department_id].abbr > departmentsList[b.department_id].abbr ? -1 : departmentsList[a.department_id].abbr < departmentsList[b.department_id].abbr ? 1 : 0;
-      }
+      else return aDepartment > bDepartment ? 1 : aDepartment < bDepartment ? -1 : 0;
     }
+    else {
+      if (aDepartment === bDepartment) {
+        //nums can have letters in them too (ex. 12L), so parse integers and compare
+        let parsedANum = parseInt(splitA[1], 10);
+        let parsedBNum = parseInt(splitB[1], 10);
+        //if integers same, check for letters to decide
+        if (parsedANum === parsedBNum) return a > b ? -1 : a < b ? 1 : 0;
+        return parsedANum > parsedBNum ? -1 : parsedANum < parsedBNum ? 1 : 0;
+      }
+      else return aDepartment > bDepartment ? -1 : aDepartment < bDepartment ? 1 : 0;
+    }
+  }
+
+  courseNumberFormatter(cell, row, departmentsList) {
+    return <Link to={`/courses/${row.id}`}>{departmentsList[row.department_id].abbr} {row.number}</Link>;
+  }
+
+  courseTitleFormatter(cell, row) {
+    return <Link to={`/courses/${row.id}`}>{row.title}</Link>;
+  }
+
+  nameFormatter(cell, row) {
+    return <Link to={`/professors/${row.id}`}>{`${row.last_name}, ${row.first_name}`}</Link>;
   }
 
   render() {
     const { searchResults, departmentsList } = this.props;
+    const coursesColumns = [
+      {
+        dataField: 'course',
+        text: 'Course',
+        formatter: (cell, row) => this.courseNumberFormatter(cell, row, departmentsList),
+        sort: true,
+        sortFunc: this.sortCourseTitles,
+        dataAlign: 'center'
+      },
+      {
+        dataField: 'title',
+        text: 'Title',
+        formatter: this.courseTitleFormatter,
+        sort: true,
+        dataAlign: 'center'
+      }
+    ];
+    const professorsColumns = [
+      {
+        dataField: 'name',
+        text: 'Name',
+        formatter: this.nameFormatter,
+        sort: true,
+        dataAlign: 'center'
+      }
+    ];
+    const labeledSearchResults = searchResults ? Object.assign({}, searchResults) : null;
+    if (searchResults && departmentsList) {
+      labeledSearchResults.courses.map(obj => {
+        obj.course = departmentsList[obj.department_id].abbr + ' ' + obj.number;
+        obj.title = obj.title;
+        obj.key = obj.course + obj.title;
+      });
+      labeledSearchResults.professors.map(obj => obj.name = obj.last_name + ', ' + obj.first_name);
+    }
+
     $('#searchBarResults').hide();
 
     if (searchResults && !searchResults.loading) {
@@ -106,28 +156,36 @@ class SearchContent extends Component {
             :
             <h5>{`Showing results for "${this.props.match.params.search}"`}</h5>
           }
-          {searchResults.professors.length > 0 ?
+          {searchResults.professors.length > 0 && (
             <div>
               <h4>Professors</h4>
-              <BootstrapTable withoutTabIndex version='4' data={searchResults.professors} striped={true} hover={true}>
-                <TableHeaderColumn dataFormat={nameFormatter} dataField="last_name" isKey={true} dataAlign="center" dataSort={true}>Name</TableHeaderColumn>
-              </BootstrapTable>
+              <BootstrapTable
+                data={labeledSearchResults.professors}
+                columns={professorsColumns}
+                keyField='name'
+                withoutTabIndex
+                version='4'
+                striped
+                hover
+              />
             </div>
-            : ''
-          }
-          {searchResults.courses.length > 0  && departmentsList ?
+          )}
+          {searchResults.courses.length > 0  && departmentsList && (
             <div>
               <h4>Courses</h4>
-              <BootstrapTable withoutTabIndex version='4' data={searchResults.courses} striped={true} hover={true}>
-                <TableHeaderColumn dataFormat={(cell, row) => courseNumberFormatter(cell, row, departmentsList)} dataField="number" dataSort sortFunc={(a, b, order) => this.sortCourseTitles(a, b, order, departmentsList) } dataAlign="center">Course</TableHeaderColumn>
-                <TableHeaderColumn dataFormat={courseTitleFormatter} dataField="title" isKey={true} dataSort sortFunc={ this.revertSortFunc } dataAlign="center">Title</TableHeaderColumn>
-              </BootstrapTable>
+              <BootstrapTable
+                data={labeledSearchResults.courses}
+                columns={coursesColumns}
+                keyField='key'
+                withoutTabIndex
+                version='4'
+                striped
+                hover
+              />
             </div>
-            : ''
-          }
+          )}
         </div>
-      ); /* note: isKey={true} is not correctly set since there is no column displayed that is entirely unique,
-      but it is needed to render. However, it does not affect functionality in this case*/
+      );
     } else if (this.props.match.params.search.length > 2) {
       return (
         <div className="loadingWrapper">
@@ -142,18 +200,6 @@ class SearchContent extends Component {
       );
     }
   }
-}
-
-function nameFormatter(cell, row) {
-  return <Link to={`/professors/${row.id}`}>{`${row.last_name}, ${row.first_name}`}</Link>;
-}
-
-function courseNumberFormatter(cell, row, departmentsList) {
-  return  <Link to={`/courses/${row.id}`}>{departmentsList[row.department_id].abbr} {row.number}</Link>;
-}
-
-function courseTitleFormatter(cell, row) {
-  return  <Link to={`/courses/${row.id}`}>{row.title}</Link>;
 }
 
 function mapStateToProps(state) {
