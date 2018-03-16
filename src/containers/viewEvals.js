@@ -358,8 +358,8 @@ class ViewEvals extends Component {
                     newInfo.evaluations[index].votes_score = newScore;
                     this.setState({info: newInfo});
                   }}
-                  openModal={(type, x, secondId, eval_id) => {
-                    switch (type) {
+                  openModal={(modalType, x, secondId, eval_id) => {
+                    switch (modalType) {
                       case 'flag': //x = comment
                         this.setState({flagModal: {open: true, comment: x}});
                         break;

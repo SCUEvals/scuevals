@@ -1,12 +1,7 @@
 @import "theme";
 
-:global(.modalBlock) {
+.deleteModal {
   button {
-    margin: 15px;
     width: 65px;
-  }
-
-  div {
-    padding: 0 15px;
   }
 }

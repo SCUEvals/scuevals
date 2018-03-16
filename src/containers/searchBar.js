@@ -65,7 +65,7 @@ class SearchBar extends Component {
       this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList); //make deep copy of current, state immutable
   }
 
-  getResponse(searchVal, setSearchResults) { //same as debouncedGetResponse but without delay
+  getResponse(searchVal, setSearchResults) { //similar to debouncedGetResponse but without delay
     $('#searchBarResults').hide(); //hide results dropdown after new results in until new input entered after
     if (searchVal && setSearchResults) {
       const client = new API();
@@ -133,7 +133,7 @@ class SearchBar extends Component {
         <label className="sr-only">{field.label}</label>
         <div id='searchBar' styleName={submitFailed && error ? 'search-error' : ''} className='col-12 col-md-8 mx-auto input-group'>
           <input
-            onChange={event => input.onChange(event)}
+            onChange={input.onChange}
             className='form-control'
             type='text'
             placeholder='Search for professor or class'

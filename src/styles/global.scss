@@ -109,8 +109,9 @@ form.content {
 
 label {
   display: flex;
+  justify-content: center;
   align-items: center;
-  margin-bottom: 0;
+  font-size: 1.1rem; //h6 size
 
   input[type='radio'] {
     margin-right: 5px;
@@ -435,38 +436,39 @@ a.homeBtn {
 
 .Modal {
   @include fixedCenter;
+  border-radius: $defaultBorderRadius;
+  background: white;
+  position: relative;
+  border: 2px solid $backgroundColor;
 
-  .modalPanel {
-    border-radius: $defaultBorderRadius;
+  button {
+    margin: 15px 15px 0 15px;
+  }
+
+  h5 {
+    margin-bottom: 0;
+    padding: 5px;
+  }
+
+  .modalHeader {
+    background: $backgroundColor;
+
+    a.homeBtn {
+      float: left;
+      margin-top: -6px;
+    }
+
+    i.fa-times {
+      position: absolute;
+      top: -1px;
+      right: 1px;
+      font-size: 20px;
+    }
+  }
+
+  .modalBlock {
     background: white;
-    position: relative;
-    border: 2px solid $backgroundColor;
-
-    h5 {
-      margin-bottom: 0;
-      padding: 5px;
-    }
-
-    .modalHeader {
-      background: $backgroundColor;
-
-      a.homeBtn {
-        float: left;
-        margin-top: -6px;
-      }
-
-      i.fa-times {
-        position: absolute;
-        top: -1px;
-        right: 1px;
-        font-size: 20px;
-      }
-    }
-
-    .modalBlock {
-      background: white;
-      padding: 15px;
-    }
+    padding: 15px;
   }
 
   width: 100%;
