@@ -46,6 +46,7 @@ label {
 
 label > input[type='checkbox'] {
   margin-left: 5px;
+  vertical-align: middle;
 }
 
 .btn {
@@ -108,9 +109,6 @@ form.content {
 }
 
 label {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-size: 1.1rem; //h6 size
 
   input[type='radio'] {
@@ -257,6 +255,10 @@ label:not(:first-child) input[type='radio'] {
       max-height: 205px;
     }
   }
+
+  &.select-error .Select-control {
+    border-color: $SCUred !important;
+  }
 }
 
 .Select-control {
@@ -266,10 +268,6 @@ label:not(:first-child) input[type='radio'] {
   &:focus {
     border-color: $focusColor;
   }
-}
-
-.error .Select-control {
-  border: 2px solid $SCUred;
 }
 
 .Select.is-disabled > .Select-control {
@@ -434,12 +432,14 @@ a.homeBtn {
   }
 }
 
-.Modal {
+.reactModal {
   @include fixedCenter;
-  border-radius: $defaultBorderRadius;
-  background: white;
-  position: relative;
-  border: 2px solid $backgroundColor;
+  width: 100%;
+
+  .modalWrapper {
+    border-radius: $defaultBorderRadius;
+    border: 2px solid $backgroundColor;
+  }
 
   button {
     margin: 15px 15px 0 15px;
@@ -452,6 +452,7 @@ a.homeBtn {
 
   .modalHeader {
     background: $backgroundColor;
+    position: relative;
 
     a.homeBtn {
       float: left;
@@ -460,8 +461,8 @@ a.homeBtn {
 
     i.fa-times {
       position: absolute;
-      top: -1px;
-      right: 1px;
+      top: 1px;
+      right: 3px;
       font-size: 20px;
     }
   }
@@ -470,9 +471,6 @@ a.homeBtn {
     background: white;
     padding: 15px;
   }
-
-  width: 100%;
-  max-width: 750px;
 }
 
 .banner {
@@ -734,4 +732,18 @@ svg.score {
   .widget {
     min-width: 478px;
   }
+}
+
+.error {
+  border: 2px solid $SCUred;
+  border-radius: $defaultBorderRadius;
+}
+
+.no-error {
+  border: 2px solid transparent;
+  border-radius: $defaultBorderRadius;
+}
+
+.comment-error {
+  border: 2px solid $SCUred !important;
 }

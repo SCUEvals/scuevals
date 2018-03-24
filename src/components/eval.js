@@ -20,7 +20,7 @@ class Eval extends Component {
     lines: PropTypes.number.isRequired,
     more: PropTypes.string.isRequired,
     less: PropTypes.string.isRequired,
-    vote_access: PropTypes.bool.isRequired
+    vote_access: PropTypes.bool
   }
 
   static defaultProps = {
@@ -301,9 +301,9 @@ class Eval extends Component {
                   :
                   <i className='fa fa-flag'
                     tabIndex='0'
-                    onClick={() => openModal('flag', evaluation.data.comment, evaluation.id)}
+                    onClick={() => openModal('flag', evaluation.data.comment, null, evaluation.id)}
                     onKeyPress={event => {
-                      if (event.key === 'Enter') openModal('flag', evaluation.data.comment, evaluation.id);
+                      if (event.key === 'Enter') openModal('flag', evaluation.data.comment, null, evaluation.id);
                     }}
                    />
                 }

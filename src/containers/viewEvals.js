@@ -33,7 +33,7 @@ class ViewEvals extends Component {
     super(props);
     this.state = {
       info: null,
-      flagModal: { open: false, comment: undefined, id: undefined },
+      flagModal: { open: false, comment: undefined, eval_id: undefined },
       deleteModal: { open: false, quarter_id: undefined, course_id: undefined, professor_id: undefined, eval_id: undefined },
       sortValue: null
     };
@@ -153,7 +153,9 @@ class ViewEvals extends Component {
       <div className="content" styleName='viewEvals'>
         <FlagModal
           flagModalOpen={flagModal.open}
+          comment={flagModal.comment}
           closeFlagModal={() => this.setState({flagModal: {open: false }})}
+          evalId={flagModal.eval_id}
         />
         <DeleteModal
           deleteModalOpen={deleteModal.open}
@@ -361,7 +363,7 @@ class ViewEvals extends Component {
                   openModal={(modalType, x, secondId, eval_id) => {
                     switch (modalType) {
                       case 'flag': //x = comment
-                        this.setState({flagModal: {open: true, comment: x}});
+                        this.setState({flagModal: {open: true, comment: x, eval_id}});
                         break;
                       case 'delete': //x = quarter_id
                         switch (type) {

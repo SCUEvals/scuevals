@@ -33,7 +33,8 @@ class PostEval extends Component {
     setDepartmentsList: PropTypes.func.isRequired,
     setProfessorsList: PropTypes.func.isRequired,
     setQuartersList: PropTypes.func.isRequired,
-    setCoursesList: PropTypes.func.isRequired
+    setCoursesList: PropTypes.func.isRequired,
+    dirty: PropTypes.bool.isRequired
   };
 
   constructor(props) {
@@ -78,8 +79,8 @@ class PostEval extends Component {
   onSubmit(values) {
     const { quarter_id, course_id, professor_id } = this.props.match.params;
     const { display_majors, display_grad_year } = values;
-    let evaluation = {...values};
-    let sendingObj = { quarter_id, course_id, professor_id, display_majors, display_grad_year, evaluation };
+    const evaluation = {...values};
+    const sendingObj = { quarter_id, course_id, professor_id, display_majors, display_grad_year, evaluation };
     const client = new API();
     return client.post('/evaluations', sendingObj, responseData => {
       this.setState({submitted: true});
@@ -287,6 +288,7 @@ class PostEval extends Component {
             {`Display ${userInfo.majors.length > 1 ? 'majors' : 'major'}`}
             <Field name='display_majors' component='input' type='checkbox' />
           </label>
+          <br />
           <label>
             Display graduation year
             <Field name='display_grad_year' component='input' type='checkbox' />
