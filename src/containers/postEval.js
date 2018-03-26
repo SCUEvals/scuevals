@@ -91,6 +91,7 @@ class PostEval extends Component {
 
   renderTextArea(field) {
     const { meta: {submitFailed, error} } = field;
+    console.log('error:', error);
     return (
       <TextareaAutoSize className={submitFailed && error ? 'comment-error' : ''} minRows={5} {...field.input} placeholder="Write your constructive review here"/>
     )
@@ -314,7 +315,7 @@ const validate = values => {
   if (!values.availability) errors.availability = 'Required';
   if (!values.clarity) errors.clarity = 'Required';
   if (!values.comment) errors.comment = 'Required';
-  if (values.comment && values.comment.length > 1000) 'Message longer than 1000 characters.';
+  if (values.comment && values.comment.length > 1000) errors.comment = 'Message longer than 1000 characters.';
   if (!values.easiness) errors.easiness = 'Required';
   if (!values.grading_speed) errors.grading_speed = 'Required';
   if (!values.recommended) errors.recommended = 'Required';

@@ -12,9 +12,8 @@ class NonStudentModal extends Component {
   render() {
     const { nonStudentModalOpen, closeNonStudentModal } = this.props;
     return (
-      <ReactModal isOpen={nonStudentModalOpen} className='Modal' appElement={document.getElementById('app')}>
-        <div className='container'>
-        <div className='modalPanel'>
+      <ReactModal isOpen={nonStudentModalOpen} className='reactModal container' appElement={document.getElementById('app')}>
+        <div className='modalWrapper'>
           <div className='modalHeader'>
             <h5>Notice!</h5>
             <i tabIndex='0' className='fa fa-times'
@@ -31,7 +30,6 @@ class NonStudentModal extends Component {
             Sorry for the inconvenience.
           </div>
         </div>
-      </div>
       </ReactModal>
     );
   }

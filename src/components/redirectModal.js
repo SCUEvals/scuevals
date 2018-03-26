@@ -35,30 +35,32 @@ class RedirectModal extends Component {
         ref={node => this.redirectModal = node}
         isOpen={redirectModalOpen}
         onAfterOpen={() => setTimeout(() => {if (this.redirectModal) this.setState({seconds: seconds - 1})}, 1000)}
-        className='Modal'
+        className='reactModal container'
         appElement={document.getElementById('app')}>
-        <div className='modalHeader'>
-          <h5>
-            <Link className='homeBtn' to='/'><i className='fa fa-home' /></Link>
-            {classInfoExists || !submitted ?
-              'Oops!'
-            : 'Thank you!'
-            }
-          </h5>
-        </div>
-        <div className='modalBlock'>
-          <p>{
-            classInfoExists ?
-              'Looks like you already posted for this class.'
-            : submitted ?
-              'Great job submitting an eval!'
-            : 'Class does not exist for this page.'
-          }</p>
-          {submitted && permissionsUpgrade && (
-            <p>You now have unlimited access to the site again until the end of this quarter.</p>
-          )}
-          <hr />
-          Redirecting to home in {seconds}...
+        <div className='modalWrapper'>
+          <div className='modalHeader'>
+            <h5>
+              <Link className='homeBtn' to='/'><i className='fa fa-home' /></Link>
+              {classInfoExists || !submitted ?
+                'Oops!'
+              : 'Thank you!'
+              }
+            </h5>
+          </div>
+          <div className='modalBlock'>
+            <p>{
+              classInfoExists ?
+                'Looks like you already posted for this class.'
+              : submitted ?
+                'Great job submitting an eval!'
+              : 'Class does not exist for this page.'
+            }</p>
+            {submitted && permissionsUpgrade && (
+              <p>You now have unlimited access to the site again until the end of this quarter.</p>
+            )}
+            <hr />
+            Redirecting to home in {seconds}...
+          </div>
         </div>
       </ReactModal>
     );

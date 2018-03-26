@@ -107,7 +107,7 @@ class FlagModal extends Component {
 
 const validate = values => {
   const errors = {};
-  if (Object.keys(values).length === 0 && values.constructor === Object) errors._error = 'Must select at least one'; //must be _error (supported in redux form API)
+  if (!values[FlagModal.OTHER] && !values[FlagModal.SPAM] && !values[FlagModal.OFFENSIVE] && !values[FlagModal.SENSITIVE_INFO]) errors._error = 'Must select at least one'; //must be _error (supported in redux form API)
   else if (values[FlagModal.OTHER] && !values.comment) errors.comment = 'Must describe other reason';
   return errors;
 }
