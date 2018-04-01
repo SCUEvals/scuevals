@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 
@@ -11,14 +11,14 @@ const defineAPIURL = new webpack.DefinePlugin({
 const htmlWebpackPluginConfig = new HTMLWebpackPlugin({
   template: './src/index.html',
   filename: './index.html',
-  // inject: 'head'
+  inject: 'head'
 });
 
 const scriptExtHtmlWebpackPluginConfig = new ScriptExtHtmlWebpackPlugin({
   defaultAttribute: 'defer'
 });
 
-const extractStyle = new ExtractTextPlugin({
+const extractStyle = new MiniCssExtractPlugin({
   filename: 'styles.[hash].min.css'
 });
 
@@ -72,44 +72,36 @@ module.exports = {
         test: /\.css$/,
         oneOf: [{
           resourceQuery: /global/,
-          use: extractStyle.extract({
-            fallback: 'style-loader',
-            use: [
-              {loader: 'css-loader', options: cssGlobalLoaderOptions},
-              {loader: 'postcss-loader', options: postCSSLoaderOptions}
-            ]
-          })
+          use: [
+            MiniCssExtractPlugin.loader,
+            {loader: 'css-loader', options: cssGlobalLoaderOptions},
+            {loader: 'postcss-loader', options: postCSSLoaderOptions}
+          ]
         }, {
-          use: extractStyle.extract({
-            fallback: 'style-loader',
-            use: [
-              {loader: 'css-loader', options: cssLoaderOptions},
-              {loader: 'postcss-loader', options: postCSSLoaderOptions}
-            ]
-          })
+          use: [
+            MiniCssExtractPlugin.loader,
+            {loader: 'css-loader', options: cssLoaderOptions},
+            {loader: 'postcss-loader', options: postCSSLoaderOptions}
+          ]
         }],
       },
       {
         test: /\.scss$/,
         oneOf: [{
           resourceQuery: /global/,
-          use: extractStyle.extract({
-            fallback: 'style-loader',
-            use: [
-              {loader: 'css-loader', options: cssGlobalLoaderOptions},
-              {loader: 'postcss-loader', options: postCSSLoaderOptions},
-              {loader: 'sass-loader', options: {sourceMap: true}}
-            ]
-          })
+          use: [
+            MiniCssExtractPlugin.loader,
+            {loader: 'css-loader', options: cssGlobalLoaderOptions},
+            {loader: 'postcss-loader', options: postCSSLoaderOptions},
+            {loader: 'sass-loader', options: {sourceMap: true}}
+          ]
         }, {
-          use: extractStyle.extract({
-            fallback: 'style-loader',
-            use: [
-              {loader: 'css-loader', options: cssLoaderOptions},
-              {loader: 'postcss-loader', options: postCSSLoaderOptions},
-              {loader: 'sass-loader', options: {sourceMap: true}}
-            ]
-          })
+          use: [
+            MiniCssExtractPlugin.loader,
+            {loader: 'css-loader', options: cssLoaderOptions},
+            {loader: 'postcss-loader', options: postCSSLoaderOptions},
+            {loader: 'sass-loader', options: {sourceMap: true}}
+          ]
         }]
       }
     ]
@@ -121,7 +113,9 @@ module.exports = {
   },
 
   plugins: [
-    defineAPIURL, htmlWebpackPluginConfig, //scriptExtHtmlWebpackPluginConfig,
-    extractStyle, //styleLintPluginConfig
+    defineAPIURL,
+    htmlWebpackPluginConfig,
+    scriptExtHtmlWebpackPluginConfig,
+    extractStyle,
   ],
 };
