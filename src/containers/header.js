@@ -8,7 +8,7 @@ import ReactGA from 'react-ga';
 import { setUserInfo, setSearchResults } from '../actions';
 import SearchBar from './searchBar';
 import '../styles/header.scss';
-import { INCOMPLETE, READ_EVALUATIONS } from '../index';
+import { INCOMPLETE, READ_EVALUATIONS, WRITE_EVALUATIONS } from '../index';
 
 class Header extends Component {
 
@@ -45,10 +45,17 @@ class Header extends Component {
             <Link to={'/'} className='homeBtn' styleName='headerHomeBtn'>
               <i className='fa fa-home' />
             </Link>
-            <Link className='btn' styleName='profileBtn' to={'/profile'}>
-              <img styleName='profile-img' src={userInfo.picture} alt='Profile picture' />
-              {userInfo.first_name}
-            </Link>
+            {userInfo.permissions.includes(WRITE_EVALUATIONS) ?
+              <Link className='btn' styleName='profileBtn' to={'/profile'}>
+                <img styleName='profile-img' src={userInfo.picture} alt='Profile picture' />
+                {userInfo.first_name}
+              </Link>
+              :
+              <div styleName='profileBtn-disabled'>
+                <img styleName='profile-img' src={userInfo.picture} alt='Profile picture' />
+                {userInfo.first_name}
+              </div>
+            }
             <button className='btn' styleName='signOutBtn' type='button' onClick={() => {
               setSearchResults(null);
               setUserInfo(null);

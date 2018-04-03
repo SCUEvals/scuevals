@@ -34,12 +34,15 @@ class Home extends Component {
   authWithBackEnd(token, referrer) {
     const client = new API();
     client.post('/auth', {id_token: token}, responseData => {
-      if (responseData.status === 'non-student') {
-        this.setState({nonStudentModalOpen: true});
-      }
-      else if (responseData.status === 'new') ReactGA.event({category: 'User', action: 'Signed Up'});
       let decodedJwt = jwtDecode(responseData.jwt);
       ReactGA.set({ userId: decodedJwt.sub.id });
+
+      if (responseData.status === 'new') {
+        ReactGA.event({category: 'User', action: 'Signed Up'});
+        ReactGA.set({ userId: decodedJwt.sub.id });
+        if (decodedJwt.sub.type === 'u') this.setState({nonStudentModalOpen: true});
+      }
+
       this.setState({loading: false}, () => {
         this.props.setUserInfo(responseData.jwt);
         // if (decodedJwt.sub.type === 's') {

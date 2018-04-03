@@ -24,10 +24,8 @@ class NonStudentModal extends Component {
             />
           </div>
           <div className='modalBlock'>
-            We noticed that you {`aren't`} a student at SCU. Temporarily, we are only allowing SCU students
-            access to the platform, but we will soon grant viewing access to non-SCU students with an SCU
-            email. If you feel this was a mistake, please contact us at <a href='mailto:scuevalsteam@gmail.com'>scuevalsteam@gmail.com</a>.
-            Sorry for the inconvenience.
+            We noticed that you {`aren't`} a student at SCU, but you still have an SCU email account. Therefore, you will be given
+            full reading rights to the website, but you will not be able to manipulate data shared by students.
           </div>
         </div>
       </ReactModal>
