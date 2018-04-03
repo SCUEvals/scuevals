@@ -16,11 +16,12 @@ if (localStorage.getItem('jwt')) {
 export default function(state = initState, action) {
   switch (action.type) {
 
-    case SET_USER_INFO:
+    case SET_USER_INFO: {
       if (!action.payload) return null; //if deleting userInfo
       let obj = {};
       obj.jwt = action.payload;
       return Object.assign(obj, jwtDecode(action.payload).sub);
+    }
 
     default:
       return state;

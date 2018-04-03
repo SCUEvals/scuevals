@@ -16,7 +16,9 @@ class FlagModal extends Component {
     submitting: PropTypes.bool.isRequired,
     submitFailed: PropTypes.bool.isRequired,
     comment: PropTypes.string,
-    error: PropTypes.string
+    error: PropTypes.string,
+    set_user_flagged: PropTypes.func,
+    user_flagged: PropTypes.bool
   }
 
   //inputs with only numbers as strings breaks redux form, so add "_val" at end (removed when using parseInt)
@@ -26,15 +28,19 @@ class FlagModal extends Component {
   static SENSITIVE_INFO = '3_val';
 
   onSubmit(values) {
-    const {OTHER, SPAM, OFFENSIVE, SENSITIVE_INFO} = this.constructor;
+    const { OTHER, SPAM, OFFENSIVE, SENSITIVE_INFO } = this.constructor;
+    const { set_user_flagged, closeFlagModal, evalId } = this.props;
     const client = new API();
     const arr = [];
     if (values[OTHER]) arr.push(parseInt(OTHER));
     if (values[SPAM]) arr.push(parseInt(SPAM));
     if (values[OFFENSIVE]) arr.push(parseInt(OFFENSIVE));
     if (values[SENSITIVE_INFO]) arr.push(parseInt(SENSITIVE_INFO));
-    const sendingObj = {reason_ids: arr};
-    return client.post(`/evaluations/${this.props.evalId}/flag`, sendingObj, this.props.closeFlagModal);
+    const sendingObj = {reason_ids: arr, comment: values.comment};
+    return client.post(`/evaluations/${evalId}/flag`, sendingObj, () => {
+      set_user_flagged();
+      closeFlagModal();
+    });
   }
 
   renderTextArea(field) {
@@ -50,7 +56,7 @@ class FlagModal extends Component {
   }
 
   render() {
-    const { flagModalOpen, closeFlagModal, handleSubmit, submitting, submitFailed, comment, evalId, error } = this.props;
+    const { flagModalOpen, closeFlagModal, handleSubmit, submitting, submitFailed, comment, error, user_flagged } = this.props;
     const {OTHER, SPAM, OFFENSIVE, SENSITIVE_INFO} = this.constructor;
     return (
       <ReactModal isOpen={flagModalOpen} className='reactModal container' appElement={document.getElementById('app')}>
@@ -67,37 +73,41 @@ class FlagModal extends Component {
           <div className='modalBlock'>
             <p style={{fontStyle: 'italic', maxHeight: '53px', overflow: 'auto', padding: '0 15px'}}>{comment}</p>
             <hr />
-            <p>To flag an evaluation, please fill the form below and we will do our best to take appropriate action if deemed necessary.</p>
-            <hr />
-            <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-              <div style={{marginBottom: '15px'}}>
-                <span style={{fontSize: '1.1rem', padding: '5px', marginBottom: '5px'}} className={error && submitFailed ? 'error' : 'no-error'}>
-                  Check all boxes that apply
-                </span>
-              </div>
-              <label>
-                Spam
-                <Field name={SPAM} component='input' type='checkbox' />
-              </label>
-              <br />
-              <label>
-                Offensive
-                <Field name={OFFENSIVE} component='input' type='checkbox' />
-              </label>
-              <br />
-              <label>
-                Sensitive Info
-                <Field name={SENSITIVE_INFO} component='input' type='checkbox' />
-              </label>
-              <br />
-              <label>
-                Other
-                <Field name={OTHER} component='input' type='checkbox' />
-              </label>
-              <br />
-              <Field name='comment' onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
-              <button disabled={submitting} type='submit' className='btn'>{submitting ? 'Submitting...' : 'Submit'}</button>
-            </form>
+            {user_flagged ?
+              'You have already flagged this evaluation.'
+              :
+              <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+                <p>To flag an evaluation, please fill the form below and we will do our best to take appropriate action if deemed necessary.</p>
+                <hr />
+                <div style={{marginBottom: '15px'}}>
+                  <span style={{fontSize: '1.1rem', padding: '5px', marginBottom: '5px'}} className={error && submitFailed ? 'error' : 'no-error'}>
+                    Check all boxes that apply
+                  </span>
+                </div>
+                <label>
+                  Spam
+                  <Field name={SPAM} component='input' type='checkbox' />
+                </label>
+                <br />
+                <label>
+                  Offensive
+                  <Field name={OFFENSIVE} component='input' type='checkbox' />
+                </label>
+                <br />
+                <label>
+                  Sensitive Info
+                  <Field name={SENSITIVE_INFO} component='input' type='checkbox' />
+                </label>
+                <br />
+                <label>
+                  Other
+                  <Field name={OTHER} component='input' type='checkbox' />
+                </label>
+                <br />
+                <Field name='comment' onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
+                <button disabled={submitting} type='submit' className='btn'>{submitting ? 'Submitting...' : 'Submit'}</button>
+              </form>
+            }
           </div>
         </div>
       </ReactModal>

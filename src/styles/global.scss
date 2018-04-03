@@ -180,6 +180,15 @@ label:not(:first-child) input[type='radio'] {
   height: auto !important;
 }
 
+.Select-control {
+  border-radius: $defaultBorderRadius;
+  border: 2px solid $backgroundColor;
+
+  &:focus {
+    border-color: $focusColor;
+  }
+}
+
 .Select {
   margin: auto auto 50px;
   max-width: 350px;
@@ -258,15 +267,6 @@ label:not(:first-child) input[type='radio'] {
 
   &.select-error .Select-control {
     border-color: $SCUred !important;
-  }
-}
-
-.Select-control {
-  border-radius: $defaultBorderRadius;
-  border: 2px solid $backgroundColor;
-
-  &:focus {
-    border-color: $focusColor;
   }
 }
 
@@ -365,6 +365,63 @@ textarea {
   }
 }
 
+a.homeBtn {
+  font-size: 1.75rem;
+
+  &.noAuthHomeBtn {
+    position: absolute;
+    left: 0;
+    top: -2px;
+  }
+
+  &:focus {
+    text-shadow: $textShadow;
+    border: 2px solid transparent !important;
+  }
+}
+
+.reactModal {
+  @include fixedCenter;
+
+  width: 100%;
+
+  .modalWrapper {
+    border-radius: $defaultBorderRadius;
+    border: 2px solid $backgroundColor;
+  }
+
+  button {
+    margin: 15px 15px 0 15px;
+  }
+
+  h5 {
+    margin-bottom: 0;
+    padding: 5px;
+  }
+
+  .modalHeader {
+    background: $backgroundColor;
+    position: relative;
+
+    a.homeBtn {
+      float: left;
+      margin-top: -6px;
+    }
+
+    i.fa-times {
+      position: absolute;
+      top: 1px;
+      right: 3px;
+      font-size: 20px;
+    }
+  }
+
+  .modalBlock {
+    background: white;
+    padding: 15px;
+  }
+}
+
 //target all focusable items to make focus color same for all items
 a[href],
 area[href],
@@ -414,62 +471,6 @@ button .fa {
 
   &:hover {
     color: $SCUdarkred;
-  }
-}
-
-a.homeBtn {
-  font-size: 1.75rem;
-
-  &.noAuthHomeBtn {
-    position: absolute;
-    left: 0;
-    top: -2px;
-  }
-
-  &:focus {
-    text-shadow: $textShadow;
-    border: 2px solid transparent !important;
-  }
-}
-
-.reactModal {
-  @include fixedCenter;
-  width: 100%;
-
-  .modalWrapper {
-    border-radius: $defaultBorderRadius;
-    border: 2px solid $backgroundColor;
-  }
-
-  button {
-    margin: 15px 15px 0 15px;
-  }
-
-  h5 {
-    margin-bottom: 0;
-    padding: 5px;
-  }
-
-  .modalHeader {
-    background: $backgroundColor;
-    position: relative;
-
-    a.homeBtn {
-      float: left;
-      margin-top: -6px;
-    }
-
-    i.fa-times {
-      position: absolute;
-      top: 1px;
-      right: 3px;
-      font-size: 20px;
-    }
-  }
-
-  .modalBlock {
-    background: white;
-    padding: 15px;
   }
 }
 

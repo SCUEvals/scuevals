@@ -33,7 +33,7 @@ class ViewEvals extends Component {
     super(props);
     this.state = {
       info: null,
-      flagModal: { open: false, comment: undefined, eval_id: undefined },
+      flagModal: { open: false, comment: undefined, eval_id: undefined, user_flagged: undefined, set_user_flagged: undefined },
       deleteModal: { open: false, quarter_id: undefined, course_id: undefined, professor_id: undefined, eval_id: undefined },
       sortValue: null
     };
@@ -156,6 +156,9 @@ class ViewEvals extends Component {
           comment={flagModal.comment}
           closeFlagModal={() => this.setState({flagModal: {open: false }})}
           evalId={flagModal.eval_id}
+          user_flagged={flagModal.user_flagged}
+          set_user_flagged={flagModal.set_user_flagged}
+
         />
         <DeleteModal
           deleteModalOpen={deleteModal.open}
@@ -360,23 +363,17 @@ class ViewEvals extends Component {
                     newInfo.evaluations[index].votes_score = newScore;
                     this.setState({info: newInfo});
                   }}
-                  openModal={(modalType, x, secondId, eval_id) => {
-                    switch (modalType) {
-                      case 'flag': //x = comment
-                        this.setState({flagModal: {open: true, comment: x, eval_id}});
+                  openDeleteModal={(quarter_id, secondId, eval_id) => {
+                    switch (type) {
+                      case 'courses':
+                        this.setState({deleteModal: {open: true, quarter_id, course_id: info.id, professor_id: secondId, eval_id}})
                         break;
-                      case 'delete': //x = quarter_id
-                        switch (type) {
-                          case 'courses':
-                            this.setState({deleteModal: {open: true, quarter_id: x, course_id: info.id, professor_id: secondId, eval_id}})
-                            break;
-                          case 'professors':
-                            this.setState({deleteModal: {open: true, quarter_id: x, course_id: secondId, professor_id: info.id, eval_id}});
-                            break;
-                        }
+                      case 'professors':
+                        this.setState({deleteModal: {open: true, quarter_id, course_id: secondId, professor_id: info.id, eval_id}});
                         break;
                     }
                   }}
+                  openFlagModal={(comment, eval_id, user_flagged, set_user_flagged) => this.setState({flagModal: {open: true, comment, eval_id, user_flagged, set_user_flagged}})}
                 />
               );
             })

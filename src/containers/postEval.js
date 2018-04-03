@@ -91,7 +91,6 @@ class PostEval extends Component {
 
   renderTextArea(field) {
     const { meta: {submitFailed, error} } = field;
-    console.log('error:', error);
     return (
       <TextareaAutoSize className={submitFailed && error ? 'comment-error' : ''} minRows={5} {...field.input} placeholder="Write your constructive review here"/>
     )
