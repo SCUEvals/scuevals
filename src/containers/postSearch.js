@@ -37,6 +37,8 @@ class PostSearch extends Component {
     super(props);
     const { departmentsList, quartersList, coursesList, professorsList, initialValues, userInfo, setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList } = props;
     this.state = {
+      alreadyPosted: false,
+      checkingIfPosted: false,
       localQuartersList: quartersList ? quartersList.array : undefined,
       localCoursesList: coursesList && coursesList.departmentsListLoaded ? coursesList.array : undefined,
       localProfessorsList: professorsList ? professorsList.array : undefined,
@@ -175,7 +177,7 @@ class PostSearch extends Component {
           isLoading={!localProfessorsList}
           onChange={newProfessor => {
             input.onChange(newProfessor);
-            if (newProfessor != input.value) populateFields(newProfessor);
+            if (newProfessor != input.value) populateFields(newProfessor)
           }}
           placeholder="Select your professor"
           onOpen={() => {
@@ -185,6 +187,13 @@ class PostSearch extends Component {
         />
       </div>
     );
+  }
+
+  authIfPosted(quarter, course, professor) { //pass in values as parameters rather than read from props because last selection won't be updated until next re-render, sending undefined as one of the ids
+    const client = new API();
+    //course and professor swapped because API currently has different order than site
+    this.setState({checkingIfPosted: true}, () => client.get(`/classes/${quarter}/${professor}/${course}`, classInfo => this.setState({checkingIfPosted: false, alreadyPosted: classInfo.user_posted}))
+    .catch(() => this.setState({checkingIfPosted: false})));
   }
 
   populateFields(currentField, field1, field2, newValue) {
@@ -211,7 +220,20 @@ class PostSearch extends Component {
     const client = new API();
     if (selectionOrder.includes(currentField)) {
       for (let i = selectionOrder.length - 1; i > 0; i--) { //clear values ahead of currentField. If at index 0, do nothing, so only loop while i > 0
-        if (selectionOrder[i] == currentField) break;
+        if (selectionOrder[i] === currentField) {
+          switch (currentField) {
+            case 'quarter':
+              if (course_id && professor_id) this.authIfPosted(quarter_id, course_id, professor_id);
+              break;
+            case 'course':
+              if (quarter_id && professor_id) this.authIfPosted(quarter_id, course_id, professor_id);
+              break;
+            case 'professor':
+              if (quarter_id && course_id) this.authIfPosted(quarter_id, course_id, professor_id);
+              break;
+          }
+          break;
+        }
         storeWithMiddleware.dispatch(change('postSearch', selectionOrder[i], ''));
         switch(selectionOrder[i]) {
           case 'quarter':
@@ -227,8 +249,11 @@ class PostSearch extends Component {
         selectionOrder.pop();
       }
       if (!quarter_id && !course_id && !professor_id) {
-        this.setState({localQuartersList: quartersList.array, localCoursesList: coursesList.array, localProfessorsList: professorsList.array});
-        this.setState({selectionOrder: []});
+        this.setState({localQuartersList: quartersList.array,
+          localCoursesList: coursesList.array,
+          localProfessorsList: professorsList.array,
+          selectionOrder: []
+        });
         return;
       }
       if (!quarter_id && currentField !== 'quarter' && (course_id || professor_id)) this.getField('quarter', client, quarter_id, course_id, professor_id);
@@ -237,9 +262,12 @@ class PostSearch extends Component {
     }
     else {
       selectionOrder.push(currentField);
+      if (selectionOrder.length === 3) this.authIfPosted(quarter_id, course_id, professor_id);
+      else {
       //in large arrays, multiple includes is inefficient, but for clean code and since array will only ever be max size 3, keeping it for simplicity
-      if (!selectionOrder.includes(field1)) this.getField(field1, client, quarter_id, course_id, professor_id, departmentsList);
-      if (!selectionOrder.includes(field2)) this.getField(field2, client, quarter_id, course_id, professor_id, departmentsList);
+        if (!selectionOrder.includes(field1)) this.getField(field1, client, quarter_id, course_id, professor_id, departmentsList);
+        if (!selectionOrder.includes(field2)) this.getField(field2, client, quarter_id, course_id, professor_id, departmentsList);
+      }
     }
   }
 
@@ -291,7 +319,7 @@ class PostSearch extends Component {
 
   render() {
     const { handleSubmit, userInfo } = this.props;
-    const { localQuartersList, localCoursesList, localProfessorsList } = this.state;
+    const { localQuartersList, localCoursesList, localProfessorsList, checkingIfPosted, alreadyPosted } = this.state;
     const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
     return (
       <form ref={node => this.postSearchForm = node} className='content' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
@@ -306,27 +334,27 @@ class PostSearch extends Component {
         <hr />
         <Field
           name='quarter' //responsible for object's key name for values
-          component={this.renderQuarters}
+          component={this.renderQuarters.bind(this)}
           localQuartersList={localQuartersList}
           populateFields={newValue => this.populateFields('quarter', 'course', 'professor', newValue)}
         />
 
         <Field
           name='course' //responsible for object's key name for values
-          component={this.renderCourses}
+          component={this.renderCourses.bind(this)}
           localCoursesList={localCoursesList}
           populateFields={newValue => this.populateFields('course', 'quarter', 'professor', newValue)}
         />
 
         <Field
           name='professor' //responsible for object's key name for values
-          component={this.renderProfessors}
+          component={this.renderProfessors.bind(this)}
           localProfessorsList={localProfessorsList}
           populateFields={newValue => this.populateFields('professor', 'quarter', 'course', newValue)}
           postSearchForm={this.postSearchForm}
         />
 
-        <button type="submit" className="btn">Continue</button>
+        <button type="submit" disabled={checkingIfPosted || alreadyPosted} className="btn">{checkingIfPosted ? ' Checking...' : alreadyPosted ? 'Already posted' : 'Continue'}</button>
       </form>
     );
   }

@@ -90,7 +90,7 @@ function renderDOM () {
                 <Route exact path='/about' component={About} />
                 <Route exact path='/privacy' component={Privacy} />
                 <Route exact path='/profile/evals' component={requireAuth(ViewMyEvals)} />
-                <Route exact path='/profile' component={requireAuth(Profile, null, [WRITE_EVALUATIONS])} />
+                <Route exact path='/profile' component={requireAuth(Profile, null, [INCOMPLETE, WRITE_EVALUATIONS])} />
                 <Route exact path='/post' component={requireAuth(PostSearch, null, [WRITE_EVALUATIONS])} />
                 <Route exact path='/' component={requireAuth(Home)} />
                 <Redirect to='/' />

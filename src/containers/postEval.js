@@ -41,14 +41,18 @@ class PostEval extends Component {
     super(props);
     this.state = {
       term: '',
-      classInfo: undefined,
+      classInfo: props.location.state ? { quarter_id: props.location.state.quarter_id, course_id: props.location.state.course_id, professor_id: props.location.state.professor_id, user_posted: false } : undefined,
       submitted: false,
       initial_read_access: props.userInfo.permissions.includes(READ_EVALUATIONS)
     };
-    const client = new API();
-    //course and professor swapped because API currently has different order than site
-    client.get(`/classes/${props.match.params.quarter_id}/${props.match.params.professor_id}/${props.match.params.course_id}`, classInfo => this.setState({classInfo}))
-    .catch(() => this.setState({classInfo: null}));
+
+    if (!props.location.state) {
+      const client = new API();
+      //course and professor swapped because API currently has different order than site
+      client.get(`/classes/${props.match.params.quarter_id}/${props.match.params.professor_id}/${props.match.params.course_id}`, classInfo => this.setState(
+        {classInfo: {quarter_id: classInfo.quarter.id, course_id: classInfo.course.id, professor_id: classInfo.professor.id, user_posted: classInfo.user_posted } }))
+      .catch(() => this.setState({classInfo: null}));
+    }
 
     const { userInfo, departmentsList, quartersList, coursesList, professorsList, setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList } = props;
     if (!userInfo.permissions.includes(READ_EVALUATIONS)) {
@@ -191,9 +195,9 @@ class PostEval extends Component {
     let quarter, course, professor;
     if (quartersList && coursesList && coursesList.departmentsListLoaded && professorsList) {
       if (classInfo) {
-        quarter = quartersList.object[classInfo.quarter.id].label;
-        course = coursesList.object[classInfo.course.id].label;
-        professor = professorsList.object[classInfo.professor.id].label;
+        quarter = quartersList.object[classInfo.quarter_id].label;
+        course = coursesList.object[classInfo.course_id].label;
+        professor = professorsList.object[classInfo.professor_id].label;
       }
       else if (location.state) {
         quarter = quartersList.object[location.state.quarter_id].label;
@@ -215,7 +219,13 @@ class PostEval extends Component {
             </Link>
           </div>
           )}
-          <RedirectModal permissionsUpgrade={!initial_read_access} history={history} redirectModalOpen={classInfo === null || classInfo && classInfo.user_posted || submitted} submitted={submitted} classInfoExists={classInfo && classInfo.user_posted} />
+          <RedirectModal
+            redirectModalOpen={classInfo === null || classInfo && classInfo.user_posted || submitted}
+            permissionsUpgrade={!initial_read_access}
+            history={history}
+            submitted={submitted}
+            classInfoExists={classInfo && classInfo.user_posted}
+          />
           {quarter && course && professor ?
             <div styleName='postInfo'>
               <h5>{quarter}</h5>

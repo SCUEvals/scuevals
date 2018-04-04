@@ -60,7 +60,7 @@ class ViewEvals extends Component {
             : a.post_time > b.post_time ? -1 : 1
           );
           this.setState({info});
-        });
+        }, {embed: (this.props.type === 'courses' ? 'professors' : 'courses')});
       });
     }
   }
@@ -220,7 +220,7 @@ class ViewEvals extends Component {
            </div>
          </div>
        )}
-        {write_access && (
+        {(write_access && info) && (
           <Link styleName='quickPost' className='btn' to={type === 'professors' ?
             `/professors/${match.params.id}/post`
             :`/courses/${match.params.id}/post`}>
