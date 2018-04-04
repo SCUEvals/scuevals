@@ -16,7 +16,7 @@ export default function requireAuth(PassedComponent, extraProps = {}, reqPermiss
     constructor(props) {
       super(props);
       this.userInfo = storeWithMiddleware.getState().userInfo;
-      this.permissionsSatisfied = !reqPermissions || this.userInfo && reqPermissions.every(reqRole => this.userInfo.permissions.includes(reqRole)) ? true : false;
+      this.permissionsSatisfied = !reqPermissions || this.userInfo && reqPermissions.some(reqRole => this.userInfo.permissions.includes(reqRole));
     }
 
     componentWillMount() { //check auth

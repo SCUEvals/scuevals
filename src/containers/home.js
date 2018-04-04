@@ -78,27 +78,39 @@ class Home extends Component {
     else if (read_access) {
       return (
         <div className='content'>
+          {this.state.nonStudentModalOpen && ( //don't want rendered in DOM at all unless true
+            <NonStudentModal nonStudentModalOpen={true} closeNonStudentModal={() => this.setState({nonStudentModalOpen: false})} />
+          )}
           <section>
             <h3 styleName='title'>SCU Evals</h3>
             <p>
               Welcome to the best platform for writing and reading evaluations for professors and courses
               at Santa Clara University!
             </p>
-            <p>
-              You are probably here because you are wondering whether a professor or course will be a good choice for next quarter,
-              or maybe because you want to share your thoughts on that awesome class you just finished. Either way, you have come to
-              the right place. We are here to make it simpler for you to find classes that you
-              would not only learn something useful from, but also enjoy.
-            </p>
+            {write_access && ( //&& userInfo.type === 's'
+              <p>
+                You are probably here because you are wondering whether a professor or course will be a good choice for next quarter,
+                or maybe because you want to share your thoughts on that awesome class you just finished. Either way, you have come to
+                the right place. We are here to make it simpler for you to find classes that you
+                would not only learn something useful from, but also enjoy.
+              </p>
+            )}
             <p>
               This platform aims to solve all of the issues where other platforms failed. For example, only verified
               SCU students are able to post evaluations here. In fact, only people affiliated with SCU can even use
               the website. Think of it as an extension of the SCU community with the goal to make your life easier.
             </p>
+            {write_access ?
             <p>
               {`Use the search bar above to look for a specific course or professor, or, why not post an evaluation
               for a class you've taken? In that case, hit the "Post Evaluation" button below and we'll get you started!`}
             </p>
+            :
+            <p>
+              Since you {`aren't`} a student, you {`won't`} be able to vote on or post evaluations,
+              but {`you're`} welcome to browse and read all of the evaluations.
+            </p>
+          }
           </section>
           <hr />
           {write_access && (
@@ -119,9 +131,6 @@ class Home extends Component {
     else { //if not logged in
       return (
         <div styleName='login'>
-          {this.state.nonStudentModalOpen && (
-            <NonStudentModal nonStudentModalOpen={true} closeNonStudentModal={() => this.setState({nonStudentModalOpen: false})} />
-          )}
           <h1>SCU Evals</h1>
           <GoogleLogin
             hostedDomain='scu.edu'
