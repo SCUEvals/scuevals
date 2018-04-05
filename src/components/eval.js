@@ -12,7 +12,7 @@ class Eval extends Component {
 
   static propTypes = {
     openDeleteModal: PropTypes.func.isRequired,
-    openFlagModal: PropTypes.func.isRequired,
+    openFlagModal: PropTypes.func,
     evaluation: PropTypes.object.isRequired,
     updateScore: PropTypes.func,
     userString: PropTypes.string,

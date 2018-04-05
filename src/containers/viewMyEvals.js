@@ -39,7 +39,7 @@ class ViewMyEvals extends Component {
   componentDidMount() {
     const { userInfo, departmentsList, quartersList, coursesList, professorsList, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } = this.props;
     const client = new API();
-    client.get('/evaluations', myEvalsList => {
+    client.get('/evaluations?embed=course&embed=professor', myEvalsList => {
       myEvalsList.sort((a, b) => a.post_time > b.post_time ? -1 : 1); //sort by most recent by default when viewing own evals
       this.setState({myEvalsList});
     });
