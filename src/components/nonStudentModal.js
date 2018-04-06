@@ -12,11 +12,10 @@ class NonStudentModal extends Component {
   render() {
     const { nonStudentModalOpen, closeNonStudentModal } = this.props;
     return (
-      <ReactModal isOpen={nonStudentModalOpen} className='Modal' appElement={document.getElementById('app')}>
-        <div className='container'>
-        <div className='modalPanel'>
+      <ReactModal isOpen={nonStudentModalOpen} className='reactModal container' appElement={document.getElementById('app')}>
+        <div className='modalWrapper'>
           <div className='modalHeader'>
-            <h5>Notice!</h5>
+            <h5>Welcome to SCU Evals!</h5>
             <i tabIndex='0' className='fa fa-times'
               onClick={closeNonStudentModal}
               onKeyPress={event => {
@@ -25,13 +24,10 @@ class NonStudentModal extends Component {
             />
           </div>
           <div className='modalBlock'>
-            We noticed that you {`aren't`} a student at SCU. Temporarily, we are only allowing SCU students
-            access to the platform, but we will soon grant viewing access to non-SCU students with an SCU
-            email. If you feel this was a mistake, please contact us at <a href='mailto:scuevalsteam@gmail.com'>scuevalsteam@gmail.com</a>.
-            Sorry for the inconvenience.
+            Since you {`aren't`} a student, you {`won't`} be able to vote on or post evaluations,
+            but {`you're`} welcome to browse and read all of the evaluations.
           </div>
         </div>
-      </div>
       </ReactModal>
     );
   }

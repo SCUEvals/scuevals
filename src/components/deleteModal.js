@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 
-import '../styles/deleteModal.scss';
-
 class DeleteModal extends Component {
 
   static propTypes = {
@@ -18,9 +16,8 @@ class DeleteModal extends Component {
   render() {
     const { deleteModalOpen, closeDeleteModal, quarter, course, professor, deletePost } = this.props;
     return (
-      <ReactModal isOpen={deleteModalOpen} className='Modal' appElement={document.getElementById('app')}>
-        <div className='container'>
-        <div className='modalPanel'>
+      <ReactModal isOpen={deleteModalOpen} className='reactModal container' appElement={document.getElementById('app')}>
+        <div className='modalWrapper'>
           <div className='modalHeader'>
             <h5>Delete post</h5>
             <i tabIndex='0' className='fa fa-times'
@@ -36,14 +33,18 @@ class DeleteModal extends Component {
             <div>{professor}</div>
             <hr />
             <div>Are you sure you want to delete this post?</div>
-            <button type='button'
-               className='btn'
-               onClick={() => {deletePost(); closeDeleteModal();}}
-               onKeyPress={event => {
-                 if (event.key === 'Enter') event.target.click();
-               }}
+            <button
+              style={{width: "65px"}}
+              type='button'
+              className='btn'
+              onClick={() => {deletePost(); closeDeleteModal();}}
+              onKeyPress={event => {
+                if (event.key === 'Enter') event.target.click();
+              }}
             >Yes</button>
-            <button type='button'
+            <button
+              style={{width: "65px"}}
+              type='button'
               className='btn'
               onClick={closeDeleteModal}
               onKeyPress={event => {
@@ -52,7 +53,6 @@ class DeleteModal extends Component {
             >No</button>
           </div>
         </div>
-      </div>
       </ReactModal>
     );
   }

@@ -7,7 +7,6 @@ header {
   align-items: center;
   padding-top: 15px;
   height: $headerHeight;
-  z-index: 1;
   width: 100%;
   background: $overlayBackground;
   color: white;
@@ -28,6 +27,7 @@ header {
   }
 
   .profileBtn,
+  .profileBtn-disabled,
   .signOutBtn,
   .headerHomeBtn {
     height: 100%;

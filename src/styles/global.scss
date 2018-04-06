@@ -46,6 +46,7 @@ label {
 
 label > input[type='checkbox'] {
   margin-left: 5px;
+  vertical-align: middle;
 }
 
 .btn {
@@ -108,9 +109,7 @@ form.content {
 }
 
 label {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0;
+  font-size: 1.1rem; //h6 size
 
   input[type='radio'] {
     margin-right: 5px;
@@ -179,6 +178,15 @@ label:not(:first-child) input[type='radio'] {
 
   color: $SCUred;
   height: auto !important;
+}
+
+.Select-control {
+  border-radius: $defaultBorderRadius;
+  border: 2px solid $backgroundColor;
+
+  &:focus {
+    border-color: $focusColor;
+  }
 }
 
 .Select {
@@ -256,19 +264,10 @@ label:not(:first-child) input[type='radio'] {
       max-height: 205px;
     }
   }
-}
 
-.Select-control {
-  border-radius: $defaultBorderRadius;
-  border: 2px solid $backgroundColor;
-
-  &:focus {
-    border-color: $focusColor;
+  &.select-error .Select-control {
+    border-color: $SCUred !important;
   }
-}
-
-.error .Select-control {
-  border: 2px solid $SCUred;
 }
 
 .Select.is-disabled > .Select-control {
@@ -366,6 +365,67 @@ textarea {
   }
 }
 
+a.homeBtn {
+  font-size: 1.75rem;
+
+  &.noAuthHomeBtn {
+    position: absolute;
+    left: 0;
+    top: -2px;
+  }
+
+  &:focus {
+    text-shadow: $textShadow;
+    border: 2px solid transparent !important;
+  }
+}
+
+.reactModal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  padding: 15px 30px;
+
+  .modalWrapper {
+    border-radius: $defaultBorderRadius;
+    border: 2px solid $backgroundColor;
+    overflow: auto;
+  }
+
+  button {
+    margin: 15px 15px 0 15px;
+  }
+
+  h5 {
+    margin-bottom: 0;
+    padding: 5px;
+  }
+
+  .modalHeader {
+    background: $backgroundColor;
+    position: relative;
+
+    a.homeBtn {
+      float: left;
+      margin-top: -6px;
+    }
+
+    i.fa-times {
+      position: absolute;
+      top: 1px;
+      right: 3px;
+      font-size: 20px;
+    }
+  }
+
+  .modalBlock {
+    background: white;
+    padding: 15px;
+  }
+}
+
 //target all focusable items to make focus color same for all items
 a[href],
 area[href],
@@ -416,61 +476,6 @@ button .fa {
   &:hover {
     color: $SCUdarkred;
   }
-}
-
-a.homeBtn {
-  font-size: 1.75rem;
-
-  &.noAuthHomeBtn {
-    position: absolute;
-    left: 0;
-    top: -2px;
-  }
-
-  &:focus {
-    text-shadow: $textShadow;
-    border: 2px solid transparent !important;
-  }
-}
-
-.Modal {
-  @include fixedCenter;
-
-  .modalPanel {
-    border-radius: $defaultBorderRadius;
-    background: white;
-    position: relative;
-    border: 2px solid $backgroundColor;
-
-    h5 {
-      margin-bottom: 0;
-      padding: 5px;
-    }
-
-    .modalHeader {
-      background: $backgroundColor;
-
-      a.homeBtn {
-        float: left;
-        margin-top: -6px;
-      }
-
-      i.fa-times {
-        position: absolute;
-        top: -1px;
-        right: 1px;
-        font-size: 20px;
-      }
-    }
-
-    .modalBlock {
-      background: white;
-      padding: 15px;
-    }
-  }
-
-  width: 100%;
-  max-width: 750px;
 }
 
 .banner {
@@ -732,4 +737,18 @@ svg.score {
   .widget {
     min-width: 478px;
   }
+}
+
+.error {
+  border: 2px solid $SCUred;
+  border-radius: $defaultBorderRadius;
+}
+
+.no-error {
+  border: 2px solid transparent;
+  border-radius: $defaultBorderRadius;
+}
+
+.comment-error {
+  border: 2px solid $SCUred !important;
 }

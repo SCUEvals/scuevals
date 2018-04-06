@@ -32,7 +32,7 @@ class Profile extends Component {
         {error && submitFailed ? <span>{error}</span> : ''}
         <Select
           name='majors'
-          className={error && submitFailed ? 'error' : ''}
+          className={error && submitFailed ? 'select-error' : ''}
           simpleValue
           joinValues
           multi

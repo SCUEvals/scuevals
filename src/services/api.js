@@ -14,7 +14,7 @@ class API {
 
     this.api = axios.create({
       headers: headers,
-      baseURL: API_URL,
+      baseURL: API_URL, // eslint-disable-line no-undef
       timeout: 10000
     });
   }

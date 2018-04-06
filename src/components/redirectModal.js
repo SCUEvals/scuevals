@@ -35,19 +35,18 @@ class RedirectModal extends Component {
         ref={node => this.redirectModal = node}
         isOpen={redirectModalOpen}
         onAfterOpen={() => setTimeout(() => {if (this.redirectModal) this.setState({seconds: seconds - 1})}, 1000)}
-        className='Modal'
+        className='reactModal container'
         appElement={document.getElementById('app')}>
-        <div className='container'>
-          <div className='modalPanel'>
-            <div className='modalHeader'>
-              <h5>
-                <Link className='homeBtn' to='/'><i className='fa fa-home' /></Link>
-                {classInfoExists || !submitted ?
-                  'Oops!'
-                : 'Thank you!'
-                }
-              </h5>
-            </div>
+        <div className='modalWrapper'>
+          <div className='modalHeader'>
+            <h5>
+              <Link className='homeBtn' to='/'><i className='fa fa-home' /></Link>
+              {classInfoExists || !submitted ?
+                'Oops!'
+              : 'Thank you!'
+              }
+            </h5>
+          </div>
           <div className='modalBlock'>
             <p>{
               classInfoExists ?
@@ -63,7 +62,6 @@ class RedirectModal extends Component {
             Redirecting to home in {seconds}...
           </div>
         </div>
-      </div>
       </ReactModal>
     );
   }

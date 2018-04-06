@@ -103,16 +103,6 @@ $voteWidth: 50px;
     }
   }
 
-  :global(.unslicked) {
-    border-bottom: 1px solid $backgroundColor;
-    background: $sandColor;
-
-    .scoreBlock {
-      display: inline-block;
-      width: percentage(1 / $xlBP);
-    }
-  }
-
   :global(.slick-list) {
     height: 74px;
     background: $sandColor;
@@ -121,6 +111,20 @@ $voteWidth: 50px;
 
     &:active {
       cursor: grabbing;
+    }
+  }
+
+  :global(.slick-initialized .slick-slide) {
+    padding-bottom: 0;
+  }
+
+  :global(.slider.regular:not(.slick-initialized)) {
+    border-bottom: 1px solid $backgroundColor;
+    background: $sandColor;
+
+    .scoreBlock {
+      display: inline-block;
+      width: percentage(1 / $xlBP);
     }
   }
 
@@ -159,10 +163,6 @@ $voteWidth: 50px;
       overflow: hidden;
       padding: 0 15px;
     }
-  }
-
-  :global(.slick-initialized .slick-slide) {
-    padding-bottom: 0;
   }
 
   .comment {
@@ -221,6 +221,10 @@ $voteWidth: 50px;
       i:global(.fa-trash) {
         font-size: 20px;
         cursor: pointer;
+      }
+
+      .flagged {
+        color: $gray;
       }
     }
   }

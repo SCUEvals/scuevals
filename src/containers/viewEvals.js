@@ -33,7 +33,7 @@ class ViewEvals extends Component {
     super(props);
     this.state = {
       info: null,
-      flagModal: { open: false, comment: undefined, id: undefined },
+      flagModal: { open: false, comment: undefined, eval_id: undefined, user_flagged: undefined, set_user_flagged: undefined },
       deleteModal: { open: false, quarter_id: undefined, course_id: undefined, professor_id: undefined, eval_id: undefined },
       sortValue: null
     };
@@ -60,7 +60,7 @@ class ViewEvals extends Component {
             : a.post_time > b.post_time ? -1 : 1
           );
           this.setState({info});
-        });
+        }, {embed: (this.props.type === 'courses' ? 'professors' : 'courses')});
       });
     }
   }
@@ -145,7 +145,7 @@ class ViewEvals extends Component {
     let sortOptions = [
       {value: 'quarter', label: 'Sort by Quarter'},
       {value: type === 'professors' ? 'course' : 'professor', label: `Sort by ${type === 'professors' ? 'Course' : 'Professor'}`},
-      {value: 'score', label: 'Sort by Score'},
+      {value: 'votes_score', label: 'Sort by Votes Score'},
       {value: 'major', label: 'Sort By Major'},
       {value: 'grad_year', label: 'Sort By Graduation Year'}
     ];
@@ -153,7 +153,12 @@ class ViewEvals extends Component {
       <div className="content" styleName='viewEvals'>
         <FlagModal
           flagModalOpen={flagModal.open}
+          comment={flagModal.comment}
           closeFlagModal={() => this.setState({flagModal: {open: false }})}
+          evalId={flagModal.eval_id}
+          user_flagged={flagModal.user_flagged}
+          set_user_flagged={flagModal.set_user_flagged}
+
         />
         <DeleteModal
           deleteModalOpen={deleteModal.open}
@@ -215,7 +220,7 @@ class ViewEvals extends Component {
            </div>
          </div>
        )}
-        {write_access && (
+        {(write_access && info) && (
           <Link styleName='quickPost' className='btn' to={type === 'professors' ?
             `/professors/${match.params.id}/post`
             :`/courses/${match.params.id}/post`}>
@@ -258,7 +263,7 @@ class ViewEvals extends Component {
                       : 0
                     );
                     break;
-                  case 'score':
+                  case 'votes_score':
                     newInfo.evaluations.sort((a, b) =>
                       a.votes_score > b.votes_score ? -1
                       : a.votes_score < b.votes_score ? 1
@@ -358,23 +363,17 @@ class ViewEvals extends Component {
                     newInfo.evaluations[index].votes_score = newScore;
                     this.setState({info: newInfo});
                   }}
-                  openModal={(type, x, secondId, eval_id) => {
+                  openDeleteModal={(quarter_id, secondId, eval_id) => {
                     switch (type) {
-                      case 'flag': //x = comment
-                        this.setState({flagModal: {open: true, comment: x}});
+                      case 'courses':
+                        this.setState({deleteModal: {open: true, quarter_id, course_id: info.id, professor_id: secondId, eval_id}})
                         break;
-                      case 'delete': //x = quarter_id
-                        switch (type) {
-                          case 'courses':
-                            this.setState({deleteModal: {open: true, quarter_id: x, course_id: info.id, professor_id: secondId, eval_id}})
-                            break;
-                          case 'professors':
-                            this.setState({deleteModal: {open: true, quarter_id: x, course_id: secondId, professor_id: info.id, eval_id}});
-                            break;
-                        }
+                      case 'professors':
+                        this.setState({deleteModal: {open: true, quarter_id, course_id: secondId, professor_id: info.id, eval_id}});
                         break;
                     }
                   }}
+                  openFlagModal={(comment, eval_id, user_flagged, set_user_flagged) => this.setState({flagModal: {open: true, comment, eval_id, user_flagged, set_user_flagged}})}
                 />
               );
             })

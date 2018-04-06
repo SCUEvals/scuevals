@@ -8,7 +8,7 @@ form {
   position: absolute;
   top: 38px;
   background: $SCUred;
-  z-index: 2;
+  z-index: 1;
   border-radius: $defaultBorderRadius;
   padding: 4px 8px;
   font-size: 13px;
@@ -29,7 +29,6 @@ form {
 
 :global(#searchBar) {
   input {
-    z-index: 3;
     border-color: white;
 
     &:focus {

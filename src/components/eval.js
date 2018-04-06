@@ -11,7 +11,8 @@ import '../styles/eval.scss';
 class Eval extends Component {
 
   static propTypes = {
-    openModal: PropTypes.func.isRequired,
+    openDeleteModal: PropTypes.func.isRequired,
+    openFlagModal: PropTypes.func,
     evaluation: PropTypes.object.isRequired,
     updateScore: PropTypes.func,
     userString: PropTypes.string,
@@ -20,7 +21,7 @@ class Eval extends Component {
     lines: PropTypes.number.isRequired,
     more: PropTypes.string.isRequired,
     less: PropTypes.string.isRequired,
-    vote_access: PropTypes.bool.isRequired
+    vote_access: PropTypes.bool
   }
 
   static defaultProps = {
@@ -33,6 +34,7 @@ class Eval extends Component {
     super(props);
     this.state = {
       user_vote: this.props.evaluation.user_vote,
+      user_flagged: this.props.evaluation.user_flagged,
       expanded: false,
       truncated: false
     };
@@ -95,8 +97,8 @@ class Eval extends Component {
   }
 
   render() {
-    const { vote_access, evaluation, openModal, quarter, department, updateScore, userString, more, less, lines } = this.props;
-    const { user_vote, expanded, truncated } = this.state;
+    const { vote_access, evaluation, openDeleteModal, openFlagModal, quarter, department, updateScore, userString, more, less, lines } = this.props;
+    const { user_vote, user_flagged, expanded, truncated } = this.state;
     const { votes_score } = evaluation;
     const { attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload } = evaluation.data;
     const average =  Number((attitude + availability + clarity + easiness + grading_speed + recommended + resourcefulness + workload) / (Object.values(evaluation.data).length - 1)).toFixed(1); //-1 for comments
@@ -293,17 +295,18 @@ class Eval extends Component {
                 {!evaluation.author || evaluation.author.self ?
                   <i className='fa fa-trash'
                     tabIndex='0'
-                    onClick={() => openModal('delete', evaluation.quarter_id, evaluation.professor ? evaluation.professor.id : evaluation.course.id, evaluation.id)}
+                    onClick={() => openDeleteModal(evaluation.quarter_id, evaluation.professor ? evaluation.professor.id : evaluation.course.id, evaluation.id)}
                     onKeyPress={event => {
-                      if (event.key === 'Enter') openModal('delete', evaluation.quarter_id, evaluation.professor ? evaluation.professor.id : evaluation.course.id, evaluation.id);
+                      if (event.key === 'Enter') openDeleteModal(evaluation.quarter_id, evaluation.professor ? evaluation.professor.id : evaluation.course.id, evaluation.id);
                     }}
                   />
                   :
                   <i className='fa fa-flag'
+                    styleName={user_flagged ? 'flagged' : ''}
                     tabIndex='0'
-                    onClick={() => openModal('flag', evaluation.data.comment, evaluation.id)}
+                    onClick={() => openFlagModal(evaluation.data.comment, evaluation.id, user_flagged, () => this.setState({user_flagged: true}))}
                     onKeyPress={event => {
-                      if (event.key === 'Enter') openModal('flag', evaluation.data.comment, evaluation.id);
+                      if (event.key === 'Enter') openFlagModal(evaluation.data.comment, null, evaluation.id);
                     }}
                    />
                 }
