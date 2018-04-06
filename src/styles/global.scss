@@ -381,13 +381,17 @@ a.homeBtn {
 }
 
 .reactModal {
-  @include fixedCenter;
-
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
   width: 100%;
+  padding: 15px 30px;
 
   .modalWrapper {
     border-radius: $defaultBorderRadius;
     border: 2px solid $backgroundColor;
+    overflow: auto;
   }
 
   button {

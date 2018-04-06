@@ -145,7 +145,7 @@ class ViewEvals extends Component {
     let sortOptions = [
       {value: 'quarter', label: 'Sort by Quarter'},
       {value: type === 'professors' ? 'course' : 'professor', label: `Sort by ${type === 'professors' ? 'Course' : 'Professor'}`},
-      {value: 'score', label: 'Sort by Score'},
+      {value: 'votes_score', label: 'Sort by Votes Score'},
       {value: 'major', label: 'Sort By Major'},
       {value: 'grad_year', label: 'Sort By Graduation Year'}
     ];
@@ -263,7 +263,7 @@ class ViewEvals extends Component {
                       : 0
                     );
                     break;
-                  case 'score':
+                  case 'votes_score':
                     newInfo.evaluations.sort((a, b) =>
                       a.votes_score > b.votes_score ? -1
                       : a.votes_score < b.votes_score ? 1

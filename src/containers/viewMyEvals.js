@@ -39,7 +39,8 @@ class ViewMyEvals extends Component {
   componentDidMount() {
     const { userInfo, departmentsList, quartersList, coursesList, professorsList, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } = this.props;
     const client = new API();
-    client.get('/evaluations?embed=course&embed=professor', myEvalsList => {
+    //parameters directly in URL instead of passed in params as {embed: ['professor, 'course']} because axios converts params differently than API expects (contains []'s, back end doesn't process it)
+    client.get(`/students/${userInfo.id}/evaluations?embed=course&embed=professor`, myEvalsList => {
       myEvalsList.sort((a, b) => a.post_time > b.post_time ? -1 : 1); //sort by most recent by default when viewing own evals
       this.setState({myEvalsList});
     });
@@ -77,7 +78,7 @@ class ViewMyEvals extends Component {
       {value: 'quarter', label: 'Sort by Quarter'},
       {value: 'course', label: 'Sort by Course'},
       {value: 'professor', label: 'Sort by Professor'},
-      {value: 'score', label: 'Sort by Score'}
+      {value: 'votes_score', label: 'Sort by Votes Score'}
     ];
     return (
       <div className="content">
@@ -149,7 +150,7 @@ class ViewMyEvals extends Component {
                         a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1 : a.post_time > b.post_time ? -1 : 1
                       );
                       break;
-                    case 'score':
+                    case 'votes_score':
                       myEvalsListCopy.sort((a, b) =>
                         a.votes_score > b.votes_score ? -1
                         : a.votes_score < b.votes_score ? 1
@@ -186,7 +187,7 @@ class ViewMyEvals extends Component {
                     evaluation={evaluation}
                     department={departmentsList && evaluation.course ? departmentsList[evaluation.course.department_id].abbr + ' ' + evaluation.course.number + ': ' + evaluation.course.title : null}
                     quarter={quartersList ? quartersList.object[evaluation.quarter_id].name + ' ' + quartersList.object[evaluation.quarter_id].year : null}
-                    openModal={() => { //type, quarter_id, secondId, eval_id passed in, but not needed in viewMyEvals
+                    openDeleteModal={() => { //type, quarter_id, secondId, eval_id passed in, but not needed in viewMyEvals
                       this.setState({deleteModal: {open: true, quarter_id: evaluation.quarter_id, course_id: evaluation.course.id, professor_id: evaluation.professor.id, eval_id: evaluation.id}});
                     }}
                   />
