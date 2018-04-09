@@ -6,13 +6,12 @@ form {
 
 .text-help {
   position: absolute;
-  top: 38px;
+  top: 40px;
   background: $SCUred;
-  z-index: 1;
+  z-index: 2;
   border-radius: $defaultBorderRadius;
   padding: 4px 8px;
   font-size: 13px;
-  opacity: 0;
   visibility: hidden;
 }
 
@@ -23,13 +22,14 @@ form {
 
   input:focus ~ .text-help {
     visibility: visible;
-    opacity: 1;
   }
 }
 
 :global(#searchBar) {
   input {
     border-color: white;
+    box-shadow: 0 5px 10px -5px $overlayBackground;
+    z-index: 2;
 
     &:focus {
       border-color: $focusColor;

@@ -134,6 +134,20 @@ class SearchBar extends Component {
         <div id='searchBar' styleName={submitFailed && error ? 'search-error' : ''} className='col-12 col-md-8 mx-auto input-group'>
           <input
             onChange={input.onChange}
+            onKeyDown={event => {
+              switch (event.keyCode) {
+                case 38: //up
+                  //document.activeElement.parentNode.previousSibling.firstChild.focus();
+                  //$('#searchBar input').focus();
+                  event.preventDefault();
+                  break;
+                case 40: {//down
+                  $('#searchBarResults li a')[0].focus();
+                  event.preventDefault();
+                  break;
+                }
+              }
+            }}
             className='form-control'
             type='text'
             placeholder='Search for professor or class'
@@ -162,17 +176,37 @@ class SearchBar extends Component {
   renderSearchResults(response, search, departmentsList) { //searchResults can exist while search value length < 3. Edge case: Old GET request still processing, but value length no longer > 2
     if (response && response.term && response.term.length > 2) {
       if (response.courses.length === 0 && response.professors.length === 0) return null;
-
       //onMouseDown prevents losing focus if clicking on h6 elements (will also prevent potential unnecessary hideOnMouseDownOutside events which are called on refocusing on input)
       return (
         <ul id='searchBarResults'>
-          {response.professors.length > 0 ? <li><h6 onMouseDown={event => event.preventDefault()}>Professors</h6></li> : ''}
+          {response.professors.length > 0  && (<li><h6 onMouseDown={event => event.preventDefault()}>Professors</h6></li>)}
           {
             response.professors.map(professor => {
               return (
                 <li key={professor.id}>
                   <Link
                     onMouseDown={event => event.preventDefault()}
+                    onKeyDown={event => {
+                      //event.preventDefault(); //disables scrolling with keys, but also selecting with enter key (re-enabled manually below)
+                      switch (event.keyCode) {
+                        case 38: { //up
+                          let node = document.activeElement.parentNode.previousSibling.firstChild;
+                          if (node.tagName == "H6") $('#searchBar input').focus();
+                          else node.focus();
+                          event.preventDefault();
+                          break;
+                        }
+                        case 40: {//down
+                          let node = document.activeElement.parentNode.nextSibling.firstChild;
+                          if (node) {
+                            if (node.tagName == "H6") node = node.parentNode.nextSibling.firstChild;
+                            node.focus();
+                          }
+                          event.preventDefault();
+                          break;
+                        }
+                      }
+                    }}
                     onClick={() => {
                       $('#searchBarResults').hide();
                       $('#searchBar input').blur();
@@ -193,6 +227,27 @@ class SearchBar extends Component {
                     onClick={() => {
                       $('#searchBarResults').hide();
                       $('#searchBar input').blur();
+                    }}
+                    onKeyDown={event => {
+                      //event.preventDefault(); //disables scrolling with keys, but also selecting with enter key (re-enabled manually below)
+                      switch (event.keyCode) {
+                        case 38: {//up
+                          let node = document.activeElement.parentNode.previousSibling.firstChild;
+                          if (node.tagName == "H6") node = node.parentNode.previousSibling.firstChild;
+                          node.focus();
+                          event.preventDefault();
+                          break;
+                        }
+                        case 40: { //down
+                          let node = document.activeElement.parentNode.nextSibling;
+                          if (!node) break; //since very last <li> may be here, must check if another exists or console error sometimes appears after last <li> selected and holding down arrow
+                          else node = node.firstChild;
+                          if (node.tagName == "H6") node = node.parentNode.nextSibling.firstChild;
+                          node.focus();
+                          event.preventDefault();
+                          break;
+                        }
+                      }
                     }}
                     onMouseDown={event => event.preventDefault()}
                      to={`/courses/${course.id}`}
