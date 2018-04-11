@@ -5,6 +5,7 @@ import { Field, reduxForm } from 'redux-form';
 import TextareaAutoSize from 'react-textarea-autosize';
 
 import API from '../services/api';
+import Checkbox from '../components/checkbox';
 
 class FlagModal extends Component {
 
@@ -19,6 +20,10 @@ class FlagModal extends Component {
     error: PropTypes.string,
     set_user_flagged: PropTypes.func,
     user_flagged: PropTypes.bool
+  }
+
+  componentDidUpdate(prevProps) {
+     if (!prevProps.flagModalOpen && this.props.flagModalOpen) $('#flagModal input[type="checkbox"]').first().focus();
   }
 
   //inputs with only numbers as strings breaks redux form, so add "_val" at end (removed when using parseInt)
@@ -55,12 +60,46 @@ class FlagModal extends Component {
     )
   }
 
+  renderCheckbox(field) {
+    let onKeyDown = event => {
+      switch (event.keyCode) {
+        case 38: { //up
+          event.preventDefault(); //stop scrolling
+          let nodes = $('#flagModal input[type="checkbox"]');
+          for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i] === event.target) {
+              if (i - 1 >= 0) nodes[i - 1].focus();
+              break;
+            }
+          }
+          break;
+        }
+
+        case 40: { //down
+          event.preventDefault(); //stop scrolling
+          let nodes = $('#flagModal input[type="checkbox"]');
+          for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i] === event.target) {
+              if (i + 1 < nodes.length) nodes[i + 1].focus();
+              else $('#flagModal textarea').focus();
+              break;
+            }
+          }
+          break;
+        }
+      }
+    }
+    return (
+      <Checkbox field={field} onKeyDown={onKeyDown} />
+    )
+  }
+
   render() {
     const { flagModalOpen, closeFlagModal, handleSubmit, submitting, submitFailed, comment, error, user_flagged } = this.props;
     const {OTHER, SPAM, OFFENSIVE, SENSITIVE_INFO} = this.constructor;
     return (
       <ReactModal isOpen={flagModalOpen} className='reactModal container' appElement={document.getElementById('app')}>
-        <div className='modalWrapper'>
+        <div id='flagModal' className='modalWrapper'>
           <div className='modalHeader'>
             <h5>Flag comment</h5>
             <i tabIndex='0' className='fa fa-times'
@@ -84,28 +123,27 @@ class FlagModal extends Component {
                     Check all boxes that apply
                   </span>
                 </div>
-                <label>
-                  Spam
-                  <Field name={SPAM} component='input' type='checkbox' />
-                </label>
-                <br />
-                <label>
-                  Offensive
-                  <Field name={OFFENSIVE} component='input' type='checkbox' />
-                </label>
-                <br />
-                <label>
-                  Sensitive Info
-                  <Field name={SENSITIVE_INFO} component='input' type='checkbox' />
-                </label>
-                <br />
-                <label>
-                  Other
-                  <Field name={OTHER} component='input' type='checkbox' />
-                </label>
+                <div className='checkbox-group'>
+                  <Field name={SPAM} component={this.renderCheckbox} text='Spam' />
+                  <br />
+                  <Field name={OFFENSIVE} component={this.renderCheckbox} text='Offensive' />
+                  <br />
+                  <Field name={SENSITIVE_INFO} component={this.renderCheckbox} text='Sensitive Info' />
+                  <br />
+                  <Field name={OTHER} component={this.renderCheckbox} text='Other' />
+                </div>
                 <br />
                 <Field name='comment' onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
-                <button disabled={submitting} type='submit' className='btn'>{submitting ? 'Submitting...' : 'Submit'}</button>
+                <button
+                  disabled={submitting}
+                  type='submit'
+                  className='btn'
+                  onKeyDown={event => {
+                    if (event.keyCode === 38) /* up */ $('#flagModal textarea').focus();
+                  }}
+                >
+                  {submitting ? 'Submitting...' : 'Submit'}
+                </button>
               </form>
             }
           </div>

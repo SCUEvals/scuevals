@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import ReactGA from 'react-ga';
 
-import { setUserInfo, setSearchResults } from '../actions';
 import SearchBar from './searchBar';
 import '../styles/header.scss';
 import { INCOMPLETE, READ_EVALUATIONS, WRITE_EVALUATIONS } from '../index';
@@ -14,8 +12,6 @@ class Header extends Component {
 
   static propTypes = {
     userInfo: PropTypes.object,
-    setUserInfo: PropTypes.func.isRequired,
-    setSearchResults: PropTypes.func.isRequired,
     location: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired
   }
@@ -36,7 +32,7 @@ class Header extends Component {
   }
 
   render() {
-    const { setUserInfo, userInfo, setSearchResults } = this.props;
+    const { userInfo } = this.props;
     if (userInfo && !userInfo.permissions.includes(INCOMPLETE) && userInfo.permissions.includes(READ_EVALUATIONS)) {
       return (
         <header>
@@ -56,14 +52,9 @@ class Header extends Component {
                 {userInfo.first_name}
               </div>
             }
-            <button className='btn' styleName='signOutBtn' type='button' onClick={() => {
-              setSearchResults(null);
-              setUserInfo(null);
-              ReactGA.set({ userId: undefined });
-              if (this.props.history.location.pathname !== '/') this.props.history.push('/');
-            }} >
+            <Link className='btn' styleName='signOutBtn' to={{pathname: '/', signOut: true}}>
               Sign Out
-            </button>
+            </Link>
           </div>
         </header>
       );
@@ -80,4 +71,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, { setUserInfo, setSearchResults })(Header));
+export default withRouter(connect(mapStateToProps, null)(Header));

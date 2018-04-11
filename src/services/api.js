@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 import { storeWithMiddleware } from '../index';
-import { setUserInfo } from '../actions';
+import { setUserInfo, setSearchResults } from '../actions';
 import history from '../components/history';
 
 class API {
@@ -23,14 +23,15 @@ class API {
     if (error.response) {
       //sign out if 401
       if (error.response.status === 401) {
-        if (error.url === error.baseURL + '/auth/refresh' || error.url === error.baseURL + '/auth') return; //don't handle error twice
+        if (error.response.config.url === error.response.config.baseURL + '/auth/refresh' || error.response.config.url === error.response.config.baseURL + '/auth') return; //don't handle error twice
         this.get('/auth/refresh', responseData => {
-          if (history.location.pathname !== '/') history.push('/');
           storeWithMiddleware.dispatch(setUserInfo(responseData.jwt));
+          if (history.location.pathname !== '/') history.push('/');
         })
         .catch(() => { //ex. user suspended
           if (history.location.pathname !== '/') history.push('/');
           storeWithMiddleware.dispatch(setUserInfo(null));
+          storeWithMiddleware.dispatch(setSearchResults(null));
         });
       }
       // The request was made and the server responded with a status code

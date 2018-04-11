@@ -137,8 +137,6 @@ class SearchBar extends Component {
             onKeyDown={event => {
               switch (event.keyCode) {
                 case 38: //up
-                  //document.activeElement.parentNode.previousSibling.firstChild.focus();
-                  //$('#searchBar input').focus();
                   event.preventDefault();
                   break;
                 case 40: {//down
@@ -293,7 +291,6 @@ class SearchBar extends Component {
           renderSearchResults={(results, term) => this.renderSearchResults(results, term, departmentsList)}
           departmentsList={departmentsList}
           searchResults={searchResults}
-          setSearchResults={response => setSearchResults(response)}
           loading={loading}
           onChange={
             (change, newVal) => {

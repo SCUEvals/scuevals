@@ -14,7 +14,7 @@ $sliderTransition: all 0.15s ease-in-out;
     .handleNum {
       font-weight: bold;
       display: flex;
-      height: 100%;
+      height: 105%; //105 not 100 because numbers slightly too high
       justify-content: center;
       align-items: center;
     }

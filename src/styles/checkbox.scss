@@ -1,0 +1,63 @@
+@import 'theme';
+
+.container {
+  position: relative;
+
+  // .flex-center {
+  //   display: inline-flex;
+  //   height: 100%;
+  //   align-items: center;
+  //   margin-left: 5px;
+  // }
+
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .checkmark {
+    //background: transparent;
+    height: 15px;
+    width: 15px;
+    display: inline-flex;
+    margin-right: 5px;
+    border-radius: $defaultBorderRadius;
+    border: 1px solid $overlayBackground;
+    transition: $defaultTransition;
+    user-select: none;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      display: none;
+      left: 4px;
+      top: 1px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg);
+    }
+  }
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: $SCUred;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: $SCUdarkred;
+}
+
+.container input:focus ~ .checkmark {
+  border: 1px solid $focusColor;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark::after {
+  display: block;
+}

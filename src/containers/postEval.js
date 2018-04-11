@@ -5,7 +5,7 @@ import TextareaAutoSize from 'react-textarea-autosize';
 import Slider from 'rc-slider';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
 import { connect } from 'react-redux';
-import ReactGA from "react-ga";
+import ReactGA from 'react-ga';
 import { Link, Prompt } from 'react-router-dom';
 
 import API from '../services/api';
@@ -15,6 +15,7 @@ import '../styles/postEval.scss';
 import RedirectModal from '../components/redirectModal';
 import { setUserInfo, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } from '../actions';
 import { READ_EVALUATIONS } from '../index';
+import Checkbox from '../components/checkbox';
 
 class PostEval extends Component {
 
@@ -75,9 +76,15 @@ class PostEval extends Component {
     }
   }
 
+  componentDidMount() {
+    $('.rc-slider-handle').first().focus();
+  }
+
   componentDidUpdate() {
-    if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList)
-      this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList); //make deep copy of current, state immutable
+    if (!this.props.userInfo.permissions.includes(READ_EVALUATIONS)) {
+      if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList)
+        this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList); //make deep copy of current, state immutable
+      }
   }
 
   onSubmit(values) {
@@ -96,12 +103,15 @@ class PostEval extends Component {
   renderTextArea(field) {
     const { meta: {submitFailed, error} } = field;
     return (
-      <TextareaAutoSize className={submitFailed && error ? 'comment-error' : ''} minRows={5} {...field.input} placeholder="Write your constructive review here"/>
+      <TextareaAutoSize
+        className={submitFailed && error ? 'comment-error' : undefined}
+        minRows={5} {...field.input}
+        placeholder='Write your constructive review here'
+      />
     )
   }
 
   renderHandle(props, textProps) {
-
     const Handle = Slider.Handle;
     const { value, ...restProps } = props;
     delete restProps.dragging; //don't include dragging prop, breaks Handle
@@ -114,20 +124,52 @@ class PostEval extends Component {
     let popperStyle = {};
 
     if (value === 0) {
-      popperStyle.visibility = 'hidden';
+      popperStyle.visibility = 'hidden'; //disables highlighting/selecting, allows elements behind it to be selectable
       popperStyle.opacity = '0'; //needed for transition animation
     }
 
     return (
       <Manager tag={false}>
-        <Handle value={value} {...restProps}>
+        <Handle
+          value={value}
+          {...restProps}
+          onKeyDown={event => {
+            switch (event.keyCode) {
+              case 38: { //up
+                event.stopPropagation(); //stop from moving slider up a value
+                event.preventDefault(); //stop scrolling
+                let nodes = $('.rc-slider-handle');
+                for (let i = 0; i < nodes.length; i++) {
+                  if (nodes[i] === event.target) {
+                    if (i - 1 >= 0) nodes[i - 1].focus();
+                    break;
+                  }
+                }
+                break;
+              }
+              case 40: { //down
+                event.stopPropagation(); //stop from moving slider down a value
+                event.preventDefault(); //stop scrolling
+                let nodes = $('.rc-slider-handle');
+                for (let i = 0; i < nodes.length; i++) {
+                  if (nodes[i] === event.target) {
+                    if (i + 1 < nodes.length) nodes[i + 1].focus();
+                    else $('textarea[name="comment"]').focus();
+                    break;
+                  }
+                }
+                break;
+              }
+            }
+          }}
+          >
           <div styleName='handleNum'>
             {value !== 0 ? value : ''}
           </div>
         </Handle>
         <Target className='popper-target'>
           {({ targetProps }) => (
-            <div style={trackerStyle} {...targetProps}/>
+            <div style={trackerStyle} {...targetProps} />
           )}
         </Target>
         <Popper style={popperStyle} placement="top" className="popper">
@@ -186,6 +228,40 @@ class PostEval extends Component {
         defaultValue={0}
       />
     );
+  }
+
+  renderCheckbox(field) {
+    let onKeyDown;
+    if (field.input.name === 'display_majors')
+      onKeyDown = event => {
+        switch (event.keyCode) {
+          case 38: //up
+            event.preventDefault(); //stop scrolling
+            $('textarea[name="comment"]').focus();
+            break;
+
+          case 40: //down
+            event.preventDefault(); //stop scrolling
+            $('input[name="display_grad_year"]').focus();
+            break;
+        }
+      }
+    else if (field.input.name ==='display_grad_year')
+      onKeyDown = event => {
+        switch (event.keyCode) {
+          case 38: //up
+            event.preventDefault(); //stop scrolling
+            $('input[name="display_majors"]').focus();
+            break;
+
+          case 40: //down
+            event.preventDefault(); //stop scrolling
+            $('button[type="submit"]').focus();
+            break;
+        }
+      }
+
+    return <Checkbox field={field} onKeyDown={onKeyDown} />;
   }
 
   render() {
@@ -294,17 +370,27 @@ class PostEval extends Component {
           <h6>Comments {this.renderInfoToolTip(TextOptions.comment.info)}</h6>
           <Field name="comment" onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
           <p>Max characters: {this.state.term.length} / 1000</p>
-          <label>
-            {`Display ${userInfo.majors.length > 1 ? 'majors' : 'major'}`}
-            <Field name='display_majors' component='input' type='checkbox' />
-          </label>
+          <div className='checkbox-group'>
+            <Field name='display_majors' component={this.renderCheckbox} text={`Display ${userInfo.majors.length > 1 ? 'majors' : 'major'}`} />
           <br />
-          <label>
-            Display graduation year
-            <Field name='display_grad_year' component='input' type='checkbox' />
-          </label>
+          <Field name='display_grad_year' component={this.renderCheckbox} text='Display graduation year' />
+        </div>
           <small>Your name and gender will always be kept hidden when posting.</small>
-          <button disabled={submitting} type="submit" className="btn">{submitting ? 'Submitting...' : 'Submit'}</button>
+          <button
+            disabled={submitting}
+            type='submit'
+            className='btn'
+            onKeyDown={event => {
+              switch (event.keyCode) {
+                case 38: //up
+                  event.preventDefault(); //stop scrolling
+                  $('input[name="display_grad_year"]').focus();
+                  break;
+              }
+            }}
+          >
+            {submitting ? 'Submitting...' : 'Submit'}
+          </button>
         </form>
       );
     }

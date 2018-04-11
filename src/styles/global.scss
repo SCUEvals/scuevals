@@ -764,3 +764,20 @@ svg.score {
   border-right: 4px solid transparent;
   border-left: 4px solid transparent;
 }
+
+.dropup .caret,
+.navbar-fixed-bottom .dropdown .caret {
+  border-top: 0;
+  border-bottom: 4px dashed;
+  border-bottom: 4px solid \9;
+  content: "";
+}
+
+.ReactModal__Overlay.ReactModal__Overlay--after-open {
+  z-index: 9999;
+}
+
+.checkbox-group {
+  display: inline-block;
+  text-align: left;
+}

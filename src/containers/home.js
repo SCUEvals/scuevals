@@ -24,11 +24,30 @@ class Home extends Component {
   };
 
   constructor(props) {
+
     super(props);
     this.state = {
       loading: false,
       nonStudentModalOpen: false
     };
+  }
+
+  componentDidMount() {
+    if (this.props.location.signOut) {
+      this.signOut(this.props);
+    }
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.location.signOut) {
+      this.signOut(props);
+    }
+  }
+
+  signOut(props) {
+    props.location.signOut = false;
+    props.setUserInfo(null);
+    ReactGA.set({ userId: undefined });
   }
 
   authWithBackEnd(token, referrer) {
@@ -68,6 +87,7 @@ class Home extends Component {
     const referrer = location.state ? location.state.referrer : null;
     const read_access = userInfo && userInfo.permissions.includes(READ_EVALUATIONS);
     const write_access = userInfo && userInfo.permissions.includes(WRITE_EVALUATIONS);
+
     if (!userInfo && this.state.loading) { //if Google login succeeded, and in process of sending to backend
       return (
         <div className='loadingWrapper'>
@@ -119,7 +139,7 @@ class Home extends Component {
           {write_access && (
             <hr />
           )}
-          <RecentEvals count={10} />
+          {!location.signOut && ( <RecentEvals count={10} /> )}
         </div>
       );
     }
