@@ -589,6 +589,7 @@ img {
   border-radius: 50%;
   background-color: $SCUred;
   border: 2px solid white !important;
+  cursor: pointer;
 
   &:hover {
     background-color: $SCUdarkred;

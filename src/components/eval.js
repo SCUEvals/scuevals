@@ -53,11 +53,11 @@ class Eval extends Component {
     let style;
     if (name === 'Average') style = {strokeDashoffset: this.calculatePath(value)};
     return (
-      <div styleName='scoreBlock'>
-        <div styleName='scoreTitle'>{name}</div>
-        <svg className='score'>
+        <div styleName='scoreWrapper'>
+        <span key='scoreTitle' styleName='scoreTitle'>{name}</span>
+        <svg key='score' className='score'>
           <circle style={style} cx="18" cy="18" r="16" className={`score${value < 1.75 ? '1' : value < 2.5 ? '2' : value < 3.25 ? '3' : '4'}`}/>
-          <text x='50%' y='50%'>
+          <text x='50%' y={name === 'Average' ? '50%' : '55%'}> {/*y not 50 because height slightly higher than desired*/}
             {value}
           </text>
         </svg>
@@ -117,24 +117,24 @@ class Eval extends Component {
         { breakpoint: 768,
           settings: {
             dots: true,
-            slidesToShow: 3,
-            slidesToScroll: 3,
+            slidesToShow: 2,
+            slidesToScroll: 2,
             speed: 225
           }
         },
         { breakpoint: 992,
           settings: {
             dots: true,
-            slidesToShow: 5,
-            slidesToScroll: 5,
+            slidesToShow: 4,
+            slidesToScroll: 4,
             speed: 375
           }
         },
         { breakpoint: 1200,
           settings: {
             dots: true,
-            slidesToShow: 7,
-            slidesToScroll: 7,
+            slidesToShow: 5,
+            slidesToScroll: 5,
             speed: 525
           }
         },
@@ -255,15 +255,25 @@ class Eval extends Component {
           </div>
           }
           <Slider {...settings}>
-            {this.renderScore('Average', average)}
-            {this.renderScore('Recommend?', recommended)}
-            {this.renderScore('Easiness', easiness)}
-            {this.renderScore('Workload', workload)}
-            {this.renderScore('Grading Speed', grading_speed)}
-            {this.renderScore('Clarity', clarity)}
-            {this.renderScore('Resourcefulness', resourcefulness)}
-            {this.renderScore('Attitude', attitude)}
-            {this.renderScore('Availability', availability)}
+            <div styleName='scoreBlock average'>
+              {this.renderScore('Average', average)}
+            </div>
+            <div styleName='scoreBlock'>
+              {this.renderScore('Recommend?', recommended)}
+              {this.renderScore('Easiness', easiness)}
+            </div>
+            <div styleName='scoreBlock'>
+              {this.renderScore('Workload', workload)}
+              {this.renderScore('Grading Speed', grading_speed)}
+            </div>
+            <div styleName='scoreBlock'>
+              {this.renderScore('Clarity', clarity)}
+              {this.renderScore('Resourcefulness', resourcefulness)}
+            </div>
+            <div styleName='scoreBlock'>
+              {this.renderScore('Attitude', attitude)}
+              {this.renderScore('Availability', availability)}
+            </div>
           </Slider>
           <div styleName='comment'>
             <div styleName='commentQuote'>
