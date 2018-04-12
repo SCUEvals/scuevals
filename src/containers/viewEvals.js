@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -70,8 +70,12 @@ class ViewEvals extends Component {
     return  157.08 - (n / 4 * 157.08);
   }
 
-  renderAverage(name, value) {
-    let avgClass = value < 1.75 ? 'score1' : value < 2.5 ? 'score2' : value < 3.25 ? 'score3' : 'score4';
+  calculateAverageColor(value) { //returns classNames that define colors of svg circles
+    return value < 1.75 ? 'score1' : value < 2.5 ? 'score2' : value < 3.25 ? 'score3' : 'score4';
+  }
+
+  renderAverage(name, value, tooltipName) {
+    let avgClass = this.calculateAverageColor(value);
     if (value) {
       return (
         <div styleName='avgScore'>
@@ -84,13 +88,7 @@ class ViewEvals extends Component {
               {value}
             </text>
           </svg>
-          {name ==='Recommend?' ?
-            this.renderInfoTooltip(TextOptions['recommended'].info)
-            : name === 'Average' ?
-             ''
-            : name === 'Grading Speed' ?
-              this.renderInfoTooltip(TextOptions['grading_speed'].info)
-            : this.renderInfoTooltip(TextOptions[name.toLowerCase()].info)}
+          {tooltipName && this.renderInfoTooltip(TextOptions[tooltipName].info)}
         </div>
       );
     }
@@ -114,10 +112,9 @@ class ViewEvals extends Component {
     const { info, flagModal, deleteModal, sortValue } = this.state;
     const { majorsList, quartersList, coursesList, professorsList, departmentsList, userInfo , type, match } = this.props;
     const write_access = userInfo.permissions.includes(WRITE_EVALUATIONS);
-    let average, attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload;
+    let average, courseAverage, professorAverage, attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload;
     if (info && info.evaluations.length > 0) {
-      average = attitude = availability = clarity = easiness = grading_speed = recommended = resourcefulness = workload = 0;
-      const avgDivideNum = Object.values(info.evaluations[0].data).length - 1; //comment not part of average
+      average = professorAverage = courseAverage =  attitude = availability = clarity = easiness = grading_speed = recommended = resourcefulness = workload = 0;
       const divideNum = info.evaluations.length;
       info.evaluations.map(evaluation => {
         const { data } = evaluation;
@@ -129,17 +126,23 @@ class ViewEvals extends Component {
         recommended += data.recommended;
         resourcefulness += data.resourcefulness;
         workload += data.workload;
-        average += (data.attitude + data.availability + data.clarity + data.easiness + data.grading_speed + data.recommended + data.resourcefulness + data.workload) / avgDivideNum;
+        courseAverage += (data.easiness + data.workload) / 2;
+        professorAverage += (data.attitude + data.availability + data.clarity + data.grading_speed + data.resourcefulness) / 5;
       });
-      average = Number((average / divideNum * 10) / 10).toFixed(1);
-      attitude = Number((attitude / divideNum * 10) / 10).toFixed(1);
-      availability = Number((availability / divideNum * 10) / 10).toFixed(1);
-      clarity = Number((clarity / divideNum * 10) / 10).toFixed(1);
-      easiness = Number((easiness / divideNum * 10) / 10).toFixed(1);
-      grading_speed = Number((grading_speed / divideNum * 10) / 10).toFixed(1);
-      recommended = Number((recommended / divideNum * 10) / 10).toFixed(1);
-      resourcefulness = Number((resourcefulness / divideNum * 10) / 10).toFixed(1);
-      workload = Number((workload / divideNum * 10) / 10).toFixed(1);
+      attitude = (attitude / divideNum).toFixed(1);
+      availability = (availability / divideNum).toFixed(1);
+      clarity = (clarity / divideNum).toFixed(1);
+      easiness = (easiness / divideNum).toFixed(1);
+      grading_speed = (grading_speed / divideNum).toFixed(1);
+      recommended = (recommended / divideNum);
+      resourcefulness = (resourcefulness / divideNum).toFixed(1);
+      workload = (workload / divideNum).toFixed(1);
+      courseAverage = (courseAverage / divideNum);
+      professorAverage = (professorAverage / divideNum);
+      average = (((courseAverage + professorAverage) / 2) * 0.8 + recommended * 0.2).toFixed(1);
+      recommended = recommended.toFixed(1);
+      courseAverage = courseAverage.toFixed(1);
+      professorAverage = professorAverage.toFixed(1);
     }
 
     let sortOptions = [
@@ -149,6 +152,7 @@ class ViewEvals extends Component {
       {value: 'major', label: 'Sort By Major'},
       {value: 'grad_year', label: 'Sort By Graduation Year'}
     ];
+
     return (
       <div className="content" styleName='viewEvals'>
         <FlagModal
@@ -191,22 +195,42 @@ class ViewEvals extends Component {
           }
         </h2>
         {info && info.evaluations.length > 0 ?
-          <div className='row' styleName='scores'>
-            {this.renderAverage('Average', average)}
-            {this.renderAverage('Recommend?', recommended)}
-            {this.renderAverage('Easiness', easiness)}
-            {this.renderAverage('Workload', workload)}
-            {this.renderAverage('Grading Speed', grading_speed)}
-            {this.renderAverage('Clarity', clarity)}
-            {this.renderAverage('Resourcefulness', resourcefulness)}
-            {this.renderAverage('Attitude', attitude)}
-            {this.renderAverage('Availability', availability)}
-          </div>
+          <section styleName='scores'>
+            <div styleName='scoresGroup top'>
+              {this.renderAverage('Course', courseAverage)}
+              {this.renderAverage('Total', average)}
+              {this.renderAverage('Professor', professorAverage)}
+            </div>
+            <div>
+              <div styleName='scoresGroup'>
+                {this.renderAverage('Recommend?', recommended, 'recommended')}
+              </div>
+              <div styleName='scoresGroup'>
+                {this.renderAverage('Easiness', easiness, 'easiness')}
+                {this.renderAverage('Workload', workload, 'workload')}
+              </div>
+              <div styleName='scoresGroup'>
+                {this.renderAverage('Grading Speed', grading_speed, 'grading_speed')}
+                {this.renderAverage('Clarity', clarity, 'clarity')}
+                {this.renderAverage('Resourcefulness', resourcefulness, 'resourcefulness')}
+                {this.renderAverage('Attitude', attitude, 'attitude')}
+                {this.renderAverage('Availability', availability, 'availability')}
+              </div>
+            </div>
+          </section>
           : ''
         }
+        <div styleName='buttonGroup'>
+        {(write_access && info) && (
+          <Link styleName='quickPostBtn' className='btn' to={type === 'professors' ?
+            `/professors/${match.params.id}/post`
+            :`/courses/${match.params.id}/post`}>
+            Post Evaluation
+          </Link>
+        )}
         {info && (info.courses || info.professors) && departmentsList && (
-          <div>
-            <button styleName='relatedInfoBtn' className='btn' type='button' data-toggle='collapse' data-target='#relatedInfo' aria-expanded='false' aria-controls='relatedInfo'>
+          <Fragment>
+            <button className='btn' type='button' data-toggle='collapse' data-target='#relatedInfo' aria-expanded='false' aria-controls='relatedInfo'>
               {info.courses ? 'Past Courses' : 'Past Professors'} <i className="fa fa-chevron-down" />
             </button>
             <div id='relatedInfo' className='collapse'>
@@ -218,15 +242,9 @@ class ViewEvals extends Component {
                 desc={type === 'professors' ? info.first_name + ' ' + info.last_name : departmentsList[info.department_id].abbr + ' ' + info.number}
              />
            </div>
-         </div>
-       )}
-        {(write_access && info) && (
-          <Link styleName='quickPost' className='btn' to={type === 'professors' ?
-            `/professors/${match.params.id}/post`
-            :`/courses/${match.params.id}/post`}>
-            Post Evaluation
-          </Link>
+         </Fragment>
         )}
+        </div>
         {info && info.evaluations.length > 0 ?
           <div>
             <Select
@@ -235,7 +253,7 @@ class ViewEvals extends Component {
               className='sort'
               simpleValue
               options={sortOptions}
-              placeholder="Sort"
+              placeholder='Sort'
               onChange={sortValue => {
                 let newInfo = Object.assign({}, info); //multiple shallow copies best way to handle nested state change while respecting immutable state
                 let evals = info.evaluations.slice();

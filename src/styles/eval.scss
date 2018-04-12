@@ -1,4 +1,10 @@
 @import "theme";
+//breakpoints for scores
+$xlBP: 5;
+$lgBP: 5;
+$mdBP: 5;
+$smBP: 3;
+$xsBP: 2;
 
 $voteWidth: 50px;
 
@@ -65,9 +71,8 @@ $voteWidth: 50px;
     background: $sandColor;
     border-bottom: 1px solid $backgroundColor;
     margin: 0;
-    padding: 0;
     position: static;
-    padding:5px 0;
+    padding: 5px 0;
     display: flex !important;
     justify-content: center;
     align-items: center;
@@ -99,30 +104,21 @@ $voteWidth: 50px;
     }
   }
 
-  :global(.slick-list) {
-    padding: 5px 0;
-  }
-
-  .scoreBlock {
-    min-width: 100px;
-  }
-
   .scoreBlock,
   :global(.slick-track) {
     height: 100%;
     vertical-align: middle;
   }
 
-  .scoreBlock:not(.average) {
+  .scoreBlock {
+    min-width: 100px;
 
-    &:not(:last-child) {
-      .scoreWrapper {
-        @media (min-width: 768px) {
-          border-right: 1px solid $gray;
-        }
-      }
+    &:not(:first-of-type) {
+      border-left: 1px solid $backgroundColor;
     }
+  }
 
+  .scoreBlock:not(.average) {
     .scoreWrapper {
       height: 50%;
       display: flex;
@@ -151,15 +147,12 @@ $voteWidth: 50px;
 
     .scoreWrapper {
       height: 100%;
-
-      @media (min-width: 768px) {
-        border-right: 1px solid $gray;
-      }
     }
   }
 
   :global(.slick-list) {
     height: 74px;
+    padding: 5px 0;
     background: $sandColor;
     border-bottom: 1px solid $backgroundColor;
     cursor: grab;
@@ -175,14 +168,9 @@ $voteWidth: 50px;
     background: $sandColor;
     height: 74px;
 
-
     .scoreBlock {
       display: inline-block;
       width: percentage(1 / $xlBP);
-
-      &.average {
-
-      }
     }
   }
 
