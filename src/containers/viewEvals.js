@@ -231,7 +231,7 @@ class ViewEvals extends Component {
         {info && (info.courses || info.professors) && departmentsList && (
           <Fragment>
             <button className='btn' type='button' data-toggle='collapse' data-target='#relatedInfo' aria-expanded='false' aria-controls='relatedInfo'>
-              {info.courses ? 'Past Courses' : 'Past Professors'} <i className="fa fa-chevron-down" />
+              {info.courses ? 'Past Courses' : 'Past Professors'} <i className='fa fa-chevron-down' /><i className='fa fa-chevron-up' />
             </button>
             <div id='relatedInfo' className='collapse'>
               <RelatedInfo

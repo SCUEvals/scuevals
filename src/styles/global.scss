@@ -782,3 +782,11 @@ svg.score {
   display: inline-block;
   text-align: left;
 }
+
+button[aria-expanded=true] .fa-chevron-down {
+   display: none;
+}
+
+button[aria-expanded=false] .fa-chevron-up {
+   display: none;
+}
