@@ -51,7 +51,7 @@ class Eval extends Component {
 
   renderScore(name, value) {
     let style;
-    if (name === 'Average') style = {strokeDashoffset: this.calculatePath(value)};
+    if (name === 'Score') style = {strokeDashoffset: this.calculatePath(value)};
     return (
         <div styleName='scoreWrapper'>
         <span key='scoreTitle' styleName='scoreTitle'>{name}</span>
@@ -101,7 +101,7 @@ class Eval extends Component {
     const { user_vote, user_flagged, expanded, truncated } = this.state;
     const { votes_score } = evaluation;
     const { attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload } = evaluation.data;
-    const average =  Number((attitude + availability + clarity + easiness + grading_speed + recommended + resourcefulness + workload) / (Object.values(evaluation.data).length - 1)).toFixed(1); //-1 for comments
+    const totalScore =  (((attitude + availability + clarity + grading_speed + resourcefulness) / 5 + (easiness + workload) / 2) / 2 * 0.8 + recommended * .2).toFixed(1);
     const settings = { //set speed = slidesToShow * 75
       dots: false,
       arrows: false,
@@ -255,8 +255,8 @@ class Eval extends Component {
           </div>
           }
           <Slider {...settings}>
-            <div styleName='scoreBlock average'>
-              {this.renderScore('Average', average)}
+            <div styleName='scoreBlock totalScore'>
+              {this.renderScore('Score', totalScore)}
             </div>
             <div styleName='scoreBlock'>
               {this.renderScore('Recommend?', recommended)}

@@ -3,10 +3,10 @@
 .viewEvals {
 
   .buttonGroup {
-    margin: 15px;
+    margin: 7.5px -7.5px;
 
-    .quickPostBtn {
-      margin-right: 15px;
+    :global(.btn) {
+      margin: 7.5px;
     }
   }
 
@@ -111,6 +111,6 @@
   }
 
   :global(#relatedInfo) table {
-    margin: 15px 0;
+    margin-bottom: 15px;
   }
 }

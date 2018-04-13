@@ -198,7 +198,7 @@ class ViewEvals extends Component {
           <section styleName='scores'>
             <div styleName='scoresGroup top'>
               {this.renderAverage('Course', courseAverage)}
-              {this.renderAverage('Total', average)}
+              {this.renderAverage('Score', average)}
               {this.renderAverage('Professor', professorAverage)}
             </div>
             <div>
@@ -222,7 +222,7 @@ class ViewEvals extends Component {
         }
         <div styleName='buttonGroup'>
         {(write_access && info) && (
-          <Link styleName='quickPostBtn' className='btn' to={type === 'professors' ?
+          <Link className='btn' to={type === 'professors' ?
             `/professors/${match.params.id}/post`
             :`/courses/${match.params.id}/post`}>
             Post Evaluation

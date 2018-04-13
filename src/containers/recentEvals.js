@@ -45,8 +45,8 @@ class RecentEvals extends Component {
             <ul className='list-group'>
               {evals.map(evaluation => {
                 const {attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload } = evaluation.data;
-                const average =  Number((attitude + availability + clarity + easiness + grading_speed + recommended + resourcefulness + workload) / (Object.values(evaluation.data).length - 1)).toFixed(1); //-1 for comments
-                let avgStyle={strokeDashoffset: this.calculatePath(average)};
+                const totalScore =  (((attitude + availability + clarity + grading_speed + resourcefulness) / 5 + (easiness + workload) / 2) / 2 * 0.8 + recommended * .2).toFixed(1);
+                let totalScoreStyle={strokeDashoffset: this.calculatePath(totalScore)};
                   return (
                     <li key={evaluation.id} className="list-group-item d-flex justify-content-between align-items-center">
                       <div  className='flex col-2'>
@@ -60,9 +60,9 @@ class RecentEvals extends Component {
                       </div>
                       <div className='flex col-2'>
                         <svg className='score'>
-                          <circle style={avgStyle} cx="18" cy="18" r="16" className={`score${average < 1.75 ? '1' : average < 2.5 ? '2' : average < 3.25 ? '3' : '4'}`}/>
+                          <circle style={totalScoreStyle} cx="18" cy="18" r="16" className={`score${totalScore < 1.75 ? '1' : totalScore < 2.5 ? '2' : totalScore < 3.25 ? '3' : '4'}`}/>
                           <text x='50%' y='50%'>
-                            {average}
+                            {totalScore}
                           </text>
                         </svg>
                       </div>

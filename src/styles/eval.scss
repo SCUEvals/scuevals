@@ -118,7 +118,7 @@ $voteWidth: 50px;
     }
   }
 
-  .scoreBlock:not(.average) {
+  .scoreBlock:not(.totalScore) {
     .scoreWrapper {
       height: 50%;
       display: flex;
@@ -140,7 +140,7 @@ $voteWidth: 50px;
     }
   }
 
-  .scoreBlock.average {
+  .scoreBlock.totalScore {
     span {
       display: block;
     }
@@ -185,6 +185,7 @@ $voteWidth: 50px;
       display: flex;
       justify-content: center;
       align-items: center;
+      padding-bottom: 0;
     }
 
     @media (min-width: $sm) {
