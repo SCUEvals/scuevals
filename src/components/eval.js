@@ -56,7 +56,7 @@ class Eval extends Component {
         <div styleName='scoreWrapper'>
         <span key='scoreTitle' styleName='scoreTitle'>{name}</span>
         <svg key='score' className='score'>
-          <circle style={style} cx="18" cy="18" r="16" className={`score${value < 1.75 ? '1' : value < 2.5 ? '2' : value < 3.25 ? '3' : '4'}`}/>
+          <circle style={style} cx='18' cy='18' r='16' className={`score${value < 1.75 ? '1' : value < 2.5 ? '2' : value < 3.25 ? '3' : '4'}`}/>
           <text x='50%' y='50%'>
             {value}
           </text>

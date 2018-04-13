@@ -6,11 +6,11 @@ import '../styles/footer.scss';
 const Footer = ()  => {
   return (
     <footer>
-      <div className="container">
-        <Link className="btn" to={"/about"}>
+      <div className='container'>
+        <Link className='btn' to='/about'>
           About Us
         </Link>
-        <Link className="btn" to={"/privacy"}>
+        <Link className='btn' to='/privacy'>
           Privacy Policy
         </Link>
       </div>

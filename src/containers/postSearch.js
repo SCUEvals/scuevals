@@ -123,7 +123,7 @@ class PostSearch extends Component {
           disabled={!localQuartersList}
           value={input.value}
           valueKey={'id'}
-          className={error && submitFailed ? 'error' : ''}
+          className={error && submitFailed ? 'select-error' : undefined}
           simpleValue
           options={localQuartersList}
           isLoading={!localQuartersList}
@@ -131,7 +131,7 @@ class PostSearch extends Component {
             input.onChange(newQuarter);
             if (newQuarter != input.value) populateFields(newQuarter);
           }}
-          placeholder="Select your quarter"
+          placeholder='Select your quarter'
         />
       </div>
     );
@@ -147,7 +147,7 @@ class PostSearch extends Component {
           disabled={!localCoursesList}
           value={input.value}
           valueKey={'id'}
-          className={error && submitFailed ? 'error' : ''}
+          className={error && submitFailed ? 'select-error' : undefined}
           simpleValue
           options={localCoursesList}
           isLoading={!localCoursesList}
@@ -155,7 +155,7 @@ class PostSearch extends Component {
             input.onChange(newCourse);
             if (newCourse != input.value) populateFields(newCourse);
           }}
-          placeholder="Select your course"
+          placeholder='Select your course'
         />
       </div>
     );
@@ -171,7 +171,7 @@ class PostSearch extends Component {
           disabled={!localProfessorsList}
           value={input.value}
           valueKey={'id'}
-          className={error && submitFailed ? 'error' : ''}
+          className={error && submitFailed ? 'select-error' : undefined}
           simpleValue
           options={localProfessorsList}
           isLoading={!localProfessorsList}
@@ -179,7 +179,7 @@ class PostSearch extends Component {
             input.onChange(newProfessor);
             if (newProfessor != input.value) populateFields(newProfessor)
           }}
-          placeholder="Select your professor"
+          placeholder='Select your professor'
           onOpen={() => {
             if (window.innerHeight < postSearchForm.clientHeight + 240) postSearchForm.style.marginBottom = '115px';
           }}
@@ -326,11 +326,11 @@ class PostSearch extends Component {
         {!read_access && (
         <div className='noWriteDiv'>
           <Link className='homeBtn' to={'/'}>
-            <i className="fa fa-home" />
+            <i className='fa fa-home' />
           </Link>
         </div>
         )}
-        <small style={{marginTop: '5px'}}>{`In any order, select the correct combination and select "Continue" to start filling your evaluation.`}</small>
+        <small style={{marginTop: '5px'}}>In any order, select the correct combination and select {`"Continue"`} to start filling your evaluation.</small>
         <hr />
         <Field
           name='quarter' //responsible for object's key name for values
@@ -354,7 +354,7 @@ class PostSearch extends Component {
           postSearchForm={this.postSearchForm}
         />
 
-        <button type="submit" disabled={checkingIfPosted || alreadyPosted} className="btn">{checkingIfPosted ? ' Checking...' : alreadyPosted ? 'Already posted' : 'Continue'}</button>
+        <button type='submit' disabled={checkingIfPosted || alreadyPosted} className='btn'>{checkingIfPosted ? ' Checking...' : alreadyPosted ? 'Already posted' : 'Continue'}</button>
       </form>
     );
   }

@@ -26,7 +26,7 @@ class FlagModal extends Component {
      if (!prevProps.flagModalOpen && this.props.flagModalOpen) $('#flagModal input[type="checkbox"]').first().focus();
   }
 
-  //inputs with only numbers as strings breaks redux form, so add "_val" at end (removed when using parseInt)
+  //inputs with only numbers as strings breaks redux form, so add '_val' at end (removed when using parseInt)
   static OTHER = '0_val';
   static SPAM = '1_val';
   static OFFENSIVE = '2_val';

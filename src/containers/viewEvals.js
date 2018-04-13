@@ -83,7 +83,7 @@ class ViewEvals extends Component {
             {name}
           </div>
           <svg className={avgClass}>
-            <circle cx="27" cy="27" r="25" style={{strokeDashoffset: this.calculatePath(value)}} />
+            <circle cx='27' cy='27' r='25' style={{strokeDashoffset: this.calculatePath(value)}} />
             <text x='50%' y='50%'>
               {value}
             </text>
@@ -100,9 +100,9 @@ class ViewEvals extends Component {
         <Target tabIndex='0' className='popper-target'>
         <i className='fa fa-question'/>
         </Target>
-        <Popper placement="top" className="popper tooltip-popper">
+        <Popper placement='top' className='popper tooltip-popper'>
           {info}
-          <Arrow className="popper__arrow" />
+          <Arrow className='popper__arrow' />
         </Popper>
       </Manager>
     );
@@ -154,7 +154,7 @@ class ViewEvals extends Component {
     ];
 
     return (
-      <div className="content" styleName='viewEvals'>
+      <div className='content' styleName='viewEvals'>
         <FlagModal
           flagModalOpen={flagModal.open}
           comment={flagModal.comment}
@@ -194,9 +194,9 @@ class ViewEvals extends Component {
             : 'Loading...'
           }
         </h2>
-        {info && info.evaluations.length > 0 ?
+        {info && info.evaluations.length > 0 && (
           <section styleName='scores'>
-            <div styleName='scoresGroup top'>
+            <div styleName='scoresGroup scoresGroupTop'>
               {this.renderAverage('Course', courseAverage)}
               {this.renderAverage('Score', average)}
               {this.renderAverage('Professor', professorAverage)}
@@ -218,8 +218,7 @@ class ViewEvals extends Component {
               </div>
             </div>
           </section>
-          : ''
-        }
+        )}
         <div styleName='buttonGroup'>
         {(write_access && info) && (
           <Link className='btn' to={type === 'professors' ?
@@ -245,12 +244,11 @@ class ViewEvals extends Component {
          </Fragment>
         )}
         </div>
-        {info && info.evaluations.length > 0 ?
-          <div>
+        {info && info.evaluations.length > 0 && (
+          <div className='sort-wrapper'>
             <Select
               isLoading={type === 'courses' ? !professorsList && !majorsList && !departmentsList : !coursesList && !majorsList && !departmentsList}
               value={sortValue}
-              className='sort'
               simpleValue
               options={sortOptions}
               placeholder='Sort'
@@ -352,8 +350,8 @@ class ViewEvals extends Component {
 
              />
            </div>
-        : ''}
-        {info ?
+        )}
+        {info && (
           info.evaluations.length === 0 ?
             <h5>No evaluations posted yet.</h5>
           : info.evaluations.map((evaluation, index) => {
@@ -366,36 +364,36 @@ class ViewEvals extends Component {
             }
             if (userString && !evaluation.author.graduation_year) userString = userString.substring(0, userString.length - 2); //cut off last comma and space
             else if (evaluation.author && evaluation.author.graduation_year) userString += 'Class of ' + evaluation.author.graduation_year;
-              return (
-                <Eval
-                  key={evaluation.id}
-                  quarter={quartersList ? quartersList.object[evaluation.quarter_id].name + ' ' + quartersList.object[evaluation.quarter_id].year : null}
-                  vote_access={userInfo.permissions.includes(VOTE_EVALUATIONS)}
-                  department={departmentsList && evaluation.course ? departmentsList[evaluation.course.department_id].abbr + ' ' + evaluation.course.number + ': ' + evaluation.course.title : null}
-                  evaluation={evaluation}
-                  userString={userString}
-                  updateScore={newScore => { //score must be updated in info array so sorting works with new values (or else could just update in local state inside Eval)
-                    let newInfo = Object.assign({}, info); //multiple shallow copies best way to handle nested state change while respecting immutable state
-                    let evals = info.evaluations.slice();
-                    newInfo.evaluations = evals;
-                    newInfo.evaluations[index].votes_score = newScore;
-                    this.setState({info: newInfo});
-                  }}
-                  openDeleteModal={(quarter_id, secondId, eval_id) => {
-                    switch (type) {
-                      case 'courses':
-                        this.setState({deleteModal: {open: true, quarter_id, course_id: info.id, professor_id: secondId, eval_id}})
-                        break;
-                      case 'professors':
-                        this.setState({deleteModal: {open: true, quarter_id, course_id: secondId, professor_id: info.id, eval_id}});
-                        break;
-                    }
-                  }}
-                  openFlagModal={(comment, eval_id, user_flagged, set_user_flagged) => this.setState({flagModal: {open: true, comment, eval_id, user_flagged, set_user_flagged}})}
-                />
-              );
-            })
-        : ''}
+            return (
+              <Eval
+                key={evaluation.id}
+                quarter={quartersList ? quartersList.object[evaluation.quarter_id].name + ' ' + quartersList.object[evaluation.quarter_id].year : null}
+                vote_access={userInfo.permissions.includes(VOTE_EVALUATIONS)}
+                department={departmentsList && evaluation.course ? departmentsList[evaluation.course.department_id].abbr + ' ' + evaluation.course.number + ': ' + evaluation.course.title : null}
+                evaluation={evaluation}
+                userString={userString}
+                updateScore={newScore => { //score must be updated in info array so sorting works with new values (or else could just update in local state inside Eval)
+                  let newInfo = Object.assign({}, info); //multiple shallow copies best way to handle nested state change while respecting immutable state
+                  let evals = info.evaluations.slice();
+                  newInfo.evaluations = evals;
+                  newInfo.evaluations[index].votes_score = newScore;
+                  this.setState({info: newInfo});
+                }}
+                openDeleteModal={(quarter_id, secondId, eval_id) => {
+                  switch (type) {
+                    case 'courses':
+                      this.setState({deleteModal: {open: true, quarter_id, course_id: info.id, professor_id: secondId, eval_id}})
+                      break;
+                    case 'professors':
+                      this.setState({deleteModal: {open: true, quarter_id, course_id: secondId, professor_id: info.id, eval_id}});
+                      break;
+                  }
+                }}
+                openFlagModal={(comment, eval_id, user_flagged, set_user_flagged) => this.setState({flagModal: {open: true, comment, eval_id, user_flagged, set_user_flagged}})}
+              />
+            );
+          })
+        )}
       </div>
     );
   }

@@ -1,4 +1,4 @@
-@import "theme";
+@import 'theme';
 //breakpoints for scores
 $xlBP: 5;
 $lgBP: 5;
@@ -133,7 +133,7 @@ $voteWidth: 50px;
       }
 
       svg {
-        transform: scale(0.6);
+        transform: scale(0.66);
         position: absolute;
         right: 5px;
       }

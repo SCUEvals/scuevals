@@ -34,7 +34,7 @@ class DeleteModal extends Component {
             <hr />
             <div>Are you sure you want to delete this post?</div>
             <button
-              style={{width: "65px"}}
+              style={{width: '65px'}}
               type='button'
               className='btn'
               onClick={() => {deletePost(); closeDeleteModal();}}
@@ -43,7 +43,7 @@ class DeleteModal extends Component {
               }}
             >Yes</button>
             <button
-              style={{width: "65px"}}
+              style={{width: '65px'}}
               type='button'
               className='btn'
               onClick={closeDeleteModal}

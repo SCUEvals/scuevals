@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -81,11 +81,11 @@ class ViewMyEvals extends Component {
       {value: 'votes_score', label: 'Sort by Votes Score'}
     ];
     return (
-      <div className="content">
+      <div className='content'>
         {!read_access && (
           <div className='noWriteDiv'>
             <Link className='homeBtn noWriteHomeBtn' to={'/'}>
-              <i className="fa fa-home" />
+              <i className='fa fa-home' />
             </Link>
           </div>
         )}
@@ -108,79 +108,80 @@ class ViewMyEvals extends Component {
             })
           }}
         />
-        <h4 className='banner'>{userInfo.first_name}&#8217;s Evals</h4>
+        <h4 className='banner'>{userInfo.first_name}'s Evals</h4>
         {myEvalsList ?
            myEvalsList.length === 0 ?
             <h5>You haven&#8217;t posted anything yet.</h5>
-            : <div>
-              <Select
-                isLoading={!coursesList && !departmentsList && !professorsList}
-                value={sortValue}
-                className='sort'
-                simpleValue
-                options={sortOptions}
-                placeholder="Sort"
-                onChange={sortValue => {
-                  let myEvalsListCopy = myEvalsList.slice();
-                  switch (sortValue) {
-                    case 'course':
-                      myEvalsListCopy.sort((a, b) => {
-                        if (a.course.department_id === b.course.department_id) {
-                          //nums can have letters in them too (ex. 12L), so parse integers and compare
-                          let parsedANum = parseInt(a.course.number, 10);
-                          let parsedBNum = parseInt(b.course.number, 10);
-                          //if integers same, check for letters to decide
-                          if (parsedANum === parsedBNum) return a.number > b.number ? 1
-                          : a.course.number < b.course.number ? -1
-                          : a.post_time > b.post_time ? -1 : 1;
-                          else return parsedANum > parsedBNum ? 1 : -1;
-                        }
-                        else return departmentsList[a.course.department_id].abbr > departmentsList[b.course.department_id].abbr ? 1 : -1;
-                      });
-                      break;
-                    case 'professor':
-                      myEvalsListCopy.sort((a, b) =>
-                        professorsList.object[a.professor.id].label > professorsList.object[b.professor.id].label ? 1
-                        : professorsList.object[a.professor.id].label < professorsList.object[b.professor.id].label ? -1
-                        : 0
-                      );
-                      break;
-                    case 'quarter':
-                      myEvalsListCopy.sort((a, b) => //assumption made that newest quarter will always be greatest number (currently always true)
-                        a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1 : a.post_time > b.post_time ? -1 : 1
-                      );
-                      break;
-                    case 'votes_score':
-                      myEvalsListCopy.sort((a, b) =>
-                        a.votes_score > b.votes_score ? -1
-                        : a.votes_score < b.votes_score ? 1
-                        : a.post_time > b.post_time ? -1 : 1
-                      );
-                      break;
-                    default: //will capture 'recent' case too since default is sort by most recent in viewMyEvals
-                      myEvalsListCopy.sort((a, b) => a.post_time > b.post_time ? -1 : 1); //sort by most recent by default when viewing own evals
-                  }
-                  this.setState({myEvalsList: myEvalsListCopy, sortValue});
-                  this.sortArrows.className='fa fa-sort';
-                }}
-              />
-              <i
-                ref={obj => this.sortArrows = obj}
-                tabIndex='0'
-                className='fa fa-sort'
-                onClick={e => {
-                  let myEvalsListCopy = myEvalsList.slice();
-                  myEvalsListCopy.reverse();
-                  this.setState({myEvalsList: myEvalsListCopy});
-                  if (e.target.className === 'fa fa-sort' || e.target.className === 'fa fa-sort-asc')
-                    e.target.className = 'fa fa-sort-desc';
-                  else e.target.className = 'fa fa-sort-asc';
-                }}
-                onKeyPress={event => {
-                  if (event.key === 'Enter') event.target.click();
-                }}
-
-               />
+            :
+            <Fragment>
+              <div className='sort-wrapper'>
+                <Select
+                  isLoading={!coursesList && !departmentsList && !professorsList}
+                  value={sortValue}
+                  simpleValue
+                  options={sortOptions}
+                  placeholder='Sort'
+                  onChange={sortValue => {
+                    let myEvalsListCopy = myEvalsList.slice();
+                    switch (sortValue) {
+                      case 'course':
+                        myEvalsListCopy.sort((a, b) => {
+                          if (a.course.department_id === b.course.department_id) {
+                            //nums can have letters in them too (ex. 12L), so parse integers and compare
+                            let parsedANum = parseInt(a.course.number, 10);
+                            let parsedBNum = parseInt(b.course.number, 10);
+                            //if integers same, check for letters to decide
+                            if (parsedANum === parsedBNum) return a.number > b.number ? 1
+                            : a.course.number < b.course.number ? -1
+                            : a.post_time > b.post_time ? -1 : 1;
+                            else return parsedANum > parsedBNum ? 1 : -1;
+                          }
+                          else return departmentsList[a.course.department_id].abbr > departmentsList[b.course.department_id].abbr ? 1 : -1;
+                        });
+                        break;
+                      case 'professor':
+                        myEvalsListCopy.sort((a, b) =>
+                          professorsList.object[a.professor.id].label > professorsList.object[b.professor.id].label ? 1
+                          : professorsList.object[a.professor.id].label < professorsList.object[b.professor.id].label ? -1
+                          : 0
+                        );
+                        break;
+                      case 'quarter':
+                        myEvalsListCopy.sort((a, b) => //assumption made that newest quarter will always be greatest number (currently always true)
+                          a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1 : a.post_time > b.post_time ? -1 : 1
+                        );
+                        break;
+                      case 'votes_score':
+                        myEvalsListCopy.sort((a, b) =>
+                          a.votes_score > b.votes_score ? -1
+                          : a.votes_score < b.votes_score ? 1
+                          : a.post_time > b.post_time ? -1 : 1
+                        );
+                        break;
+                      default: //will capture 'recent' case too since default is sort by most recent in viewMyEvals
+                        myEvalsListCopy.sort((a, b) => a.post_time > b.post_time ? -1 : 1); //sort by most recent by default when viewing own evals
+                    }
+                    this.setState({myEvalsList: myEvalsListCopy, sortValue});
+                    this.sortArrows.className='fa fa-sort';
+                  }}
+                />
+                <i
+                  ref={obj => this.sortArrows = obj}
+                  tabIndex='0'
+                  className='fa fa-sort'
+                  onClick={e => {
+                    let myEvalsListCopy = myEvalsList.slice();
+                    myEvalsListCopy.reverse();
+                    this.setState({myEvalsList: myEvalsListCopy});
+                    if (e.target.className === 'fa fa-sort' || e.target.className === 'fa fa-sort-asc')
+                      e.target.className = 'fa fa-sort-desc';
+                    else e.target.className = 'fa fa-sort-asc';
+                  }}
+                  onKeyPress={event => {
+                    if (event.key === 'Enter') event.target.click();
+                  }}
+                 />
+               </div>
                 {myEvalsList.map(evaluation => {
                   return <Eval
                     key={evaluation.id}
@@ -192,7 +193,7 @@ class ViewMyEvals extends Component {
                     }}
                   />
                 })}
-            </div>
+            </Fragment>
         : <h5>Loading...</h5>}
       </div>
     );

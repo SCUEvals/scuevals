@@ -48,7 +48,7 @@ class RecentEvals extends Component {
                 const totalScore =  (((attitude + availability + clarity + grading_speed + resourcefulness) / 5 + (easiness + workload) / 2) / 2 * 0.8 + recommended * .2).toFixed(1);
                 let totalScoreStyle={strokeDashoffset: this.calculatePath(totalScore)};
                   return (
-                    <li key={evaluation.id} className="list-group-item d-flex justify-content-between align-items-center">
+                    <li key={evaluation.id} className='list-group-item d-flex justify-content-between align-items-center'>
                       <div  className='flex col-2'>
                         {quartersList.object[evaluation.quarter_id].label}
                       </div>
@@ -60,7 +60,7 @@ class RecentEvals extends Component {
                       </div>
                       <div className='flex col-2'>
                         <svg className='score'>
-                          <circle style={totalScoreStyle} cx="18" cy="18" r="16" className={`score${totalScore < 1.75 ? '1' : totalScore < 2.5 ? '2' : totalScore < 3.25 ? '3' : '4'}`}/>
+                          <circle style={totalScoreStyle} cx='18' cy='18' r='16' className={`score${totalScore < 1.75 ? '1' : totalScore < 2.5 ? '2' : totalScore < 3.25 ? '3' : '4'}`}/>
                           <text x='50%' y='50%'>
                             {totalScore}
                           </text>

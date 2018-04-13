@@ -172,9 +172,9 @@ class PostEval extends Component {
             <div style={trackerStyle} {...targetProps} />
           )}
         </Target>
-        <Popper style={popperStyle} placement="top" className="popper">
+        <Popper style={popperStyle} placement='top' className='popper'>
             {value === 0 || value === 1 ? textProps.one : value === 2 ? textProps.two : value === 3 ? textProps.three : value === 4 ? textProps.four : ''}
-          <Arrow className="popper__arrow" />
+          <Arrow className='popper__arrow' />
         </Popper>
       </Manager>
     );
@@ -186,9 +186,9 @@ class PostEval extends Component {
         <Target tabIndex='0' className='popper-target'>
         <i className='fa fa-question'/>
         </Target>
-        <Popper placement="top" className="popper tooltip-popper">
+        <Popper placement='top' className='popper tooltip-popper'>
           {info}
-          <Arrow className="popper__arrow" />
+          <Arrow className='popper__arrow' />
         </Popper>
       </Manager>
     );
@@ -283,7 +283,7 @@ class PostEval extends Component {
     }
     if (location.state || classInfo !== undefined) { //passed values from postSearch
       return (
-        <form styleName='postEval' onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
+        <form styleName='postEval' onSubmit={handleSubmit(this.onSubmit.bind(this))} className='content' >
           <Prompt
             when={dirty && !submitted}
             message='Are you sure you want to go to navigate away before submitting your evaluation?'
@@ -291,7 +291,7 @@ class PostEval extends Component {
           {!read_access && (
             <div className='noWriteDiv'>
             <Link className='homeBtn' to={'/'}>
-              <i className="fa fa-home" />
+              <i className='fa fa-home' />
             </Link>
           </div>
           )}
@@ -368,7 +368,7 @@ class PostEval extends Component {
           <h6>Would you recommend this course with this professor? {this.renderInfoToolTip(TextOptions.recommended.info)}</h6>
           <Field name='recommended' format={value => value === '' ? 0 : value} textProps={TextOptions.recommended} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Comments {this.renderInfoToolTip(TextOptions.comment.info)}</h6>
-          <Field name="comment" onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
+          <Field name='comment' onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
           <p>Max characters: {this.state.term.length} / 1000</p>
           <div className='checkbox-group'>
             <Field name='display_majors' component={this.renderCheckbox} text={`Display ${userInfo.majors.length > 1 ? 'majors' : 'major'}`} />
@@ -396,8 +396,8 @@ class PostEval extends Component {
     }
     else {
       return (
-        <div className="loadingWrapper">
-          <i className="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <div className='loadingWrapper'>
+          <i className='fa fa-spinner fa-spin fa-3x fa-fw'></i>
         </div>
       );
     }

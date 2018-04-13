@@ -122,8 +122,8 @@ class Home extends Component {
             </p>
             {write_access ?
             <p>
-              {`Use the search bar above to look for a specific course or professor, or, why not post an evaluation
-              for a class you've taken? In that case, hit the "Post Evaluation" button below and we'll get you started!`}
+              Use the search bar above to look for a specific course or professor, or, why not post an evaluation
+              for a class you've taken? In that case, hit the {`"Post Evaluation"`} button below and we'll get you started!
             </p>
             :
             <p>

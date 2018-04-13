@@ -1,4 +1,4 @@
-@import "theme";
+@import 'theme';
 
 $sliderTransition: all 0.15s ease-in-out;
 
@@ -145,7 +145,7 @@ $sliderTransition: all 0.15s ease-in-out;
     visibility: visible;
   }
 
-  :global(.rc-slider-handle) ~ :global(.popper[data-placement="bottom"]) {
+  :global(.rc-slider-handle) ~ :global(.popper[data-placement='bottom']) {
     top: 35px !important;
   }
 

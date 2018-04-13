@@ -150,7 +150,7 @@ class SearchContent extends Component {
 
     if (searchResults && !searchResults.loading) {
       return (
-        <div styleName= "results" className="content">
+        <div styleName='results' className='content'>
           {searchResults.professors.length === 0 && searchResults.courses.length === 0 ?
             <h5>{`No results found for "${this.props.match.params.search}"`}</h5>
             :
@@ -188,13 +188,13 @@ class SearchContent extends Component {
       );
     } else if (this.props.match.params.search.length > 2) {
       return (
-        <div className="loadingWrapper">
-          <i className="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <div className='loadingWrapper'>
+          <i className='fa fa-spinner fa-spin fa-3x fa-fw'></i>
         </div>
       );
     } else {
       return (
-        <div styleName="results" className="content">
+        <div styleName='results' className='content'>
           <h5>Please search with at least 3 characters.</h5>
         </div>
       );

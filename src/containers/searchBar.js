@@ -129,9 +129,9 @@ class SearchBar extends Component {
     }
     const submitBtnClass = loading ? 'Select-loading' : 'fa fa-search';
     return (
-      <div className="row">
-        <label className="sr-only">{field.label}</label>
+      <div className='row'>
         <div id='searchBar' styleName={submitFailed && error ? 'search-error' : ''} className='col-12 col-md-8 mx-auto input-group'>
+          <span className='sr-only'>Search bar</span>
           <input
             onChange={input.onChange}
             onKeyDown={event => {
@@ -156,8 +156,8 @@ class SearchBar extends Component {
               hideOnMouseDownOutside('#searchBar', '#searchBarResults');
             }}
           />
-          <span className="input-group-btn">
-            <button type="submit" className="btn"><i className={submitBtnClass} /></button>
+          <span className='input-group-btn'>
+            <button type='submit' className='btn'><i className={submitBtnClass} /></button>
           </span>
           {submitFailed && error ?
             <div styleName='text-help'>
@@ -177,6 +177,7 @@ class SearchBar extends Component {
       //onMouseDown prevents losing focus if clicking on h6 elements (will also prevent potential unnecessary hideOnMouseDownOutside events which are called on refocusing on input)
       return (
         <ul id='searchBarResults'>
+          <span className='sr-only'>Search results</span>
           {response.professors.length > 0  && (<li><h6 onMouseDown={event => event.preventDefault()}>Professors</h6></li>)}
           {
             response.professors.map(professor => {
@@ -189,7 +190,7 @@ class SearchBar extends Component {
                       switch (event.keyCode) {
                         case 38: { //up
                           let node = document.activeElement.parentNode.previousSibling.firstChild;
-                          if (node.tagName == "H6") $('#searchBar input').focus();
+                          if (node.tagName == 'H6') $('#searchBar input').focus();
                           else node.focus();
                           event.preventDefault();
                           break;
@@ -197,7 +198,7 @@ class SearchBar extends Component {
                         case 40: {//down
                           let node = document.activeElement.parentNode.nextSibling.firstChild;
                           if (node) {
-                            if (node.tagName == "H6") node = node.parentNode.nextSibling.firstChild;
+                            if (node.tagName == 'H6') node = node.parentNode.nextSibling.firstChild;
                             node.focus();
                           }
                           event.preventDefault();
@@ -231,7 +232,7 @@ class SearchBar extends Component {
                       switch (event.keyCode) {
                         case 38: {//up
                           let node = document.activeElement.parentNode.previousSibling.firstChild;
-                          if (node.tagName == "H6") node = node.parentNode.previousSibling.firstChild;
+                          if (node.tagName == 'H6') node = node.parentNode.previousSibling.firstChild;
                           node.focus();
                           event.preventDefault();
                           break;
@@ -240,7 +241,7 @@ class SearchBar extends Component {
                           let node = document.activeElement.parentNode.nextSibling;
                           if (!node) break; //since very last <li> may be here, must check if another exists or console error sometimes appears after last <li> selected and holding down arrow
                           else node = node.firstChild;
-                          if (node.tagName == "H6") node = node.parentNode.nextSibling.firstChild;
+                          if (node.tagName == 'H6') node = node.parentNode.nextSibling.firstChild;
                           node.focus();
                           event.preventDefault();
                           break;
@@ -284,7 +285,7 @@ class SearchBar extends Component {
     const { handleSubmit, setSearchResults, searchResults, departmentsList } = this.props;
     const { loading } = this.state;
     return(
-      <form ref={node => this.form = node} className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+      <form ref={node => this.form = node} className='container' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
           name='search' //responsible for object's key name for values
           component={this.renderSearch}
@@ -314,7 +315,7 @@ class SearchBar extends Component {
 function validate(values) {
   const errors = {};
   if (!values.search || values.search.length < 3) {
-    errors.search = "Enter at least 3 characters";
+    errors.search = 'Enter at least 3 characters';
   }
   return errors;
 }

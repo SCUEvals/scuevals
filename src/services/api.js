@@ -62,7 +62,7 @@ class API {
   }
 
   get(path, callback, passedParams) { //passedParams (obj) and customHandleError (func) optional
-    return this.api.get(path, {params: passedParams}).then(response => {callback(response.data); return response;}).catch(this.handleError);
+    return this.api.get(path, {"params": passedParams}).then(response => {callback(response.data); return response;}).catch(this.handleError);
   }
 
   patch(path, payload, callback) {
@@ -74,7 +74,7 @@ class API {
   }
 
   put(path, value, callback) {
-    return this.api.put(path, {value: value}).then(response => {callback(response.data); return response;}).catch(this.handleError);
+    return this.api.put(path, {"value": value}).then(response => {callback(response.data); return response;}).catch(this.handleError);
   }
 
   delete(path, callback) {

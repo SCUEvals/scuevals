@@ -1,7 +1,6 @@
-@import "theme";
+@import 'theme';
 
 .viewEvals {
-
   .buttonGroup {
     margin: 7.5px -7.5px;
 
@@ -31,40 +30,6 @@
       border-radius: $defaultBorderRadius;
       background: $sandColor;
 
-      &.top {
-        .avgScore:nth-child(odd) {
-          width: inherit;
-          font-size: 12px;
-
-          .scoreTitle {
-            margin-bottom: -8px;
-          }
-
-          svg {
-            transform: scale(0.61);
-          }
-        }
-
-        .avgScore:nth-child(even) {
-          width: 110px;
-          font-size: 18px;
-
-          .scoreTitle {
-            margin-bottom: 5px;
-          }
-
-          svg {
-            transform: scale(1.21);
-            margin-top: 5px;
-          }
-        }
-      }
-
-      .avgScore {
-        width: 100px;
-        display: inline-block;
-      }
-
       svg {
         width: 55px;
         height: 55px;
@@ -85,6 +50,40 @@
           stroke-dasharray: 157.08;
           stroke-dashoffset: 157.08;
           stroke: $overlayBackground;
+        }
+      }
+
+      .avgScore {
+        width: 100px;
+        display: inline-block;
+      }
+
+      &.scoresGroupTop {
+        .avgScore:nth-child(odd) {
+          width: inherit;
+          font-size: 12px;
+
+          .scoreTitle {
+            margin-bottom: -8px;
+          }
+
+          svg {
+            transform: scale(0.61);
+          }
+        }
+
+        .avgScore:nth-child(even) {
+          width: 105px;
+          font-size: 18px;
+
+          .scoreTitle {
+            margin-bottom: 5px;
+          }
+
+          svg {
+            transform: scale(1.21);
+            margin-top: 5px;
+          }
         }
       }
 

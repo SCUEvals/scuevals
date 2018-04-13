@@ -42,7 +42,7 @@ class Profile extends Component {
           options={majorsList}
           onChange={newMajors => input.onChange(newMajors)}
           isLoading={majorsList ? false : true}
-          placeholder="Select your major(s)"
+          placeholder='Select your major(s)'
           onBlur={() => input.onBlur(input.value)}
         />
     </div>
@@ -59,11 +59,11 @@ class Profile extends Component {
     return (
       <Select
         value={input.value}
-        className={error && submitFailed ? 'error' : ''}
+        className={error && submitFailed ? 'select-error' : undefined}
         simpleValue
         options={options}
         onChange={newGradYear => input.onChange(newGradYear)}
-        placeholder="Select your expected graduation year"
+        placeholder='Select your expected graduation year'
         onBlur={() => input.onBlur(input.value)}
       />
     );
@@ -75,28 +75,28 @@ class Profile extends Component {
       <div className={`flex ${error && submitFailed ? 'error' : ''}`}>
         <label>
           <Field
-            name="gender"
-            component="input"
-            type="radio"
-            value="m"
+            name='gender'
+            component='input'
+            type='radio'
+            value='m'
           />{' '}
           Male
         </label>
         <label>
           <Field
-            name="gender"
-            component="input"
-            type="radio"
-            value="f"
+            name='gender'
+            component='input'
+            type='radio'
+            value='f'
           />{' '}
           Female
         </label>
         <label>
           <Field
-            name="gender"
-            component="input"
-            type="radio"
-            value="o"
+            name='gender'
+            component='input'
+            type='radio'
+            value='o'
           />{' '}
           Other
         </label>
@@ -127,11 +127,11 @@ class Profile extends Component {
     const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
     const profileInfo = 'This information may only be used anonymously for statistical purposes.\nYour name is kept hidden at all times.';
     return (
-      <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
+      <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className='content' >
         {!read_access && (
           <div className='noWriteDiv'>
             <Link className='homeBtn noWriteHomeBtn' to={'/'}>
-              <i className="fa fa-home" />
+              <i className='fa fa-home' />
             </Link>
           </div>
         )}
@@ -145,11 +145,11 @@ class Profile extends Component {
             <h4 className='banner'>Welcome to SCU Evals, {userInfo.first_name}!</h4>
             <p>Before we start, we need to know a few things about you.</p>
             <small>{profileInfo}<br/>
-            <button type="button" onClick={() => {
+            <button type='button' onClick={() => {
               setUserInfo(null);
               history.push('/');
               }}
-              className="signOutBtn">
+              className='signOutBtn'>
               Sign Out
             </button>
           </small>
@@ -176,7 +176,7 @@ class Profile extends Component {
             component={this.renderGender}
           />
         </div>
-        <button disabled={submitting} style={{marginTop: '35px'}} type="submit" className="btn">{submitting ? 'Saving...' : 'Save'}</button>
+        <button disabled={submitting} style={{marginTop: '35px'}} type='submit' className='btn'>{submitting ? 'Saving...' : 'Save'}</button>
       </form>
     );
   }
