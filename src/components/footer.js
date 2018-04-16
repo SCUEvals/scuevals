@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 
 import '../styles/footer.scss';
 
-const Footer = ()  => {
-  return (
+const Footer = () => (
     <footer>
       <div className='container'>
         <Link className='btn' to='/about'>
@@ -15,7 +14,6 @@ const Footer = ()  => {
         </Link>
       </div>
     </footer>
-  );
-};
+);
 
 export default Footer;

@@ -36,45 +36,21 @@ export const VOTE_EVALUATIONS = 3;
 export const ADMINISTRATOR = 10;
 export const API_KEY = 20;
 
-ReactGA.initialize('UA-102751367-1');
-
 export const storeWithMiddleware = createStore(
-  reducers, //note: undecodeable jwt will be removed in userInfo reducer here if altered by user, so safe to assume next steps have decodeable jwt
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), //for browser's Redux DevTools add-on to work for development
-  applyMiddleware(promise)
+  reducers, /* note: undecodeable jwt will be removed in userInfo reducer here if altered by user,
+               so safe to assume next steps have decodeable jwt */
+  // for browser's Redux DevTools add-on to work for development
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  applyMiddleware(promise),
 );
 
-if (localStorage.getItem('jwt')) {
-  let decodedJwt = jwtDecode(localStorage.getItem('jwt')); //won't fail, reducers above took care of undecodeable jwt (check note for reducers above)
-  if (new Date().getTime() / 1000 > decodedJwt.exp) { //if token expired, delete it
-    localStorage.removeItem('jwt');
-    storeWithMiddleware.dispatch(setUserInfo(null)); //userInfo decoded from expired token, so delete it
-    renderDOM();
-  }
-  else { //else verify with back end
-    const client = new API();
-    client.get('auth/validate', responseData => {
-      if (responseData.jwt) {
-        ReactGA.set({ userId: decodedJwt.sub.id }); //id will be same from prev json token, no need to decode new one from responseData and find id
-        localStorage.setItem('jwt', responseData.jwt);
-      }
-      else localStorage.removeItem('jwt'); //else responseData.msg error msg occurs if not valid
-      renderDOM();
-    }).catch(() => { //decodeable JWT, but not authorized on back-end
-      localStorage.removeItem('jwt');
-      storeWithMiddleware.dispatch(setUserInfo(null));
-      renderDOM();
-    })
-  }
-}
-else { //no jwt found
-  renderDOM();
-}
+ReactGA.initialize('UA-102751367-1');
 
-function renderDOM () {
+function renderDOM() {
   ReactDOM.render(
     <Provider store={storeWithMiddleware}>
-      {/*Use Router with history={history} rather than BrowserRouter because need to access history outside of React components (API service) */}
+      {/* Use Router with history={history} rather than BrowserRouter
+         because need to access history outside of React components (API service) */}
       <Router history={history}>
         <GAListener>
           <div id='push-footer' styleName='push-footer'>
@@ -83,10 +59,10 @@ function renderDOM () {
               <Switch>
                 <Route exact path='/search/:search' component={requireAuth(SearchContent, null, [READ_EVALUATIONS])} />
                 <Route exact path='/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)' component={requireAuth(PostEval, null, [WRITE_EVALUATIONS])} />
-                <Route exact path='/professors/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'professors'}, [WRITE_EVALUATIONS])} />
-                <Route exact path='/courses/:id(\d+)/post' component={requireAuth(PostSearch, {type: 'courses'}, [WRITE_EVALUATIONS])} />
-                <Route exact path='/professors/:id(\d+)' component={requireAuth(ViewEvals, {type: 'professors'}, [READ_EVALUATIONS])} />
-                <Route exact path='/courses/:id(\d+)' component={requireAuth(ViewEvals, {type: 'courses'})} />
+                <Route exact path='/professors/:id(\d+)/post' component={requireAuth(PostSearch, { type: 'professors' }, [WRITE_EVALUATIONS])} />
+                <Route exact path='/courses/:id(\d+)/post' component={requireAuth(PostSearch, { type: 'courses' }, [WRITE_EVALUATIONS])} />
+                <Route exact path='/professors/:id(\d+)' component={requireAuth(ViewEvals, { type: 'professors' }, [READ_EVALUATIONS])} />
+                <Route exact path='/courses/:id(\d+)' component={requireAuth(ViewEvals, { type: 'courses' })} />
                 <Route exact path='/about' component={About} />
                 <Route exact path='/privacy' component={Privacy} />
                 <Route exact path='/profile/evals' component={requireAuth(ViewMyEvals)} />
@@ -101,6 +77,33 @@ function renderDOM () {
         </GAListener>
       </Router>
     </Provider>,
-    document.getElementById('app')
-  )
+    document.getElementById('app'),
+  );
+}
+
+if (localStorage.getItem('jwt')) {
+  const decodedJwt = jwtDecode(localStorage.getItem('jwt')); // won't fail, reducers above took care of undecodeable jwt (check note for reducers above)
+  if (new Date().getTime() / 1000 > decodedJwt.exp) { // if token expired, delete it
+    localStorage.removeItem('jwt');
+    // userInfo decoded from expired token, so delete it
+    storeWithMiddleware.dispatch(setUserInfo(null));
+    renderDOM();
+  } else { // else verify with back end
+    const client = new API();
+    client.get('auth/validate', (responseData) => {
+      if (responseData.jwt) {
+        /* id will be same from prev json token,
+           no need to decode new one from responseData and find id */
+        ReactGA.set({ userId: decodedJwt.sub.id });
+        localStorage.setItem('jwt', responseData.jwt);
+      } else localStorage.removeItem('jwt'); // else responseData.msg error msg occurs if not valid
+      renderDOM();
+    }).catch(() => { // decodeable JWT, but not authorized on back-end
+      localStorage.removeItem('jwt');
+      storeWithMiddleware.dispatch(setUserInfo(null));
+      renderDOM();
+    });
+  }
+} else { // no jwt found
+  renderDOM();
 }

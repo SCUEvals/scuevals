@@ -6,14 +6,13 @@ import { connect } from 'react-redux';
 import { INCOMPLETE, READ_EVALUATIONS } from '../index';
 
 class Privacy extends Component {
-
     static propTypes = {
-      userInfo: PropTypes.object
+      userInfo: PropTypes.object,
     }
 
-  render() {
-    const { userInfo } = this.props;
-    return (
+    render() {
+      const { userInfo } = this.props;
+      return (
       <div className='content'>
         <h3>
           {(!userInfo || userInfo.permissions.includes(INCOMPLETE) || !userInfo.permissions.includes(READ_EVALUATIONS)) && (
@@ -28,9 +27,9 @@ class Privacy extends Component {
             JSON web token which is deleted after signing out for serverside verification containing information
             given while creating your account (major, graduation year, and gender). Google Analytics is
             a tool that helps us understand how visitors interact with our website. Oauth 2.0 allows users
-            to securely login through {`Google's`} services without us managing or having access to
+            to securely login through {'Google\'s'} services without us managing or having access to
             passwords. We use this so we may ensure those who wish to post reviews are from Santa Clara
-            University while keeping you secure. We also have access to Google {`Analytics's`} 3rd-party
+            University while keeping you secure. We also have access to Google {'Analytics\'s'} 3rd-party
             audience data to better understand the demographics of our users.
           </p>
           <p>We do not store nor have access to your personal passwords.</p>
@@ -52,13 +51,13 @@ class Privacy extends Component {
             Last policy revision: 12 October 2017.
           </p>
       </div>
-    );
-  }
+      );
+    }
 }
 
 function mapStateToProps(state) {
   return {
-    userInfo: state.userInfo
+    userInfo: state.userInfo,
   };
 }
 

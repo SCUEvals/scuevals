@@ -1,8 +1,7 @@
 import { SET_PROFESSORS_LIST } from '../actions';
 
-export default function(state = null, action) {
+export default function (state = null, action) {
   switch (action.type) {
-
     case SET_PROFESSORS_LIST:
       return action.payload;
 

@@ -4,48 +4,46 @@ import { Link } from 'react-router-dom';
 import BootstrapTable from 'react-bootstrap-table-next';
 
 class RelatedInfo extends Component {
-
   static propTypes = {
     departmentsList: PropTypes.object.isRequired,
     info: PropTypes.array.isRequired,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
   }
 
   sortCourseTitles(a, b, order) {
     const splitA = a.split(' ');
     const splitB = b.split(' ');
-    let aDepartment = splitA[0];
-    let bDepartment = splitB[0];
+    const aDepartment = splitA[0];
+    const bDepartment = splitB[0];
     if (order === 'asc') {
       if (aDepartment === bDepartment) {
-        //nums can have letters in them too (ex. 12L), so parse integers and compare
-        let parsedANum = parseInt(splitA[1], 10);
-        let parsedBNum = parseInt(splitB[1], 10);
-        //if integers same, check for letters to decide
+        // nums can have letters in them too (ex. 12L), so parse integers and compare
+        const parsedANum = parseInt(splitA[1], 10);
+        const parsedBNum = parseInt(splitB[1], 10);
+        // if integers same, check for letters to decide
         if (parsedANum === parsedBNum) return a > b ? 1 : a < b ? -1 : 0;
-        else return parsedANum > parsedBNum ? 1 : parsedANum < parsedBNum ? -1 : 0;
+        return parsedANum > parsedBNum ? 1 : parsedANum < parsedBNum ? -1 : 0;
       }
-      else return aDepartment > bDepartment ? 1 : aDepartment < bDepartment ? -1 : 0;
+      return aDepartment > bDepartment ? 1 : aDepartment < bDepartment ? -1 : 0;
     }
-    else {
-      if (aDepartment === bDepartment) {
-        //nums can have letters in them too (ex. 12L), so parse integers and compare
-        let parsedANum = parseInt(splitA[1], 10);
-        let parsedBNum = parseInt(splitB[1], 10);
-        //if integers same, check for letters to decide
-        if (parsedANum === parsedBNum) return a > b ? -1 : a < b ? 1 : 0;
-        return parsedANum > parsedBNum ? -1 : parsedANum < parsedBNum ? 1 : 0;
-      }
-      else return aDepartment > bDepartment ? -1 : aDepartment < bDepartment ? 1 : 0;
+
+    if (aDepartment === bDepartment) {
+      // nums can have letters in them too (ex. 12L), so parse integers and compare
+      const parsedANum = parseInt(splitA[1], 10);
+      const parsedBNum = parseInt(splitB[1], 10);
+      // if integers same, check for letters to decide
+      if (parsedANum === parsedBNum) return a > b ? -1 : a < b ? 1 : 0;
+      return parsedANum > parsedBNum ? -1 : parsedANum < parsedBNum ? 1 : 0;
     }
+    return aDepartment > bDepartment ? -1 : aDepartment < bDepartment ? 1 : 0;
   }
 
   courseFormatter(cell, row) {
-    return  <Link to={`/courses/${row.id}`}>{row.course}</Link>;
+    return <Link to={`/courses/${row.id}`}>{row.course}</Link>;
   }
 
   courseTitleFormatter(cell, row) {
-    return  <Link to={`/courses/${row.id}`}>{row.title}</Link>;
+    return <Link to={`/courses/${row.id}`}>{row.title}</Link>;
   }
 
   nameFormatter(cell, row) {
@@ -61,15 +59,15 @@ class RelatedInfo extends Component {
         formatter: this.courseFormatter,
         sort: true,
         sortFunc: this.sortCourseTitles,
-        dataAlign: 'center'
+        dataAlign: 'center',
       },
       {
         dataField: 'title',
         text: 'Title',
         formatter: this.courseTitleFormatter,
         sort: true,
-        dataAlign: 'center'
-      }
+        dataAlign: 'center',
+      },
     ];
 
     const professorsColumns = [
@@ -78,18 +76,17 @@ class RelatedInfo extends Component {
         text: 'Name',
         formatter: this.nameFormatter,
         sort: true,
-        dataAlign: 'center'
-      }
+        dataAlign: 'center',
+      },
     ];
 
     const labeledInfo = info.slice();
-    labeledInfo.map(obj => {
+    labeledInfo.map((obj) => {
       if (type === 'professors') {
-        obj.course = departmentsList[obj.department_id].abbr + ' ' + obj.number;
+        obj.course = `${departmentsList[obj.department_id].abbr} ${obj.number}`;
         obj.key = obj.course + obj.title;
-      }
-      else {
-        obj.name = obj.last_name + ', ' + obj.first_name;
+      } else {
+        obj.name = `${obj.last_name}, ${obj.first_name}`;
       }
     });
 
@@ -107,7 +104,7 @@ class RelatedInfo extends Component {
           hover
         />
       </div>
-      : <div className='widget'>
+        : <div className='widget'>
           <BootstrapTable
             ref={node => this.table = node}
             data={labeledInfo}

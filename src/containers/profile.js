@@ -12,7 +12,6 @@ import '../styles/profile.scss';
 import { INCOMPLETE, READ_EVALUATIONS } from '../index';
 
 class Profile extends Component {
-
   static propTypes = {
     userInfo: PropTypes.object,
     majorsList: PropTypes.object,
@@ -21,12 +20,12 @@ class Profile extends Component {
     submitting: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    location: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired,
   }
 
   renderMajors(field) {
     const { input, majorsList } = field;
-    const { meta: {submitFailed, error} } = field;
+    const { meta: { submitFailed, error } } = field;
     return (
       <div>
         {error && submitFailed ? <span>{error}</span> : ''}
@@ -41,7 +40,7 @@ class Profile extends Component {
           value={input.value}
           options={majorsList}
           onChange={newMajors => input.onChange(newMajors)}
-          isLoading={majorsList ? false : true}
+          isLoading={!majorsList}
           placeholder='Select your major(s)'
           onBlur={() => input.onBlur(input.value)}
         />
@@ -51,10 +50,10 @@ class Profile extends Component {
 
   renderGradYear(field) {
     const { input } = field;
-    const { meta: {submitFailed, error} } = field;
-    let options = [];
+    const { meta: { submitFailed, error } } = field;
+    const options = [];
     const currentYear = new Date().getFullYear();
-    for (let i = currentYear; i < currentYear + 6; i++) options.push({value: i, label: i});
+    for (let i = currentYear; i < currentYear + 6; i++) options.push({ value: i, label: i });
 
     return (
       <Select
@@ -70,7 +69,7 @@ class Profile extends Component {
   }
 
   renderGender(field) {
-    const { meta: {submitFailed, error} } = field;
+    const { meta: { submitFailed, error } } = field;
     return (
       <div className={`flex ${error && submitFailed ? 'error' : ''}`}>
         <label>
@@ -106,8 +105,8 @@ class Profile extends Component {
 
   onSubmit(values) {
     const client = new API();
-    return client.patch(`/students/${this.props.userInfo.id}`, values, responseData => {
-      if (this.props.userInfo.permissions.includes(INCOMPLETE)) ReactGA.event({category: 'User', action: 'Completed Profile'});
+    return client.patch(`/students/${this.props.userInfo.id}`, values, (responseData) => {
+      if (this.props.userInfo.permissions.includes(INCOMPLETE)) ReactGA.event({ category: 'User', action: 'Completed Profile' });
       this.props.setUserInfo(responseData.jwt);
       if (this.props.location.state) this.props.history.push(this.props.location.state.referrer);
       else this.props.history.push('/');
@@ -115,14 +114,16 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    if (this.props.userInfo.permissions.includes(INCOMPLETE) || !this.props.userInfo.permissions.includes(READ_EVALUATIONS)) { //don't need to check if majorsList or userInfo exists, majorsList shouldn't exist and userInfo should
+    if (this.props.userInfo.permissions.includes(INCOMPLETE) || !this.props.userInfo.permissions.includes(READ_EVALUATIONS)) { // don't need to check if majorsList or userInfo exists, majorsList shouldn't exist and userInfo should
       const client = new API();
-      client.get('/majors', majorsList =>this.props.setMajorsList(majorsList));
+      client.get('/majors', majorsList => this.props.setMajorsList(majorsList));
     }
   }
 
   render() {
-    const { handleSubmit, history, setUserInfo, userInfo, submitting, majorsList } = this.props;
+    const {
+      handleSubmit, history, setUserInfo, userInfo, submitting, majorsList,
+    } = this.props;
     const incomplete = userInfo.permissions.includes(INCOMPLETE);
     const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
     const profileInfo = 'This information may only be used anonymously for statistical purposes.\nYour name is kept hidden at all times.';
@@ -157,7 +158,7 @@ class Profile extends Component {
         }
         <hr />
         {!incomplete && (<Link className='btn' to='/profile/evals'>Manage my Evals</Link>)}
-        {!incomplete &&  (<hr />)}
+        {!incomplete && (<hr />)}
         <div styleName='form-container'>
           <h5>Major(s)</h5>
           <Field
@@ -176,41 +177,39 @@ class Profile extends Component {
             component={this.renderGender}
           />
         </div>
-        <button disabled={submitting} style={{marginTop: '35px'}} type='submit' className='btn'>{submitting ? 'Saving...' : 'Save'}</button>
+        <button disabled={submitting} style={{ marginTop: '35px' }} type='submit' className='btn'>{submitting ? 'Saving...' : 'Save'}</button>
       </form>
     );
   }
 }
 
 
-const validate = values => {
+const validate = (values) => {
   const currentYear = new Date().getFullYear();
   const errors = {};
-  if (!values.gender || (values.gender !== 'm' && values.gender !== 'f' && values.gender !=='o')) errors.gender = true;
+  if (!values.gender || (values.gender !== 'm' && values.gender !== 'f' && values.gender !== 'o')) errors.gender = true;
   if (!values.graduation_year || (values.graduation_year < currentYear || values.graduation_year > currentYear + 5)) errors.graduation_year = true;
 
-  //simpleValue only gives string, so convert to array. Without simpleValue, entire object passed, making comparisons more difficult
-  if (values.majors && typeof(values.majors) == 'string') values.majors = values.majors.split(',').map(Number);
+  // simpleValue only gives string, so convert to array. Without simpleValue, entire object passed, making comparisons more difficult
+  if (values.majors && typeof (values.majors) === 'string') values.majors = values.majors.split(',').map(Number);
   if (!Array.isArray(values.majors) || values.majors.length < 1) errors.majors = true;
   else if (values.majors.length > 3) errors.majors = 'Only up to 3 majors may be declared.';
-  else if (values.majors.length > 1 && values.majors.includes(0))  errors.majors = 'Cannot choose "Undeclared" with other majors.';
+  else if (values.majors.length > 1 && values.majors.includes(0)) errors.majors = 'Cannot choose "Undeclared" with other majors.';
 
   return errors;
-}
+};
 
-const mapStateToProps = state => {
-  return {
-    userInfo: state.userInfo,
-    majorsList: state.majorsList,
-    initialValues: {
-      graduation_year: state.userInfo ? state.userInfo.graduation_year : null,
-      majors: state.userInfo ? state.userInfo.majors : null,
-      gender: state.userInfo ? state.userInfo.gender : null
-    }
-  }
-}
+const mapStateToProps = state => ({
+  userInfo: state.userInfo,
+  majorsList: state.majorsList,
+  initialValues: {
+    graduation_year: state.userInfo ? state.userInfo.graduation_year : null,
+    majors: state.userInfo ? state.userInfo.majors : null,
+    gender: state.userInfo ? state.userInfo.gender : null,
+  },
+});
 
 export default connect(mapStateToProps, { setUserInfo, setMajorsList })(reduxForm({
   validate,
-  form:'profile'
+  form: 'profile',
 })(Profile));

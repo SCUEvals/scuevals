@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import '../styles/checkbox.scss';
 
-const Checkbox = (props)  => {
+const Checkbox = (props) => {
   const { onKeyDown } = props;
   const { input, text } = props.field;
   return (
@@ -11,13 +11,13 @@ const Checkbox = (props)  => {
       <input
         type='checkbox'
          {...input}
-         onKeyPress={event => {
+         onKeyPress={(event) => {
            if (event.key === 'Enter') {
-             event.preventDefault(); //disable form submission
+             event.preventDefault(); // disable form submission
              event.target.click();
            }
          }}
-         onKeyDown={onKeyDown} //may be undefined
+         onKeyDown={onKeyDown} // may be undefined
       />
       <span styleName='checkmark' />
       {text}
@@ -27,7 +27,7 @@ const Checkbox = (props)  => {
 
 Checkbox.propTypes = {
   field: PropTypes.object.isRequired,
-  onKeyDown: PropTypes.func
+  onKeyDown: PropTypes.func,
 };
 
 export default Checkbox;

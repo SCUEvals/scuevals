@@ -10,7 +10,6 @@ import API from '../services/api';
 import { setSearchResults, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList, setMajorsList } from '../actions';
 
 class SearchBar extends Component {
-
   static propTypes = {
     searchResults: PropTypes.object,
     quartersList: PropTypes.object,
@@ -27,15 +26,15 @@ class SearchBar extends Component {
     match: PropTypes.object,
     history: PropTypes.object,
     location: PropTypes.object,
-    handleSubmit: PropTypes.func
+    handleSubmit: PropTypes.func,
   }
 
-  /*searchBar always loaded after auth as full user, so make ajax requests after auth
-  (not on authWithBackEnd on home because if going to non-home page from link, then won't load)*/
+  /* searchBar always loaded after auth as full user, so make ajax requests after auth
+  (not on authWithBackEnd on home because if going to non-home page from link, then won't load) */
   constructor(props) {
     super(props);
     this.state = {
-      loading: false
+      loading: false,
     };
     this.debouncedGetResponse = debounce(this.debouncedGetResponse, 250);
     if (!this.props.departmentsList) {
@@ -48,7 +47,7 @@ class SearchBar extends Component {
     }
     if (!this.props.coursesList) {
       const client = new API();
-      client.get('/courses', courses =>this.props.setCoursesList(courses, this.props.departmentsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+      client.get('/courses', courses => this.props.setCoursesList(courses, this.props.departmentsList)); // departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
     }
     if (!this.props.professorsList) {
       const client = new API();
@@ -56,25 +55,25 @@ class SearchBar extends Component {
     }
     if (!this.props.majorsList) {
       const client = new API();
-      client.get('/majors', majors =>this.props.setMajorsList(majors));
+      client.get('/majors', majors => this.props.setMajorsList(majors));
     }
   }
 
-  componentDidUpdate() { //if coursesList fetched before departmentsList, then need to retroactively search for department name from id and sort
-    if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList)
-      this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList); //make deep copy of current, state immutable
+  componentDidUpdate() { // if coursesList fetched before departmentsList, then need to retroactively search for department name from id and sort
+    if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList) { this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList); } // make deep copy of current, state immutable
   }
 
-  getResponse(searchVal, setSearchResults) { //similar to debouncedGetResponse but without delay
-    $('#searchBarResults').hide(); //hide results dropdown after new results in until new input entered after
+  getResponse(searchVal, setSearchResults) { // similar to debouncedGetResponse but without delay
+    $('#searchBarResults').hide(); // hide results dropdown after new results in until new input entered after
     if (searchVal && setSearchResults) {
       const client = new API();
-      client.get('/search', responseData => {
+      client.get(
+        '/search', (responseData) => {
           responseData.term = searchVal;
           this.sortResponseData(responseData);
           setSearchResults(responseData);
         },
-        {q: searchVal}
+        { q: searchVal },
       );
     }
   }
@@ -83,16 +82,17 @@ class SearchBar extends Component {
     if (searchVal && setSearchResults) {
       const client = new API();
       if (this.form) {
-        this.setState({loading: true}, () => client.get('/search', responseData => {
+        this.setState({ loading: true }, () => client.get(
+          '/search', (responseData) => {
             if (this.form) {
               responseData.term = searchVal;
               this.sortResponseData(responseData);
               setSearchResults(responseData);
-              this.setState({loading: false});
-              if (responseData.courses.length > 0 || responseData.professors.length > 0) $('#searchBar input').focus(); //focus on input after appears, which will also enable searchResults
+              this.setState({ loading: false });
+              if (responseData.courses.length > 0 || responseData.professors.length > 0) $('#searchBar input').focus(); // focus on input after appears, which will also enable searchResults
             }
           },
-          {q: searchVal}
+          { q: searchVal },
         ));
       }
     }
@@ -100,31 +100,31 @@ class SearchBar extends Component {
 
   sortResponseData(responseData) {
     const { departmentsList } = this.props;
-    responseData.professors.sort((a, b) => {
-      return a.last_name > b.last_name ? 1 : a.last_name < b.last_name ? -1 : 0;
-    });
+    responseData.professors.sort((a, b) => (a.last_name > b.last_name ? 1 : a.last_name < b.last_name ? -1 : 0));
     responseData.courses.sort((a, b) => {
-    if (a.department_id == b.department_id) {
-      //nums can have letters in them too (ex. 12L), so parse integers and compare
-      let parsedANum = parseInt(a.number, 10);
-      let parsedBNum = parseInt(b.number, 10);
-      //if integers same, check for letters to decide
-      if (parsedANum == parsedBNum) return a.number > b.number ? 1 : a.number < b.number ? -1 : 0;
-      return parsedANum > parsedBNum ? 1 : parsedANum < parsedBNum ? -1 : 0;
-    }
-    else return departmentsList[a.department_id].abbr > departmentsList[b.department_id].abbr ? 1 : departmentsList[a.department_id].abbr < departmentsList[b.department_id].abbr ? -1 : 0;
+      if (a.department_id == b.department_id) {
+      // nums can have letters in them too (ex. 12L), so parse integers and compare
+        const parsedANum = parseInt(a.number, 10);
+        const parsedBNum = parseInt(b.number, 10);
+        // if integers same, check for letters to decide
+        if (parsedANum == parsedBNum) return a.number > b.number ? 1 : a.number < b.number ? -1 : 0;
+        return parsedANum > parsedBNum ? 1 : parsedANum < parsedBNum ? -1 : 0;
+      }
+      return departmentsList[a.department_id].abbr > departmentsList[b.department_id].abbr ? 1 : departmentsList[a.department_id].abbr < departmentsList[b.department_id].abbr ? -1 : 0;
     });
   }
 
   renderSearch(field) {
-    const { meta: { error, submitFailed }, renderSearchResults, departmentsList, input, searchResults, loading } = field;
-    function hideOnMouseDownOutside(searchBar, searchBarResults) { //must not be DOM objects passed, since each click needs to re-search DOM to see if exists
-      const outsideMouseDownListener = event => {
+    const {
+      meta: { error, submitFailed }, renderSearchResults, departmentsList, input, searchResults, loading,
+    } = field;
+    function hideOnMouseDownOutside(searchBar, searchBarResults) { // must not be DOM objects passed, since each click needs to re-search DOM to see if exists
+      const outsideMouseDownListener = (event) => {
         if (!$(event.target).closest($(searchBar)).length) {
-          $(searchBarResults).hide(); //if already hidden, will do nothing
+          $(searchBarResults).hide(); // if already hidden, will do nothing
           document.removeEventListener('mousedown', outsideMouseDownListener);
         }
-      }
+      };
       document.addEventListener('mousedown', outsideMouseDownListener);
     }
     const submitBtnClass = loading ? 'Select-loading' : 'fa fa-search';
@@ -134,12 +134,12 @@ class SearchBar extends Component {
           <span className='sr-only'>Search bar</span>
           <input
             onChange={input.onChange}
-            onKeyDown={event => {
+            onKeyDown={(event) => {
               switch (event.keyCode) {
-                case 38: //up
+                case 38: // up
                   event.preventDefault();
                   break;
-                case 40: {//down
+                case 40: { // down
                   $('#searchBarResults li a')[0].focus();
                   event.preventDefault();
                   break;
@@ -150,7 +150,7 @@ class SearchBar extends Component {
             type='text'
             placeholder='Search for professor or class'
             autoComplete='off'
-            onFocus={ event => {
+            onFocus={ (event) => {
               $('#searchBarResults').show();
               input.onFocus(event);
               hideOnMouseDownOutside('#searchBar', '#searchBarResults');
@@ -171,31 +171,30 @@ class SearchBar extends Component {
     );
   }
 
-  renderSearchResults(response, search, departmentsList) { //searchResults can exist while search value length < 3. Edge case: Old GET request still processing, but value length no longer > 2
+  renderSearchResults(response, search, departmentsList) { // searchResults can exist while search value length < 3. Edge case: Old GET request still processing, but value length no longer > 2
     if (response && response.term && response.term.length > 2) {
       if (response.courses.length === 0 && response.professors.length === 0) return null;
-      //onMouseDown prevents losing focus if clicking on h6 elements (will also prevent potential unnecessary hideOnMouseDownOutside events which are called on refocusing on input)
+      // onMouseDown prevents losing focus if clicking on h6 elements (will also prevent potential unnecessary hideOnMouseDownOutside events which are called on refocusing on input)
       return (
         <ul id='searchBarResults'>
           <span className='sr-only'>Search results</span>
-          {response.professors.length > 0  && (<li><h6 onMouseDown={event => event.preventDefault()}>Professors</h6></li>)}
+          {response.professors.length > 0 && (<li><h6 onMouseDown={event => event.preventDefault()}>Professors</h6></li>)}
           {
-            response.professors.map(professor => {
-              return (
+            response.professors.map(professor => (
                 <li key={professor.id}>
                   <Link
                     onMouseDown={event => event.preventDefault()}
-                    onKeyDown={event => {
-                      //event.preventDefault(); //disables scrolling with keys, but also selecting with enter key (re-enabled manually below)
+                    onKeyDown={(event) => {
+                      // event.preventDefault(); //disables scrolling with keys, but also selecting with enter key (re-enabled manually below)
                       switch (event.keyCode) {
-                        case 38: { //up
-                          let node = document.activeElement.parentNode.previousSibling.firstChild;
+                        case 38: { // up
+                          const node = document.activeElement.parentNode.previousSibling.firstChild;
                           if (node.tagName == 'H6') $('#searchBar input').focus();
                           else node.focus();
                           event.preventDefault();
                           break;
                         }
-                        case 40: {//down
+                        case 40: { // down
                           let node = document.activeElement.parentNode.nextSibling.firstChild;
                           if (node) {
                             if (node.tagName == 'H6') node = node.parentNode.nextSibling.firstChild;
@@ -214,32 +213,30 @@ class SearchBar extends Component {
                     {professor.last_name}, {professor.first_name}
                   </Link>
                 </li>
-              );
-            })
+              ))
           }
           {response.courses.length > 0 ? <li><h6 onMouseDown={event => event.preventDefault()}>Courses</h6></li> : ''}
           {
-            response.courses.map(course => {
-              return(
+            response.courses.map(course => (
                 <li key={course.id}>
                   <Link
                     onClick={() => {
                       $('#searchBarResults').hide();
                       $('#searchBar input').blur();
                     }}
-                    onKeyDown={event => {
-                      //event.preventDefault(); //disables scrolling with keys, but also selecting with enter key (re-enabled manually below)
+                    onKeyDown={(event) => {
+                      // event.preventDefault(); //disables scrolling with keys, but also selecting with enter key (re-enabled manually below)
                       switch (event.keyCode) {
-                        case 38: {//up
+                        case 38: { // up
                           let node = document.activeElement.parentNode.previousSibling.firstChild;
                           if (node.tagName == 'H6') node = node.parentNode.previousSibling.firstChild;
                           node.focus();
                           event.preventDefault();
                           break;
                         }
-                        case 40: { //down
+                        case 40: { // down
                           let node = document.activeElement.parentNode.nextSibling;
-                          if (!node) break; //since very last <li> may be here, must check if another exists or console error sometimes appears after last <li> selected and holding down arrow
+                          if (!node) break; // since very last <li> may be here, must check if another exists or console error sometimes appears after last <li> selected and holding down arrow
                           else node = node.firstChild;
                           if (node.tagName == 'H6') node = node.parentNode.nextSibling.firstChild;
                           node.focus();
@@ -254,40 +251,45 @@ class SearchBar extends Component {
                      {departmentsList ? departmentsList[course.department_id].abbr : '...'} {course.number}: {course.title}
                   </Link>
                 </li>
-              );
-            })
+              ))
         }
         </ul>
       );
     }
-    else return null;
+    return null;
   }
 
   onSubmit(values) {
-    const { location, searchResults, setSearchResults, history } = this.props;
-    //values is object with searchr: <input>
-    this.debouncedGetResponse(null, null); //cancel other responses in progress
-    if ('/search/' + values.search !== location.pathname) { //only do something if search is different than last
-      if (!searchResults || values.search != searchResults.term) { //if values same, don't make new request, use current searchResults instead (but force update for searchContent)
-        const tempResponse = {professors: [], courses: [], forceUpdate: true, loading: true};
-        setSearchResults(tempResponse); //show loading icon while results being asynchronously fetched
-        this.getResponse(values.search, response =>  {
+    const {
+      location, searchResults, setSearchResults, history,
+    } = this.props;
+    // values is object with searchr: <input>
+    this.debouncedGetResponse(null, null); // cancel other responses in progress
+    if (`/search/${values.search}` !== location.pathname) { // only do something if search is different than last
+      if (!searchResults || values.search != searchResults.term) { // if values same, don't make new request, use current searchResults instead (but force update for searchContent)
+        const tempResponse = {
+          professors: [], courses: [], forceUpdate: true, loading: true,
+        };
+        setSearchResults(tempResponse); // show loading icon while results being asynchronously fetched
+        this.getResponse(values.search, (response) => {
           response.forceUpdate = true;
           response.term = values.search;
           setSearchResults(response);
         });
       }
-      history.push('/search/' + values.search);
+      history.push(`/search/${values.search}`);
     }
   }
 
   render() {
-    const { handleSubmit, setSearchResults, searchResults, departmentsList } = this.props;
+    const {
+      handleSubmit, setSearchResults, searchResults, departmentsList,
+    } = this.props;
     const { loading } = this.state;
-    return(
+    return (
       <form ref={node => this.form = node} className='container' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
-          name='search' //responsible for object's key name for values
+          name='search' // responsible for object's key name for values
           component={this.renderSearch}
           renderSearchResults={(results, term) => this.renderSearchResults(results, term, departmentsList)}
           departmentsList={departmentsList}
@@ -296,12 +298,12 @@ class SearchBar extends Component {
           onChange={
             (change, newVal) => {
               if (newVal.length > 2) {
-                this.debouncedGetResponse(newVal, response => {
+                this.debouncedGetResponse(newVal, (response) => {
                   response.term = newVal;
                   setSearchResults(response);
                 });
               } else {
-                this.debouncedGetResponse(null, null);//this cancels any previous calls still being debounced so function not called later
+                this.debouncedGetResponse(null, null);// this cancels any previous calls still being debounced so function not called later
                 if (this.props.searchResults !== null) setSearchResults(null);
               }
             }
@@ -320,27 +322,25 @@ function validate(values) {
   return errors;
 }
 
-const mapStateToProps = state => {
-   return {
-     userInfo: state.userInfo,
-     searchResults: state.searchResults,
-     departmentsList: state.departmentsList,
-     coursesList: state.coursesList,
-     majorsList: state.majorsList,
-     myEvalsList: state.myEvalsList
-   }
-}
+const mapStateToProps = state => ({
+  userInfo: state.userInfo,
+  searchResults: state.searchResults,
+  departmentsList: state.departmentsList,
+  coursesList: state.coursesList,
+  majorsList: state.majorsList,
+  myEvalsList: state.myEvalsList,
+});
 
 const mapDispatchToProps = {
- setSearchResults,
- setDepartmentsList,
- setProfessorsList,
- setQuartersList,
- setCoursesList,
- setMajorsList
+  setSearchResults,
+  setDepartmentsList,
+  setProfessorsList,
+  setQuartersList,
+  setCoursesList,
+  setMajorsList,
 };
 
 export default reduxForm({
   validate,
-  form: 'searchBar'
+  form: 'searchBar',
 })(connect(mapStateToProps, mapDispatchToProps)(SearchBar));

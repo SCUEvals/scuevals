@@ -9,23 +9,22 @@ import '../styles/header.scss';
 import { INCOMPLETE, READ_EVALUATIONS, WRITE_EVALUATIONS } from '../index';
 
 class Header extends Component {
-
   static propTypes = {
     userInfo: PropTypes.object,
     location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
   }
 
   componentDidMount() {
     const { userInfo } = this.props;
-    let pushFooter = document.getElementById('push-footer');
+    const pushFooter = document.getElementById('push-footer');
     if (userInfo && !userInfo.permissions.includes(INCOMPLETE) && userInfo.permissions.includes(READ_EVALUATIONS)) pushFooter.classList.remove('flex');
     else pushFooter.classList.add('flex');
   }
 
   componentWillUpdate(nextProps) {
     if (nextProps.userInfo !== this.props.userInfo) {
-      let pushFooter = document.getElementById('push-footer');
+      const pushFooter = document.getElementById('push-footer');
       if (nextProps.userInfo && !nextProps.userInfo.permissions.includes(INCOMPLETE) && nextProps.userInfo.permissions.includes(READ_EVALUATIONS)) pushFooter.classList.remove('flex');
       else pushFooter.classList.add('flex');
     }
@@ -38,11 +37,11 @@ class Header extends Component {
         <header>
           <SearchBar location={this.props.location} history={this.props.history} />
           <div styleName='header-items' className='container'>
-            <Link to={'/'} className='homeBtn' styleName='headerHomeBtn'>
+            <Link to='/' className='homeBtn' styleName='headerHomeBtn'>
               <i className='fa fa-home' />
             </Link>
             {userInfo.permissions.includes(WRITE_EVALUATIONS) ?
-              <Link className='btn' styleName='profileBtn' to={'/profile'}>
+              <Link className='btn' styleName='profileBtn' to='/profile'>
                 <img styleName='profile-img' src={userInfo.picture} alt='Profile picture' />
                 {userInfo.first_name}
               </Link>
@@ -52,14 +51,14 @@ class Header extends Component {
                 {userInfo.first_name}
               </div>
             }
-            <Link className='btn' styleName='signOutBtn' to={{pathname: '/', signOut: true}}>
+            <Link className='btn' styleName='signOutBtn' to={{ pathname: '/', signOut: true }}>
               Sign Out
             </Link>
           </div>
         </header>
       );
     }
-    else return null;
+    return null;
   }
 }
 
@@ -67,7 +66,7 @@ function mapStateToProps(state) {
   return {
     userInfo: state.userInfo,
     searchResults: state.searchResults,
-    departmentsList: state.departmentsList
+    departmentsList: state.departmentsList,
   };
 }
 

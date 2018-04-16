@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 
 class NonStudentModal extends Component {
-
   static propTypes = {
     nonStudentModalOpen: PropTypes.bool.isRequired,
-    closeNonStudentModal: PropTypes.func.isRequired
+    closeNonStudentModal: PropTypes.func.isRequired,
   }
 
   render() {
@@ -18,14 +17,14 @@ class NonStudentModal extends Component {
             <h5>Welcome to SCU Evals!</h5>
             <i tabIndex='0' className='fa fa-times'
               onClick={closeNonStudentModal}
-              onKeyPress={event => {
+              onKeyPress={(event) => {
                 if (event.key === 'Enter') closeNonStudentModal();
               }}
             />
           </div>
           <div className='modalBlock'>
-            Since you {`aren't`} a student, you {`won't`} be able to vote on or post evaluations,
-            but {`you're`} welcome to browse and read all of the evaluations.
+            Since you {'aren\'t'} a student, you {'won\'t'} be able to vote on or post evaluations,
+            but {'you\'re'} welcome to browse and read all of the evaluations.
           </div>
         </div>
       </ReactModal>

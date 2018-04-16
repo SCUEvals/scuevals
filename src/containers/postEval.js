@@ -18,7 +18,6 @@ import { READ_EVALUATIONS } from '../index';
 import Checkbox from '../components/checkbox';
 
 class PostEval extends Component {
-
   static propTypes = {
     userInfo: PropTypes.object.isRequired,
     departmentsList: PropTypes.object,
@@ -35,27 +34,34 @@ class PostEval extends Component {
     setProfessorsList: PropTypes.func.isRequired,
     setQuartersList: PropTypes.func.isRequired,
     setCoursesList: PropTypes.func.isRequired,
-    dirty: PropTypes.bool.isRequired
+    dirty: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       term: '',
-      classInfo: props.location.state ? { quarter_id: props.location.state.quarter_id, course_id: props.location.state.course_id, professor_id: props.location.state.professor_id, user_posted: false } : undefined,
+      classInfo: props.location.state ? {
+        quarter_id: props.location.state.quarter_id, course_id: props.location.state.course_id, professor_id: props.location.state.professor_id, user_posted: false,
+      } : undefined,
       submitted: false,
-      initial_read_access: props.userInfo.permissions.includes(READ_EVALUATIONS)
+      initial_read_access: props.userInfo.permissions.includes(READ_EVALUATIONS),
     };
 
     if (!props.location.state) {
       const client = new API();
-      //course and professor swapped because API currently has different order than site
-      client.get(`/classes/${props.match.params.quarter_id}/${props.match.params.professor_id}/${props.match.params.course_id}`, classInfo => this.setState(
-        {classInfo: {quarter_id: classInfo.quarter.id, course_id: classInfo.course.id, professor_id: classInfo.professor.id, user_posted: classInfo.user_posted } }))
-      .catch(() => this.setState({classInfo: null}));
+      // course and professor swapped because API currently has different order than site
+      client.get(`/classes/${props.match.params.quarter_id}/${props.match.params.professor_id}/${props.match.params.course_id}`, classInfo => this.setState({
+        classInfo: {
+          quarter_id: classInfo.quarter.id, course_id: classInfo.course.id, professor_id: classInfo.professor.id, user_posted: classInfo.user_posted,
+        },
+      }))
+        .catch(() => this.setState({ classInfo: null }));
     }
 
-    const { userInfo, departmentsList, quartersList, coursesList, professorsList, setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList } = props;
+    const {
+      userInfo, departmentsList, quartersList, coursesList, professorsList, setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList,
+    } = props;
     if (!userInfo.permissions.includes(READ_EVALUATIONS)) {
       if (!departmentsList) {
         const client = new API();
@@ -67,7 +73,7 @@ class PostEval extends Component {
       }
       if (!coursesList) {
         const client = new API();
-        client.get('/courses', courses => setCoursesList(courses, departmentsList)); //departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+        client.get('/courses', courses => setCoursesList(courses, departmentsList)); // departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
       }
       if (!professorsList) {
         const client = new API();
@@ -82,50 +88,51 @@ class PostEval extends Component {
 
   componentDidUpdate() {
     if (!this.props.userInfo.permissions.includes(READ_EVALUATIONS)) {
-      if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList)
-        this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList); //make deep copy of current, state immutable
-      }
+      if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList) { this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList); } // make deep copy of current, state immutable
+    }
   }
 
   onSubmit(values) {
     const { quarter_id, course_id, professor_id } = this.props.match.params;
     const { display_majors, display_grad_year } = values;
-    const evaluation = {...values};
-    const sendingObj = { quarter_id, course_id, professor_id, display_majors, display_grad_year, evaluation };
+    const evaluation = { ...values };
+    const sendingObj = {
+      quarter_id, course_id, professor_id, display_majors, display_grad_year, evaluation,
+    };
     const client = new API();
-    return client.post('/evaluations', sendingObj, responseData => {
-      this.setState({submitted: true});
-      ReactGA.event({category: 'Evaluation', action: 'Submitted'});
+    return client.post('/evaluations', sendingObj, (responseData) => {
+      this.setState({ submitted: true });
+      ReactGA.event({ category: 'Evaluation', action: 'Submitted' });
       this.props.setUserInfo(responseData.jwt);
     });
   }
 
   renderTextArea(field) {
-    const { meta: {submitFailed, error} } = field;
+    const { meta: { submitFailed, error } } = field;
     return (
       <TextareaAutoSize
         className={submitFailed && error ? 'comment-error' : undefined}
         minRows={5} {...field.input}
         placeholder='Write your constructive review here'
       />
-    )
+    );
   }
 
   renderHandle(props, textProps) {
     const Handle = Slider.Handle;
     const { value, ...restProps } = props;
-    delete restProps.dragging; //don't include dragging prop, breaks Handle
-    let trackerStyle = {
+    delete restProps.dragging; // don't include dragging prop, breaks Handle
+    const trackerStyle = {
       top: '-12px',
-      left: 'calc(' + props.offset + '% - 2px)',
-      position: 'absolute'
+      left: `calc(${props.offset}% - 2px)`,
+      position: 'absolute',
     };
 
-    let popperStyle = {};
+    const popperStyle = {};
 
     if (value === 0) {
-      popperStyle.visibility = 'hidden'; //disables highlighting/selecting, allows elements behind it to be selectable
-      popperStyle.opacity = '0'; //needed for transition animation
+      popperStyle.visibility = 'hidden'; // disables highlighting/selecting, allows elements behind it to be selectable
+      popperStyle.opacity = '0'; // needed for transition animation
     }
 
     return (
@@ -133,12 +140,12 @@ class PostEval extends Component {
         <Handle
           value={value}
           {...restProps}
-          onKeyDown={event => {
+          onKeyDown={(event) => {
             switch (event.keyCode) {
-              case 38: { //up
-                event.stopPropagation(); //stop from moving slider up a value
-                event.preventDefault(); //stop scrolling
-                let nodes = $('.rc-slider-handle');
+              case 38: { // up
+                event.stopPropagation(); // stop from moving slider up a value
+                event.preventDefault(); // stop scrolling
+                const nodes = $('.rc-slider-handle');
                 for (let i = 0; i < nodes.length; i++) {
                   if (nodes[i] === event.target) {
                     if (i - 1 >= 0) nodes[i - 1].focus();
@@ -147,10 +154,10 @@ class PostEval extends Component {
                 }
                 break;
               }
-              case 40: { //down
-                event.stopPropagation(); //stop from moving slider down a value
-                event.preventDefault(); //stop scrolling
-                let nodes = $('.rc-slider-handle');
+              case 40: { // down
+                event.stopPropagation(); // stop from moving slider down a value
+                event.preventDefault(); // stop scrolling
+                const nodes = $('.rc-slider-handle');
                 for (let i = 0; i < nodes.length; i++) {
                   if (nodes[i] === event.target) {
                     if (i + 1 < nodes.length) nodes[i + 1].focus();
@@ -195,11 +202,11 @@ class PostEval extends Component {
   }
 
   renderSlider(field) {
-    const { meta: {submitFailed, error}, input, textProps } = field;
-    let track = $('.' + input.name + ' .rc-slider-track');
-    if (track.length === 1) { //if exists
+    const { meta: { submitFailed, error }, input, textProps } = field;
+    let track = $(`.${input.name} .rc-slider-track`);
+    if (track.length === 1) { // if exists
       track = track[0];
-      switch(input.value) {
+      switch (input.value) {
         case 1:
           track.className = 'rc-slider-track track1';
           break;
@@ -214,12 +221,12 @@ class PostEval extends Component {
           break;
       }
     }
-    const sliderClass = submitFailed && error ? input.name + ' slider-error' : input.name;
+    const sliderClass = submitFailed && error ? `${input.name} slider-error` : input.name;
     const { renderHandle } = field;
     return (
       <Slider
-        onBeforeChange={() => $('.' + input.name + ' div[role="slider"]').focus()}
-        className={sliderClass} //used to change track colors on changes
+        onBeforeChange={() => $(`.${input.name} div[role="slider"]`).focus()}
+        className={sliderClass} // used to change track colors on changes
         name={input.name}
         {...input}
         dots
@@ -232,56 +239,60 @@ class PostEval extends Component {
 
   renderCheckbox(field) {
     let onKeyDown;
-    if (field.input.name === 'display_majors')
-      onKeyDown = event => {
+    if (field.input.name === 'display_majors') {
+      onKeyDown = (event) => {
         switch (event.keyCode) {
-          case 38: //up
-            event.preventDefault(); //stop scrolling
+          case 38: // up
+            event.preventDefault(); // stop scrolling
             $('textarea[name="comment"]').focus();
             break;
 
-          case 40: //down
-            event.preventDefault(); //stop scrolling
+          case 40: // down
+            event.preventDefault(); // stop scrolling
             $('input[name="display_grad_year"]').focus();
             break;
         }
-      }
-    else if (field.input.name ==='display_grad_year')
-      onKeyDown = event => {
+      };
+    } else if (field.input.name === 'display_grad_year') {
+      onKeyDown = (event) => {
         switch (event.keyCode) {
-          case 38: //up
-            event.preventDefault(); //stop scrolling
+          case 38: // up
+            event.preventDefault(); // stop scrolling
             $('input[name="display_majors"]').focus();
             break;
 
-          case 40: //down
-            event.preventDefault(); //stop scrolling
+          case 40: // down
+            event.preventDefault(); // stop scrolling
             $('button[type="submit"]').focus();
             break;
         }
-      }
+      };
+    }
 
     return <Checkbox field={field} onKeyDown={onKeyDown} />;
   }
 
   render() {
-    const { quartersList, coursesList, professorsList, handleSubmit, submitting, userInfo, location, history, dirty } = this.props;
+    const {
+      quartersList, coursesList, professorsList, handleSubmit, submitting, userInfo, location, history, dirty,
+    } = this.props;
     const { classInfo, submitted, initial_read_access } = this.state;
     const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
-    let quarter, course, professor;
+    let quarter,
+      course,
+      professor;
     if (quartersList && coursesList && coursesList.departmentsListLoaded && professorsList) {
       if (classInfo) {
         quarter = quartersList.object[classInfo.quarter_id].label;
         course = coursesList.object[classInfo.course_id].label;
         professor = professorsList.object[classInfo.professor_id].label;
-      }
-      else if (location.state) {
+      } else if (location.state) {
         quarter = quartersList.object[location.state.quarter_id].label;
         course = coursesList.object[location.state.course_id].label;
         professor = professorsList.object[location.state.professor_id].label;
       }
     }
-    if (location.state || classInfo !== undefined) { //passed values from postSearch
+    if (location.state || classInfo !== undefined) { // passed values from postSearch
       return (
         <form styleName='postEval' onSubmit={handleSubmit(this.onSubmit.bind(this))} className='content' >
           <Prompt
@@ -348,42 +359,42 @@ class PostEval extends Component {
           </div>
           <h3>Professor</h3>
           <h6>Attitude {this.renderInfoToolTip(TextOptions.attitude.info)}</h6>
-          <Field name='attitude' format={value => value === '' ? 0 : value} textProps={TextOptions.attitude} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='attitude' format={value => (value === '' ? 0 : value)} textProps={TextOptions.attitude} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Availability {this.renderInfoToolTip(TextOptions.availability.info)}</h6>
-          <Field name='availability' format={value => value === '' ? 0 : value} textProps={TextOptions.availability} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='availability' format={value => (value === '' ? 0 : value)} textProps={TextOptions.availability} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Clarity {this.renderInfoToolTip(TextOptions.clarity.info)}</h6>
-          <Field name='clarity' format={value => value === '' ? 0 : value} textProps={TextOptions.clarity} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='clarity' format={value => (value === '' ? 0 : value)} textProps={TextOptions.clarity} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Grading Speed {this.renderInfoToolTip(TextOptions.grading_speed.info)}</h6>
-          <Field name='grading_speed' format={value => value === '' ? 0 : value} textProps={TextOptions.grading_speed} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='grading_speed' format={value => (value === '' ? 0 : value)} textProps={TextOptions.grading_speed} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Resourcefulness {this.renderInfoToolTip(TextOptions.resourcefulness.info)}</h6>
-          <Field name='resourcefulness' format={value => value === '' ? 0 : value} textProps={TextOptions.resourcefulness} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='resourcefulness' format={value => (value === '' ? 0 : value)} textProps={TextOptions.resourcefulness} renderHandle={this.renderHandle} component={this.renderSlider} />
 
           <h3>Class</h3>
           <h6>Easiness {this.renderInfoToolTip(TextOptions.easiness.info)}</h6>
-          <Field name='easiness' format={value => value === '' ? 0 : value} textProps={TextOptions.easiness} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='easiness' format={value => (value === '' ? 0 : value)} textProps={TextOptions.easiness} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Workload {this.renderInfoToolTip(TextOptions.workload.info)}</h6>
-          <Field name='workload' format={value => value === '' ? 0 : value} textProps={TextOptions.workload} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='workload' format={value => (value === '' ? 0 : value)} textProps={TextOptions.workload} renderHandle={this.renderHandle} component={this.renderSlider} />
 
           <h3>General</h3>
           <h6>Would you recommend this course with this professor? {this.renderInfoToolTip(TextOptions.recommended.info)}</h6>
-          <Field name='recommended' format={value => value === '' ? 0 : value} textProps={TextOptions.recommended} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name='recommended' format={value => (value === '' ? 0 : value)} textProps={TextOptions.recommended} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Comments {this.renderInfoToolTip(TextOptions.comment.info)}</h6>
-          <Field name='comment' onChange={e => this.setState({term: e.target.value})} component={this.renderTextArea} />
+          <Field name='comment' onChange={e => this.setState({ term: e.target.value })} component={this.renderTextArea} />
           <p>Max characters: {this.state.term.length} / 1000</p>
           <div className='checkbox-group'>
             <Field name='display_majors' component={this.renderCheckbox} text={`Display ${userInfo.majors.length > 1 ? 'majors' : 'major'}`} />
-          <br />
-          <Field name='display_grad_year' component={this.renderCheckbox} text='Display graduation year' />
+            <br />
+            <Field name='display_grad_year' component={this.renderCheckbox} text='Display graduation year' />
         </div>
           <small>Your name and gender will always be kept hidden when posting.</small>
           <button
             disabled={submitting}
             type='submit'
             className='btn'
-            onKeyDown={event => {
+            onKeyDown={(event) => {
               switch (event.keyCode) {
-                case 38: //up
-                  event.preventDefault(); //stop scrolling
+                case 38: // up
+                  event.preventDefault(); // stop scrolling
                   $('input[name="display_grad_year"]').focus();
                   break;
               }
@@ -394,17 +405,16 @@ class PostEval extends Component {
         </form>
       );
     }
-    else {
-      return (
+
+    return (
         <div className='loadingWrapper'>
           <i className='fa fa-spinner fa-spin fa-3x fa-fw'></i>
         </div>
-      );
-    }
+    );
   }
 }
 
-const validate = values => {
+const validate = (values) => {
   const errors = {};
   if (!values.attitude) errors.attitude = 'Required';
   if (!values.availability) errors.availability = 'Required';
@@ -417,7 +427,7 @@ const validate = values => {
   if (!values.resourcefulness) errors.resourcefulness = 'Required';
   if (!values.workload) errors.workload = 'Required';
   return errors;
-}
+};
 
 function mapStateToProps(state) {
   return {
@@ -425,12 +435,14 @@ function mapStateToProps(state) {
     departmentsList: state.departmentsList,
     quartersList: state.quartersList,
     coursesList: state.coursesList,
-    professorsList: state.professorsList
+    professorsList: state.professorsList,
   };
 }
 
 export default reduxForm({
   validate,
   form: 'postEval',
-  initialValues: { display_majors: true, display_grad_year: true }
-})(connect(mapStateToProps, { setUserInfo, setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList })(PostEval));
+  initialValues: { display_majors: true, display_grad_year: true },
+})(connect(mapStateToProps, {
+  setUserInfo, setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList,
+})(PostEval));

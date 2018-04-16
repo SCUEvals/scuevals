@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 import '../styles/home.scss';
 
-//component for Home when only write access
-const WriteOnly = (props)  => {
+// component for Home when only write access
+const WriteOnly = (props) => {
   const { setUserInfo } = props;
   return (
     <div className='content'>
@@ -17,8 +17,8 @@ const WriteOnly = (props)  => {
         </p>
         <p>
           Congratulations on completing that last quarter! In order for us to stay relevant, we always need new evaluations.<br />
-          Therefore, {`we're`} asking users to <strong><u>write at least one evaluation per quarter</u></strong> to maintain continued
-          unlimited access to the site. We promise it {`won't`} take long!
+          Therefore, {'we\'re'} asking users to <strong><u>write at least one evaluation per quarter</u></strong> to maintain continued
+          unlimited access to the site. We promise it {'won\'t'} take long!
         </p>
           <Link to='/profile'>Go to profile</Link>
           <br />
@@ -38,7 +38,7 @@ const WriteOnly = (props)  => {
 };
 
 WriteOnly.propTypes = {
-  setUserInfo: PropTypes.func.isRequired
+  setUserInfo: PropTypes.func.isRequired,
 };
 
 export default WriteOnly;

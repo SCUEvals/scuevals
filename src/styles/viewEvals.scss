@@ -21,14 +21,26 @@
       font-size: 15px;
     }
 
-    .scoresGroup {
+    .scoresWrapper {
       font-size: 14px;
       margin: 15px 7.5px 0;
-      padding: 5px;
       display: inline-block;
       border: 1px solid $backgroundColor;
       border-radius: $defaultBorderRadius;
       background: $sandColor;
+
+      .scoreHeader {
+        font-size: 11px;
+        color: #866c50;
+        border-bottom: 1px solid $sandColor;
+        margin-bottom: 3px;
+        background: #f5e3d0;
+        border-color: #e8d2ba;
+      }
+
+      .scoresGroup {
+        padding: 5px;
+      }
 
       svg {
         width: 55px;
@@ -54,11 +66,13 @@
       }
 
       .avgScore {
-        width: 100px;
+        width: 110px;
         display: inline-block;
       }
 
-      &.scoresGroupTop {
+      &.scoresWrapperTop {
+        padding: 5px;
+
         .avgScore:nth-child(odd) {
           width: inherit;
           font-size: 12px;
