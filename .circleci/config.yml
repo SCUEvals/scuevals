@@ -29,14 +29,16 @@ jobs:
 
       - run:
           name: Build assets
-          command: npm run build
+          command: |
+            npm run build
+            cp -R ./public/* ./dist
 
       - store_artifacts:
           path: test-reports
           destination: test-reports
 
       - persist_to_workspace:
-          root: build
+          root: dist
           paths: .
 
   deploy-staging:
@@ -47,11 +49,13 @@ jobs:
       DOKKU_REMOTE: "$DOKKU_REMOTE_STAGING"
     steps:
       - checkout
+      - attach_workspace:
+          at: dist
 
       - run:
           name: Commit assets
           command: |
-            git add build
+            git add dist
             git commit -m "Add assets"
 
       - run:
@@ -70,12 +74,12 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: build
+          at: dist
 
       - run:
           name: Commit assets
           command: |
-            git add build
+            git add dist
             git commit -m "Add assets"
 
       - run:
