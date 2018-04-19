@@ -11,6 +11,7 @@ import API from '../services/api';
 import '../styles/viewEvals.scss';
 import { READ_EVALUATIONS } from '../index';
 import { setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } from '../actions';
+import CustomSort from '../utils/customSort';
 
 
 class ViewMyEvals extends Component {
@@ -44,7 +45,7 @@ class ViewMyEvals extends Component {
     const client = new API();
     // parameters directly in URL instead of passed in params as {embed: ['professor, 'course']} because axios converts params differently than API expects (contains []'s, back end doesn't process it)
     client.get(`/students/${userInfo.id}/evaluations?embed=course&embed=professor`, (myEvalsList) => {
-      myEvalsList.sort((a, b) => (a.post_time > b.post_time ? -1 : 1)); // sort by most recent by default when viewing own evals
+      CustomSort('recent', myEvalsList);
       this.setState({ myEvalsList });
     });
     if (!userInfo.permissions.includes(READ_EVALUATIONS)) {
@@ -68,7 +69,9 @@ class ViewMyEvals extends Component {
   }
 
   componentDidUpdate() { // if coursesList fetched before departmentsList, then need to retroactively search for department name from id and sort
-    if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList) { this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList); } // make deep copy of current, state immutable
+    if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList) {
+      this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList);
+    } // make deep copy of current, state immutable
   }
 
   render() {
@@ -97,7 +100,7 @@ class ViewMyEvals extends Component {
           deleteModalOpen={deleteModal.open}
           closeDeleteModal={() => this.setState({ deleteModal: { open: false } })}
           quarter={quartersList && deleteModal.quarter_id ?
-             quartersList.object[deleteModal.quarter_id].label : null}
+            quartersList.object[deleteModal.quarter_id].label : null}
           course={coursesList && coursesList.departmentsListLoaded && deleteModal.course_id ? coursesList.object[deleteModal.course_id].label : null }
           professor={professorsList && deleteModal.professor_id ? professorsList.object[deleteModal.professor_id].label : null}
           eval_id={deleteModal.eval_id}
@@ -115,7 +118,7 @@ class ViewMyEvals extends Component {
         />
         <h4 className='banner'>{userInfo.first_name}{'\'s'} Evals</h4>
         {myEvalsList ?
-           myEvalsList.length === 0 ?
+          myEvalsList.length === 0 ?
             <h5>You haven&#8217;t posted anything yet.</h5>
             :
             <Fragment>
@@ -126,48 +129,10 @@ class ViewMyEvals extends Component {
                   simpleValue
                   options={sortOptions}
                   placeholder='Sort'
-                  onChange={(sortValue) => {
+                  onChange={(newSortValue) => {
                     const myEvalsListCopy = myEvalsList.slice();
-                    switch (sortValue) {
-                      case 'course':
-                        myEvalsListCopy.sort((a, b) => {
-                          if (a.course.department_id === b.course.department_id) {
-                            // nums can have letters in them too (ex. 12L), so parse integers and compare
-                            const parsedANum = parseInt(a.course.number, 10);
-                            const parsedBNum = parseInt(b.course.number, 10);
-                            // if integers same, check for letters to decide
-                            if (parsedANum === parsedBNum) {
-                              return a.number > b.number ? 1
-                            : a.course.number < b.course.number ? -1
-                            : a.post_time > b.post_time ? -1 : 1;
-                            }
-                            return parsedANum > parsedBNum ? 1 : -1;
-                          }
-                          return departmentsList[a.course.department_id].abbr > departmentsList[b.course.department_id].abbr ? 1 : -1;
-                        });
-                        break;
-                      case 'professor':
-                        myEvalsListCopy.sort((a, b) =>
-                          (professorsList.object[a.professor.id].label > professorsList.object[b.professor.id].label ? 1
-                          : professorsList.object[a.professor.id].label < professorsList.object[b.professor.id].label ? -1
-                          : 0));
-                        break;
-                      case 'quarter':
-                        myEvalsListCopy.sort((a, b) => // assumption made that newest quarter will always be greatest number (currently always true)
-                          (a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1 : a.post_time > b.post_time ? -1 : 1));
-                        break;
-                      case 'votes_score':
-                        myEvalsListCopy.sort((a, b) =>
-                          (a.votes_score > b.votes_score ? -1
-                          : a.votes_score < b.votes_score ? 1
-                          : a.post_time > b.post_time ? -1 : 1));
-                        break;
-
-                      // will capture 'recent' case too since default is sort by most recent in viewMy
-                      default:
-                        myEvalsListCopy.sort((a, b) => (a.post_time > b.post_time ? -1 : 1)); // sort by most recent by default when viewing own evals
-                    }
-                    this.setState({ myEvalsList: myEvalsListCopy, sortValue });
+                    CustomSort(newSortValue, myEvalsListCopy, 'recent');
+                    this.setState({ myEvalsList: myEvalsListCopy, sortValue: newSortValue });
                     this.sortArrows.className = 'fa fa-sort';
                   }}
                 />
@@ -185,31 +150,31 @@ class ViewMyEvals extends Component {
                   onKeyPress={(event) => {
                     if (event.key === 'Enter') event.target.click();
                   }}
-                 />
-               </div>
-                {myEvalsList.map(evaluation => <Eval
-                    key={evaluation.id}
-                    evaluation={evaluation}
-                    department={departmentsList && evaluation.course ?
-                      `${departmentsList[evaluation.course.department_id].abbr} ${evaluation.course.number}: ${evaluation.course.title}`
-                    : null}
-                    quarter={quartersList ?
-                      `${quartersList.object[evaluation.quarter_id].name} ${quartersList.object[evaluation.quarter_id].year}`
-                    : null}
-                    openDeleteModal={() => {
-                      this.setState({
-                        deleteModal: {
-                          open: true,
-                          quarter_id: evaluation.quarter_id,
-                          course_id: evaluation.course.id,
-                          professor_id: evaluation.professor.id,
-                          eval_id: evaluation.id,
-                        },
-                      });
-                    }}
-                  />)}
+                />
+              </div>
+              {myEvalsList.map(evaluation => <Eval
+                key={evaluation.id}
+                evaluation={evaluation}
+                department={departmentsList && evaluation.course ?
+                  `${departmentsList[evaluation.course.department_id].abbr} ${evaluation.course.number}: ${evaluation.course.title}`
+                  : null}
+                quarter={quartersList ?
+                  `${quartersList.object[evaluation.quarter_id].name} ${quartersList.object[evaluation.quarter_id].year}`
+                  : null}
+                openDeleteModal={() => {
+                  this.setState({
+                    deleteModal: {
+                      open: true,
+                      quarter_id: evaluation.quarter_id,
+                      course_id: evaluation.course.id,
+                      professor_id: evaluation.professor.id,
+                      eval_id: evaluation.id,
+                    },
+                  });
+                }}
+              />)}
             </Fragment>
-        : <h5>Loading...</h5>}
+          : <h5>Loading...</h5>}
       </div>
     );
   }

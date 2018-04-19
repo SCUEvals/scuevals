@@ -9,6 +9,7 @@ import { storeWithMiddleware } from '../index';
 import API from '../services/api';
 import { READ_EVALUATIONS } from '../index';
 import { setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList } from '../actions';
+import CustomSort from '../utils/customSort';
 
 class PostSearch extends Component {
   static propTypes = {
@@ -129,7 +130,7 @@ class PostSearch extends Component {
           isLoading={!localQuartersList}
           onChange={(newQuarter) => {
             input.onChange(newQuarter);
-            if (newQuarter != input.value) populateFields(newQuarter);
+            if (newQuarter != input.value) this.setState({ alreadyPosted: false }, populateFields(newQuarter));
           }}
           placeholder='Select your quarter'
         />
@@ -153,7 +154,7 @@ class PostSearch extends Component {
           isLoading={!localCoursesList}
           onChange={(newCourse) => {
             input.onChange(newCourse);
-            if (newCourse != input.value) populateFields(newCourse);
+            if (newCourse != input.value) this.setState({ alreadyPosted: false }, populateFields(newCourse));
           }}
           placeholder='Select your course'
         />
@@ -179,7 +180,7 @@ class PostSearch extends Component {
           isLoading={!localProfessorsList}
           onChange={(newProfessor) => {
             input.onChange(newProfessor);
-            if (newProfessor != input.value) populateFields(newProfessor);
+            if (newProfessor != input.value) this.setState({ alreadyPosted: false }, populateFields(newProfessor));
           }}
           placeholder='Select your professor'
           onOpen={() => {
@@ -207,50 +208,50 @@ class PostSearch extends Component {
       course_id,
       professor_id; //= currently selected values
     switch (currentField) {
-      case 'quarter':
-        quarter_id = newValue;
-        course_id = course;
-        professor_id = professor;
-        break;
-      case 'course':
-        quarter_id = quarter;
-        course_id = newValue;
-        professor_id = professor;
-        break;
-      case 'professor':
-        quarter_id = quarter;
-        course_id = course;
-        professor_id = newValue;
-        break;
+    case 'quarter':
+      quarter_id = newValue;
+      course_id = course;
+      professor_id = professor;
+      break;
+    case 'course':
+      quarter_id = quarter;
+      course_id = newValue;
+      professor_id = professor;
+      break;
+    case 'professor':
+      quarter_id = quarter;
+      course_id = course;
+      professor_id = newValue;
+      break;
     }
     const client = new API();
     if (selectionOrder.includes(currentField)) {
       for (let i = selectionOrder.length - 1; i > 0; i--) { // clear values ahead of currentField. If at index 0, do nothing, so only loop while i > 0
         if (selectionOrder[i] === currentField) {
           switch (currentField) {
-            case 'quarter':
-              if (course_id && professor_id) this.authIfPosted(quarter_id, course_id, professor_id);
-              break;
-            case 'course':
-              if (quarter_id && professor_id) this.authIfPosted(quarter_id, course_id, professor_id);
-              break;
-            case 'professor':
-              if (quarter_id && course_id) this.authIfPosted(quarter_id, course_id, professor_id);
-              break;
+          case 'quarter':
+            if (course_id && professor_id) this.authIfPosted(quarter_id, course_id, professor_id);
+            break;
+          case 'course':
+            if (quarter_id && professor_id) this.authIfPosted(quarter_id, course_id, professor_id);
+            break;
+          case 'professor':
+            if (quarter_id && course_id) this.authIfPosted(quarter_id, course_id, professor_id);
+            break;
           }
           break;
         }
         storeWithMiddleware.dispatch(change('postSearch', selectionOrder[i], ''));
         switch (selectionOrder[i]) {
-          case 'quarter':
-            quarter_id = null;
-            break;
-          case 'course':
-            course_id = null;
-            break;
-          case 'professor':
-            professor_id = null;
-            break;
+        case 'quarter':
+          quarter_id = null;
+          break;
+        case 'course':
+          course_id = null;
+          break;
+        case 'professor':
+          professor_id = null;
+          break;
         }
         selectionOrder.pop();
       }
@@ -270,7 +271,7 @@ class PostSearch extends Component {
       selectionOrder.push(currentField);
       if (selectionOrder.length === 3) this.authIfPosted(quarter_id, course_id, professor_id);
       else {
-      // in large arrays, multiple includes is inefficient, but for clean code and since array will only ever be max size 3, keeping it for simplicity
+        // in large arrays, multiple includes is inefficient, but for clean code and since array will only ever be max size 3, keeping it for simplicity
         if (!selectionOrder.includes(field1)) this.getField(field1, client, quarter_id, course_id, professor_id, departmentsList);
         if (!selectionOrder.includes(field2)) this.getField(field2, client, quarter_id, course_id, professor_id, departmentsList);
       }
@@ -279,45 +280,34 @@ class PostSearch extends Component {
 
   getField(field, client, quarter_id, course_id, professor_id, departmentsList) {
     switch (field) {
-      case 'quarter':
-        this.setState({ localQuartersList: null }, () => client.get('/quarters', (quarters) => {
-          if (this.postSearchForm) {
-            quarters.sort((a, b) => // convert object with ids as keys into array of objects, then sort
-              (a.year > b.year ? -1 : a.year < b.year ? 1 : a.name == 'Winter' ? 1 : a.name == 'Fall' ? -1 : b.name == 'Fall' ? 1 : -1))
-              .map(quarter => quarter.label = `${quarter.name} ${quarter.year}`);
-            this.setState({ localQuartersList: quarters });
-          }
-        }, { quarter_id, course_id, professor_id }));
-        break;
-      case 'course':
-        this.setState({ localCoursesList: null }, () => client.get('/courses', (courses) => {
-          if (this.postSearchForm) {
-            courses.sort((a, b) => {
-              if (a.department_id == b.department_id) {
-                // nums can have letters in them too (ex. 12L), so parse integers and compare
-                const parsedANum = parseInt(a.number, 10);
-                const parsedBNum = parseInt(b.number, 10);
-                // if integers same, check for letters to decide
-                if (parsedANum == parsedBNum) return a.number > b.number ? 1 : a.number < b.number ? -1 : 0;
-                return parsedANum > parsedBNum ? 1 : parsedANum < parsedBNum ? -1 : 0;
-              }
-              return departmentsList[a.department_id].abbr > departmentsList[b.department_id].abbr ? 1 : departmentsList[a.department_id].abbr < departmentsList[b.department_id].abbr ? -1 : 0;
-            }).map(course => course.label = `${departmentsList[course.department_id].abbr} ${course.number}: ${course.title}`);
+    case 'quarter':
+      this.setState({ localQuartersList: null }, () => client.get('/quarters', (quarters) => {
+        if (this.postSearchForm) {
+          CustomSort('quarter', quarters);
+          quarters.map(quarter => quarter.label = `${quarter.name} ${quarter.year}`);
+          this.setState({ localQuartersList: quarters });
+        }
+      }, { quarter_id, course_id, professor_id }));
+      break;
+    case 'course':
+      this.setState({ localCoursesList: null }, () => client.get('/courses', (courses) => {
+        if (this.postSearchForm) {
+          CustomSort('course', courses);
+          courses.map(course => course.label = `${departmentsList[course.department_id].abbr} ${course.number}: ${course.title}`);
 
-            this.setState({ localCoursesList: courses });
-          }
-        }, { quarter_id, course_id, professor_id }));
-        break;
-      case 'professor':
-        this.setState({ localProfessorsList: null }, () => client.get('/professors', (professors) => {
-          if (this.postSearchForm) {
-            professors.map(professor => professor.label = `${professor.last_name}, ${professor.first_name}`);
-            professors.sort((a, b) => // must type professors.sort, not just .sort (else sorting doesn't work since label won't be recognized yet)
-              (a.label > b.label ? 1 : a.label < b.label ? -1 : 0));
-            this.setState({ localProfessorsList: professors });
-          }
-        }, { quarter_id, course_id, professor_id }));
-        break;
+          this.setState({ localCoursesList: courses });
+        }
+      }, { quarter_id, course_id, professor_id }));
+      break;
+    case 'professor':
+      this.setState({ localProfessorsList: null }, () => client.get('/professors', (professors) => {
+        if (this.postSearchForm) {
+          professors.map(professor => professor.label = `${professor.last_name}, ${professor.first_name}`);
+          CustomSort('professor', professors);
+          this.setState({ localProfessorsList: professors });
+        }
+      }, { quarter_id, course_id, professor_id }));
+      break;
     }
   }
 
@@ -330,11 +320,11 @@ class PostSearch extends Component {
     return (
       <form ref={node => this.postSearchForm = node} className='content' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         {!read_access && (
-        <div className='noWriteDiv'>
-          <Link className='homeBtn' to={'/'}>
-            <i className='fa fa-home' />
-          </Link>
-        </div>
+          <div className='noWriteDiv'>
+            <Link className='homeBtn' to={'/'}>
+              <i className='fa fa-home' />
+            </Link>
+          </div>
         )}
         <small style={{ marginTop: '5px' }}>In any order, select the correct combination and select {'"Continue"'} to start filling your evaluation.</small>
         <hr />

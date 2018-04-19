@@ -3,17 +3,18 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { Link } from 'react-router-dom';
-import FlagModal from '../components/flagModal';
-import DeleteModal from '../components/deleteModal';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
 import ReactGA from 'react-ga';
 
+import FlagModal from '../components/flagModal';
+import DeleteModal from '../components/deleteModal';
 import TextOptions from '../components/textOptions';
 import Eval from '../components/eval';
 import API from '../services/api';
 import '../styles/viewEvals.scss';
 import { WRITE_EVALUATIONS, VOTE_EVALUATIONS } from '../index';
 import RelatedInfo from '../components/relatedInfo';
+import CustomSort from '../utils/customSort';
 
 class ViewEvals extends Component {
   static propTypes = {
@@ -45,9 +46,7 @@ class ViewEvals extends Component {
   componentWillMount() {
     const client = new API();
     client.get(`/${this.props.type}/${this.props.match.params.id}`, (info) => {
-      info.evaluations.sort((a, b) =>
-        (a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1 // bigger number quarter ids assumed to be always most recent
-          : a.post_time > b.post_time ? -1 : 1));
+      CustomSort('quarter', info.evaluations);
       this.setState({ info });
     }, { embed: (this.props.type === 'courses' ? 'professors' : 'courses') });
   }
@@ -57,9 +56,7 @@ class ViewEvals extends Component {
       this.setState({ info: null }, () => {
         const client = new API();
         client.get(`/${this.props.type}/${this.props.match.params.id}`, (info) => {
-          info.evaluations.sort((a, b) =>
-            (a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1
-              : a.post_time > b.post_time ? -1 : 1));
+          CustomSort('quarter', info.evaluations);
           this.setState({ info });
         }, { embed: (this.props.type === 'courses' ? 'professors' : 'courses') });
       });
@@ -99,7 +96,7 @@ class ViewEvals extends Component {
     return (
       <Manager className='popper-manager'>
         <Target tabIndex='0' className='popper-target'>
-        <i className='fa fa-question'/>
+          <i className='fa fa-question'/>
         </Target>
         <Popper placement='top' className='popper tooltip-popper'>
           {info}
@@ -196,7 +193,7 @@ class ViewEvals extends Component {
                 newList.evaluations = evals;
                 this.setState({ info: newList });
               }
-             });
+            });
           }}
         />
         <h2>
@@ -205,7 +202,7 @@ class ViewEvals extends Component {
               `${info.first_name} ${info.last_name}`
               : departmentsList ?
                 `${departmentsList[info.department_id].abbr} ${info.number}: ${info.title}`
-              : 'Loading...'
+                : 'Loading...'
             : 'Loading...'
           }
         </h2>
@@ -244,29 +241,29 @@ class ViewEvals extends Component {
           </section>
         )}
         <div styleName='buttonGroup'>
-        {(write_access && info) && (
-          <Link className='btn' to={type === 'professors' ?
-            `/professors/${match.params.id}/post`
-            : `/courses/${match.params.id}/post`}>
+          {(write_access && info) && (
+            <Link className='btn' to={type === 'professors' ?
+              `/professors/${match.params.id}/post`
+              : `/courses/${match.params.id}/post`}>
             Post Evaluation
-          </Link>
-        )}
-        {info && (info.courses || info.professors) && departmentsList && (
-          <Fragment>
-            <button className='btn' type='button' data-toggle='collapse' data-target='#relatedInfo' aria-expanded='false' aria-controls='relatedInfo'>
-              {info.courses ? 'Past Courses' : 'Past Professors'} <i className='fa fa-chevron-down' /><i className='fa fa-chevron-up' />
-            </button>
-            <div id='relatedInfo' className='collapse'>
-              <RelatedInfo
-                departmentsList={departmentsList}
-                type={type}
-                match={match}
-                info={type === 'professors' ? info.courses : info.professors}
-                desc={type === 'professors' ? `${info.first_name} ${info.last_name}` : `${departmentsList[info.department_id].abbr} ${info.number}`}
-             />
-           </div>
-         </Fragment>
-        )}
+            </Link>
+          )}
+          {info && (info.courses || info.professors) && departmentsList && (
+            <Fragment>
+              <button className='btn' type='button' data-toggle='collapse' data-target='#relatedInfo' aria-expanded='false' aria-controls='relatedInfo'>
+                {info.courses ? 'Past Courses' : 'Past Professors'} <i className='fa fa-chevron-down' /><i className='fa fa-chevron-up' />
+              </button>
+              <div id='relatedInfo' className='collapse'>
+                <RelatedInfo
+                  departmentsList={departmentsList}
+                  type={type}
+                  match={match}
+                  info={type === 'professors' ? info.courses : info.professors}
+                  desc={type === 'professors' ? `${info.first_name} ${info.last_name}` : `${departmentsList[info.department_id].abbr} ${info.number}`}
+                />
+              </div>
+            </Fragment>
+          )}
         </div>
         {info && info.evaluations.length > 0 && (
           <div className='sort-wrapper'>
@@ -276,79 +273,12 @@ class ViewEvals extends Component {
               simpleValue
               options={sortOptions}
               placeholder='Sort'
-              onChange={(sortValue) => {
+              onChange={(newSortValue) => {
                 const newInfo = Object.assign({}, info); // multiple shallow copies best way to handle nested state change while respecting immutable state
                 const evals = info.evaluations.slice();
                 newInfo.evaluations = evals;
-                switch (sortValue) {
-                  case 'course':
-                    newInfo.evaluations.sort((a, b) => {
-                      if (a.department_id === b.department_id) {
-                        // nums can have letters in them too (ex. 12L), so parse integers and compare
-                        const parsedANum = parseInt(a.number, 10);
-                        const parsedBNum = parseInt(b.number, 10);
-                        // if integers same, check for letters to decide
-                        if (parsedANum === parsedBNum) {
-                          return a.course.number > b.course.number ? 1
-                          : a.course.number < b.course.number ? -1
-                          : a.post_time > b.post_time ? -1 : 1;
-                        }
-                        return parsedANum > parsedBNum ? 1 : -1;
-                      }
-                      return departmentsList[a.course.department_id].abbr > departmentsList[b.course.department_id].abbr ? 1 : -1;
-                    });
-                    break;
-                  case 'professor':
-                    newInfo.evaluations.sort((a, b) =>
-                      (professorsList.object[a.professor.id].label > professorsList.object[b.professor.id].label ? 1
-                      : professorsList.object[a.professor.id].label < professorsList.object[b.professor.id].label ? -1
-                      : 0));
-                    break;
-                  case 'votes_score':
-                    newInfo.evaluations.sort((a, b) =>
-                      (a.votes_score > b.votes_score ? -1
-                      : a.votes_score < b.votes_score ? 1
-                      : a.post_time > b.post_time ? -1 : 1));
-                    break;
-                  case 'major':
-                    newInfo.evaluations.sort((a, b) => {
-                      if (!a.author.majors && !b.author.majors) return a.post_time > b.post_time ? -1 : 1;
-                      else if (!a.author.majors) return 1;
-                      else if (!b.author.majors) return -1;
-
-                        const aMajors = a.author.majors.slice();
-                        const bMajors = b.author.majors.slice();
-                        aMajors.sort((a, b) =>
-                           (majorsList.object[a].name > majorsList.object[b].name ? 1 : -1), // alphabetically sort majors if multiple
-                        );
-                        bMajors.sort((a, b) =>
-                           (majorsList.object[a].name > majorsList.object[b].name ? 1 : -1), // alphabetically sort majors if multiple
-                        );
-                        for (let i = 0; i < Math.max(aMajors.length, bMajors.length); i++) {
-                          if (!aMajors[i] && !bMajors[i]) return a.post_time > b.post_time ? -1 : 1;
-                          else if (!aMajors[i]) return -1;
-                          else if (!bMajors[i]) return 1;
-                          else if (aMajors[i] !== bMajors[i]) {
-                             return majorsList.object[aMajors[i]].name > majorsList.object[bMajors[i]].name ? 1 : -1;
-                          }
-                        }
-                    });
-                    break;
-                  case 'grad_year':
-                    newInfo.evaluations.sort((a, b) => {
-                      if (!a.author.graduation_year && !b.author.graduation_year) return a.post_time > b.post_time ? -1 : 1;
-                      else if (!a.author.graduation_year) return 1;
-                      else if (!b.author.graduation_year) return -1;
-                      return a.author.graduation_year > b.author.graduation_year ? -1
-                      : a.author.graduation_year < b.author.graduation_year ? 1
-                      : a.post_time > b.post_time ? -1 : 1;
-                    });
-                    break;
-                  default: // will capture 'quarter' case too since sorts by quarter by default in viewEvals
-                    newInfo.evaluations.sort((a, b) => (a.quarter_id > b.quarter_id ? -1 : a.quarter_id < b.quarter_id ? 1 // bigger number quarter ids assumed to be always most recent
-                      : a.post_time > b.post_time ? -1 : 1));
-                }
-                this.setState({ info: newInfo, sortValue });
+                CustomSort(newSortValue, newInfo.evaluations, 'quarter');
+                this.setState({ info: newInfo, sortValue: newSortValue });
                 this.sortArrows.className = 'fa fa-sort';
               }}
             />
@@ -367,75 +297,75 @@ class ViewEvals extends Component {
                 if (event.key === 'Enter') event.target.click();
               }}
 
-             />
-           </div>
+            />
+          </div>
         )}
         {info && (
           info.evaluations.length === 0 ?
             <h5>No evaluations posted yet.</h5>
-          : info.evaluations.map((evaluation, index) => {
-            let userString = '';
-            if (evaluation.author && evaluation.author.majors && majorsList) {
-              const authorMajors = evaluation.author.majors.slice();
-              // alphabetically sort majors if multiple
-              authorMajors.sort((a, b) => (majorsList.object[a].name > majorsList.object[b].name ? 1 : -1));
-              for (const i of authorMajors) userString += `${majorsList.object[i].name}, `;
-            }
-            if (userString && !evaluation.author.graduation_year) userString = userString.substring(0, userString.length - 2); // cut off last comma and space
-            else if (evaluation.author && evaluation.author.graduation_year) userString += `Class of ${evaluation.author.graduation_year}`;
-            return (
-              <Eval
-                key={evaluation.id}
-                quarter={quartersList ? `${quartersList.object[evaluation.quarter_id].name} ${quartersList.object[evaluation.quarter_id].year}` : null}
-                vote_access={userInfo.permissions.includes(VOTE_EVALUATIONS)}
-                department={departmentsList && evaluation.course ? `${departmentsList[evaluation.course.department_id].abbr} ${evaluation.course.number}: ${evaluation.course.title}` : null}
-                evaluation={evaluation}
-                userString={userString}
-                updateScore={(newScore) => { // score must be updated in info array so sorting works with new values (or else could just update in local state inside Eval)
-                  const newInfo = Object.assign({}, info); // multiple shallow copies best way to handle nested state change while respecting immutable state
-                  const evals = info.evaluations.slice();
-                  newInfo.evaluations = evals;
-                  newInfo.evaluations[index].votes_score = newScore;
-                  this.setState({ info: newInfo });
-                }}
-                openDeleteModal={(quarter_id, secondId, eval_id) => {
-                  switch (type) {
+            : info.evaluations.map((evaluation, index) => {
+              let userString = '';
+              if (evaluation.author && evaluation.author.majors && majorsList) {
+                const authorMajors = evaluation.author.majors.slice();
+                // alphabetically sort majors if multiple
+                authorMajors.sort((a, b) => (majorsList.object[a].name > majorsList.object[b].name ? 1 : -1));
+                for (const i of authorMajors) userString += `${majorsList.object[i].name}, `;
+              }
+              if (userString && !evaluation.author.graduation_year) userString = userString.substring(0, userString.length - 2); // cut off last comma and space
+              else if (evaluation.author && evaluation.author.graduation_year) userString += `Class of ${evaluation.author.graduation_year}`;
+              return (
+                <Eval
+                  key={evaluation.id}
+                  quarter={quartersList ? `${quartersList.object[evaluation.quarter_id].name} ${quartersList.object[evaluation.quarter_id].year}` : null}
+                  vote_access={userInfo.permissions.includes(VOTE_EVALUATIONS)}
+                  department={departmentsList && evaluation.course ? `${departmentsList[evaluation.course.department_id].abbr} ${evaluation.course.number}: ${evaluation.course.title}` : null}
+                  evaluation={evaluation}
+                  userString={userString}
+                  updateScore={(newScore) => { // score must be updated in info array so sorting works with new values (or else could just update in local state inside Eval)
+                    const newInfo = Object.assign({}, info); // multiple shallow copies best way to handle nested state change while respecting immutable state
+                    const evals = info.evaluations.slice();
+                    newInfo.evaluations = evals;
+                    newInfo.evaluations[index].votes_score = newScore;
+                    this.setState({ info: newInfo });
+                  }}
+                  openDeleteModal={(quarter_id, secondId, eval_id) => {
+                    switch (type) {
                     case 'courses':
                       this.setState({
-                       deleteModal: {
-                         open: true,
-                         quarter_id,
-                         course_id: info.id,
-                         professor_id: secondId,
-                         eval_id,
-                      },
+                        deleteModal: {
+                          open: true,
+                          quarter_id,
+                          course_id: info.id,
+                          professor_id: secondId,
+                          eval_id,
+                        },
                       });
                       break;
                     case 'professors':
                       this.setState({
-                       deleteModal: {
-                         open: true,
-                         quarter_id,
-                         course_id: secondId,
-                         professor_id: info.id,
-                         eval_id,
-                       },
+                        deleteModal: {
+                          open: true,
+                          quarter_id,
+                          course_id: secondId,
+                          professor_id: info.id,
+                          eval_id,
+                        },
                       });
                       break;
-                  }
-                }}
-                openFlagModal={(comment, eval_id, user_flagged, set_user_flagged) => this.setState({
-                 flagModal: {
-                   open: true,
-                   comment,
-                   eval_id,
-                   user_flagged,
-                   set_user_flagged,
-                 },
-                })}
-              />
-            );
-          })
+                    }
+                  }}
+                  openFlagModal={(comment, eval_id, user_flagged, set_user_flagged) => this.setState({
+                    flagModal: {
+                      open: true,
+                      comment,
+                      eval_id,
+                      user_flagged,
+                      set_user_flagged,
+                    },
+                  })}
+                />
+              );
+            })
         )}
       </div>
     );
