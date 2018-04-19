@@ -30,7 +30,7 @@ jobs:
       - run:
           name: Build assets
           command: |
-            [[ "$CIRCLE_BRANCH" = "master" ]] API_URL=$API_PRODUCTION || API_URL=$API_STAGING
+            [[ "$CIRCLE_BRANCH" = "master" ]] API_URL="$API_PRODUCTION" || API_URL="$API_STAGING"
             npm run build
             cp -R ./public/* ./dist
 
