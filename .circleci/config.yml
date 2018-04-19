@@ -55,7 +55,7 @@ jobs:
       - run:
           name: Commit assets
           command: |
-            git add dist
+            git add -f dist
             git commit -m "Add assets"
 
       - run:
@@ -79,7 +79,7 @@ jobs:
       - run:
           name: Commit assets
           command: |
-            git add dist
+            git add -f dist
             git commit -m "Add assets"
 
       - run:
