@@ -46,48 +46,38 @@ jobs:
         enabled: true
     working_directory: ~/repo
     environment:
-      DOKKU_REMOTE: "$DOKKU_REMOTE_STAGING"
+      S3: "$AWS_STAGING"
     steps:
       - checkout
       - attach_workspace:
           at: dist
 
       - run:
-          name: Commit assets
-          command: |
-            git add -f dist
-            git commit -m "Add assets"
+          name: Install AWS CLI
+          command: sudo apt-get -y -qq install awscli
 
       - run:
-          name: Deploy to Dokku
-          command: |
-            git remote add dokku $DOKKU_REMOTE
-            echo Pushing to Dokku...
-            git push dokku develop:master &>/dev/null
+          name: Deploy to AWS
+          command: aws s3 sync dist s3://$S3 --delete
 
   deploy-production:
     machine:
         enabled: true
     working_directory: ~/repo
     environment:
-      DOKKU_REMOTE: "$DOKKU_REMOTE_PRODUCTION"
+      S3: "$AWS_PRODUCTION"
     steps:
       - checkout
       - attach_workspace:
           at: dist
 
       - run:
-          name: Commit assets
-          command: |
-            git add -f dist
-            git commit -m "Add assets"
+          name: Install AWS CLI
+          command: sudo apt-get -y -qq install awscli
 
       - run:
-          name: Deploy to Dokku
-          command: |
-            git remote add dokku $DOKKU_REMOTE
-            echo Pushing to Dokku...
-            git push dokku master:master &>/dev/null
+          name: Deploy to AWS
+          command: aws s3 sync dist s3://$S3 --delete
 
 workflows:
   version: 2
