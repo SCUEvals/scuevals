@@ -54,7 +54,9 @@ jobs:
 
       - run:
           name: Install AWS CLI
-          command: sudo apt-get -y -qq install awscli
+          command: |
+            apt-get -y -qq update
+            apt-get -y -qq install awscli
 
       - run:
           name: Deploy to AWS
@@ -73,7 +75,9 @@ jobs:
 
       - run:
           name: Install AWS CLI
-          command: sudo apt-get -y -qq install awscli
+          command: |
+            apt-get -y -qq update
+            apt-get -y -qq install awscli
 
       - run:
           name: Deploy to AWS
