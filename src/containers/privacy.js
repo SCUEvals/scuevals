@@ -13,15 +13,15 @@ class Privacy extends Component {
     render() {
       const { userInfo } = this.props;
       return (
-      <div className='content'>
-        <h3>
-          {(!userInfo || userInfo.permissions.includes(INCOMPLETE) || !userInfo.permissions.includes(READ_EVALUATIONS)) && (
-            <Link className='homeBtn noAuthHomeBtn' to={'/'}>
-              <i className='fa fa-home' />
-            </Link>
-          )}
+        <div className='content'>
+          <h3>
+            {(!userInfo || userInfo.permissions.includes(INCOMPLETE) || !userInfo.permissions.includes(READ_EVALUATIONS)) && (
+              <Link className='homeBtn noAuthHomeBtn' to={'/'}>
+                <i className='fa fa-home' />
+              </Link>
+            )}
           Privacy Policy
-        </h3>
+          </h3>
           <p>
             The only cookies in use on our site are for Google Analytics, Oauth 2.0 for Google, and a
             JSON web token which is deleted after signing out for serverside verification containing information
@@ -44,13 +44,13 @@ class Privacy extends Component {
             all websites you use, visit this Google page, <a href='https://tools.google.com/dlpage/gaoptout'>https://tools.google.com/dlpage/gaoptout</a>.
           </p>
           <hr />
-            <h6>Changes to This Policy</h6>
+          <h6>Changes to This Policy</h6>
           <p>
             We reserve the right to change this policy to meet the changing needs of
             SCU Evals, or for any other reason.
             Last policy revision: 12 October 2017.
           </p>
-      </div>
+        </div>
       );
     }
 }

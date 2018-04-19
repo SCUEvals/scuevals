@@ -92,18 +92,18 @@ class RelatedInfo extends Component {
 
     return (
       type === 'professors' ?
-      <div className='widget'>
-        <BootstrapTable
-          ref={node => this.table = node}
-          data={labeledInfo}
-          columns={coursesColumns}
-          keyField='key'
-          withoutTabIndex
-          version='4'
-          striped
-          hover
-        />
-      </div>
+        <div className='widget'>
+          <BootstrapTable
+            ref={node => this.table = node}
+            data={labeledInfo}
+            columns={coursesColumns}
+            keyField='key'
+            withoutTabIndex
+            version='4'
+            striped
+            hover
+          />
+        </div>
         : <div className='widget'>
           <BootstrapTable
             ref={node => this.table = node}

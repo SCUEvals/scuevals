@@ -52,7 +52,7 @@ class Eval extends Component {
     let style;
     if (name === 'Score') style = { strokeDashoffset: this.calculatePath(value) };
     return (
-        <div styleName='scoreWrapper'>
+      <div styleName='scoreWrapper'>
         <span key='scoreTitle' styleName='scoreTitle'>{name}</span>
         <svg key='score' className='score'>
           <circle style={style} cx='18' cy='18' r='16' className={`score${value < 1.75 ? '1' : value < 2.5 ? '2' : value < 3.25 ? '3' : '4'}`}/>
@@ -165,7 +165,7 @@ class Eval extends Component {
       <div styleName='eval'>
         <div styleName='vote'>
           {vote_access && evaluation.author && !evaluation.author.self && (
-              <i tabIndex='0'
+            <i tabIndex='0'
               styleName={user_vote === 'u' ? 'active' : ''}
               className='fa fa-thumbs-up'
               onClick={user_vote === 'u' ?
@@ -174,8 +174,8 @@ class Eval extends Component {
                   client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({ category: 'Vote', action: 'Deleted' }));
                   updateScore(votes_score - 1);
                   this.setState({
-                     user_vote: null,
-                   });
+                    user_vote: null,
+                  });
                 }
                 : () => { // user_vote 'd' or not voted
                   const client = new API();
@@ -183,7 +183,7 @@ class Eval extends Component {
                   if (user_vote == 'd') {
                     updateScore(votes_score + 2);
                     this.setState({
-                       user_vote: 'u',
+                      user_vote: 'u',
                     });
                   } else {
                     updateScore(votes_score + 1);
@@ -192,9 +192,9 @@ class Eval extends Component {
                     });
                   }
                 }}
-                onKeyPress={(event) => {
-                  if (event.key === 'Enter') event.target.click();
-                }}
+              onKeyPress={(event) => {
+                if (event.key === 'Enter') event.target.click();
+              }}
 
             />
           )}
@@ -202,36 +202,36 @@ class Eval extends Component {
           {vote_access && evaluation.author && !evaluation.author.self ?
             <i tabIndex='0'
               styleName={user_vote === 'd' ? 'active' : ''}
-               className='fa fa-thumbs-down'
-               onClick={user_vote === 'd' ?
-                 () => {
-                   const client = new API();
-                   client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({ category: 'Vote', action: 'Deleted' }));
-                   updateScore(votes_score + 1);
-                   this.setState({
-                     user_vote: null,
-                   });
-                 }
-                 : () => { // user_vote 1 or null
-                   const client = new API();
-                   client.put(`/evaluations/${evaluation.id}/vote`, 'd', () => ReactGA.event({ category: 'Vote', action: 'Added' }));
-                   if (user_vote === 'u') {
-                     updateScore(votes_score - 2);
-                     this.setState({
-                       user_vote: 'd',
-                     });
-                    } else {
-                      updateScore(votes_score - 1);
-                      this.setState({ // /user_vote null
-                        user_vote: 'd',
-                      });
-                    }
-                 }}
-                 onKeyPress={(event) => {
-                   if (event.key === 'Enter') event.target.click();
-                 }}
+              className='fa fa-thumbs-down'
+              onClick={user_vote === 'd' ?
+                () => {
+                  const client = new API();
+                  client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({ category: 'Vote', action: 'Deleted' }));
+                  updateScore(votes_score + 1);
+                  this.setState({
+                    user_vote: null,
+                  });
+                }
+                : () => { // user_vote 1 or null
+                  const client = new API();
+                  client.put(`/evaluations/${evaluation.id}/vote`, 'd', () => ReactGA.event({ category: 'Vote', action: 'Added' }));
+                  if (user_vote === 'u') {
+                    updateScore(votes_score - 2);
+                    this.setState({
+                      user_vote: 'd',
+                    });
+                  } else {
+                    updateScore(votes_score - 1);
+                    this.setState({ // /user_vote null
+                      user_vote: 'd',
+                    });
+                  }
+                }}
+              onKeyPress={(event) => {
+                if (event.key === 'Enter') event.target.click();
+              }}
             />
-          : ''}
+            : ''}
         </div>
         <div styleName='evalContent'>
           {evaluation.course && evaluation.professor ? // for viewing own evals on viewMyEvals, both sent
@@ -245,7 +245,7 @@ class Eval extends Component {
               <div styleName='col-sm-custom' className='col-12 col-md-5'>
                 {department ?
                   <Link to={`/courses/${evaluation.course.id}`}>{department}</Link>
-                : ''}
+                  : ''}
               </div>
             </div>
             :
@@ -256,11 +256,11 @@ class Eval extends Component {
               <div className='col-12 col-sm-6'>
                 {evaluation.course ?
                   department ?
-                  <Link to={`/courses/${evaluation.course.id}`}>{department}</Link>
-                  : ''
-                : <Link to={`/professors/${evaluation.professor.id}`}>{`${evaluation.professor.last_name}, ${evaluation.professor.first_name}`}</Link>}
+                    <Link to={`/courses/${evaluation.course.id}`}>{department}</Link>
+                    : ''
+                  : <Link to={`/professors/${evaluation.professor.id}`}>{`${evaluation.professor.last_name}, ${evaluation.professor.first_name}`}</Link>}
               </div>
-          </div>
+            </div>
           }
           <Slider {...settings}>
             <div styleName='scoreBlock totalScore'>
@@ -287,23 +287,23 @@ class Eval extends Component {
             <div styleName='commentQuote'>
               <div styleName='truncate' ref={node => this.truncate = node}>
                 <Truncate
-                    lines={!expanded && lines}
-                    onTruncate={this.handleTruncate}
-                    ellipsis={'...'}
+                  lines={!expanded && lines}
+                  onTruncate={this.handleTruncate}
+                  ellipsis={'...'}
                 >
-                    {evaluation.data.comment}
+                  {evaluation.data.comment}
                 </Truncate>
               </div>
               {truncated && (<hr styleName='fadeBar' />)}
               {/* button has display none style if not expandable (not conditionally rendered because if so, then new node created each re-render and unfocuses the button each new render) */}
-                <button
-                   style={showBtnStyle}
-                   styleName='showBtn'
-                   onClick={() => {
-                     if (!expanded) this.expandComment(this.truncate);
-                     else this.collapseComment(this.truncate);
-                   }}
-                >{truncated ? more : expanded ? less : ''}</button>
+              <button
+                style={showBtnStyle}
+                styleName='showBtn'
+                onClick={() => {
+                  if (!expanded) this.expandComment(this.truncate);
+                  else this.collapseComment(this.truncate);
+                }}
+              >{truncated ? more : expanded ? less : ''}</button>
             </div>
             <div className='row'>
               <div className='col-xs-12 col-sm-10' styleName='posterInfo'>
@@ -326,7 +326,7 @@ class Eval extends Component {
                     onKeyPress={(event) => {
                       if (event.key === 'Enter') openFlagModal(evaluation.data.comment, null, evaluation.id);
                     }}
-                   />
+                  />
                 }
               </div>
             </div>

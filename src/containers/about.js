@@ -50,13 +50,13 @@ class About extends Component {
                   Router</a> is used. Because it is written with {'JavaScript\'s'} new release ES6,
                   the web app uses <a href='https://babeljs.io'>Babel</a> to translate ES6 code into
                   ES5 code for better compatibility between browsers, uses <a
-                  href='https://webpack.js.org'>Webpack</a> to do things like compiling SCSS and running code through Babel
+                    href='https://webpack.js.org'>Webpack</a> to do things like compiling SCSS and running code through Babel
                   for transformation, and uses <a href='https://expressjs.com'>Express</a> to
                   configure the server. For managing packages, <a
-                  href='https://www.npmjs.com/'>npm</a> is used. For design purposes and browser
+                    href='https://www.npmjs.com/'>npm</a> is used. For design purposes and browser
                   flexibility, the web app uses a CDN for {'Twitter\'s'} <a
-                  href='https://getbootstrap.com/'>Bootstrap</a> framework. <a
-                  href='http://sass-lang.com/'>SCSS</a> is implemented for consistent,
+                    href='https://getbootstrap.com/'>Bootstrap</a> framework. <a
+                    href='http://sass-lang.com/'>SCSS</a> is implemented for consistent,
                   compressed, and programmatic creation of CSS.
                 </p>
                 <h6>Check it out at the <a href='https://github.com/SCUEvals/scuevals'> GitHub repository.</a></h6>

@@ -44,7 +44,7 @@ class Profile extends Component {
           placeholder='Select your major(s)'
           onBlur={() => input.onBlur(input.value)}
         />
-    </div>
+      </div>
     );
   }
 
@@ -136,25 +136,25 @@ class Profile extends Component {
             </Link>
           </div>
         )}
-          {!incomplete ?
-            <div>
-              <h4 className='banner'>{`${userInfo.first_name}'s Profile`}</h4>
-              <small>{profileInfo}</small>
-            </div>
-            :
-            <div>
+        {!incomplete ?
+          <div>
+            <h4 className='banner'>{`${userInfo.first_name}'s Profile`}</h4>
+            <small>{profileInfo}</small>
+          </div>
+          :
+          <div>
             <h4 className='banner'>Welcome to SCU Evals, {userInfo.first_name}!</h4>
             <p>Before we start, we need to know a few things about you.</p>
             <small>{profileInfo}<br/>
-            <button type='button' onClick={() => {
-              setUserInfo(null);
-              history.push('/');
+              <button type='button' onClick={() => {
+                setUserInfo(null);
+                history.push('/');
               }}
               className='signOutBtn'>
               Sign Out
-            </button>
-          </small>
-        </div>
+              </button>
+            </small>
+          </div>
         }
         <hr />
         {!incomplete && (<Link className='btn' to='/profile/evals'>Manage my Evals</Link>)}

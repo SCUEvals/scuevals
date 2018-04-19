@@ -20,16 +20,16 @@ const WriteOnly = (props) => {
           Therefore, {'we\'re'} asking users to <strong><u>write at least one evaluation per quarter</u></strong> to maintain continued
           unlimited access to the site. We promise it {'won\'t'} take long!
         </p>
-          <Link to='/profile'>Go to profile</Link>
-          <br />
-          <button
-            type='button'
-            className='signOutBtn'
-            onClick={() => setUserInfo(null)}
-            // no need to push history to '/' since this component part of container Home with route path already '/'
-          >
+        <Link to='/profile'>Go to profile</Link>
+        <br />
+        <button
+          type='button'
+          className='signOutBtn'
+          onClick={() => setUserInfo(null)}
+          // no need to push history to '/' since this component part of container Home with route path already '/'
+        >
             Sign Out
-          </button>
+        </button>
       </section>
       <hr />
       <Link to='/post' className='btn'>Post Evaluation</Link>

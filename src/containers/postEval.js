@@ -142,34 +142,34 @@ class PostEval extends Component {
           {...restProps}
           onKeyDown={(event) => {
             switch (event.keyCode) {
-              case 38: { // up
-                event.stopPropagation(); // stop from moving slider up a value
-                event.preventDefault(); // stop scrolling
-                const nodes = $('.rc-slider-handle');
-                for (let i = 0; i < nodes.length; i++) {
-                  if (nodes[i] === event.target) {
-                    if (i - 1 >= 0) nodes[i - 1].focus();
-                    break;
-                  }
+            case 38: { // up
+              event.stopPropagation(); // stop from moving slider up a value
+              event.preventDefault(); // stop scrolling
+              const nodes = $('.rc-slider-handle');
+              for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i] === event.target) {
+                  if (i - 1 >= 0) nodes[i - 1].focus();
+                  break;
                 }
-                break;
               }
-              case 40: { // down
-                event.stopPropagation(); // stop from moving slider down a value
-                event.preventDefault(); // stop scrolling
-                const nodes = $('.rc-slider-handle');
-                for (let i = 0; i < nodes.length; i++) {
-                  if (nodes[i] === event.target) {
-                    if (i + 1 < nodes.length) nodes[i + 1].focus();
-                    else $('textarea[name="comment"]').focus();
-                    break;
-                  }
+              break;
+            }
+            case 40: { // down
+              event.stopPropagation(); // stop from moving slider down a value
+              event.preventDefault(); // stop scrolling
+              const nodes = $('.rc-slider-handle');
+              for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i] === event.target) {
+                  if (i + 1 < nodes.length) nodes[i + 1].focus();
+                  else $('textarea[name="comment"]').focus();
+                  break;
                 }
-                break;
               }
+              break;
+            }
             }
           }}
-          >
+        >
           <div styleName='handleNum'>
             {value !== 0 ? value : ''}
           </div>
@@ -180,7 +180,7 @@ class PostEval extends Component {
           )}
         </Target>
         <Popper style={popperStyle} placement='top' className='popper'>
-            {value === 0 || value === 1 ? textProps.one : value === 2 ? textProps.two : value === 3 ? textProps.three : value === 4 ? textProps.four : ''}
+          {value === 0 || value === 1 ? textProps.one : value === 2 ? textProps.two : value === 3 ? textProps.three : value === 4 ? textProps.four : ''}
           <Arrow className='popper__arrow' />
         </Popper>
       </Manager>
@@ -191,7 +191,7 @@ class PostEval extends Component {
     return (
       <Manager className='popper-manager'>
         <Target tabIndex='0' className='popper-target'>
-        <i className='fa fa-question'/>
+          <i className='fa fa-question'/>
         </Target>
         <Popper placement='top' className='popper tooltip-popper'>
           {info}
@@ -207,18 +207,18 @@ class PostEval extends Component {
     if (track.length === 1) { // if exists
       track = track[0];
       switch (input.value) {
-        case 1:
-          track.className = 'rc-slider-track track1';
-          break;
-        case 2:
-          track.className = 'rc-slider-track track2';
-          break;
-        case 3:
-          track.className = 'rc-slider-track track3';
-          break;
-        case 4:
-          track.className = 'rc-slider-track track4';
-          break;
+      case 1:
+        track.className = 'rc-slider-track track1';
+        break;
+      case 2:
+        track.className = 'rc-slider-track track2';
+        break;
+      case 3:
+        track.className = 'rc-slider-track track3';
+        break;
+      case 4:
+        track.className = 'rc-slider-track track4';
+        break;
       }
     }
     const sliderClass = submitFailed && error ? `${input.name} slider-error` : input.name;
@@ -242,29 +242,29 @@ class PostEval extends Component {
     if (field.input.name === 'display_majors') {
       onKeyDown = (event) => {
         switch (event.keyCode) {
-          case 38: // up
-            event.preventDefault(); // stop scrolling
-            $('textarea[name="comment"]').focus();
-            break;
+        case 38: // up
+          event.preventDefault(); // stop scrolling
+          $('textarea[name="comment"]').focus();
+          break;
 
-          case 40: // down
-            event.preventDefault(); // stop scrolling
-            $('input[name="display_grad_year"]').focus();
-            break;
+        case 40: // down
+          event.preventDefault(); // stop scrolling
+          $('input[name="display_grad_year"]').focus();
+          break;
         }
       };
     } else if (field.input.name === 'display_grad_year') {
       onKeyDown = (event) => {
         switch (event.keyCode) {
-          case 38: // up
-            event.preventDefault(); // stop scrolling
-            $('input[name="display_majors"]').focus();
-            break;
+        case 38: // up
+          event.preventDefault(); // stop scrolling
+          $('input[name="display_majors"]').focus();
+          break;
 
-          case 40: // down
-            event.preventDefault(); // stop scrolling
-            $('button[type="submit"]').focus();
-            break;
+        case 40: // down
+          event.preventDefault(); // stop scrolling
+          $('button[type="submit"]').focus();
+          break;
         }
       };
     }
@@ -301,10 +301,10 @@ class PostEval extends Component {
           />
           {!read_access && (
             <div className='noWriteDiv'>
-            <Link className='homeBtn' to={'/'}>
-              <i className='fa fa-home' />
-            </Link>
-          </div>
+              <Link className='homeBtn' to={'/'}>
+                <i className='fa fa-home' />
+              </Link>
+            </div>
           )}
           <RedirectModal
             redirectModalOpen={classInfo === null || classInfo && classInfo.user_posted || submitted}
@@ -319,26 +319,26 @@ class PostEval extends Component {
               <h3>{course}</h3>
               <h3>{professor}</h3>
             </div>
-          : classInfo === null ?
-            <div styleName='postInfo'>
-              <h3>No class exists for this page.</h3>
-            </div>
-          : <div styleName='postInfo'>
-              <h3>Loading...</h3>
-            </div>
+            : classInfo === null ?
+              <div styleName='postInfo'>
+                <h3>No class exists for this page.</h3>
+              </div>
+              : <div styleName='postInfo'>
+                <h3>Loading...</h3>
+              </div>
           }
           <div styleName='postGuidelines' className='row'>
             <div className='col-12 col-md-6'>
               <div className='card'>
                 <div className='card-header'>GUIDELINES TO FOLLOW</div>
-                  <div className='card-body'>
-                    <ul>
-                      <li>If unsure about a question, select <div tabIndex='0' styleName='popper-target-guidelines'><i className='fa fa-question'/></div> for more details</li>
-                      <li>Remove unfair bias</li>
-                      <li>Proofread your comments</li>
-                      <li>Write respectfully</li>
-                      <li>Share information you wish you knew before taking this class</li>
-                    </ul>
+                <div className='card-body'>
+                  <ul>
+                    <li>If unsure about a question, select <div tabIndex='0' styleName='popper-target-guidelines'><i className='fa fa-question'/></div> for more details</li>
+                    <li>Remove unfair bias</li>
+                    <li>Proofread your comments</li>
+                    <li>Write respectfully</li>
+                    <li>Share information you wish you knew before taking this class</li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -385,7 +385,7 @@ class PostEval extends Component {
             <Field name='display_majors' component={this.renderCheckbox} text={`Display ${userInfo.majors.length > 1 ? 'majors' : 'major'}`} />
             <br />
             <Field name='display_grad_year' component={this.renderCheckbox} text='Display graduation year' />
-        </div>
+          </div>
           <small>Your name and gender will always be kept hidden when posting.</small>
           <button
             disabled={submitting}
@@ -393,10 +393,10 @@ class PostEval extends Component {
             className='btn'
             onKeyDown={(event) => {
               switch (event.keyCode) {
-                case 38: // up
-                  event.preventDefault(); // stop scrolling
-                  $('input[name="display_grad_year"]').focus();
-                  break;
+              case 38: // up
+                event.preventDefault(); // stop scrolling
+                $('input[name="display_grad_year"]').focus();
+                break;
               }
             }}
           >
@@ -407,9 +407,9 @@ class PostEval extends Component {
     }
 
     return (
-        <div className='loadingWrapper'>
-          <i className='fa fa-spinner fa-spin fa-3x fa-fw'></i>
-        </div>
+      <div className='loadingWrapper'>
+        <i className='fa fa-spinner fa-spin fa-3x fa-fw'></i>
+      </div>
     );
   }
 }

@@ -5,6 +5,10 @@ html {
   height: 100%;
 }
 
+#app {
+  height: 100%;
+}
+
 body {
   background: white;
   text-align: center;
@@ -13,6 +17,10 @@ body {
   color: $overlayBackground;
   text-overflow: ellipsis;
   font-family: 'Roboto', sans-serif;
+
+  &.ReactModal__Body--open #app {
+    filter: blur(3px);
+  }
 }
 
 body::after {
@@ -325,10 +333,6 @@ label:not(:first-child) input[type='radio'] {
       }
     }
   }
-}
-
-#app {
-  height: 100%;
 }
 
 .Select--single > .Select-control .Select-value,

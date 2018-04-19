@@ -10,14 +10,14 @@ const Checkbox = (props) => {
     <label styleName='container'>
       <input
         type='checkbox'
-         {...input}
-         onKeyPress={(event) => {
-           if (event.key === 'Enter') {
-             event.preventDefault(); // disable form submission
-             event.target.click();
-           }
-         }}
-         onKeyDown={onKeyDown} // may be undefined
+        {...input}
+        onKeyPress={(event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault(); // disable form submission
+            event.target.click();
+          }
+        }}
+        onKeyDown={onKeyDown} // may be undefined
       />
       <span styleName='checkmark' />
       {text}

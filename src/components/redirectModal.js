@@ -44,7 +44,7 @@ class RedirectModal extends Component {
               <Link className='homeBtn' to='/'><i className='fa fa-home' /></Link>
               {classInfoExists || !submitted ?
                 'Oops!'
-              : 'Thank you!'
+                : 'Thank you!'
               }
             </h5>
           </div>
@@ -52,9 +52,9 @@ class RedirectModal extends Component {
             <p>{
               classInfoExists ?
                 'Looks like you already posted for this class.'
-              : submitted ?
-                'Great job submitting an eval!'
-              : 'Class does not exist for this page.'
+                : submitted ?
+                  'Great job submitting an eval!'
+                  : 'Class does not exist for this page.'
             }</p>
             {submitted && permissionsUpgrade && (
               <p>You now have unlimited access to the site again until the end of this quarter.</p>

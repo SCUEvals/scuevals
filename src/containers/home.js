@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import API from '../services/api';
 import '../styles/home.scss';
 import { setUserInfo } from '../actions';
-import RecentEvals from './recentEvals';
+import RecentEvalsWidget from './recentEvalsWidget';
 import NonStudentModal from '../components/nonStudentModal';
 import WriteOnly from '../components/writeOnly';
 import { INCOMPLETE, READ_EVALUATIONS, WRITE_EVALUATIONS } from '../index';
@@ -73,7 +73,7 @@ class Home extends Component {
       .catch((e) => {
         if (e.status === 'suspended') {
           this.setState({ loading: false }, () => {
-          // Show modal for suspended message
+            // Show modal for suspended message
           });
         }
       });
@@ -117,16 +117,16 @@ class Home extends Component {
               the website. Think of it as an extension of the SCU community with the goal to make your life easier.
             </p>
             {write_access ?
-            <p>
+              <p>
               Use the search bar above to look for a specific course or professor, or, why not post an evaluation
               for a class {'you\'ve'} taken? In that case, hit the {'"Post Evaluation"'} button below and {'we\'ll'} get you started!
-            </p>
-            :
-            <p>
+              </p>
+              :
+              <p>
               Since you {'aren\'t'} a student, you {'won\'t'} be able to vote on or post evaluations,
               but {'you\'re'} welcome to browse and read all of the evaluations.
-            </p>
-          }
+              </p>
+            }
           </section>
           <hr />
           {write_access && (
@@ -135,7 +135,7 @@ class Home extends Component {
           {write_access && (
             <hr />
           )}
-          {!location.signOut && (<RecentEvals count={10} />)}
+          {!location.signOut && (<RecentEvalsWidget count={10} />)}
         </div>
       );
     } else if (userInfo) {
@@ -145,21 +145,21 @@ class Home extends Component {
     }
     // if not logged in
     return (
-        <div styleName='login'>
-          <h1>SCU Evals</h1>
-          <GoogleLogin
-            hostedDomain='scu.edu'
-            clientId='471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com'
-            buttonText=''
-            onSuccess={info => this.setState({ loading: true }, this.authWithBackEnd(info.tokenObj.id_token, referrer))}
-            onFailure={err => /* eslint-disable no-console */ console.error('Google Login Error: ', err) /* eslint-enable no-console */}
-            className='btn'
-            styleName='loginBtn'
-          >
-            <img className='pull-left' alt='Google "G" logo' src='/images/googleG.jpg' />
-            <span>Sign in with Google</span>
-          </GoogleLogin>
-        </div>
+      <div styleName='login'>
+        <h1>SCU Evals</h1>
+        <GoogleLogin
+          hostedDomain='scu.edu'
+          clientId='471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com'
+          buttonText=''
+          onSuccess={info => this.setState({ loading: true }, this.authWithBackEnd(info.tokenObj.id_token, referrer))}
+          onFailure={err => /* eslint-disable no-console */ console.error('Google Login Error: ', err) /* eslint-enable no-console */}
+          className='btn'
+          styleName='loginBtn'
+        >
+          <img className='pull-left' alt='Google "G" logo' src='/images/googleG.jpg' />
+          <span>Sign in with Google</span>
+        </GoogleLogin>
+      </div>
     );
   }
 }

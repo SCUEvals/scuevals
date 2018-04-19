@@ -4,16 +4,16 @@ import { Link } from 'react-router-dom';
 import '../styles/footer.scss';
 
 const Footer = () => (
-    <footer>
-      <div className='container'>
-        <Link className='btn' to='/about'>
+  <footer>
+    <div className='container'>
+      <Link className='btn' to='/about'>
           About Us
-        </Link>
-        <Link className='btn' to='/privacy'>
+      </Link>
+      <Link className='btn' to='/privacy'>
           Privacy Policy
-        </Link>
-      </div>
-    </footer>
+      </Link>
+    </div>
+  </footer>
 );
 
 export default Footer;

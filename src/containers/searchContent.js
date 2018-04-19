@@ -55,7 +55,7 @@ class SearchContent extends Component {
     if (departmentsList) {
       responseData.courses.sort((a, b) => {
         if (a.department_id == b.department_id) {
-        // nums can have letters in them too (ex. 12L), so parse integers and compare
+          // nums can have letters in them too (ex. 12L), so parse integers and compare
           const parsedANum = parseInt(a.number, 10);
           const parsedBNum = parseInt(b.number, 10);
           // if integers same, check for letters to decide
@@ -193,9 +193,9 @@ class SearchContent extends Component {
       );
     }
     return (
-        <div styleName='results' className='content'>
-          <h5>Please search with at least 3 characters.</h5>
-        </div>
+      <div styleName='results' className='content'>
+        <h5>Please search with at least 3 characters.</h5>
+      </div>
     );
   }
 }

@@ -46,40 +46,45 @@ export default function customSort(sortValue, arr, defaultSort) {
   }
 }
 
-
 // private helper functions
-
 function sortByQuarter(arr) {
   arr.sort((a, b) => orderByQuarter(a, b));
 }
 
 function sortByCourse(arr, defaultSort) {
   arr.sort((a, b) => {
-    const aDptID = a.course.department_id;
-    const bDptID = b.course.department_id;
+    const aDptID = a.course ? a.course.department_id : a.department_id;
+    const bDptID = b.course ? b.course.departmend_id : b.department_id;
+    const aNum = a.course ? a.course.number : a.number;
+    const bNum = b.course ? b.course.number : b.number;
     if (aDptID === bDptID) {
       // can have letters in them too (ex. 12L), so parse integers & compare
-      const parsedANum = parseInt(a.course.number, 10);
-      const parsedBNum = parseInt(b.course.number, 10);
+      const parsedANum = parseInt(aNum, 10);
+      const parsedBNum = parseInt(bNum, 10);
       // if integers same, check for letters to decide
       if (parsedANum === parsedBNum) {
-        return a.number > b.number ? 1
-          : a.course.number < b.course.number ? -1
+        return aNum > bNum ? 1
+          : aNum < bNum ? -1
           : orderByDefault(a, b, defaultSort);
       }
       return parsedANum > parsedBNum ? 1 : -1;
     }
     const { departmentsList } = storeWithMiddleware.getState();
-    return departmentsList[aDptID].abbr > departmentsList[bDptID].abbr ? 1 : -1;
+    return departmentsList[aDptID].abbr > departmentsList[bDptID].abbr ? 1
+      : departmentsList[aDptID].abbr < departmentsList[bDptID].abbr ? -1
+      : orderByDefault();
   });
 }
 
 function sortByProfessor(arr, defaultSort) {
   const professorsListObj = storeWithMiddleware.getState().professorsList.object;
-  arr.sort((a, b) =>
-    (professorsListObj[a.professor.id].label > professorsListObj[b.professor.id].label ? 1
-      : professorsListObj[a.professor.id].label < professorsListObj[b.professor.id].label ? -1
-      : orderByDefault(a, b, defaultSort)));
+  arr.sort((a, b) => {
+    const aProfID = a.professor ? a.professor.id : a.id;
+    const bProfID = b.professor ? b.professor.id : b.id;
+    return professorsListObj[aProfID].label > professorsListObj[bProfID].label ? 1
+      : professorsListObj[aProfID].label < professorsListObj[bProfID].label ? -1
+      : orderByDefault(a, b, defaultSort);
+  });
 }
 
 function sortByMajor(arr, defaultSort) {
@@ -149,11 +154,17 @@ function orderByDefault(a, b, defaultVal) {
 }
 
 function orderByQuarter(a, b) {
-  return (
-    a.quarter_id > b.quarter_id ? -1
-    : a.quarter_id < b.quarter_id ? 1
-    : orderByPostTime(a, b)
-  );
+  return a.year > b.year ? -1
+    : a.year < b.year ? 1
+    : a.name === 'Winter' ? 1
+    : a.name === 'Fall' ? -1
+    : b.name === 'Fall' ? 1
+    : -1;
+  // return (
+  //   a.quarter_id > b.quarter_id ? -1
+  //   : a.quarter_id < b.quarter_id ? 1
+  //   : orderByPostTime(a, b)
+  // );
 }
 
 function orderByPostTime(a, b) {
