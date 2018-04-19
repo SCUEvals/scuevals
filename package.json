@@ -9,7 +9,6 @@
   "scripts": {
     "build": "webpack -p --config webpack/prod.config.js --mode production",
     "dev": "webpack-dev-server --config webpack/dev.config.js --mode development",
-    "postinstall": "if [ \"$NODE_ENV\" = \"production\" ]; then npm run build-assets; fi",
     "build-assets": "webpack -p --config webpack/prod.config.js --mode production",
     "start": "node server.js",
     "lint": "eslint webpack src public/scripts --color",
