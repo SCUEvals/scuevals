@@ -1,0 +1,100 @@
+version: 2
+jobs:
+  build:
+    docker:
+
+      - image: circleci/node:8
+        environment:
+          NODE_ENV: production
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Install dependencies
+          command: |
+            npm install
+            npm install --only=dev
+
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Build assets
+          command: |
+            [[ "$CIRCLE_BRANCH" = "master" ]] && API_URL="$API_PRODUCTION" || API_URL="$API_STAGING"
+            export API_URL
+            API_URL=$API_URL npm run build
+            cp -R ./public/* ./dist
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
+
+      - persist_to_workspace:
+          root: dist
+          paths: .
+
+  deploy-staging:
+    machine:
+        enabled: true
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+
+      - run:
+          name: Install AWS CLI
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get -y -qq install awscli
+
+      - run:
+          name: Deploy to AWS
+          command: aws s3 sync dist s3://$AWS_STAGING --delete
+
+  deploy-production:
+    machine:
+        enabled: true
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+
+      - run:
+          name: Install AWS CLI
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get -y -qq install awscli
+
+      - run:
+          name: Deploy to AWS
+          command: aws s3 sync dist s3://$AWS_PRODUCTION --delete
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy-staging:
+          filters:
+            branches:
+              only: develop
+          requires:
+            - build
+      - deploy-production:
+          filters:
+            branches:
+              only: master
+          requires:
+            - build
