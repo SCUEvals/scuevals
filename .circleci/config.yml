@@ -95,6 +95,6 @@ workflows:
       - deploy-production:
           filters:
             branches:
-              only: feature/circleci
+              only: master
           requires:
             - build
