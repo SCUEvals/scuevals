@@ -89,7 +89,7 @@ workflows:
       - deploy-staging:
           filters:
             branches:
-              only: develop
+              only: development
           requires:
             - build
       - deploy-production:
