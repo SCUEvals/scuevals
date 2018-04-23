@@ -24,7 +24,6 @@ module.exports = merge(baseConfig, {
           loader: 'eslint-loader',
           options: {
             emitWarning: true,
-            fix: true,
           }
         }
       }

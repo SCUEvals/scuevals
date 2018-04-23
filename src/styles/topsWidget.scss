@@ -1,0 +1,25 @@
+.topsWidget {
+  min-height: 291px;
+
+  :global(.Select) {
+    margin-bottom: 30px;
+  }
+
+  nav {
+    position: relative;
+
+    small {
+      position: absolute;
+      bottom: 0;
+      right: 2%;
+    }
+  }
+
+  :global(.tab-content .list-group) small {
+    margin-top: 30px;
+  }
+
+  .loadingWrapper {
+    margin-top: 30px;
+  }
+}

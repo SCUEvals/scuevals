@@ -17,18 +17,20 @@ class DeleteModal extends Component {
       deleteModalOpen, closeDeleteModal, quarter, course, professor, deletePost,
     } = this.props;
     return (
-      <ReactModal isOpen={deleteModalOpen} className='reactModal container' appElement={document.getElementById('app')}>
-        <div className='modalWrapper'>
-          <div className='modalHeader'>
+      <ReactModal isOpen={deleteModalOpen} className="reactModal container" appElement={document.getElementById('app')}>
+        <div className="modalWrapper">
+          <div className="modalHeader">
             <h5>Delete post</h5>
-            <i tabIndex='0' className='fa fa-times'
+            <i
+              tabIndex="0"
+              className="fa fa-times"
               onClick={closeDeleteModal}
               onKeyPress={(event) => {
                 if (event.key === 'Enter') closeDeleteModal();
               }}
             />
           </div>
-          <div className='modalBlock'>
+          <div className="modalBlock">
             <div>{quarter}</div>
             <div>{course}</div>
             <div>{professor}</div>
@@ -36,22 +38,24 @@ class DeleteModal extends Component {
             <div>Are you sure you want to delete this post?</div>
             <button
               style={{ width: '65px' }}
-              type='button'
-              className='btn'
+              type="button"
+              className="btn"
               onClick={() => { deletePost(); closeDeleteModal(); }}
               onKeyPress={(event) => {
                 if (event.key === 'Enter') event.target.click();
               }}
-            >Yes</button>
+            >Yes
+            </button>
             <button
               style={{ width: '65px' }}
-              type='button'
-              className='btn'
+              type="button"
+              className="btn"
               onClick={closeDeleteModal}
               onKeyPress={(event) => {
                 if (event.key === 'Enter') event.target.click();
               }}
-            >No</button>
+            >No
+            </button>
           </div>
         </div>
       </ReactModal>

@@ -123,7 +123,7 @@ class PostSearch extends Component {
         <Select
           disabled={!localQuartersList}
           value={input.value}
-          valueKey={'id'}
+          valueKey="id"
           className={error && submitFailed ? 'select-error' : undefined}
           simpleValue
           options={localQuartersList}
@@ -132,7 +132,7 @@ class PostSearch extends Component {
             input.onChange(newQuarter);
             if (newQuarter != input.value) this.setState({ alreadyPosted: false }, populateFields(newQuarter));
           }}
-          placeholder='Select your quarter'
+          placeholder="Select your quarter"
         />
       </div>
     );
@@ -147,7 +147,7 @@ class PostSearch extends Component {
         <Select
           disabled={!localCoursesList}
           value={input.value}
-          valueKey={'id'}
+          valueKey="id"
           className={error && submitFailed ? 'select-error' : undefined}
           simpleValue
           options={localCoursesList}
@@ -156,7 +156,7 @@ class PostSearch extends Component {
             input.onChange(newCourse);
             if (newCourse != input.value) this.setState({ alreadyPosted: false }, populateFields(newCourse));
           }}
-          placeholder='Select your course'
+          placeholder="Select your course"
         />
       </div>
     );
@@ -173,7 +173,7 @@ class PostSearch extends Component {
         <Select
           disabled={!localProfessorsList}
           value={input.value}
-          valueKey={'id'}
+          valueKey="id"
           className={error && submitFailed ? 'select-error' : undefined}
           simpleValue
           options={localProfessorsList}
@@ -182,7 +182,7 @@ class PostSearch extends Component {
             input.onChange(newProfessor);
             if (newProfessor != input.value) this.setState({ alreadyPosted: false }, populateFields(newProfessor));
           }}
-          placeholder='Select your professor'
+          placeholder="Select your professor"
           onOpen={() => {
             if (window.innerHeight < postSearchForm.clientHeight + 240) postSearchForm.style.marginBottom = '115px';
           }}
@@ -208,50 +208,50 @@ class PostSearch extends Component {
       course_id,
       professor_id; //= currently selected values
     switch (currentField) {
-    case 'quarter':
-      quarter_id = newValue;
-      course_id = course;
-      professor_id = professor;
-      break;
-    case 'course':
-      quarter_id = quarter;
-      course_id = newValue;
-      professor_id = professor;
-      break;
-    case 'professor':
-      quarter_id = quarter;
-      course_id = course;
-      professor_id = newValue;
-      break;
+      case 'quarter':
+        quarter_id = newValue;
+        course_id = course;
+        professor_id = professor;
+        break;
+      case 'course':
+        quarter_id = quarter;
+        course_id = newValue;
+        professor_id = professor;
+        break;
+      case 'professor':
+        quarter_id = quarter;
+        course_id = course;
+        professor_id = newValue;
+        break;
     }
     const client = new API();
     if (selectionOrder.includes(currentField)) {
       for (let i = selectionOrder.length - 1; i > 0; i--) { // clear values ahead of currentField. If at index 0, do nothing, so only loop while i > 0
         if (selectionOrder[i] === currentField) {
           switch (currentField) {
-          case 'quarter':
-            if (course_id && professor_id) this.authIfPosted(quarter_id, course_id, professor_id);
-            break;
-          case 'course':
-            if (quarter_id && professor_id) this.authIfPosted(quarter_id, course_id, professor_id);
-            break;
-          case 'professor':
-            if (quarter_id && course_id) this.authIfPosted(quarter_id, course_id, professor_id);
-            break;
+            case 'quarter':
+              if (course_id && professor_id) this.authIfPosted(quarter_id, course_id, professor_id);
+              break;
+            case 'course':
+              if (quarter_id && professor_id) this.authIfPosted(quarter_id, course_id, professor_id);
+              break;
+            case 'professor':
+              if (quarter_id && course_id) this.authIfPosted(quarter_id, course_id, professor_id);
+              break;
           }
           break;
         }
         storeWithMiddleware.dispatch(change('postSearch', selectionOrder[i], ''));
         switch (selectionOrder[i]) {
-        case 'quarter':
-          quarter_id = null;
-          break;
-        case 'course':
-          course_id = null;
-          break;
-        case 'professor':
-          professor_id = null;
-          break;
+          case 'quarter':
+            quarter_id = null;
+            break;
+          case 'course':
+            course_id = null;
+            break;
+          case 'professor':
+            professor_id = null;
+            break;
         }
         selectionOrder.pop();
       }
@@ -280,34 +280,34 @@ class PostSearch extends Component {
 
   getField(field, client, quarter_id, course_id, professor_id, departmentsList) {
     switch (field) {
-    case 'quarter':
-      this.setState({ localQuartersList: null }, () => client.get('/quarters', (quarters) => {
-        if (this.postSearchForm) {
-          CustomSort('quarter', quarters);
-          quarters.map(quarter => quarter.label = `${quarter.name} ${quarter.year}`);
-          this.setState({ localQuartersList: quarters });
-        }
-      }, { quarter_id, course_id, professor_id }));
-      break;
-    case 'course':
-      this.setState({ localCoursesList: null }, () => client.get('/courses', (courses) => {
-        if (this.postSearchForm) {
-          CustomSort('course', courses);
-          courses.map(course => course.label = `${departmentsList[course.department_id].abbr} ${course.number}: ${course.title}`);
+      case 'quarter':
+        this.setState({ localQuartersList: null }, () => client.get('/quarters', (quarters) => {
+          if (this.postSearchForm) {
+            CustomSort('quarter', quarters);
+            quarters.map(quarter => quarter.label = `${quarter.name} ${quarter.year}`);
+            this.setState({ localQuartersList: quarters });
+          }
+        }, { quarter_id, course_id, professor_id }));
+        break;
+      case 'course':
+        this.setState({ localCoursesList: null }, () => client.get('/courses', (courses) => {
+          if (this.postSearchForm) {
+            CustomSort('course', courses);
+            courses.map(course => course.label = `${departmentsList.object[course.department_id].abbr} ${course.number}: ${course.title}`);
 
-          this.setState({ localCoursesList: courses });
-        }
-      }, { quarter_id, course_id, professor_id }));
-      break;
-    case 'professor':
-      this.setState({ localProfessorsList: null }, () => client.get('/professors', (professors) => {
-        if (this.postSearchForm) {
-          professors.map(professor => professor.label = `${professor.last_name}, ${professor.first_name}`);
-          CustomSort('professor', professors);
-          this.setState({ localProfessorsList: professors });
-        }
-      }, { quarter_id, course_id, professor_id }));
-      break;
+            this.setState({ localCoursesList: courses });
+          }
+        }, { quarter_id, course_id, professor_id }));
+        break;
+      case 'professor':
+        this.setState({ localProfessorsList: null }, () => client.get('/professors', (professors) => {
+          if (this.postSearchForm) {
+            professors.map(professor => professor.label = `${professor.last_name}, ${professor.first_name}`);
+            CustomSort('professor', professors);
+            this.setState({ localProfessorsList: professors });
+          }
+        }, { quarter_id, course_id, professor_id }));
+        break;
     }
   }
 
@@ -318,39 +318,39 @@ class PostSearch extends Component {
     } = this.state;
     const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
     return (
-      <form ref={node => this.postSearchForm = node} className='content' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+      <form ref={node => this.postSearchForm = node} className="content" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         {!read_access && (
-          <div className='noWriteDiv'>
-            <Link className='homeBtn' to={'/'}>
-              <i className='fa fa-home' />
+          <div className="noWriteDiv">
+            <Link className="homeBtn" to="/">
+              <i className="fa fa-home" />
             </Link>
           </div>
         )}
         <small style={{ marginTop: '5px' }}>In any order, select the correct combination and select {'"Continue"'} to start filling your evaluation.</small>
         <hr />
         <Field
-          name='quarter' // responsible for object's key name for values
+          name="quarter" // responsible for object's key name for values
           component={this.renderQuarters.bind(this)}
           localQuartersList={localQuartersList}
           populateFields={newValue => this.populateFields('quarter', 'course', 'professor', newValue)}
         />
 
         <Field
-          name='course' // responsible for object's key name for values
+          name="course" // responsible for object's key name for values
           component={this.renderCourses.bind(this)}
           localCoursesList={localCoursesList}
           populateFields={newValue => this.populateFields('course', 'quarter', 'professor', newValue)}
         />
 
         <Field
-          name='professor' // responsible for object's key name for values
+          name="professor" // responsible for object's key name for values
           component={this.renderProfessors.bind(this)}
           localProfessorsList={localProfessorsList}
           populateFields={newValue => this.populateFields('professor', 'quarter', 'course', newValue)}
           postSearchForm={this.postSearchForm}
         />
 
-        <button type='submit' disabled={checkingIfPosted || alreadyPosted} className='btn'>{checkingIfPosted ? ' Checking...' : alreadyPosted ? 'Already posted' : 'Continue'}</button>
+        <button type="submit" disabled={checkingIfPosted || alreadyPosted} className="btn">{checkingIfPosted ? ' Checking...' : alreadyPosted ? 'Already posted' : 'Continue'}</button>
       </form>
     );
   }

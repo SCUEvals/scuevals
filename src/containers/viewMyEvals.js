@@ -88,11 +88,11 @@ class ViewMyEvals extends Component {
       { value: 'votes_score', label: 'Sort by Votes Score' },
     ];
     return (
-      <div className='content'>
+      <div className="content">
         {!read_access && (
-          <div className='noWriteDiv'>
-            <Link className='homeBtn noWriteHomeBtn' to={'/'}>
-              <i className='fa fa-home' />
+          <div className="noWriteDiv">
+            <Link className="homeBtn noWriteHomeBtn" to="/">
+              <i className="fa fa-home" />
             </Link>
           </div>
         )}
@@ -101,34 +101,35 @@ class ViewMyEvals extends Component {
           closeDeleteModal={() => this.setState({ deleteModal: { open: false } })}
           quarter={quartersList && deleteModal.quarter_id ?
             quartersList.object[deleteModal.quarter_id].label : null}
-          course={coursesList && coursesList.departmentsListLoaded && deleteModal.course_id ? coursesList.object[deleteModal.course_id].label : null }
+          course={coursesList && coursesList.departmentsListLoaded && deleteModal.course_id ? coursesList.object[deleteModal.course_id].label : null}
           professor={professorsList && deleteModal.professor_id ? professorsList.object[deleteModal.professor_id].label : null}
           eval_id={deleteModal.eval_id}
           deletePost={() => {
             const client = new API();
             client.delete(`/evaluations/${deleteModal.eval_id}`, () => ReactGA.event({ category: 'Evaluation', action: 'Deleted' }));
-            myEvalsList.map((obj, key) => {
-              if (obj.id === deleteModal.eval_id) {
+            for (let i = 0; i < myEvalsList.length; i++) {
+              if (myEvalsList[i].id === deleteModal.eval_id) {
                 const newList = myEvalsList.slice();
-                newList.splice(key, 1);
+                newList.splice(i, 1);
                 this.setState({ myEvalsList: newList });
+                break;
               }
-            });
+            }
           }}
         />
-        <h4 className='banner'>{userInfo.first_name}{'\'s'} Evals</h4>
+        <h4 className="banner">{userInfo.first_name}{'\'s'} Evals</h4>
         {myEvalsList ?
           myEvalsList.length === 0 ?
             <h5>You haven&#8217;t posted anything yet.</h5>
             :
             <Fragment>
-              <div className='sort-wrapper'>
+              <div className="sort-wrapper">
                 <Select
                   isLoading={!coursesList && !departmentsList && !professorsList}
                   value={sortValue}
                   simpleValue
                   options={sortOptions}
-                  placeholder='Sort'
+                  placeholder="Sort"
                   onChange={(newSortValue) => {
                     const myEvalsListCopy = myEvalsList.slice();
                     CustomSort(newSortValue, myEvalsListCopy, 'recent');
@@ -138,8 +139,8 @@ class ViewMyEvals extends Component {
                 />
                 <i
                   ref={(obj) => { this.sortArrows = obj; }}
-                  tabIndex='0'
-                  className='fa fa-sort'
+                  tabIndex="0"
+                  className="fa fa-sort"
                   onClick={(e) => {
                     const myEvalsListCopy = myEvalsList.slice();
                     myEvalsListCopy.reverse();
@@ -152,7 +153,7 @@ class ViewMyEvals extends Component {
                   }}
                 />
               </div>
-              {myEvalsList.map(evaluation => <Eval
+              {myEvalsList.map(evaluation => (<Eval
                 key={evaluation.id}
                 evaluation={evaluation}
                 department={departmentsList && evaluation.course ?
@@ -172,7 +173,7 @@ class ViewMyEvals extends Component {
                     },
                   });
                 }}
-              />)}
+              />))}
             </Fragment>
           : <h5>Loading...</h5>}
       </div>

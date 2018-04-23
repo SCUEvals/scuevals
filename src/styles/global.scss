@@ -735,17 +735,32 @@ svg.score {
   }
 }
 
-.widget {
-  max-width: 750px;
-  margin: 0 auto;
-  overflow: auto;
-}
-
 .widgetWrapper {
   overflow: auto;
+  margin: 30px 0 15px 0;
 
   .widget {
-    min-width: 478px;
+    min-width: 400px;
+    max-width: 524px;
+    margin-left: auto;
+    margin-right: auto;
+
+    :global(.list-group-item) {
+      padding: 5px 0;
+
+      :global(.flex) {
+        font-size: 14px;
+        margin-top: 6px;
+      }
+
+      circle {
+        transform: rotate(-90deg) scaleY(-1) scale(0.8) !important;
+      }
+
+      text {
+        font-size: 12px !important;
+      }
+    }
   }
 }
 

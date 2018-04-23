@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import API from '../services/api';
-import '../styles/recentEvalsWidget.scss';
 
 class RecentEvalsWidget extends Component {
   constructor(props) {
@@ -39,48 +38,46 @@ class RecentEvalsWidget extends Component {
     } = this.props;
     if (evals && quartersList && coursesList && coursesList.departmentsListLoaded && professorsList) {
       return (
-        <div styleName='recentEvalsWidget'>
-          <h5>{count} Most Recent Evaluations</h5>
-          <div className='widgetWrapper'>
-            <div className='widget'>
-              <small className='offset-10'>Scale is 1-4</small>
-              <ul className='list-group'>
-                {evals.map((evaluation) => {
-                  const {
-                    attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload,
-                  } = evaluation.data;
-                  const totalScore = (((attitude + availability + clarity + grading_speed + resourcefulness) / 5 + (easiness + workload) / 2) / 2 * 0.8 + recommended * 0.2).toFixed(1);
-                  const totalScoreStyle = { strokeDashoffset: this.calculatePath(totalScore) };
-                  return (
-                    <li key={evaluation.id} className='list-group-item d-flex justify-content-between align-items-center'>
-                      <div className='flex col-2'>
-                        {quartersList.object[evaluation.quarter_id].label}
-                      </div>
-                      <div className='flex col-4'>
-                        <Link to={`/courses/${evaluation.course.id}`} >{`${departmentsList[coursesList.object[evaluation.course.id].department_id].abbr} ${coursesList.object[evaluation.course.id].number}`}</Link>
-                      </div>
-                      <div className='flex col-4'>
-                        <Link to={`/professors/${evaluation.professor.id}`} >{professorsList.object[evaluation.professor.id].label}</Link>
-                      </div>
-                      <div className='flex col-2'>
-                        <svg className='score'>
-                          <circle style={totalScoreStyle} cx='18' cy='18' r='16' className={`score${totalScore < 1.75 ? '1' : totalScore < 2.5 ? '2' : totalScore < 3.25 ? '3' : '4'}`}/>
-                          <text x='50%' y='50%'>
-                            {totalScore}
-                          </text>
-                        </svg>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
+        <div ref={node => this.recentEvalsWidget = node} className="widgetWrapper">
+          <div className="widget">
+            <h5>Recent Evaluations</h5>
+            <small style={{textAlign: "right", marginRight: "2%"}}>Scale is 1-4</small>
+            <ul className="list-group">
+              {evals.map((evaluation) => {
+                const {
+                  attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload,
+                } = evaluation.data;
+                const totalScore = (((attitude + availability + clarity + grading_speed + resourcefulness) / 5 + (easiness + workload) / 2) / 2 * 0.8 + recommended * 0.2).toFixed(1);
+                const totalScoreStyle = { strokeDashoffset: this.calculatePath(totalScore) };
+                return (
+                  <li key={evaluation.id} className="list-group-item d-flex justify-content-between align-items-center">
+                    <div className="flex col-2">
+                      {quartersList.object[evaluation.quarter_id].label}
+                    </div>
+                    <div className="flex col-4">
+                      <Link to={`/courses/${evaluation.course.id}`} >{`${departmentsList.object[coursesList.object[evaluation.course.id].department_id].abbr} ${coursesList.object[evaluation.course.id].number}`}</Link>
+                    </div>
+                    <div className="flex col-4">
+                      <Link to={`/professors/${evaluation.professor.id}`} >{professorsList.object[evaluation.professor.id].label}</Link>
+                    </div>
+                    <div className="flex col-2">
+                      <svg className="score">
+                        <circle style={totalScoreStyle} cx="18" cy="18" r="16" className={`score${totalScore < 1.75 ? '1' : totalScore < 2.5 ? '2' : totalScore < 3.25 ? '3' : '4'}`} />
+                        <text x="50%" y="50%">
+                          {totalScore}
+                        </text>
+                      </svg>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </div>
       );
     }
     return (
-      <h5 ref={node => this.recentEvalsWidget = node} styleName='recentEvalsWidget'>Loading Most Recent Evaluations...</h5>
+      <h5 ref={node => this.recentEvalsWidget = node}>Loading Most Recent Evaluations...</h5>
     );
   }
 }

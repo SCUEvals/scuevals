@@ -53,23 +53,23 @@ function renderDOM() {
          because need to access history outside of React components (API service) */}
       <Router history={history}>
         <GAListener>
-          <div id='push-footer' styleName='push-footer'>
+          <div id="push-footer" styleName="push-footer">
             <Header />
-            <div className='container'>
+            <div className="container">
               <Switch>
-                <Route exact path='/search/:search' component={requireAuth(SearchContent, null, [READ_EVALUATIONS])} />
-                <Route exact path='/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)' component={requireAuth(PostEval, null, [WRITE_EVALUATIONS])} />
-                <Route exact path='/professors/:id(\d+)/post' component={requireAuth(PostSearch, { type: 'professors' }, [WRITE_EVALUATIONS])} />
-                <Route exact path='/courses/:id(\d+)/post' component={requireAuth(PostSearch, { type: 'courses' }, [WRITE_EVALUATIONS])} />
-                <Route exact path='/professors/:id(\d+)' component={requireAuth(ViewEvals, { type: 'professors' }, [READ_EVALUATIONS])} />
-                <Route exact path='/courses/:id(\d+)' component={requireAuth(ViewEvals, { type: 'courses' })} />
-                <Route exact path='/about' component={About} />
-                <Route exact path='/privacy' component={Privacy} />
-                <Route exact path='/profile/evals' component={requireAuth(ViewMyEvals)} />
-                <Route exact path='/profile' component={requireAuth(Profile, null, [INCOMPLETE, WRITE_EVALUATIONS])} />
-                <Route exact path='/post' component={requireAuth(PostSearch, null, [WRITE_EVALUATIONS])} />
-                <Route exact path='/' component={requireAuth(Home)} />
-                <Redirect to='/' />
+                <Route exact path="/search/:search" component={requireAuth(SearchContent, null, [READ_EVALUATIONS])} />
+                <Route exact path="/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)" component={requireAuth(PostEval, null, [WRITE_EVALUATIONS])} />
+                <Route exact path="/professors/:id(\d+)/post" component={requireAuth(PostSearch, { type: 'professors' }, [WRITE_EVALUATIONS])} />
+                <Route exact path="/courses/:id(\d+)/post" component={requireAuth(PostSearch, { type: 'courses' }, [WRITE_EVALUATIONS])} />
+                <Route exact path="/professors/:id(\d+)" component={requireAuth(ViewEvals, { type: 'professors' }, [READ_EVALUATIONS])} />
+                <Route exact path="/courses/:id(\d+)" component={requireAuth(ViewEvals, { type: 'courses' })} />
+                <Route exact path="/about" component={About} />
+                <Route exact path="/privacy" component={Privacy} />
+                <Route exact path="/profile/evals" component={requireAuth(ViewMyEvals)} />
+                <Route exact path="/profile" component={requireAuth(Profile, null, [INCOMPLETE, WRITE_EVALUATIONS])} />
+                <Route exact path="/post" component={requireAuth(PostSearch, null, [WRITE_EVALUATIONS])} />
+                <Route exact path="/" component={requireAuth(Home)} />
+                <Redirect to="/" />
               </Switch>
             </div>
           </div>

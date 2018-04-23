@@ -76,13 +76,13 @@ class ViewEvals extends Component {
     const avgClass = this.calculateAverageColor(value);
     if (value) {
       return (
-        <div styleName='avgScore'>
-          <div styleName='scoreTitle'>
+        <div styleName="avgScore">
+          <div styleName="scoreTitle">
             {name}
           </div>
           <svg className={avgClass}>
-            <circle cx='27' cy='27' r='25' style={{ strokeDashoffset: this.calculatePath(value) }} />
-            <text x='50%' y='50%'>
+            <circle cx="27" cy="27" r="25" style={{ strokeDashoffset: this.calculatePath(value) }} />
+            <text x="50%" y="50%">
               {value}
             </text>
           </svg>
@@ -94,13 +94,13 @@ class ViewEvals extends Component {
 
   renderInfoTooltip(info) {
     return (
-      <Manager className='popper-manager'>
-        <Target tabIndex='0' className='popper-target'>
-          <i className='fa fa-question'/>
+      <Manager className="popper-manager">
+        <Target tabIndex="0" className="popper-target">
+          <i className="fa fa-question" />
         </Target>
-        <Popper placement='top' className='popper tooltip-popper'>
+        <Popper placement="top" className="popper tooltip-popper">
           {info}
-          <Arrow className='popper__arrow' />
+          <Arrow className="popper__arrow" />
         </Popper>
       </Manager>
     );
@@ -166,7 +166,7 @@ class ViewEvals extends Component {
     ];
 
     return (
-      <div className='content' styleName='viewEvals'>
+      <div className="content" styleName="viewEvals">
         <FlagModal
           flagModalOpen={flagModal.open}
           comment={flagModal.comment}
@@ -180,20 +180,21 @@ class ViewEvals extends Component {
           deleteModalOpen={deleteModal.open}
           closeDeleteModal={() => this.setState({ deleteModal: { open: false } })}
           quarter={quartersList && deleteModal.quarter_id ? quartersList.object[deleteModal.quarter_id].label : null}
-          course={coursesList && coursesList.departmentsListLoaded && deleteModal.course_id ? coursesList.object[deleteModal.course_id].label : null }
+          course={coursesList && coursesList.departmentsListLoaded && deleteModal.course_id ? coursesList.object[deleteModal.course_id].label : null}
           professor={professorsList && deleteModal.professor_id ? professorsList.object[deleteModal.professor_id].label : null}
           deletePost={() => {
             const client = new API();
             client.delete(`/evaluations/${deleteModal.eval_id}`, () => ReactGA.event({ category: 'Evaluation', action: 'Deleted' }));
-            info.evaluations.map((obj, key) => {
-              if (obj.id === deleteModal.eval_id) {
+            for (let i = 0; i < myEvalsList.length; i++) {
+              if (myEvalsList[i].id === deleteModal.eval_id) {
                 const newList = Object.assign({}, info); // multiple shallow copies best way to handle nested state change while respecting immutable state
                 const evals = info.evaluations.slice();
                 evals.splice(key, 1);
                 newList.evaluations = evals;
                 this.setState({ info: newList });
+                break;
               }
-            });
+            }
           }}
         />
         <h2>
@@ -201,35 +202,35 @@ class ViewEvals extends Component {
             type === 'professors' ?
               `${info.first_name} ${info.last_name}`
               : departmentsList ?
-                `${departmentsList[info.department_id].abbr} ${info.number}: ${info.title}`
+                `${departmentsList.object[info.department_id].abbr} ${info.number}: ${info.title}`
                 : 'Loading...'
             : 'Loading...'
           }
         </h2>
         {info && info.evaluations.length > 0 && (
-          <section styleName='scores'>
-            <div styleName='scoresWrapper scoresWrapperTop'>
+          <section styleName="scores">
+            <div styleName="scoresWrapper scoresWrapperTop">
               {this.renderAverage('Course', courseAverage)}
               {this.renderAverage('Score', average)}
               {this.renderAverage('Professor', professorAverage)}
             </div>
             <div>
-              <div styleName='scoresWrapper'>
-                <div styleName='scoreHeader'>General</div>
-                <div styleName='scoresGroup'>
+              <div styleName="scoresWrapper">
+                <div styleName="scoreHeader">General</div>
+                <div styleName="scoresGroup">
                   {this.renderAverage('Recommend?', recommended, 'recommended')}
                 </div>
               </div>
-              <div styleName='scoresWrapper'>
-                <div styleName='scoreHeader'>Course</div>
-                <div styleName='scoresGroup'>
+              <div styleName="scoresWrapper">
+                <div styleName="scoreHeader">Course</div>
+                <div styleName="scoresGroup">
                   {this.renderAverage('Easiness', easiness, 'easiness')}
                   {this.renderAverage('Workload', workload, 'workload')}
                 </div>
               </div>
-              <div styleName='scoresWrapper'>
-                <div styleName='scoreHeader'>Professor</div>
-                <div styleName='scoresGroup'>
+              <div styleName="scoresWrapper">
+                <div styleName="scoreHeader">Professor</div>
+                <div styleName="scoresGroup">
                   {this.renderAverage('Attitude', attitude, 'attitude')}
                   {this.renderAverage('Availability', availability, 'availability')}
                   {this.renderAverage('Clarity', clarity, 'clarity')}
@@ -240,39 +241,43 @@ class ViewEvals extends Component {
             </div>
           </section>
         )}
-        <div styleName='buttonGroup'>
+        <div styleName="buttonGroup">
           {(write_access && info) && (
-            <Link className='btn' to={type === 'professors' ?
-              `/professors/${match.params.id}/post`
-              : `/courses/${match.params.id}/post`}>
+            <Link
+              className="btn"
+              to={type === 'professors' ?
+                `/professors/${match.params.id}/post`
+                : `/courses/${match.params.id}/post`}
+            >
             Post Evaluation
             </Link>
           )}
           {info && (info.courses || info.professors) && departmentsList && (
             <Fragment>
-              <button className='btn' type='button' data-toggle='collapse' data-target='#relatedInfo' aria-expanded='false' aria-controls='relatedInfo'>
-                {info.courses ? 'Past Courses' : 'Past Professors'} <i className='fa fa-chevron-down' /><i className='fa fa-chevron-up' />
+              <button className="btn" type="button" data-toggle="collapse" data-target="#relatedInfo" aria-expanded="false" aria-controls="relatedInfo">
+                {info.courses ? 'Past Courses' : 'Past Professors'} <i className="fa fa-chevron-down" /><i className="fa fa-chevron-up" />
               </button>
-              <div id='relatedInfo' className='collapse'>
+              <div id="relatedInfo" className="collapse">
                 <RelatedInfo
                   departmentsList={departmentsList}
                   type={type}
                   match={match}
                   info={type === 'professors' ? info.courses : info.professors}
-                  desc={type === 'professors' ? `${info.first_name} ${info.last_name}` : `${departmentsList[info.department_id].abbr} ${info.number}`}
+                  desc={type === 'professors' ? `${info.first_name} ${info.last_name}`
+                    : `${departmentsList.object[info.department_id].abbr} ${info.number}`}
                 />
               </div>
             </Fragment>
           )}
         </div>
         {info && info.evaluations.length > 0 && (
-          <div className='sort-wrapper'>
+          <div className="sort-wrapper">
             <Select
               isLoading={type === 'courses' ? !professorsList && !majorsList && !departmentsList : !coursesList && !majorsList && !departmentsList}
               value={sortValue}
               simpleValue
               options={sortOptions}
-              placeholder='Sort'
+              placeholder="Sort"
               onChange={(newSortValue) => {
                 const newInfo = Object.assign({}, info); // multiple shallow copies best way to handle nested state change while respecting immutable state
                 const evals = info.evaluations.slice();
@@ -284,8 +289,8 @@ class ViewEvals extends Component {
             />
             <i
               ref={obj => this.sortArrows = obj}
-              tabIndex='0'
-              className='fa fa-sort'
+              tabIndex="0"
+              className="fa fa-sort"
               onClick={(e) => {
                 const newInfo = Object.assign({}, info); // multiple shallow copies best way to handle nested state change while respecting immutable state
                 const evals = info.evaluations.slice();
@@ -318,7 +323,8 @@ class ViewEvals extends Component {
                   key={evaluation.id}
                   quarter={quartersList ? `${quartersList.object[evaluation.quarter_id].name} ${quartersList.object[evaluation.quarter_id].year}` : null}
                   vote_access={userInfo.permissions.includes(VOTE_EVALUATIONS)}
-                  department={departmentsList && evaluation.course ? `${departmentsList[evaluation.course.department_id].abbr} ${evaluation.course.number}: ${evaluation.course.title}` : null}
+                  department={departmentsList && evaluation.course ? `${departmentsList.object[evaluation.course.department_id].abbr} ${evaluation.course.number}: ${evaluation.course.title}`
+                    : null}
                   evaluation={evaluation}
                   userString={userString}
                   updateScore={(newScore) => { // score must be updated in info array so sorting works with new values (or else could just update in local state inside Eval)

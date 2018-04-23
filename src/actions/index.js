@@ -1,3 +1,5 @@
+import CustomSort from '../utils/customSort';
+
 export const SET_USER_INFO = 'set_user_info';
 export const SET_SEARCH_RESULTS = 'set_search_results';
 export const SET_MAJORS_LIST = 'set_majors_list';
@@ -35,8 +37,8 @@ export function setSearchResults(results) {
 }
 
 export function setMajorsList(majorsList) {
-  majorsList.sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0));
   const majorsListObj = majorsList ? majorsList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
+  CustomSort('major', majorsList, null, majorsListObj);
   const returnedObj = { object: majorsListObj, array: majorsList };
   return {
     type: SET_MAJORS_LIST,
@@ -46,9 +48,9 @@ export function setMajorsList(majorsList) {
 
 
 export function setQuartersList(quartersList) {
-  quartersList.sort((a, b) => // convert object with ids as keys into array of objects, then sort
-    (a.year > b.year ? -1 : a.year < b.year ? 1 : a.name == 'Winter' ? 1 : a.name == 'Fall' ? -1 : b.name == 'Fall' ? 1 : -1)).map((quarter) => { quarter.label = `${quarter.name} ${quarter.year}`; return quarter; });
+  quartersList.map((quarter) => { quarter.label = `${quarter.name} ${quarter.year}`; return quarter; });
   const quartersListObj = quartersList ? quartersList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
+  CustomSort('quarter', quartersList);
   const returnedObj = { object: quartersListObj, array: quartersList };
   return {
     type: SET_QUARTERS_LIST,
@@ -58,16 +60,18 @@ export function setQuartersList(quartersList) {
 
 export function setDepartmentsList(departmentsList) {
   const departmentsListObj = departmentsList ? departmentsList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
+  CustomSort('department', departmentsList, null, departmentsListObj);
+  const returnedObj = { object: departmentsListObj, array: departmentsList };
   return {
     type: SET_DEPARTMENTS_LIST,
-    payload: departmentsListObj,
+    payload: returnedObj,
   };
 }
 
 export function setProfessorsList(professorsList) {
   professorsList.map((professor) => { professor.label = `${professor.last_name}, ${professor.first_name}`; });
-  professorsList.sort((a, b) => (a.label > b.label ? 1 : a.label < b.label ? -1 : 0));
   const professorsListObj = professorsList ? professorsList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
+  CustomSort('professor', professorsList, null, professorsListObj);
   const returnedObj = { object: professorsListObj, array: professorsList };
   return {
     type: SET_PROFESSORS_LIST,
@@ -79,17 +83,8 @@ export function setCoursesList(coursesList, departmentsList) {
   let returnedObj;
   const coursesListObj = coursesList ? coursesList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
   if (departmentsList) {
-    coursesList.sort((a, b) => {
-      if (a.department_id == b.department_id) {
-        // nums can have letters in them too (ex. 12L), so parse integers and compare
-        const parsedANum = parseInt(a.number, 10);
-        const parsedBNum = parseInt(b.number, 10);
-        // if integers same, check for letters to decide
-        if (parsedANum == parsedBNum) return a.number > b.number ? 1 : a.number < b.number ? -1 : 0;
-        return parsedANum > parsedBNum ? 1 : parsedANum < parsedBNum ? -1 : 0;
-      }
-      return departmentsList[a.department_id].abbr > departmentsList[b.department_id].abbr ? 1 : departmentsList[a.department_id].abbr < departmentsList[b.department_id].abbr ? -1 : 0;
-    }).map((course) => { course.label = `${departmentsList[course.department_id].abbr} ${course.number}: ${course.title}`; return course; });
+    CustomSort('course', coursesList, null, coursesListObj);
+    coursesList.map((course) => { course.label = `${departmentsList.object[course.department_id].abbr} ${course.number}: ${course.title}`; return course; });
     returnedObj = { object: coursesListObj, array: coursesList, departmentsListLoaded: true };
   } else returnedObj = { object: coursesListObj, array: coursesList, departmentsListLoaded: false };
   return {

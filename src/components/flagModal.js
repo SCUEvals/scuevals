@@ -55,8 +55,9 @@ class FlagModal extends Component {
       <TextareaAutoSize
         style={{ margin: '0 auto', display: 'block' }}
         className={submitFailed && error ? 'comment-error' : ''}
-        minRows={2} {...field.input}
-        placeholder='Write your reasons here'
+        minRows={2}
+        {...field.input}
+        placeholder="Write your reasons here"
       />
     );
   }
@@ -64,30 +65,30 @@ class FlagModal extends Component {
   renderCheckbox(field) {
     const onKeyDown = (event) => {
       switch (event.keyCode) {
-      case 38: { // up
-        event.preventDefault(); // stop scrolling
-        const nodes = $('#flagModal input[type="checkbox"]');
-        for (let i = 0; i < nodes.length; i++) {
-          if (nodes[i] === event.target) {
-            if (i - 1 >= 0) nodes[i - 1].focus();
-            break;
+        case 38: { // up
+          event.preventDefault(); // stop scrolling
+          const nodes = $('#flagModal input[type="checkbox"]');
+          for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i] === event.target) {
+              if (i - 1 >= 0) nodes[i - 1].focus();
+              break;
+            }
           }
+          break;
         }
-        break;
-      }
 
-      case 40: { // down
-        event.preventDefault(); // stop scrolling
-        const nodes = $('#flagModal input[type="checkbox"]');
-        for (let i = 0; i < nodes.length; i++) {
-          if (nodes[i] === event.target) {
-            if (i + 1 < nodes.length) nodes[i + 1].focus();
-            else $('#flagModal textarea').focus();
-            break;
+        case 40: { // down
+          event.preventDefault(); // stop scrolling
+          const nodes = $('#flagModal input[type="checkbox"]');
+          for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i] === event.target) {
+              if (i + 1 < nodes.length) nodes[i + 1].focus();
+              else $('#flagModal textarea').focus();
+              break;
+            }
           }
+          break;
         }
-        break;
-      }
       }
     };
     return (
@@ -103,21 +104,25 @@ class FlagModal extends Component {
       OTHER, SPAM, OFFENSIVE, SENSITIVE_INFO,
     } = this.constructor;
     return (
-      <ReactModal isOpen={flagModalOpen} className='reactModal container' appElement={document.getElementById('app')}>
-        <div id='flagModal' className='modalWrapper'>
-          <div className='modalHeader'>
+      <ReactModal isOpen={flagModalOpen} className="reactModal container" appElement={document.getElementById('app')}>
+        <div id="flagModal" className="modalWrapper">
+          <div className="modalHeader">
             <h5>Flag comment</h5>
-            <i tabIndex='0' className='fa fa-times'
+            <i
+              tabIndex="0"
+              className="fa fa-times"
               onClick={closeFlagModal}
               onKeyPress={(event) => {
                 if (event.key === 'Enter') closeFlagModal();
               }}
             />
           </div>
-          <div className='modalBlock'>
+          <div className="modalBlock">
             <p style={{
               fontStyle: 'italic', maxHeight: '53px', overflow: 'auto', padding: '0 15px',
-            }}>{comment}</p>
+            }}
+            >{comment}
+            </p>
             <hr />
             {user_flagged ?
               'You have already flagged this evaluation.'
@@ -130,21 +135,21 @@ class FlagModal extends Component {
                     Check all boxes that apply
                   </span>
                 </div>
-                <div className='checkbox-group'>
-                  <Field name={SPAM} component={this.renderCheckbox} text='Spam' />
+                <div className="checkbox-group">
+                  <Field name={SPAM} component={this.renderCheckbox} text="Spam" />
                   <br />
-                  <Field name={OFFENSIVE} component={this.renderCheckbox} text='Offensive' />
+                  <Field name={OFFENSIVE} component={this.renderCheckbox} text="Offensive" />
                   <br />
-                  <Field name={SENSITIVE_INFO} component={this.renderCheckbox} text='Sensitive Info' />
+                  <Field name={SENSITIVE_INFO} component={this.renderCheckbox} text="Sensitive Info" />
                   <br />
-                  <Field name={OTHER} component={this.renderCheckbox} text='Other' />
+                  <Field name={OTHER} component={this.renderCheckbox} text="Other" />
                 </div>
                 <br />
-                <Field name='comment' onChange={e => this.setState({ term: e.target.value })} component={this.renderTextArea} />
+                <Field name="comment" onChange={e => this.setState({ term: e.target.value })} component={this.renderTextArea} />
                 <button
                   disabled={submitting}
-                  type='submit'
-                  className='btn'
+                  type="submit"
+                  className="btn"
                   onKeyDown={(event) => {
                     if (event.keyCode === 38) /* up */ $('#flagModal textarea').focus();
                   }}

@@ -88,7 +88,10 @@ class PostEval extends Component {
 
   componentDidUpdate() {
     if (!this.props.userInfo.permissions.includes(READ_EVALUATIONS)) {
-      if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList) { this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList); } // make deep copy of current, state immutable
+      if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList) {
+        // make deep copy of current, state immutable
+        this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList);
+      }
     }
   }
 
@@ -112,8 +115,9 @@ class PostEval extends Component {
     return (
       <TextareaAutoSize
         className={submitFailed && error ? 'comment-error' : undefined}
-        minRows={5} {...field.input}
-        placeholder='Write your constructive review here'
+        minRows={5}
+        {...field.input}
+        placeholder="Write your constructive review here"
       />
     );
   }
@@ -170,18 +174,18 @@ class PostEval extends Component {
             }
           }}
         >
-          <div styleName='handleNum'>
+          <div styleName="handleNum">
             {value !== 0 ? value : ''}
           </div>
         </Handle>
-        <Target className='popper-target'>
+        <Target className="popper-target">
           {({ targetProps }) => (
             <div style={trackerStyle} {...targetProps} />
           )}
         </Target>
-        <Popper style={popperStyle} placement='top' className='popper'>
+        <Popper style={popperStyle} placement="top" className="popper">
           {value === 0 || value === 1 ? textProps.one : value === 2 ? textProps.two : value === 3 ? textProps.three : value === 4 ? textProps.four : ''}
-          <Arrow className='popper__arrow' />
+          <Arrow className="popper__arrow" />
         </Popper>
       </Manager>
     );
@@ -189,13 +193,13 @@ class PostEval extends Component {
 
   renderInfoToolTip(info) {
     return (
-      <Manager className='popper-manager'>
-        <Target tabIndex='0' className='popper-target'>
-          <i className='fa fa-question'/>
+      <Manager className="popper-manager">
+        <Target tabIndex="0" className="popper-target">
+          <i className="fa fa-question" />
         </Target>
-        <Popper placement='top' className='popper tooltip-popper'>
+        <Popper placement="top" className="popper tooltip-popper">
           {info}
-          <Arrow className='popper__arrow' />
+          <Arrow className="popper__arrow" />
         </Popper>
       </Manager>
     );
@@ -207,18 +211,18 @@ class PostEval extends Component {
     if (track.length === 1) { // if exists
       track = track[0];
       switch (input.value) {
-      case 1:
-        track.className = 'rc-slider-track track1';
-        break;
-      case 2:
-        track.className = 'rc-slider-track track2';
-        break;
-      case 3:
-        track.className = 'rc-slider-track track3';
-        break;
-      case 4:
-        track.className = 'rc-slider-track track4';
-        break;
+        case 1:
+          track.className = 'rc-slider-track track1';
+          break;
+        case 2:
+          track.className = 'rc-slider-track track2';
+          break;
+        case 3:
+          track.className = 'rc-slider-track track3';
+          break;
+        case 4:
+          track.className = 'rc-slider-track track4';
+          break;
       }
     }
     const sliderClass = submitFailed && error ? `${input.name} slider-error` : input.name;
@@ -242,29 +246,29 @@ class PostEval extends Component {
     if (field.input.name === 'display_majors') {
       onKeyDown = (event) => {
         switch (event.keyCode) {
-        case 38: // up
-          event.preventDefault(); // stop scrolling
-          $('textarea[name="comment"]').focus();
-          break;
+          case 38: // up
+            event.preventDefault(); // stop scrolling
+            $('textarea[name="comment"]').focus();
+            break;
 
-        case 40: // down
-          event.preventDefault(); // stop scrolling
-          $('input[name="display_grad_year"]').focus();
-          break;
+          case 40: // down
+            event.preventDefault(); // stop scrolling
+            $('input[name="display_grad_year"]').focus();
+            break;
         }
       };
     } else if (field.input.name === 'display_grad_year') {
       onKeyDown = (event) => {
         switch (event.keyCode) {
-        case 38: // up
-          event.preventDefault(); // stop scrolling
-          $('input[name="display_majors"]').focus();
-          break;
+          case 38: // up
+            event.preventDefault(); // stop scrolling
+            $('input[name="display_majors"]').focus();
+            break;
 
-        case 40: // down
-          event.preventDefault(); // stop scrolling
-          $('button[type="submit"]').focus();
-          break;
+          case 40: // down
+            event.preventDefault(); // stop scrolling
+            $('button[type="submit"]').focus();
+            break;
         }
       };
     }
@@ -294,15 +298,15 @@ class PostEval extends Component {
     }
     if (location.state || classInfo !== undefined) { // passed values from postSearch
       return (
-        <form styleName='postEval' onSubmit={handleSubmit(this.onSubmit.bind(this))} className='content' >
+        <form styleName="postEval" onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
           <Prompt
             when={dirty && !submitted}
-            message='Are you sure you want to go to navigate away before submitting your evaluation?'
+            message="Are you sure you want to go to navigate away before submitting your evaluation?"
           />
           {!read_access && (
-            <div className='noWriteDiv'>
-              <Link className='homeBtn' to={'/'}>
-                <i className='fa fa-home' />
+            <div className="noWriteDiv">
+              <Link className="homeBtn" to="/">
+                <i className="fa fa-home" />
               </Link>
             </div>
           )}
@@ -314,26 +318,26 @@ class PostEval extends Component {
             classInfoExists={classInfo && classInfo.user_posted}
           />
           {quarter && course && professor ?
-            <div styleName='postInfo'>
+            <div styleName="postInfo">
               <h5>{quarter}</h5>
               <h3>{course}</h3>
               <h3>{professor}</h3>
             </div>
             : classInfo === null ?
-              <div styleName='postInfo'>
+              <div styleName="postInfo">
                 <h3>No class exists for this page.</h3>
               </div>
-              : <div styleName='postInfo'>
+              : <div styleName="postInfo">
                 <h3>Loading...</h3>
               </div>
           }
-          <div styleName='postGuidelines' className='row'>
-            <div className='col-12 col-md-6'>
-              <div className='card'>
-                <div className='card-header'>GUIDELINES TO FOLLOW</div>
-                <div className='card-body'>
+          <div styleName="postGuidelines" className="row">
+            <div className="col-12 col-md-6">
+              <div className="card">
+                <div className="card-header">GUIDELINES TO FOLLOW</div>
+                <div className="card-body">
                   <ul>
-                    <li>If unsure about a question, select <div tabIndex='0' styleName='popper-target-guidelines'><i className='fa fa-question'/></div> for more details</li>
+                    <li>If unsure about a question, select <div tabIndex="0" styleName="popper-target-guidelines"><i className="fa fa-question" /></div> for more details</li>
                     <li>Remove unfair bias</li>
                     <li>Proofread your comments</li>
                     <li>Write respectfully</li>
@@ -342,10 +346,10 @@ class PostEval extends Component {
                 </div>
               </div>
             </div>
-            <div className='col-12 col-md-6'>
-              <div className='card'>
-                <div className='card-header'>THINGS TO AVOID</div>
-                <div className='card-body'>
+            <div className="col-12 col-md-6">
+              <div className="card">
+                <div className="card-header">THINGS TO AVOID</div>
+                <div className="card-body">
                   <ul >
                     <li>Hate speech or excessive profanity</li>
                     <li>Speaking on behalf of others</li>
@@ -359,38 +363,38 @@ class PostEval extends Component {
           </div>
           <h3>Professor</h3>
           <h6>Attitude {this.renderInfoToolTip(TextOptions.attitude.info)}</h6>
-          <Field name='attitude' format={value => (value === '' ? 0 : value)} textProps={TextOptions.attitude} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name="attitude" format={value => (value === '' ? 0 : value)} textProps={TextOptions.attitude} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Availability {this.renderInfoToolTip(TextOptions.availability.info)}</h6>
-          <Field name='availability' format={value => (value === '' ? 0 : value)} textProps={TextOptions.availability} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name="availability" format={value => (value === '' ? 0 : value)} textProps={TextOptions.availability} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Clarity {this.renderInfoToolTip(TextOptions.clarity.info)}</h6>
-          <Field name='clarity' format={value => (value === '' ? 0 : value)} textProps={TextOptions.clarity} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name="clarity" format={value => (value === '' ? 0 : value)} textProps={TextOptions.clarity} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Grading Speed {this.renderInfoToolTip(TextOptions.grading_speed.info)}</h6>
-          <Field name='grading_speed' format={value => (value === '' ? 0 : value)} textProps={TextOptions.grading_speed} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name="grading_speed" format={value => (value === '' ? 0 : value)} textProps={TextOptions.grading_speed} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Resourcefulness {this.renderInfoToolTip(TextOptions.resourcefulness.info)}</h6>
-          <Field name='resourcefulness' format={value => (value === '' ? 0 : value)} textProps={TextOptions.resourcefulness} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name="resourcefulness" format={value => (value === '' ? 0 : value)} textProps={TextOptions.resourcefulness} renderHandle={this.renderHandle} component={this.renderSlider} />
 
           <h3>Class</h3>
           <h6>Easiness {this.renderInfoToolTip(TextOptions.easiness.info)}</h6>
-          <Field name='easiness' format={value => (value === '' ? 0 : value)} textProps={TextOptions.easiness} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name="easiness" format={value => (value === '' ? 0 : value)} textProps={TextOptions.easiness} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Workload {this.renderInfoToolTip(TextOptions.workload.info)}</h6>
-          <Field name='workload' format={value => (value === '' ? 0 : value)} textProps={TextOptions.workload} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name="workload" format={value => (value === '' ? 0 : value)} textProps={TextOptions.workload} renderHandle={this.renderHandle} component={this.renderSlider} />
 
           <h3>General</h3>
           <h6>Would you recommend this course with this professor? {this.renderInfoToolTip(TextOptions.recommended.info)}</h6>
-          <Field name='recommended' format={value => (value === '' ? 0 : value)} textProps={TextOptions.recommended} renderHandle={this.renderHandle} component={this.renderSlider} />
+          <Field name="recommended" format={value => (value === '' ? 0 : value)} textProps={TextOptions.recommended} renderHandle={this.renderHandle} component={this.renderSlider} />
           <h6>Comments {this.renderInfoToolTip(TextOptions.comment.info)}</h6>
-          <Field name='comment' onChange={e => this.setState({ term: e.target.value })} component={this.renderTextArea} />
+          <Field name="comment" onChange={e => this.setState({ term: e.target.value })} component={this.renderTextArea} />
           <p>Max characters: {this.state.term.length} / 1000</p>
-          <div className='checkbox-group'>
-            <Field name='display_majors' component={this.renderCheckbox} text={`Display ${userInfo.majors.length > 1 ? 'majors' : 'major'}`} />
+          <div className="checkbox-group">
+            <Field name="display_majors" component={this.renderCheckbox} text={`Display ${userInfo.majors.length > 1 ? 'majors' : 'major'}`} />
             <br />
-            <Field name='display_grad_year' component={this.renderCheckbox} text='Display graduation year' />
+            <Field name="display_grad_year" component={this.renderCheckbox} text="Display graduation year" />
           </div>
           <small>Your name and gender will always be kept hidden when posting.</small>
           <button
             disabled={submitting}
-            type='submit'
-            className='btn'
+            type="submit"
+            className="btn"
             onKeyDown={(event) => {
               switch (event.keyCode) {
               case 38: // up
@@ -407,8 +411,8 @@ class PostEval extends Component {
     }
 
     return (
-      <div className='loadingWrapper'>
-        <i className='fa fa-spinner fa-spin fa-3x fa-fw'></i>
+      <div className="loadingWrapper">
+        <i className="fa fa-spinner fa-spin fa-3x fa-fw" />
       </div>
     );
   }

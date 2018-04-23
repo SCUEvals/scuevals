@@ -52,11 +52,11 @@ class Eval extends Component {
     let style;
     if (name === 'Score') style = { strokeDashoffset: this.calculatePath(value) };
     return (
-      <div styleName='scoreWrapper'>
-        <span key='scoreTitle' styleName='scoreTitle'>{name}</span>
-        <svg key='score' className='score'>
-          <circle style={style} cx='18' cy='18' r='16' className={`score${value < 1.75 ? '1' : value < 2.5 ? '2' : value < 3.25 ? '3' : '4'}`}/>
-          <text x='50%' y='50%'>
+      <div styleName="scoreWrapper">
+        <span key="scoreTitle" styleName="scoreTitle">{name}</span>
+        <svg key="score" className="score">
+          <circle style={style} cx="18" cy="18" r="16" className={`score${value < 1.75 ? '1' : value < 2.5 ? '2' : value < 3.25 ? '3' : '4'}`} />
+          <text x="50%" y="50%">
             {value}
           </text>
         </svg>
@@ -162,12 +162,13 @@ class Eval extends Component {
       : 18;
     const showBtnStyle = !truncated && !expanded ? { display: 'none' } : {};
     return (
-      <div styleName='eval'>
-        <div styleName='vote'>
+      <div styleName="eval">
+        <div styleName="vote">
           {vote_access && evaluation.author && !evaluation.author.self && (
-            <i tabIndex='0'
+            <i
+              tabIndex="0"
               styleName={user_vote === 'u' ? 'active' : ''}
-              className='fa fa-thumbs-up'
+              className="fa fa-thumbs-up"
               onClick={user_vote === 'u' ?
                 () => {
                   const client = new API();
@@ -198,11 +199,12 @@ class Eval extends Component {
 
             />
           )}
-          <span style={{ fontSize: `${votesFontSize}px` }} styleName='voteScore'>{votes_score}</span>
+          <span style={{ fontSize: `${votesFontSize}px` }} styleName="voteScore">{votes_score}</span>
           {vote_access && evaluation.author && !evaluation.author.self ?
-            <i tabIndex='0'
+            <i
+              tabIndex="0"
               styleName={user_vote === 'd' ? 'active' : ''}
-              className='fa fa-thumbs-down'
+              className="fa fa-thumbs-down"
               onClick={user_vote === 'd' ?
                 () => {
                   const client = new API();
@@ -233,27 +235,27 @@ class Eval extends Component {
             />
             : ''}
         </div>
-        <div styleName='evalContent'>
+        <div styleName="evalContent">
           {evaluation.course && evaluation.professor ? // for viewing own evals on viewMyEvals, both sent
-            <div styleName='evalInfo' className='row'>
-              <div styleName='col-sm-custom' className='col-12 col-md-2'>
+            <div styleName="evalInfo" className="row">
+              <div styleName="col-sm-custom" className="col-12 col-md-2">
                 {quarter}
               </div>
-              <div styleName='col-sm-custom' className='col-12 col-md-5'>
+              <div styleName="col-sm-custom" className="col-12 col-md-5">
                 <Link to={`/professors/${evaluation.professor.id}`}>{`${evaluation.professor.last_name}, ${evaluation.professor.first_name}`}</Link>
               </div>
-              <div styleName='col-sm-custom' className='col-12 col-md-5'>
+              <div styleName="col-sm-custom" className="col-12 col-md-5">
                 {department ?
                   <Link to={`/courses/${evaluation.course.id}`}>{department}</Link>
                   : ''}
               </div>
             </div>
             :
-            <div styleName='evalInfo' className='row'>
-              <div className='col-12 col-sm-6'>
+            <div styleName="evalInfo" className="row">
+              <div className="col-12 col-sm-6">
                 {quarter}
               </div>
-              <div className='col-12 col-sm-6'>
+              <div className="col-12 col-sm-6">
                 {evaluation.course ?
                   department ?
                     <Link to={`/courses/${evaluation.course.id}`}>{department}</Link>
@@ -263,65 +265,68 @@ class Eval extends Component {
             </div>
           }
           <Slider {...settings}>
-            <div styleName='scoreBlock totalScore'>
+            <div styleName="scoreBlock totalScore">
               {this.renderScore('Score', totalScore)}
             </div>
-            <div styleName='scoreBlock'>
+            <div styleName="scoreBlock">
               {this.renderScore('Recommend?', recommended)}
               {this.renderScore('Easiness', easiness)}
             </div>
-            <div styleName='scoreBlock'>
+            <div styleName="scoreBlock">
               {this.renderScore('Workload', workload)}
               {this.renderScore('Attitude', attitude)}
             </div>
-            <div styleName='scoreBlock'>
+            <div styleName="scoreBlock">
               {this.renderScore('Availability', availability)}
               {this.renderScore('Grading Speed', grading_speed)}
             </div>
-            <div styleName='scoreBlock'>
+            <div styleName="scoreBlock">
               {this.renderScore('Clarity', clarity)}
               {this.renderScore('Resourcefulness', resourcefulness)}
             </div>
           </Slider>
-          <div styleName='comment'>
-            <div styleName='commentQuote'>
-              <div styleName='truncate' ref={node => this.truncate = node}>
+          <div styleName="comment">
+            <div styleName="commentQuote">
+              <div styleName="truncate" ref={node => this.truncate = node}>
                 <Truncate
                   lines={!expanded && lines}
                   onTruncate={this.handleTruncate}
-                  ellipsis={'...'}
+                  ellipsis="..."
                 >
                   {evaluation.data.comment}
                 </Truncate>
               </div>
-              {truncated && (<hr styleName='fadeBar' />)}
+              {truncated && (<hr styleName="fadeBar" />)}
               {/* button has display none style if not expandable (not conditionally rendered because if so, then new node created each re-render and unfocuses the button each new render) */}
               <button
                 style={showBtnStyle}
-                styleName='showBtn'
+                styleName="showBtn"
                 onClick={() => {
                   if (!expanded) this.expandComment(this.truncate);
                   else this.collapseComment(this.truncate);
                 }}
-              >{truncated ? more : expanded ? less : ''}</button>
+              >{truncated ? more : expanded ? less : ''}
+              </button>
             </div>
-            <div className='row'>
-              <div className='col-xs-12 col-sm-10' styleName='posterInfo'>
+            <div className="row">
+              <div className="col-xs-12 col-sm-10" styleName="posterInfo">
                 {userString}
               </div>
-              <div className='col-xs-12 col-sm-2' styleName='triggerModal'>
+              <div className="col-xs-12 col-sm-2" styleName="triggerModal">
                 {!evaluation.author || evaluation.author.self ?
-                  <i className='fa fa-trash'
-                    tabIndex='0'
+                  <i
+                    className="fa fa-trash"
+                    tabIndex="0"
                     onClick={() => openDeleteModal(evaluation.quarter_id, evaluation.professor ? evaluation.professor.id : evaluation.course.id, evaluation.id)}
                     onKeyPress={(event) => {
                       if (event.key === 'Enter') openDeleteModal(evaluation.quarter_id, evaluation.professor ? evaluation.professor.id : evaluation.course.id, evaluation.id);
                     }}
                   />
                   :
-                  <i className='fa fa-flag'
+                  <i
+                    className="fa fa-flag"
                     styleName={user_flagged ? 'flagged' : ''}
-                    tabIndex='0'
+                    tabIndex="0"
                     onClick={() => openFlagModal(evaluation.data.comment, evaluation.id, user_flagged, () => this.setState({ user_flagged: true }))}
                     onKeyPress={(event) => {
                       if (event.key === 'Enter') openFlagModal(evaluation.data.comment, null, evaluation.id);

@@ -10,6 +10,7 @@ import API from '../services/api';
 import '../styles/home.scss';
 import { setUserInfo } from '../actions';
 import RecentEvalsWidget from './recentEvalsWidget';
+import TopsWidget from './topsWidget';
 import NonStudentModal from '../components/nonStudentModal';
 import WriteOnly from '../components/writeOnly';
 import { INCOMPLETE, READ_EVALUATIONS, WRITE_EVALUATIONS } from '../index';
@@ -87,18 +88,18 @@ class Home extends Component {
 
     if (!userInfo && this.state.loading) { // if Google login succeeded, and in process of sending to backend
       return (
-        <div className='loadingWrapper'>
-          <i className='fa fa-spinner fa-spin fa-3x fa-fw' />
+        <div className="loadingWrapper">
+          <i className="fa fa-spinner fa-spin fa-3x fa-fw" />
         </div>
       );
     } else if (read_access) {
       return (
-        <div className='content'>
+        <div className="content">
           {this.state.nonStudentModalOpen && ( // don't want rendered in DOM at all unless true
-            <NonStudentModal nonStudentModalOpen={true} closeNonStudentModal={() => this.setState({ nonStudentModalOpen: false })} />
+            <NonStudentModal nonStudentModalOpen closeNonStudentModal={() => this.setState({ nonStudentModalOpen: false })} />
           )}
           <section>
-            <h3 styleName='title'>SCU Evals</h3>
+            <h3 styleName="title">SCU Evals</h3>
             <p>
               Welcome to the best platform for writing and reading evaluations for professors and courses
               at Santa Clara University!
@@ -130,12 +131,21 @@ class Home extends Component {
           </section>
           <hr />
           {write_access && (
-            <Link to='/post' className='btn'>Post Evaluation</Link>
+            <Link to="/post" className="btn">Post Evaluation</Link>
           )}
           {write_access && (
             <hr />
           )}
-          {!location.signOut && (<RecentEvalsWidget count={10} />)}
+          {!location.signOut && (
+            <div className="row">
+              <div className="col-lg-6">
+                <RecentEvalsWidget count={10} />
+              </div>
+              <div className="col-lg-6">
+                <TopsWidget count={10} />
+              </div>
+            </div>
+          )}
         </div>
       );
     } else if (userInfo) {
@@ -145,18 +155,18 @@ class Home extends Component {
     }
     // if not logged in
     return (
-      <div styleName='login'>
+      <div styleName="login">
         <h1>SCU Evals</h1>
         <GoogleLogin
-          hostedDomain='scu.edu'
-          clientId='471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com'
-          buttonText=''
+          hostedDomain="scu.edu"
+          clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
+          buttonText=""
           onSuccess={info => this.setState({ loading: true }, this.authWithBackEnd(info.tokenObj.id_token, referrer))}
           onFailure={err => /* eslint-disable no-console */ console.error('Google Login Error: ', err) /* eslint-enable no-console */}
-          className='btn'
-          styleName='loginBtn'
+          className="btn"
+          styleName="loginBtn"
         >
-          <img className='pull-left' alt='Google "G" logo' src='/images/googleG.jpg' />
+          <img className="pull-left" alt='Google "G" logo' src="/images/googleG.jpg" />
           <span>Sign in with Google</span>
         </GoogleLogin>
       </div>

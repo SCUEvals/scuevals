@@ -13,11 +13,11 @@ class Privacy extends Component {
     render() {
       const { userInfo } = this.props;
       return (
-        <div className='content'>
+        <div className="content">
           <h3>
             {(!userInfo || userInfo.permissions.includes(INCOMPLETE) || !userInfo.permissions.includes(READ_EVALUATIONS)) && (
-              <Link className='homeBtn noAuthHomeBtn' to={'/'}>
-                <i className='fa fa-home' />
+              <Link className="homeBtn noAuthHomeBtn" to="/">
+                <i className="fa fa-home" />
               </Link>
             )}
           Privacy Policy
@@ -36,12 +36,12 @@ class Privacy extends Component {
           <p>
             Google Analytics collects information anonymously. It reports website trends
             without identifying individual visitors.  To learn more about Google Analytics
-             and how it uses your data, please visit  <a href='https://google.com/analytics/learn/privacy.html'>https://google.com/analytics/learn/privacy.html</a>.
+             and how it uses your data, please visit  <a href="https://google.com/analytics/learn/privacy.html">https://google.com/analytics/learn/privacy.html</a>.
           </p>
           <p>
             You can opt out of Google Analytics without affecting how you visit our site –
             for more information on opting out of being tracked by Google Analytics across
-            all websites you use, visit this Google page, <a href='https://tools.google.com/dlpage/gaoptout'>https://tools.google.com/dlpage/gaoptout</a>.
+            all websites you use, visit this Google page, <a href="https://tools.google.com/dlpage/gaoptout">https://tools.google.com/dlpage/gaoptout</a>.
           </p>
           <hr />
           <h6>Changes to This Policy</h6>

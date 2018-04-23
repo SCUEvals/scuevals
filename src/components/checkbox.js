@@ -7,9 +7,9 @@ const Checkbox = (props) => {
   const { onKeyDown } = props;
   const { input, text } = props.field;
   return (
-    <label styleName='container'>
+    <label styleName="container">
       <input
-        type='checkbox'
+        type="checkbox"
         {...input}
         onKeyPress={(event) => {
           if (event.key === 'Enter') {
@@ -19,7 +19,7 @@ const Checkbox = (props) => {
         }}
         onKeyDown={onKeyDown} // may be undefined
       />
-      <span styleName='checkmark' />
+      <span styleName="checkmark" />
       {text}
     </label>
   );

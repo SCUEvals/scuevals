@@ -83,7 +83,7 @@ class RelatedInfo extends Component {
     const labeledInfo = info.slice();
     labeledInfo.map((obj) => {
       if (type === 'professors') {
-        obj.course = `${departmentsList[obj.department_id].abbr} ${obj.number}`;
+        obj.course = `${departmentsList.object[obj.department_id].abbr} ${obj.number}`;
         obj.key = obj.course + obj.title;
       } else {
         obj.name = `${obj.last_name}, ${obj.first_name}`;
@@ -92,26 +92,26 @@ class RelatedInfo extends Component {
 
     return (
       type === 'professors' ?
-        <div className='widget'>
+        <div className="widget">
           <BootstrapTable
             ref={node => this.table = node}
             data={labeledInfo}
             columns={coursesColumns}
-            keyField='key'
+            keyField="key"
             withoutTabIndex
-            version='4'
+            version="4"
             striped
             hover
           />
         </div>
-        : <div className='widget'>
+        : <div className="widget">
           <BootstrapTable
             ref={node => this.table = node}
             data={labeledInfo}
             columns={professorsColumns}
-            keyField='name'
+            keyField="name"
             withoutTabIndex
-            version='4'
+            version="4"
             striped
             hover
           />

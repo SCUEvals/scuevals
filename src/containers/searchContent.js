@@ -62,7 +62,9 @@ class SearchContent extends Component {
           if (parsedANum == parsedBNum) return a.number > b.number ? 1 : a.number < b.number ? -1 : 0;
           return parsedANum > parsedBNum ? 1 : parsedANum < parsedBNum ? -1 : 0;
         }
-        return departmentsList[a.department_id].abbr > departmentsList[b.department_id].abbr ? 1 : departmentsList[a.department_id].abbr < departmentsList[b.department_id].abbr ? -1 : 0;
+        return departmentsList.object[a.department_id].abbr > departmentsList.object[b.department_id].abbr ? 1
+          : departmentsList.object[a.department_id].abbr < departmentsList.object[b.department_id].abbr ? -1
+            : 0;
       });
     }
   }
@@ -96,7 +98,7 @@ class SearchContent extends Component {
   }
 
   courseNumberFormatter(cell, row, departmentsList) {
-    return <Link to={`/courses/${row.id}`}>{departmentsList[row.department_id].abbr} {row.number}</Link>;
+    return <Link to={`/courses/${row.id}`}>{departmentsList.object[row.department_id].abbr} {row.number}</Link>;
   }
 
   courseTitleFormatter(cell, row) {
@@ -138,7 +140,7 @@ class SearchContent extends Component {
     const labeledSearchResults = searchResults ? Object.assign({}, searchResults) : null;
     if (searchResults && departmentsList) {
       labeledSearchResults.courses.map((obj) => {
-        obj.course = `${departmentsList[obj.department_id].abbr} ${obj.number}`;
+        obj.course = `${departmentsList.object[obj.department_id].abbr} ${obj.number}`;
         obj.title = obj.title;
         obj.key = obj.course + obj.title;
       });
@@ -149,7 +151,7 @@ class SearchContent extends Component {
 
     if (searchResults && !searchResults.loading) {
       return (
-        <div styleName='results' className='content'>
+        <div styleName="results" className="content">
           {searchResults.professors.length === 0 && searchResults.courses.length === 0 ?
             <h5>{`No results found for "${this.props.match.params.search}"`}</h5>
             :
@@ -161,9 +163,9 @@ class SearchContent extends Component {
               <BootstrapTable
                 data={labeledSearchResults.professors}
                 columns={professorsColumns}
-                keyField='name'
+                keyField="name"
                 withoutTabIndex
-                version='4'
+                version="4"
                 striped
                 hover
               />
@@ -175,9 +177,9 @@ class SearchContent extends Component {
               <BootstrapTable
                 data={labeledSearchResults.courses}
                 columns={coursesColumns}
-                keyField='key'
+                keyField="key"
                 withoutTabIndex
-                version='4'
+                version="4"
                 striped
                 hover
               />
@@ -187,13 +189,13 @@ class SearchContent extends Component {
       );
     } else if (this.props.match.params.search.length > 2) {
       return (
-        <div className='loadingWrapper'>
-          <i className='fa fa-spinner fa-spin fa-3x fa-fw'></i>
+        <div className="loadingWrapper">
+          <i className="fa fa-spinner fa-spin fa-3x fa-fw" />
         </div>
       );
     }
     return (
-      <div styleName='results' className='content'>
+      <div styleName="results" className="content">
         <h5>Please search with at least 3 characters.</h5>
       </div>
     );

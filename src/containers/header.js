@@ -36,22 +36,22 @@ class Header extends Component {
       return (
         <header>
           <SearchBar location={this.props.location} history={this.props.history} />
-          <div styleName='header-items' className='container'>
-            <Link to='/' className='homeBtn' styleName='headerHomeBtn'>
-              <i className='fa fa-home' />
+          <div styleName="header-items" className="container">
+            <Link to="/" className="homeBtn" styleName="headerHomeBtn">
+              <i className="fa fa-home" />
             </Link>
             {userInfo.permissions.includes(WRITE_EVALUATIONS) ?
-              <Link className='btn' styleName='profileBtn' to='/profile'>
-                <img styleName='profile-img' src={userInfo.picture} alt='Profile picture' />
+              <Link className="btn" styleName="profileBtn" to="/profile">
+                <img styleName="profile-img" src={userInfo.picture} alt="Profile picture" />
                 {userInfo.first_name}
               </Link>
               :
-              <div styleName='profileBtn-disabled'>
-                <img styleName='profile-img' src={userInfo.picture} alt='Profile picture' />
+              <div styleName="profileBtn-disabled">
+                <img styleName="profile-img" src={userInfo.picture} alt="Profile picture" />
                 {userInfo.first_name}
               </div>
             }
-            <Link className='btn' styleName='signOutBtn' to={{ pathname: '/', signOut: true }}>
+            <Link className="btn" styleName="signOutBtn" to={{ pathname: '/', signOut: true }}>
               Sign Out
             </Link>
           </div>
@@ -65,8 +65,6 @@ class Header extends Component {
 function mapStateToProps(state) {
   return {
     userInfo: state.userInfo,
-    searchResults: state.searchResults,
-    departmentsList: state.departmentsList,
   };
 }
 

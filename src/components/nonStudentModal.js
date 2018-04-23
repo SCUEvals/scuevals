@@ -11,18 +11,20 @@ class NonStudentModal extends Component {
   render() {
     const { nonStudentModalOpen, closeNonStudentModal } = this.props;
     return (
-      <ReactModal isOpen={nonStudentModalOpen} className='reactModal container' appElement={document.getElementById('app')}>
-        <div className='modalWrapper'>
-          <div className='modalHeader'>
+      <ReactModal isOpen={nonStudentModalOpen} className="reactModal container" appElement={document.getElementById('app')}>
+        <div className="modalWrapper">
+          <div className="modalHeader">
             <h5>Welcome to SCU Evals!</h5>
-            <i tabIndex='0' className='fa fa-times'
+            <i
+              tabIndex="0"
+              className="fa fa-times"
               onClick={closeNonStudentModal}
               onKeyPress={(event) => {
                 if (event.key === 'Enter') closeNonStudentModal();
               }}
             />
           </div>
-          <div className='modalBlock'>
+          <div className="modalBlock">
             Since you {'aren\'t'} a student, you {'won\'t'} be able to vote on or post evaluations,
             but {'you\'re'} welcome to browse and read all of the evaluations.
           </div>

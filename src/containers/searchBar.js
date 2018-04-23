@@ -48,7 +48,8 @@ class SearchBar extends Component {
     }
     if (!this.props.coursesList) {
       const client = new API();
-      client.get('/courses', courses => this.props.setCoursesList(courses, this.props.departmentsList)); // departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+      // departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+      client.get('/courses', courses => this.props.setCoursesList(courses, this.props.departmentsList));
     }
     if (!this.props.professorsList) {
       const client = new API();
@@ -61,7 +62,10 @@ class SearchBar extends Component {
   }
 
   componentDidUpdate() { // if coursesList fetched before departmentsList, then need to retroactively search for department name from id and sort
-    if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList) { this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList); } // make deep copy of current, state immutable
+    if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList) {
+      // make deep copy of current, state immutable
+      this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList);
+    }
   }
 
   getResponse(searchVal, setSearchResults) { // similar to debouncedGetResponse but without delay
@@ -90,7 +94,8 @@ class SearchBar extends Component {
               this.sortResponseData(responseData);
               setSearchResults(responseData);
               this.setState({ loading: false });
-              if (responseData.courses.length > 0 || responseData.professors.length > 0) $('#searchBar input').focus(); // focus on input after appears, which will also enable searchResults
+              // focus on input after appears, which will also enable searchResults
+              if (responseData.courses.length > 0 || responseData.professors.length > 0) $('#searchBar input').focus();
             }
           },
           { q: searchVal },
@@ -119,9 +124,9 @@ class SearchBar extends Component {
     }
     const submitBtnClass = loading ? 'Select-loading' : 'fa fa-search';
     return (
-      <div className='row'>
-        <div id='searchBar' styleName={submitFailed && error ? 'search-error' : ''} className='col-12 col-md-8 mx-auto input-group'>
-          <span className='sr-only'>Search bar</span>
+      <div className="row">
+        <div id="searchBar" styleName={submitFailed && error ? 'search-error' : ''} className="col-12 col-md-8 mx-auto input-group">
+          <span className="sr-only">Search bar</span>
           <input
             onChange={input.onChange}
             onKeyDown={(event) => {
@@ -136,21 +141,21 @@ class SearchBar extends Component {
               }
               }
             }}
-            className='form-control'
-            type='text'
-            placeholder='Search for professor or class'
-            autoComplete='off'
-            onFocus={ (event) => {
+            className="form-control"
+            type="text"
+            placeholder="Search for professor or class"
+            autoComplete="off"
+            onFocus={(event) => {
               $('#searchBarResults').show();
               input.onFocus(event);
               hideOnMouseDownOutside('#searchBar', '#searchBarResults');
             }}
           />
-          <span className='input-group-btn'>
-            <button type='submit' className='btn'><i className={submitBtnClass} /></button>
+          <span className="input-group-btn">
+            <button type="submit" className="btn"><i className={submitBtnClass} /></button>
           </span>
           {submitFailed && error ?
-            <div styleName='text-help'>
+            <div styleName="text-help">
               {error}
             </div>
             : ''
@@ -166,8 +171,8 @@ class SearchBar extends Component {
       if (response.courses.length === 0 && response.professors.length === 0) return null;
       // onMouseDown prevents losing focus if clicking on h6 elements (will also prevent potential unnecessary hideOnMouseDownOutside events which are called on refocusing on input)
       return (
-        <ul id='searchBarResults'>
-          <span className='sr-only'>Search results</span>
+        <ul id="searchBarResults">
+          <span className="sr-only">Search results</span>
           {response.professors.length > 0 && (<li><h6 onMouseDown={event => event.preventDefault()}>Professors</h6></li>)}
           {
             response.professors.map(professor => (
@@ -199,7 +204,8 @@ class SearchBar extends Component {
                     $('#searchBarResults').hide();
                     $('#searchBar input').blur();
                   }}
-                  to={`/professors/${professor.id}`}>
+                  to={`/professors/${professor.id}`}
+                >
                   {professor.last_name}, {professor.first_name}
                 </Link>
               </li>
@@ -238,7 +244,7 @@ class SearchBar extends Component {
                   onMouseDown={event => event.preventDefault()}
                   to={`/courses/${course.id}`}
                 >
-                  {departmentsList ? departmentsList[course.department_id].abbr : '...'} {course.number}: {course.title}
+                  {departmentsList ? departmentsList.object[course.department_id].abbr : '...'} {course.number}: {course.title}
                 </Link>
               </li>
             ))
@@ -277,9 +283,9 @@ class SearchBar extends Component {
     } = this.props;
     const { loading } = this.state;
     return (
-      <form ref={node => this.form = node} className='container' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+      <form ref={node => this.form = node} className="container" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <Field
-          name='search' // responsible for object's key name for values
+          name="search" // responsible for object's key name for values
           component={this.renderSearch}
           renderSearchResults={(results, term) => this.renderSearchResults(results, term, departmentsList)}
           departmentsList={departmentsList}

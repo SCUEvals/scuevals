@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
@@ -27,24 +27,23 @@ class Profile extends Component {
     const { input, majorsList } = field;
     const { meta: { submitFailed, error } } = field;
     return (
-      <div>
-        {error && submitFailed ? <span>{error}</span> : ''}
+      <Fragment>
+        {error && submitFailed && <span>{error}</span>}
         <Select
-          name='majors'
-          className={error && submitFailed ? 'select-error' : ''}
+          name="majors"
+          className={error && submitFailed ? 'select-error' : undefined}
           simpleValue
           joinValues
           multi
-          valueKey='id'
-          labelKey='name'
+          valueKey="id"
+          labelKey="name"
           value={input.value}
           options={majorsList}
-          onChange={newMajors => input.onChange(newMajors)}
+          onChange={input.onChange}
           isLoading={!majorsList}
-          placeholder='Select your major(s)'
-          onBlur={() => input.onBlur(input.value)}
+          placeholder="Select your major(s)"
         />
-      </div>
+      </Fragment>
     );
   }
 
@@ -62,7 +61,7 @@ class Profile extends Component {
         simpleValue
         options={options}
         onChange={newGradYear => input.onChange(newGradYear)}
-        placeholder='Select your expected graduation year'
+        placeholder="Select your expected graduation year"
         onBlur={() => input.onBlur(input.value)}
       />
     );
@@ -74,28 +73,28 @@ class Profile extends Component {
       <div className={`flex ${error && submitFailed ? 'error' : ''}`}>
         <label>
           <Field
-            name='gender'
-            component='input'
-            type='radio'
-            value='m'
+            name="gender"
+            component="input"
+            type="radio"
+            value="m"
           />{' '}
           Male
         </label>
         <label>
           <Field
-            name='gender'
-            component='input'
-            type='radio'
-            value='f'
+            name="gender"
+            component="input"
+            type="radio"
+            value="f"
           />{' '}
           Female
         </label>
         <label>
           <Field
-            name='gender'
-            component='input'
-            type='radio'
-            value='o'
+            name="gender"
+            component="input"
+            type="radio"
+            value="o"
           />{' '}
           Other
         </label>
@@ -128,56 +127,59 @@ class Profile extends Component {
     const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
     const profileInfo = 'This information may only be used anonymously for statistical purposes.\nYour name is kept hidden at all times.';
     return (
-      <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className='content' >
+      <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
         {!read_access && (
-          <div className='noWriteDiv'>
-            <Link className='homeBtn noWriteHomeBtn' to={'/'}>
-              <i className='fa fa-home' />
+          <div className="noWriteDiv">
+            <Link className="homeBtn noWriteHomeBtn" to="/">
+              <i className="fa fa-home" />
             </Link>
           </div>
         )}
         {!incomplete ?
           <div>
-            <h4 className='banner'>{`${userInfo.first_name}'s Profile`}</h4>
+            <h4 className="banner">{`${userInfo.first_name}'s Profile`}</h4>
             <small>{profileInfo}</small>
           </div>
           :
           <div>
-            <h4 className='banner'>Welcome to SCU Evals, {userInfo.first_name}!</h4>
+            <h4 className="banner">Welcome to SCU Evals, {userInfo.first_name}!</h4>
             <p>Before we start, we need to know a few things about you.</p>
-            <small>{profileInfo}<br/>
-              <button type='button' onClick={() => {
-                setUserInfo(null);
-                history.push('/');
-              }}
-              className='signOutBtn'>
+            <small>{profileInfo}<br />
+              <button
+                type="button"
+                onClick={() => {
+                  setUserInfo(null);
+                  history.push('/');
+                }}
+                className="signOutBtn"
+              >
               Sign Out
               </button>
             </small>
           </div>
         }
         <hr />
-        {!incomplete && (<Link className='btn' to='/profile/evals'>Manage my Evals</Link>)}
+        {!incomplete && (<Link className="btn" to="/profile/evals">Manage my Evals</Link>)}
         {!incomplete && (<hr />)}
-        <div styleName='form-container'>
+        <div styleName="form-container">
           <h5>Major(s)</h5>
           <Field
-            name='majors'
+            name="majors"
             component={this.renderMajors}
             majorsList={majorsList ? majorsList.array : null}
           />
           <h5>Expected Graduation Year</h5>
           <Field
-            name='graduation_year'
+            name="graduation_year"
             component={this.renderGradYear}
           />
           <h5>Gender</h5>
           <Field
-            name='gender'
+            name="gender"
             component={this.renderGender}
           />
         </div>
-        <button disabled={submitting} style={{ marginTop: '35px' }} type='submit' className='btn'>{submitting ? 'Saving...' : 'Save'}</button>
+        <button disabled={submitting} style={{ marginTop: '35px' }} type="submit" className="btn">{submitting ? 'Saving...' : 'Save'}</button>
       </form>
     );
   }
