@@ -157,7 +157,7 @@ class ViewMyEvals extends Component {
                 key={evaluation.id}
                 evaluation={evaluation}
                 department={departmentsList && evaluation.course ?
-                  `${departmentsList[evaluation.course.department_id].abbr} ${evaluation.course.number}: ${evaluation.course.title}`
+                  `${departmentsList.object[evaluation.course.department_id].abbr} ${evaluation.course.number}: ${evaluation.course.title}`
                   : null}
                 quarter={quartersList ?
                   `${quartersList.object[evaluation.quarter_id].name} ${quartersList.object[evaluation.quarter_id].year}`
