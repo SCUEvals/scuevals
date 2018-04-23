@@ -4,12 +4,13 @@ import PropTypes from 'prop-types';
 import '../styles/checkbox.scss';
 
 const Checkbox = (props) => {
-  const { onKeyDown } = props;
+  const { onKeyDown, defaultChecked } = props;
   const { input, text } = props.field;
   return (
     <label styleName="container">
       <input
         type="checkbox"
+        defaultChecked={defaultChecked}
         {...input}
         onKeyPress={(event) => {
           if (event.key === 'Enter') {

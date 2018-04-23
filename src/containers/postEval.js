@@ -273,7 +273,7 @@ class PostEval extends Component {
       };
     }
 
-    return <Checkbox field={field} onKeyDown={onKeyDown} />;
+    return <Checkbox field={field} onKeyDown={onKeyDown} defaultChecked={true} />;
   }
 
   render() {
