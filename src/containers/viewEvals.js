@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { Link } from 'react-router-dom';
-import { Manager, Target, Popper, Arrow } from 'react-popper';
 import ReactGA from 'react-ga';
 
 import FlagModal from '../components/flagModal';
@@ -15,6 +14,7 @@ import '../styles/viewEvals.scss';
 import { WRITE_EVALUATIONS, VOTE_EVALUATIONS } from '../index';
 import RelatedInfo from '../components/relatedInfo';
 import CustomSort from '../utils/customSort';
+import Averages from '../components/averages';
 
 class ViewEvals extends Component {
   static propTypes = {
@@ -44,66 +44,23 @@ class ViewEvals extends Component {
   }
 
   componentWillMount() {
-    const client = new API();
-    client.get(`/${this.props.type}/${this.props.match.params.id}`, (info) => {
-      CustomSort('quarter', info.evaluations);
-      this.setState({ info });
-    }, { embed: (this.props.type === 'courses' ? 'professors' : 'courses') });
+    this.getInfo();
   }
 
   componentWillUpdate(nextProps) {
     if (this.props.location.pathname !== nextProps.location.pathname) {
-      this.setState({ info: null }, () => {
-        const client = new API();
-        client.get(`/${this.props.type}/${this.props.match.params.id}`, (info) => {
-          CustomSort('quarter', info.evaluations);
-          this.setState({ info });
-        }, { embed: (this.props.type === 'courses' ? 'professors' : 'courses') });
-      });
+      this.getInfo();
     }
   }
 
-  calculatePath(n) { // n in range 1-4
-    // circumference r=25, 25*2*pi = 157.080
-    return 157.08 - (n / 4 * 157.08);
-  }
-
-  calculateAverageColor(value) { // returns classNames that define colors of svg circles
-    return value < 1.75 ? 'score1' : value < 2.5 ? 'score2' : value < 3.25 ? 'score3' : 'score4';
-  }
-
-  renderAverage(name, value, tooltipName) {
-    const avgClass = this.calculateAverageColor(value);
-    if (value) {
-      return (
-        <div styleName="avgScore">
-          <div styleName="scoreTitle">
-            {name}
-          </div>
-          <svg className={avgClass}>
-            <circle cx="27" cy="27" r="25" style={{ strokeDashoffset: this.calculatePath(value) }} />
-            <text x="50%" y="50%">
-              {value}
-            </text>
-          </svg>
-          {tooltipName && this.renderInfoTooltip(TextOptions[tooltipName].info)}
-        </div>
-      );
-    }
-  }
-
-  renderInfoTooltip(info) {
-    return (
-      <Manager className="popper-manager">
-        <Target tabIndex="0" className="popper-target">
-          <i className="fa fa-question" />
-        </Target>
-        <Popper placement="top" className="popper tooltip-popper">
-          {info}
-          <Arrow className="popper__arrow" />
-        </Popper>
-      </Manager>
-    );
+  getInfo() {
+    this.setState({ info: null }, () => {
+      const client = new API();
+      client.get(`/${this.props.type}/${this.props.match.params.id}`, (info) => {
+        CustomSort('quarter', info.evaluations);
+        this.setState({ info });
+      }, { embed: (this.props.type === 'courses' ? 'professors' : 'courses') });
+    });
   }
 
   render() { // 1-1.74 score1, 1.75-2.49 score2, 2.50-3.24 score3, 3.25-4 score4
@@ -114,48 +71,7 @@ class ViewEvals extends Component {
       majorsList, quartersList, coursesList, professorsList, departmentsList, userInfo, type, match,
     } = this.props;
     const write_access = userInfo.permissions.includes(WRITE_EVALUATIONS);
-    let average,
-      courseAverage,
-      professorAverage,
-      attitude,
-      availability,
-      clarity,
-      easiness,
-      grading_speed,
-      recommended,
-      resourcefulness,
-      workload;
-    if (info && info.evaluations.length > 0) {
-      average = professorAverage = courseAverage = attitude = availability = clarity = easiness = grading_speed = recommended = resourcefulness = workload = 0;
-      const divideNum = info.evaluations.length;
-      info.evaluations.map((evaluation) => {
-        const { data } = evaluation;
-        attitude += data.attitude;
-        availability += data.availability;
-        clarity += data.clarity;
-        easiness += data.easiness;
-        grading_speed += data.grading_speed;
-        recommended += data.recommended;
-        resourcefulness += data.resourcefulness;
-        workload += data.workload;
-        courseAverage += (data.easiness + data.workload) / 2;
-        professorAverage += (data.attitude + data.availability + data.clarity + data.grading_speed + data.resourcefulness) / 5;
-      });
-      attitude = (attitude / divideNum).toFixed(1);
-      availability = (availability / divideNum).toFixed(1);
-      clarity = (clarity / divideNum).toFixed(1);
-      easiness = (easiness / divideNum).toFixed(1);
-      grading_speed = (grading_speed / divideNum).toFixed(1);
-      recommended /= divideNum;
-      resourcefulness = (resourcefulness / divideNum).toFixed(1);
-      workload = (workload / divideNum).toFixed(1);
-      courseAverage /= divideNum;
-      professorAverage /= divideNum;
-      average = (((courseAverage + professorAverage) / 2) * 0.8 + recommended * 0.2).toFixed(1);
-      recommended = recommended.toFixed(1);
-      courseAverage = courseAverage.toFixed(1);
-      professorAverage = professorAverage.toFixed(1);
-    }
+
 
     const sortOptions = [
       { value: 'quarter', label: 'Sort by Quarter' },
@@ -207,40 +123,7 @@ class ViewEvals extends Component {
             : 'Loading...'
           }
         </h2>
-        {info && info.evaluations.length > 0 && (
-          <section styleName="scores">
-            <div styleName="scoresWrapper scoresWrapperTop">
-              {this.renderAverage('Course', courseAverage)}
-              {this.renderAverage('Score', average)}
-              {this.renderAverage('Professor', professorAverage)}
-            </div>
-            <div>
-              <div styleName="scoresWrapper">
-                <div styleName="scoreHeader">General</div>
-                <div styleName="scoresGroup">
-                  {this.renderAverage('Recommend?', recommended, 'recommended')}
-                </div>
-              </div>
-              <div styleName="scoresWrapper">
-                <div styleName="scoreHeader">Course</div>
-                <div styleName="scoresGroup">
-                  {this.renderAverage('Easiness', easiness, 'easiness')}
-                  {this.renderAverage('Workload', workload, 'workload')}
-                </div>
-              </div>
-              <div styleName="scoresWrapper">
-                <div styleName="scoreHeader">Professor</div>
-                <div styleName="scoresGroup">
-                  {this.renderAverage('Attitude', attitude, 'attitude')}
-                  {this.renderAverage('Availability', availability, 'availability')}
-                  {this.renderAverage('Clarity', clarity, 'clarity')}
-                  {this.renderAverage('Grading Speed', grading_speed, 'grading_speed')}
-                  {this.renderAverage('Resourcefulness', resourcefulness, 'resourcefulness')}
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
+        <Averages evaluations={info && info.evaluations} />
         <div styleName="buttonGroup">
           {(write_access && info) && (
             <Link
@@ -273,7 +156,12 @@ class ViewEvals extends Component {
         {info && info.evaluations.length > 0 && (
           <div className="sort-wrapper">
             <Select
-              isLoading={type === 'courses' ? !professorsList && !majorsList && !departmentsList : !coursesList && !majorsList && !departmentsList}
+              isLoading={type === 'professors' ? !departmentsList || !majorsList
+                : !professorsList || !majorsList
+              }
+              disabled={type === 'professors' ? !departmentsList || !majorsList
+                : !professorsList || !majorsList
+              }
               value={sortValue}
               simpleValue
               options={sortOptions}

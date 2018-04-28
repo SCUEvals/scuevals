@@ -1,7 +1,13 @@
 @import 'theme';
 
-.form-container {
-  max-width: 350px;
-  margin-right: auto !important;
-  margin-left: auto !important;
+.profile {
+  :global(.Select) {
+    margin-bottom: 40px;
+  }
+
+  .form-container {
+    max-width: 350px;
+    margin-right: auto !important;
+    margin-left: auto !important;
+  }
 }

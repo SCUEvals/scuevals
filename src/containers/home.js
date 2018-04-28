@@ -94,7 +94,7 @@ class Home extends Component {
       );
     } else if (read_access) {
       return (
-        <div className="content">
+        <div styleName="home" className="content">
           {this.state.nonStudentModalOpen && ( // don't want rendered in DOM at all unless true
             <NonStudentModal nonStudentModalOpen closeNonStudentModal={() => this.setState({ nonStudentModalOpen: false })} />
           )}
@@ -130,9 +130,13 @@ class Home extends Component {
             }
           </section>
           <hr />
-          {write_access && (
-            <Link to="/post" className="btn">Post Evaluation</Link>
-          )}
+          <div styleName="linkBtns">
+            {write_access && (
+              <Link to="/post" className="btn">Post Evaluation</Link>
+            )}
+            <Link to="/evaluations" className="btn">Browse Evaluations</Link>
+          </div>
+
           {write_access && (
             <hr />
           )}
@@ -155,8 +159,8 @@ class Home extends Component {
     }
     // if not logged in
     return (
-      <div styleName="login">
-        <h1>SCU Evals</h1>
+      <div styleName="home login">
+        <h1 styleName="logo">SCU Evals</h1>
         <GoogleLogin
           hostedDomain="scu.edu"
           clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"

@@ -10,6 +10,7 @@ import API from '../services/api';
 import { READ_EVALUATIONS } from '../index';
 import { setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList } from '../actions';
 import CustomSort from '../utils/customSort';
+import '../styles/postSearch.scss';
 
 class PostSearch extends Component {
   static propTypes = {
@@ -119,7 +120,7 @@ class PostSearch extends Component {
     const { meta: { submitFailed, error } } = field;
     return (
       <div>
-        <h4>{!localQuartersList ? 'Loading quarters...' : 'Choose quarter'}</h4>
+        <h5>{!localQuartersList ? 'Loading quarters...' : 'Choose quarter'}</h5>
         <Select
           disabled={!localQuartersList}
           value={input.value}
@@ -143,7 +144,7 @@ class PostSearch extends Component {
     const { meta: { submitFailed, error } } = field;
     return (
       <div>
-        <h4>{!localCoursesList ? 'Loading courses...' : 'Choose course'}</h4>
+        <h5>{!localCoursesList ? 'Loading courses...' : 'Choose course'}</h5>
         <Select
           disabled={!localCoursesList}
           value={input.value}
@@ -169,7 +170,7 @@ class PostSearch extends Component {
     const { meta: { submitFailed, error } } = field;
     return (
       <div>
-        <h4>{!localProfessorsList ? 'Loading professors...' : 'Choose professor'}</h4>
+        <h5>{!localProfessorsList ? 'Loading professors...' : 'Choose professor'}</h5>
         <Select
           disabled={!localProfessorsList}
           value={input.value}
@@ -184,7 +185,7 @@ class PostSearch extends Component {
           }}
           placeholder="Select your professor"
           onOpen={() => {
-            if (window.innerHeight < postSearchForm.clientHeight + 240) postSearchForm.style.marginBottom = '115px';
+            if (window.innerHeight < postSearchForm.clientHeight + 240) postSearchForm.style.marginBottom = '125px';
           }}
           onClose={() => postSearchForm.style.marginBottom = ''}
         />
@@ -318,7 +319,7 @@ class PostSearch extends Component {
     } = this.state;
     const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
     return (
-      <form ref={node => this.postSearchForm = node} className="content" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+      <form ref={node => this.postSearchForm = node} styleName="postSearch" className="content" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         {!read_access && (
           <div className="noWriteDiv">
             <Link className="homeBtn" to="/">

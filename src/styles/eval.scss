@@ -132,7 +132,7 @@ $voteWidth: 50px;
         font-size: 14px;
       }
 
-      svg {
+      :global(svg.score) {
         transform: scale(0.66);
         position: absolute;
         right: 5px;

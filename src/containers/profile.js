@@ -24,7 +24,7 @@ class Profile extends Component {
   }
 
   renderMajors(field) {
-    const { input, majorsList } = field;
+    const { input, majorsListArr } = field;
     const { meta: { submitFailed, error } } = field;
     return (
       <Fragment>
@@ -38,9 +38,9 @@ class Profile extends Component {
           valueKey="id"
           labelKey="name"
           value={input.value}
-          options={majorsList}
+          options={majorsListArr}
           onChange={input.onChange}
-          isLoading={!majorsList}
+          isLoading={!majorsListArr}
           placeholder="Select your major(s)"
         />
       </Fragment>
@@ -127,7 +127,7 @@ class Profile extends Component {
     const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
     const profileInfo = 'This information may only be used anonymously for statistical purposes.\nYour name is kept hidden at all times.';
     return (
-      <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="content" >
+      <form onSubmit={handleSubmit(this.onSubmit.bind(this))} styleName="profile" className="content" >
         {!read_access && (
           <div className="noWriteDiv">
             <Link className="homeBtn noWriteHomeBtn" to="/">
@@ -166,7 +166,7 @@ class Profile extends Component {
           <Field
             name="majors"
             component={this.renderMajors}
-            majorsList={majorsList ? majorsList.array : null}
+            majorsListArr={majorsList ? majorsList.array : undefined}
           />
           <h5>Expected Graduation Year</h5>
           <Field

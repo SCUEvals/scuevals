@@ -1,0 +1,20 @@
+.filterViewEvals {
+
+  form {
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 767px) {
+    :global(.col-md-4:not(:last-child)) {
+      margin-bottom: 40px;
+    }
+  }
+
+  :global(.sort-wrapper) {
+    margin: 30px auto 8px auto;
+  }
+
+  .loadingWrapper {
+    margin: 30px auto 15px 0;
+  }
+}

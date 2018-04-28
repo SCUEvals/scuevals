@@ -18,8 +18,10 @@ import Privacy from './containers/privacy';
 import GAListener from './components/gaListener';
 import Profile from './containers/profile';
 import ViewEvals from './containers/viewEvals';
+import FilterViewEvals from './containers/filterViewEvals';
 import PostSearch from './containers/postSearch';
 import ViewMyEvals from './containers/viewMyEvals';
+
 
 import requireAuth from './components/requireAuth';
 import history from './components/history';
@@ -27,7 +29,6 @@ import API from './services/api';
 import { setUserInfo } from './actions';
 
 import './styles/global.scss?global';
-import './styles/index.scss';
 
 export const INCOMPLETE = 0;
 export const READ_EVALUATIONS = 1;
@@ -53,7 +54,7 @@ function renderDOM() {
          because need to access history outside of React components (API service) */}
       <Router history={history}>
         <GAListener>
-          <div id="push-footer" styleName="push-footer">
+          <div id="push-footer">
             <Header />
             <div className="container">
               <Switch>
@@ -62,7 +63,8 @@ function renderDOM() {
                 <Route exact path="/professors/:id(\d+)/post" component={requireAuth(PostSearch, { type: 'professors' }, [WRITE_EVALUATIONS])} />
                 <Route exact path="/courses/:id(\d+)/post" component={requireAuth(PostSearch, { type: 'courses' }, [WRITE_EVALUATIONS])} />
                 <Route exact path="/professors/:id(\d+)" component={requireAuth(ViewEvals, { type: 'professors' }, [READ_EVALUATIONS])} />
-                <Route exact path="/courses/:id(\d+)" component={requireAuth(ViewEvals, { type: 'courses' })} />
+                <Route exact path="/courses/:id(\d+)" component={requireAuth(ViewEvals, { type: 'courses' }, [READ_EVALUATIONS])} />
+                <Route exact path="/evaluations" component={requireAuth(FilterViewEvals, null, [READ_EVALUATIONS])} />
                 <Route exact path="/about" component={About} />
                 <Route exact path="/privacy" component={Privacy} />
                 <Route exact path="/profile/evals" component={requireAuth(ViewMyEvals)} />

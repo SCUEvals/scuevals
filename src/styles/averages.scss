@@ -1,0 +1,96 @@
+@import 'theme';
+
+.averages {
+  margin: 15px -7.5px;
+
+  .scoreBlock {
+    padding: 5px 0;
+    font-size: 15px;
+  }
+
+  .scoresWrapper {
+    font-size: 14px;
+    margin: 15px 7.5px 0;
+    display: inline-block;
+    border: 1px solid $backgroundColor;
+    border-radius: $defaultBorderRadius;
+    background: $sandColor;
+
+    .scoreHeader {
+      font-size: 11px;
+      color: #866c50;
+      border-bottom: 1px solid $sandColor;
+      margin-bottom: 3px;
+      background: #f5e3d0;
+      border-color: #e8d2ba;
+    }
+
+    .scoresGroup {
+      padding: 5px;
+    }
+
+    :global(svg.score) {
+      transform: scale(1.11);
+    }
+
+    .avgScore {
+      width: 110px;
+      display: inline-block;
+
+      .scoreTitle {
+        margin-bottom: 5px;
+      }
+    }
+
+    &.scoresWrapperTop {
+      padding: 5px;
+
+      .avgScore:nth-child(odd) {
+        width: inherit;
+        font-size: 12px;
+
+        .scoreTitle {
+          margin-bottom: -4px;
+        }
+
+        svg {
+          transform: scale(0.8);
+        }
+      }
+
+      .avgScore:nth-child(even) {
+        width: 105px;
+        font-size: 18px;
+
+        .scoreTitle {
+          margin-bottom: 5px;
+        }
+
+        svg {
+          transform: scale(1.5);
+          margin-top: 5px;
+        }
+      }
+    }
+
+    :global(.popper-manager) {
+      position: relative;
+
+      :global(.popper-target) {
+        position: absolute;
+        bottom: 15px;
+        left: -3px;
+      }
+
+      :global(.tooltip-popper) {
+        width: 115px;
+      }
+    }
+  }
+}
+
+@keyframes score {
+  from {
+    stroke-dashoffset: 157.08;
+  }
+}

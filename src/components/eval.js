@@ -161,6 +161,7 @@ class Eval extends Component {
         : 15
       : 18;
     const showBtnStyle = !truncated && !expanded ? { display: 'none' } : {};
+
     return (
       <div styleName="eval">
         <div styleName="vote">

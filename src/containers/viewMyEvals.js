@@ -125,7 +125,8 @@ class ViewMyEvals extends Component {
             <Fragment>
               <div className="sort-wrapper">
                 <Select
-                  isLoading={!coursesList && !departmentsList && !professorsList}
+                  isLoading={!departmentsList || !professorsList}
+                  disabled={!departmentsList || !professorsList}
                   value={sortValue}
                   simpleValue
                   options={sortOptions}
