@@ -13,7 +13,7 @@ class TopsWidget extends Component {
     this.state = {
       topProfessors: undefined,
       topCourses: undefined,
-      deptID: 18,
+      deptID: props.majorsList ? props.majorsList.object[props.userInfo.majors[0]].departments[0] : undefined
     };
   }
 
@@ -23,7 +23,15 @@ class TopsWidget extends Component {
   }
 
   componentDidMount() {
-    this.getDepartmentTops(this.state.deptID);
+    if (this.props.majorsList) this.getDepartmentTops(this.state.deptID);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.majorsList && this.props.majorsList) {
+      const deptID =  this.props.majorsList.object[this.props.userInfo.majors[0]].departments[0];
+      this.setState({ deptID });
+      this.getDepartmentTops(deptID);
+    }
   }
 
   getDepartmentTops(deptID) {
@@ -43,7 +51,7 @@ class TopsWidget extends Component {
 
   render() {
     const { topProfessors, topCourses, deptID } = this.state;
-    const { departmentsList } = this.props;
+    const { departmentsList, majorsList } = this.props;
     if (topProfessors !== undefined && topCourses !== undefined && departmentsList) {
       return (
         <div styleName='topsWidget' ref={node => this.topsWidget = node} className="widgetWrapper">
@@ -56,7 +64,8 @@ class TopsWidget extends Component {
               labelKey="name"
               value={deptID}
               options={departmentsList.array}
-              isLoading={!departmentsList}
+              isLoading={!departmentsList || !majorsList}
+              disabled={!departmentsList || !majorsList}
               placeholder="Select department"
               onChange={(dept) => {
                 let client = new API();
@@ -140,6 +149,8 @@ class TopsWidget extends Component {
 function mapStateToProps(state) {
   return {
     departmentsList: state.departmentsList,
+    userInfo: state.userInfo,
+    majorsList: state.majorsList,
   };
 }
 

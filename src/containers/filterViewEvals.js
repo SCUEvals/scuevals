@@ -209,7 +209,6 @@ class FilterViewEvals extends Component {
           placeholder="Select your professor"
           onOpen={() => {
             if (!filterViewEvals) return;
-            console.log(window.innerHeight, filterViewEvals.clientHeight);
             if (filterViewEvals.clientHeight <= 193 || window.innerHeight < 768) filterViewEvals.style.marginBottom = '175px';
           }}
           onClose={() => {
