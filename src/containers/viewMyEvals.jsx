@@ -2,10 +2,10 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Select from 'react-select';
-import DeleteModal from '../components/deleteModal';
 import ReactGA from 'react-ga';
 import { Link } from 'react-router-dom';
 
+import DeleteModal from '../components/deleteModal';
 import Eval from '../components/eval';
 import API from '../services/api';
 import '../styles/viewEvals.scss';
@@ -49,27 +49,21 @@ class ViewMyEvals extends Component {
       this.setState({ myEvalsList });
     });
     if (!userInfo.permissions.includes(READ_EVALUATIONS)) {
-      if (!departmentsList) {
-        const client = new API();
-        client.get('/departments', departments => setDepartmentsList(departments));
-      }
-      if (!quartersList) {
-        const client = new API();
-        client.get('/quarters', quarters => setQuartersList(quarters));
-      }
-      if (!coursesList) {
-        const client = new API();
-        client.get('/courses', courses => setCoursesList(courses, departmentsList)); // departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
-      }
-      if (!professorsList) {
-        const client = new API();
-        client.get('/professors', professors => setProfessorsList(professors));
-      }
+      if (!departmentsList) client.get('/departments', departments => setDepartmentsList(departments));
+      if (!quartersList) client.get('/quarters', quarters => setQuartersList(quarters));
+      // departmentsList needed to lookup ids. May not be loaded yet, but that's handled below
+      if (!coursesList) client.get('/courses', courses => setCoursesList(courses, departmentsList));
+      if (!professorsList) client.get('/professors', professors => setProfessorsList(professors));
     }
   }
 
-  componentDidUpdate() { // if coursesList fetched before departmentsList, then need to retroactively search for department name from id and sort
-    if (this.props.coursesList && !this.props.coursesList.departmentsListLoaded && this.props.departmentsList) {
+ /* if coursesList fetched before departmentsList, then need to retroactively search for
+  department name from id and sort */
+  componentDidUpdate() {
+    if (this.props.coursesList
+      && !this.props.coursesList.departmentsListLoaded
+      && this.props.departmentsList
+    ) {
       this.props.setCoursesList(this.props.coursesList.array.slice(), this.props.departmentsList);
     } // make deep copy of current, state immutable
   }
@@ -79,7 +73,7 @@ class ViewMyEvals extends Component {
     const {
       userInfo, quartersList, coursesList, departmentsList, professorsList,
     } = this.props;
-    const read_access = userInfo && userInfo.permissions.includes(READ_EVALUATIONS);
+    const readAccess = userInfo && userInfo.permissions.includes(READ_EVALUATIONS);
     const sortOptions = [
       { value: 'recent', label: 'Sort by Most Recent' },
       { value: 'quarter', label: 'Sort by Quarter' },
@@ -89,7 +83,7 @@ class ViewMyEvals extends Component {
     ];
     return (
       <div className="content">
-        {!read_access && (
+        {!readAccess && (
           <div className="noWriteDiv">
             <Link className="homeBtn noWriteHomeBtn" to="/">
               <i className="fa fa-home" />
@@ -101,8 +95,14 @@ class ViewMyEvals extends Component {
           closeDeleteModal={() => this.setState({ deleteModal: { open: false } })}
           quarter={quartersList && deleteModal.quarter_id ?
             quartersList.object[deleteModal.quarter_id].label : null}
-          course={coursesList && coursesList.departmentsListLoaded && deleteModal.course_id ? coursesList.object[deleteModal.course_id].label : null}
-          professor={professorsList && deleteModal.professor_id ? professorsList.object[deleteModal.professor_id].label : null}
+          course={coursesList && coursesList.departmentsListLoaded && deleteModal.course_id ?
+            coursesList.object[deleteModal.course_id].label
+            : null
+          }
+          professor={professorsList && deleteModal.professor_id ?
+            professorsList.object[deleteModal.professor_id].label
+            : null
+          }
           eval_id={deleteModal.eval_id}
           deletePost={() => {
             const client = new API();
@@ -139,6 +139,7 @@ class ViewMyEvals extends Component {
                   }}
                 />
                 <i
+                  role="button"
                   ref={(obj) => { this.sortArrows = obj; }}
                   tabIndex="0"
                   className="fa fa-sort"

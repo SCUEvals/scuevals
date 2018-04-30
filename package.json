@@ -2,7 +2,7 @@
   "name": "SCUevals",
   "version": "1.0.0",
   "description": "A web app for rating and reviewing professors and courses at SCU.",
-  "main": "index.js",
+  "main": "index.jsx",
   "engines": {
     "node": "^8.1.4"
   },

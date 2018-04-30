@@ -118,6 +118,25 @@ $voteWidth: 50px;
     }
   }
 
+  :global(.slick-list) {
+    height: 74px;
+    padding: 5px 0;
+    background: $sandColor;
+    border-bottom: 1px solid $backgroundColor;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  :global(.slider.regular:not(.slick-initialized)) {
+    padding: 5px 0;
+    border-bottom: 1px solid $backgroundColor;
+    background: $sandColor;
+    height: 74px;
+  }
+
   .scoreBlock:not(.totalScore) {
     .scoreWrapper {
       height: 50%;
@@ -140,6 +159,11 @@ $voteWidth: 50px;
     }
   }
 
+  :global(.slider.regular:not(.slick-initialized)) .scoreBlock {
+    display: inline-block;
+    width: percentage(1 / $xlBP);
+  }
+
   .scoreBlock.totalScore {
     span {
       display: block;
@@ -147,30 +171,6 @@ $voteWidth: 50px;
 
     .scoreWrapper {
       height: 100%;
-    }
-  }
-
-  :global(.slick-list) {
-    height: 74px;
-    padding: 5px 0;
-    background: $sandColor;
-    border-bottom: 1px solid $backgroundColor;
-    cursor: grab;
-
-    &:active {
-      cursor: grabbing;
-    }
-  }
-
-  :global(.slider.regular:not(.slick-initialized)) {
-    padding: 5px 0;
-    border-bottom: 1px solid $backgroundColor;
-    background: $sandColor;
-    height: 74px;
-
-    .scoreBlock {
-      display: inline-block;
-      width: percentage(1 / $xlBP);
     }
   }
 

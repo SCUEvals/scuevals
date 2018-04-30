@@ -20,6 +20,12 @@
     "no-plusplus": 0,
     "no-nested-ternary": 0,
     "indent": ["error", 2, { "flatTernaryExpressions": true, } ],
+    no-return-assign: ["error", "except-parens"],
+    "jsx-a11y/anchor-is-valid": [ "error", {
+      "components": [ "Link" ],
+      "specialLink": [ "to" ]
+    }],
+    react/require-default-props: 0,
   },
   "globals": {
     "$": true

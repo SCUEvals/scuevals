@@ -20,9 +20,9 @@ import {
   QuartersListPT,
   CoursesListPT,
   DepartmentsListPT,
-  ProfessorsListPT,
-  LocationPT,
-  MatchPT,
+  professorsListPT,
+  locationPT,
+  matchPT,
 } from '../utils/propTypes';
 import Averages from '../components/averages';
 
@@ -34,9 +34,9 @@ class ViewEvals extends Component {
     quartersList: QuartersListPT,
     coursesList: CoursesListPT,
     departmentsList: DepartmentsListPT,
-    professorsList: ProfessorsListPT,
-    location: LocationPT,
-    match: MatchPT,
+    professorsList: professorsListPT,
+    location: locationPT,
+    match: matchPT,
   }
 
   constructor(props) {

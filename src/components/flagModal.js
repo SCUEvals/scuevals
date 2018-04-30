@@ -17,8 +17,8 @@ class FlagModal extends Component {
     submitFailed: PropTypes.bool.isRequired,
     comment: PropTypes.string,
     error: PropTypes.string,
-    set_user_flagged: PropTypes.func,
-    user_flagged: PropTypes.bool,
+    setUserFlagged: PropTypes.func,
+    userFlagged: PropTypes.bool,
   }
 
   componentDidUpdate(prevProps) {
@@ -35,7 +35,7 @@ class FlagModal extends Component {
     const {
       OTHER, SPAM, OFFENSIVE, SENSITIVE_INFO,
     } = this.constructor;
-    const { set_user_flagged, closeFlagModal, evalId } = this.props;
+    const { setUserFlagged, closeFlagModal, evalId } = this.props;
     const client = new API();
     const arr = [];
     if (values[OTHER]) arr.push(parseInt(OTHER));
@@ -44,7 +44,7 @@ class FlagModal extends Component {
     if (values[SENSITIVE_INFO]) arr.push(parseInt(SENSITIVE_INFO));
     const sendingObj = { reason_ids: arr, comment: values.comment };
     return client.post(`/evaluations/${evalId}/flag`, sendingObj, () => {
-      set_user_flagged();
+      setUserFlagged();
       closeFlagModal();
     });
   }
@@ -98,7 +98,7 @@ class FlagModal extends Component {
 
   render() {
     const {
-      flagModalOpen, closeFlagModal, handleSubmit, submitting, submitFailed, comment, error, user_flagged,
+      flagModalOpen, closeFlagModal, handleSubmit, submitting, submitFailed, comment, error, userFlagged,
     } = this.props;
     const {
       OTHER, SPAM, OFFENSIVE, SENSITIVE_INFO,
@@ -124,7 +124,7 @@ class FlagModal extends Component {
             >{comment}
             </p>
             <hr />
-            {user_flagged ?
+            {userFlagged ?
               'You have already flagged this evaluation.'
               :
               <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>

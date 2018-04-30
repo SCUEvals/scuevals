@@ -1,7 +1,6 @@
 @import 'theme';
 
 .home {
-
   &.login {
     width: 258px; //270px when font-weight is bold
 
@@ -51,10 +50,10 @@
   }
 
   .linkBtns {
-    margin:  0 -7.5px;
+    margin: 0 -7.5px;
 
-     a {
-       margin: 7.5px;
-     }
+    a {
+      margin: 7.5px;
+    }
   }
 }
