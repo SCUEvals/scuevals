@@ -15,11 +15,11 @@ import { WRITE_EVALUATIONS, VOTE_EVALUATIONS } from '../index';
 import RelatedInfo from '../components/relatedInfo';
 import CustomSort from '../utils/customSort';
 import {
-  UserInfoPT,
-  MajorsListPT,
-  QuartersListPT,
-  CoursesListPT,
-  DepartmentsListPT,
+  userInfoPT,
+  majorsListPT,
+  quartersListPT,
+  coursesListPT,
+  departmentsListPT,
   professorsListPT,
   locationPT,
   matchPT,
@@ -29,11 +29,11 @@ import Averages from '../components/averages';
 class ViewEvals extends Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
-    userInfo: UserInfoPT,
-    majorsList: MajorsListPT,
-    quartersList: QuartersListPT,
-    coursesList: CoursesListPT,
-    departmentsList: DepartmentsListPT,
+    userInfo: userInfoPT,
+    majorsList: majorsListPT,
+    quartersList:  quartersListPT,
+    coursesList: coursesListPT,
+    departmentsList: departmentsListPT,
     professorsList: professorsListPT,
     location: locationPT,
     match: matchPT,
@@ -93,7 +93,9 @@ class ViewEvals extends Component {
 
     const sortOptions = [
       { value: 'quarter', label: 'Sort by Quarter' },
-      { value: type === 'professors' ? 'course' : 'professor', label: `Sort by ${type === 'professors' ? 'Course' : 'Professor'}` },
+      { value: type === 'professors' ? 'course' : 'professor',
+        label: `Sort by ${type === 'professors' ? 'Course' : 'Professor'}`
+      },
       { value: 'votes_score', label: 'Sort by Votes Score' },
       { value: 'major', label: 'Sort By Major' },
       { value: 'grad_year', label: 'Sort By Graduation Year' },
@@ -312,15 +314,13 @@ class ViewEvals extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    userInfo: state.userInfo,
-    departmentsList: state.departmentsList,
-    majorsList: state.majorsList,
-    quartersList: state.quartersList,
-    coursesList: state.coursesList,
-    professorsList: state.professorsList,
-  };
-}
+const mapStateToProps = state => ({
+  userInfo: state.userInfo,
+  departmentsList: state.departmentsList,
+  majorsList: state.majorsList,
+  quartersList: state.quartersList,
+  coursesList: state.coursesList,
+  professorsList: state.professorsList,
+});
 
 export default connect(mapStateToProps, null)(ViewEvals);

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { storeWithMiddleware } from '../index';
 import API from '../services/api';
 import { READ_EVALUATIONS } from '../index';
-import { setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList } from '../actions';
+import { setDepartmentsListAction, setQuartersListAction, setCoursesListAction, setProfessorsListAction } from '../actions';
 import CustomSort from '../utils/customSort';
 import '../styles/postSearch.scss';
 
@@ -209,50 +209,50 @@ class PostSearch extends Component {
       course_id,
       professor_id; //= currently selected values
     switch (currentField) {
-      case 'quarter':
-        quarter_id = newValue;
-        course_id = course;
-        professor_id = professor;
-        break;
-      case 'course':
-        quarter_id = quarter;
-        course_id = newValue;
-        professor_id = professor;
-        break;
-      case 'professor':
-        quarter_id = quarter;
-        course_id = course;
-        professor_id = newValue;
-        break;
+    case 'quarter':
+      quarter_id = newValue;
+      course_id = course;
+      professor_id = professor;
+      break;
+    case 'course':
+      quarter_id = quarter;
+      course_id = newValue;
+      professor_id = professor;
+      break;
+    case 'professor':
+      quarter_id = quarter;
+      course_id = course;
+      professor_id = newValue;
+      break;
     }
     const client = new API();
     if (selectionOrder.includes(currentField)) {
       for (let i = selectionOrder.length - 1; i > 0; i--) { // clear values ahead of currentField. If at index 0, do nothing, so only loop while i > 0
         if (selectionOrder[i] === currentField) {
           switch (currentField) {
-            case 'quarter':
-              if (course_id && professor_id) this.authIfPosted(quarter_id, course_id, professor_id);
-              break;
-            case 'course':
-              if (quarter_id && professor_id) this.authIfPosted(quarter_id, course_id, professor_id);
-              break;
-            case 'professor':
-              if (quarter_id && course_id) this.authIfPosted(quarter_id, course_id, professor_id);
-              break;
+          case 'quarter':
+            if (course_id && professor_id) this.authIfPosted(quarter_id, course_id, professor_id);
+            break;
+          case 'course':
+            if (quarter_id && professor_id) this.authIfPosted(quarter_id, course_id, professor_id);
+            break;
+          case 'professor':
+            if (quarter_id && course_id) this.authIfPosted(quarter_id, course_id, professor_id);
+            break;
           }
           break;
         }
         storeWithMiddleware.dispatch(change('postSearch', selectionOrder[i], ''));
         switch (selectionOrder[i]) {
-          case 'quarter':
-            quarter_id = null;
-            break;
-          case 'course':
-            course_id = null;
-            break;
-          case 'professor':
-            professor_id = null;
-            break;
+        case 'quarter':
+          quarter_id = null;
+          break;
+        case 'course':
+          course_id = null;
+          break;
+        case 'professor':
+          professor_id = null;
+          break;
         }
         selectionOrder.pop();
       }
@@ -281,34 +281,34 @@ class PostSearch extends Component {
 
   getField(field, client, quarter_id, course_id, professor_id, departmentsList) {
     switch (field) {
-      case 'quarter':
-        this.setState({ localQuartersList: null }, () => client.get('/quarters', (quarters) => {
-          if (this.postSearchForm) {
-            CustomSort('quarter', quarters);
-            quarters.map(quarter => quarter.label = `${quarter.name} ${quarter.year}`);
-            this.setState({ localQuartersList: quarters });
-          }
-        }, { quarter_id, course_id, professor_id }));
-        break;
-      case 'course':
-        this.setState({ localCoursesList: null }, () => client.get('/courses', (courses) => {
-          if (this.postSearchForm) {
-            CustomSort('course', courses);
-            courses.map(course => course.label = `${departmentsList.object[course.department_id].abbr} ${course.number}: ${course.title}`);
+    case 'quarter':
+      this.setState({ localQuartersList: null }, () => client.get('/quarters', (quarters) => {
+        if (this.postSearchForm) {
+          CustomSort('quarter', quarters);
+          quarters.map(quarter => quarter.label = `${quarter.name} ${quarter.year}`);
+          this.setState({ localQuartersList: quarters });
+        }
+      }, { quarter_id, course_id, professor_id }));
+      break;
+    case 'course':
+      this.setState({ localCoursesList: null }, () => client.get('/courses', (courses) => {
+        if (this.postSearchForm) {
+          CustomSort('course', courses);
+          courses.map(course => course.label = `${departmentsList.object[course.department_id].abbr} ${course.number}: ${course.title}`);
 
-            this.setState({ localCoursesList: courses });
-          }
-        }, { quarter_id, course_id, professor_id }));
-        break;
-      case 'professor':
-        this.setState({ localProfessorsList: null }, () => client.get('/professors', (professors) => {
-          if (this.postSearchForm) {
-            professors.map(professor => professor.label = `${professor.last_name}, ${professor.first_name}`);
-            CustomSort('professor', professors);
-            this.setState({ localProfessorsList: professors });
-          }
-        }, { quarter_id, course_id, professor_id }));
-        break;
+          this.setState({ localCoursesList: courses });
+        }
+      }, { quarter_id, course_id, professor_id }));
+      break;
+    case 'professor':
+      this.setState({ localProfessorsList: null }, () => client.get('/professors', (professors) => {
+        if (this.postSearchForm) {
+          professors.map(professor => professor.label = `${professor.last_name}, ${professor.first_name}`);
+          CustomSort('professor', professors);
+          this.setState({ localProfessorsList: professors });
+        }
+      }, { quarter_id, course_id, professor_id }));
+      break;
     }
   }
 
@@ -390,6 +390,11 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps, {
-  setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList,
-})(PostSearchWithReduxForm);
+const mapDispatchToProps = {
+    setDepartmentsList: setDepartmentsListAction,
+    setQuartersList: setQuartersListAction,
+    setCoursesList: setCoursesListAction,
+    setProfessorsList: setProfessorsListAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostSearchWithReduxForm);

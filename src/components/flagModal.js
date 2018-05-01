@@ -65,30 +65,30 @@ class FlagModal extends Component {
   renderCheckbox(field) {
     const onKeyDown = (event) => {
       switch (event.keyCode) {
-        case 38: { // up
-          event.preventDefault(); // stop scrolling
-          const nodes = $('#flagModal input[type="checkbox"]');
-          for (let i = 0; i < nodes.length; i++) {
-            if (nodes[i] === event.target) {
-              if (i - 1 >= 0) nodes[i - 1].focus();
-              break;
-            }
+      case 38: { // up
+        event.preventDefault(); // stop scrolling
+        const nodes = $('#flagModal input[type="checkbox"]');
+        for (let i = 0; i < nodes.length; i++) {
+          if (nodes[i] === event.target) {
+            if (i - 1 >= 0) nodes[i - 1].focus();
+            break;
           }
-          break;
         }
+        break;
+      }
 
-        case 40: { // down
-          event.preventDefault(); // stop scrolling
-          const nodes = $('#flagModal input[type="checkbox"]');
-          for (let i = 0; i < nodes.length; i++) {
-            if (nodes[i] === event.target) {
-              if (i + 1 < nodes.length) nodes[i + 1].focus();
-              else $('#flagModal textarea').focus();
-              break;
-            }
+      case 40: { // down
+        event.preventDefault(); // stop scrolling
+        const nodes = $('#flagModal input[type="checkbox"]');
+        for (let i = 0; i < nodes.length; i++) {
+          if (nodes[i] === event.target) {
+            if (i + 1 < nodes.length) nodes[i + 1].focus();
+            else $('#flagModal textarea').focus();
+            break;
           }
-          break;
         }
+        break;
+      }
       }
     };
     return (

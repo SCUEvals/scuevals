@@ -62,10 +62,8 @@ class Header extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    userInfo: state.userInfo,
-  };
-}
+const mapStateToProps = state => ({
+  userInfo: state.userInfo,
+});
 
 export default withRouter(connect(mapStateToProps, null)(Header));

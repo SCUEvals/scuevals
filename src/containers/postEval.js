@@ -13,7 +13,7 @@ import TextOptions from '../components/textOptions';
 import '../../node_modules/rc-slider/dist/rc-slider.min.css?global';
 import '../styles/postEval.scss';
 import RedirectModal from '../components/redirectModal';
-import { setUserInfo, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } from '../actions';
+import { setUserInfoAction, setDepartmentsListAction, setProfessorsListAction, setQuartersListAction, setCoursesListAction } from '../actions';
 import { READ_EVALUATIONS } from '../index';
 import Checkbox from '../components/checkbox';
 
@@ -211,18 +211,18 @@ class PostEval extends Component {
     if (track.length === 1) { // if exists
       track = track[0];
       switch (input.value) {
-        case 1:
-          track.className = 'rc-slider-track track1';
-          break;
-        case 2:
-          track.className = 'rc-slider-track track2';
-          break;
-        case 3:
-          track.className = 'rc-slider-track track3';
-          break;
-        case 4:
-          track.className = 'rc-slider-track track4';
-          break;
+      case 1:
+        track.className = 'rc-slider-track track1';
+        break;
+      case 2:
+        track.className = 'rc-slider-track track2';
+        break;
+      case 3:
+        track.className = 'rc-slider-track track3';
+        break;
+      case 4:
+        track.className = 'rc-slider-track track4';
+        break;
       }
     }
     const sliderClass = submitFailed && error ? `${input.name} slider-error` : input.name;
@@ -246,34 +246,34 @@ class PostEval extends Component {
     if (field.input.name === 'display_majors') {
       onKeyDown = (event) => {
         switch (event.keyCode) {
-          case 38: // up
-            event.preventDefault(); // stop scrolling
-            $('textarea[name="comment"]').focus();
-            break;
+        case 38: // up
+          event.preventDefault(); // stop scrolling
+          $('textarea[name="comment"]').focus();
+          break;
 
-          case 40: // down
-            event.preventDefault(); // stop scrolling
-            $('input[name="display_grad_year"]').focus();
-            break;
+        case 40: // down
+          event.preventDefault(); // stop scrolling
+          $('input[name="display_grad_year"]').focus();
+          break;
         }
       };
     } else if (field.input.name === 'display_grad_year') {
       onKeyDown = (event) => {
         switch (event.keyCode) {
-          case 38: // up
-            event.preventDefault(); // stop scrolling
-            $('input[name="display_majors"]').focus();
-            break;
+        case 38: // up
+          event.preventDefault(); // stop scrolling
+          $('input[name="display_majors"]').focus();
+          break;
 
-          case 40: // down
-            event.preventDefault(); // stop scrolling
-            $('button[type="submit"]').focus();
-            break;
+        case 40: // down
+          event.preventDefault(); // stop scrolling
+          $('button[type="submit"]').focus();
+          break;
         }
       };
     }
 
-    return <Checkbox field={field} onKeyDown={onKeyDown} defaultChecked={true} />;
+    return <Checkbox field={field} onKeyDown={onKeyDown} defaultChecked />;
   }
 
   render() {
@@ -433,20 +433,24 @@ const validate = (values) => {
   return errors;
 };
 
-function mapStateToProps(state) {
-  return {
-    userInfo: state.userInfo,
-    departmentsList: state.departmentsList,
-    quartersList: state.quartersList,
-    coursesList: state.coursesList,
-    professorsList: state.professorsList,
-  };
-}
+const mapStateToProps = state => ({
+  userInfo: state.userInfo,
+  departmentsList: state.departmentsList,
+  quartersList: state.quartersList,
+  coursesList: state.coursesList,
+  professorsList: state.professorsList,
+});
+
+const mapDispatchToProps = {
+  setUserInfo: setUserInfoAction,
+  setDepartmentsList: setDepartmentsListAction,
+  setQuartersList: setQuartersListAction,
+  setCoursesList: setCoursesListAction,
+  setProfessorsList: setProfessorsListAction,
+};
 
 export default reduxForm({
   validate,
   form: 'postEval',
   initialValues: { display_majors: true, display_grad_year: true },
-})(connect(mapStateToProps, {
-  setUserInfo, setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList,
-})(PostEval));
+})(connect(mapStateToProps, mapDispatchToProps)(PostEval));

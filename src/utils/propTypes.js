@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-export const UserInfoPT = PropTypes.shape({
+export const userInfoPT = PropTypes.shape({
   jwt: PropTypes.string,
   id: PropTypes.number,
   university_id: PropTypes.number,
@@ -13,35 +13,45 @@ export const UserInfoPT = PropTypes.shape({
   // majors: PropTypes.array
 });
 
-export const MajorsListPT = PropTypes.shape({
+export const majorsListPT = PropTypes.shape({
   object: PropTypes.object,
   array: PropTypes.array,
 });
 
-export const QuartersListPT = PropTypes.shape({
+export const quartersListPT = PropTypes.shape({
   object: PropTypes.object,
   array: PropTypes.array,
 });
 
-export const CoursesListPT = PropTypes.shape({
+export const coursesListPT = PropTypes.shape({
   object: PropTypes.object,
   array: PropTypes.array,
 });
 
-export const DepartmentsListPT = PropTypes.shape({
+export const departmentsListPT = PropTypes.shape({
   object: PropTypes.object,
   array: PropTypes.array,
 });
 
-export const ProfessorsListPT = PropTypes.shape({
+export const professorsListPT = PropTypes.shape({
   object: PropTypes.object,
   array: PropTypes.array,
 });
 
-export const LocationPT = PropTypes.shape({
+export const locationPT = PropTypes.shape({
   pathname: PropTypes.string,
 }).isRequired;
 
-export const MatchPT = PropTypes.shape({
+export const matchPT = PropTypes.shape({
   params: PropTypes.object,
 }).isRequired;
+
+export const historyPT = PropTypes.shape({
+  action: PropTypes.string,
+  push: PropTypes.func,
+}).isRequired;
+
+export const searchResultsPT = PropTypes.shape({
+  courses: PropTypes.array,
+  professors: PropTypes.array,
+});

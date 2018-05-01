@@ -7,6 +7,7 @@ import Truncate from 'react-truncate';
 
 import API from '../services/api';
 import '../styles/eval.scss';
+import calcTotalScore from '../utils/calcTotalScore';
 
 class Eval extends Component {
   static propTypes = {
@@ -106,7 +107,7 @@ class Eval extends Component {
     const {
       attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload,
     } = evaluation.data;
-    const totalScore = (((attitude + availability + clarity + grading_speed + resourcefulness) / 5 + (easiness + workload) / 2) / 2 * 0.8 + recommended * 0.2).toFixed(1);
+    const totalScore = calcTotalScore(evaluation.data);
     const settings = { // set speed = slidesToShow * 75
       dots: false,
       arrows: false,

@@ -12,7 +12,7 @@ export const SET_COURSES_LIST = 'set_courses_list';
   Storing as object to use dot notation for O(1) lookup instead of looking through entire array O(n)
 */
 
-export function setUserInfo(jwt) {
+export function setUserInfoAction(jwt) {
   if (!jwt) localStorage.removeItem('jwt');
   else {
     try {
@@ -29,14 +29,14 @@ export function setUserInfo(jwt) {
   };
 }
 
-export function setSearchResults(results) {
+export function setSearchResultsAction(results) {
   return {
     type: SET_SEARCH_RESULTS,
     payload: results,
   };
 }
 
-export function setMajorsList(majorsList) {
+export function setMajorsListAction(majorsList) {
   const majorsListObj = majorsList ? majorsList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
   CustomSort('major', majorsList, null, majorsListObj);
   const returnedObj = { object: majorsListObj, array: majorsList };
@@ -47,7 +47,7 @@ export function setMajorsList(majorsList) {
 }
 
 
-export function setQuartersList(quartersList) {
+export function setQuartersListAction(quartersList) {
   quartersList.map((quarter) => { quarter.label = `${quarter.name} ${quarter.year}`; return quarter; });
   const quartersListObj = quartersList ? quartersList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
   CustomSort('quarter', quartersList);
@@ -58,7 +58,7 @@ export function setQuartersList(quartersList) {
   };
 }
 
-export function setDepartmentsList(departmentsList) {
+export function setDepartmentsListAction(departmentsList) {
   const departmentsListObj = departmentsList ? departmentsList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
   CustomSort('department', departmentsList, null, departmentsListObj);
   const returnedObj = { object: departmentsListObj, array: departmentsList };
@@ -68,10 +68,10 @@ export function setDepartmentsList(departmentsList) {
   };
 }
 
-export function setProfessorsList(professorsList) {
+export function setProfessorsListAction(professorsList) {
   professorsList.map((professor) => { professor.label = `${professor.last_name}, ${professor.first_name}`; });
   const professorsListObj = professorsList ? professorsList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
-  CustomSort('professor', professorsList, null, professorsListObj);
+  CustomSort('professor', professorsList);
   const returnedObj = { object: professorsListObj, array: professorsList };
   return {
     type: SET_PROFESSORS_LIST,
@@ -79,7 +79,7 @@ export function setProfessorsList(professorsList) {
   };
 }
 
-export function setCoursesList(coursesList, departmentsList) {
+export function setCoursesListAction(coursesList, departmentsList) {
   let returnedObj;
   const coursesListObj = coursesList ? coursesList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
   if (departmentsList) {

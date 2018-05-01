@@ -6,24 +6,83 @@ import Select from 'react-select';
 import { Link } from 'react-router-dom';
 import ReactGA from 'react-ga';
 
-import { setUserInfo, setMajorsList } from '../actions';
+import { setUserInfoAction, setMajorsListAction } from '../actions';
 import API from '../services/api';
 import '../styles/profile.scss';
 import { INCOMPLETE, READ_EVALUATIONS } from '../index';
+import { userInfoPT, majorsListPT, historyPT, locationPT } from '../utils/propTypes';
 
 class Profile extends Component {
   static propTypes = {
-    userInfo: PropTypes.object,
-    majorsList: PropTypes.object,
+    userInfo: userInfoPT,
+    majorsList: majorsListPT,
     setUserInfo: PropTypes.func.isRequired,
     setMajorsList: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
-    history: PropTypes.object.isRequired,
+    history: historyPT,
     handleSubmit: PropTypes.func.isRequired,
-    location: PropTypes.object.isRequired,
+    location: locationPT,
   }
 
-  renderMajors(field) {
+  static renderGradYear(field) {
+    const { input } = field;
+    const { meta: { submitFailed, error } } = field;
+    const options = [];
+    const currentYear = new Date().getFullYear();
+    for (let i = currentYear; i < currentYear + 6; i++) options.push({ value: i, label: i });
+
+    return (
+      <Select
+        value={input.value}
+        className={error && submitFailed ? 'select-error' : undefined}
+        simpleValue
+        options={options}
+        onChange={newGradYear => input.onChange(newGradYear)}
+        placeholder="Select your expected graduation year"
+        onBlur={() => input.onBlur(input.value)}
+      />
+    );
+  }
+
+  static renderGender(field) {
+    const { meta: { submitFailed, error } } = field;
+    return (
+      <div className={`flex ${error && submitFailed ? 'error' : ''}`}>
+        <label htmlFor="male">
+          <Field
+            id="male"
+            name="gender"
+            component="input"
+            type="radio"
+            value="m"
+          />{' '}
+          Male
+        </label>
+        <label htmlFor="other">
+          <Field
+            id="female"
+            name="gender"
+            component="input"
+            type="radio"
+            value="f"
+          />{' '}
+          Female
+        </label>
+        <label htmlFor="female">
+          <Field
+            id="other"
+            name="gender"
+            component="input"
+            type="radio"
+            value="o"
+          />{' '}
+          Other
+        </label>
+      </div>
+    );
+  }
+
+  static renderMajors(field) {
     const { input, majorsListArr } = field;
     const { meta: { submitFailed, error } } = field;
     return (
@@ -47,59 +106,15 @@ class Profile extends Component {
     );
   }
 
-  renderGradYear(field) {
-    const { input } = field;
-    const { meta: { submitFailed, error } } = field;
-    const options = [];
-    const currentYear = new Date().getFullYear();
-    for (let i = currentYear; i < currentYear + 6; i++) options.push({ value: i, label: i });
-
-    return (
-      <Select
-        value={input.value}
-        className={error && submitFailed ? 'select-error' : undefined}
-        simpleValue
-        options={options}
-        onChange={newGradYear => input.onChange(newGradYear)}
-        placeholder="Select your expected graduation year"
-        onBlur={() => input.onBlur(input.value)}
-      />
-    );
-  }
-
-  renderGender(field) {
-    const { meta: { submitFailed, error } } = field;
-    return (
-      <div className={`flex ${error && submitFailed ? 'error' : ''}`}>
-        <label>
-          <Field
-            name="gender"
-            component="input"
-            type="radio"
-            value="m"
-          />{' '}
-          Male
-        </label>
-        <label>
-          <Field
-            name="gender"
-            component="input"
-            type="radio"
-            value="f"
-          />{' '}
-          Female
-        </label>
-        <label>
-          <Field
-            name="gender"
-            component="input"
-            type="radio"
-            value="o"
-          />{' '}
-          Other
-        </label>
-      </div>
-    );
+  componentDidMount() {
+    /* don't need to check if majorsList or userInfo exists, majorsList shouldn't exist and userInfo
+       should if statement below true */
+    if (this.props.userInfo.permissions.includes(INCOMPLETE)
+     || !this.props.userInfo.permissions.includes(READ_EVALUATIONS)
+    ) {
+      const client = new API();
+      client.get('/majors', majorsList => this.props.setMajorsList(majorsList));
+    }
   }
 
   onSubmit(values) {
@@ -112,23 +127,16 @@ class Profile extends Component {
     });
   }
 
-  componentDidMount() {
-    if (this.props.userInfo.permissions.includes(INCOMPLETE) || !this.props.userInfo.permissions.includes(READ_EVALUATIONS)) { // don't need to check if majorsList or userInfo exists, majorsList shouldn't exist and userInfo should
-      const client = new API();
-      client.get('/majors', majorsList => this.props.setMajorsList(majorsList));
-    }
-  }
-
   render() {
     const {
       handleSubmit, history, setUserInfo, userInfo, submitting, majorsList,
     } = this.props;
     const incomplete = userInfo.permissions.includes(INCOMPLETE);
-    const read_access = userInfo.permissions.includes(READ_EVALUATIONS);
+    const readAccess = userInfo.permissions.includes(READ_EVALUATIONS);
     const profileInfo = 'This information may only be used anonymously for statistical purposes.\nYour name is kept hidden at all times.';
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))} styleName="profile" className="content" >
-        {!read_access && (
+        {!readAccess && (
           <div className="noWriteDiv">
             <Link className="homeBtn noWriteHomeBtn" to="/">
               <i className="fa fa-home" />
@@ -165,21 +173,23 @@ class Profile extends Component {
           <h5>Major(s)</h5>
           <Field
             name="majors"
-            component={this.renderMajors}
+            component={Profile.renderMajors}
             majorsListArr={majorsList ? majorsList.array : undefined}
           />
           <h5>Expected Graduation Year</h5>
           <Field
             name="graduation_year"
-            component={this.renderGradYear}
+            component={Profile.renderGradYear}
           />
           <h5>Gender</h5>
           <Field
             name="gender"
-            component={this.renderGender}
+            component={Profile.renderGender}
           />
         </div>
-        <button disabled={submitting} style={{ marginTop: '35px' }} type="submit" className="btn">{submitting ? 'Saving...' : 'Save'}</button>
+        <button disabled={submitting} type="submit" className="btn">
+          {submitting ? 'Saving...' : 'Save'}
+        </button>
       </form>
     );
   }
@@ -190,9 +200,13 @@ const validate = (values) => {
   const currentYear = new Date().getFullYear();
   const errors = {};
   if (!values.gender || (values.gender !== 'm' && values.gender !== 'f' && values.gender !== 'o')) errors.gender = true;
-  if (!values.graduation_year || (values.graduation_year < currentYear || values.graduation_year > currentYear + 5)) errors.graduation_year = true;
+  if (!values.graduation_year
+    || (values.graduation_year < currentYear || values.graduation_year > currentYear + 5)
+  ) errors.graduation_year = true;
 
-  // simpleValue only gives string, so convert to array. Without simpleValue, entire object passed, making comparisons more difficult
+  /* simpleValue only gives string, so convert to array. Without simpleValue, entire object passed,
+     making comparisons more difficult */
+  // eslint-disable-next-line no-param-reassign
   if (values.majors && typeof (values.majors) === 'string') values.majors = values.majors.split(',').map(Number);
   if (!Array.isArray(values.majors) || values.majors.length < 1) errors.majors = true;
   else if (values.majors.length > 3) errors.majors = 'Only up to 3 majors may be declared.';
@@ -211,7 +225,12 @@ const mapStateToProps = state => ({
   },
 });
 
-export default connect(mapStateToProps, { setUserInfo, setMajorsList })(reduxForm({
+const mapDispatchToProps = {
+  setUserInfo: setUserInfoAction,
+  setMajorsList: setMajorsListAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
   validate,
   form: 'profile',
 })(Profile));

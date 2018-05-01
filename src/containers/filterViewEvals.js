@@ -4,11 +4,12 @@ import { Field, reduxForm, change, formValueSelector } from 'redux-form';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import ReactGA from 'react-ga';
 
 import { storeWithMiddleware } from '../index';
 import API from '../services/api';
 import { READ_EVALUATIONS } from '../index';
-import { setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList } from '../actions';
+import { setDepartmentsListAction, setQuartersListAction, setCoursesListAction, setProfessorsListAction } from '../actions';
 import CustomSort from '../utils/customSort';
 import Averages from '../components/averages';
 import Eval from '../components/eval';
@@ -114,7 +115,9 @@ class FilterViewEvals extends Component {
   }
 
   renderQuarters(field) {
-    const { input, localQuartersList, populateFields, filterViewEvals } = field;
+    const {
+      input, localQuartersList, populateFields, filterViewEvals,
+    } = field;
     const { meta: { submitFailed, error } } = field;
     return (
       <div>
@@ -149,7 +152,9 @@ class FilterViewEvals extends Component {
   }
 
   renderCourses(field) {
-    const { input, localCoursesList, populateFields, filterViewEvals } = field;
+    const {
+      input, localCoursesList, populateFields, filterViewEvals,
+    } = field;
     const { meta: { submitFailed, error } } = field;
     return (
       <div>
@@ -229,36 +234,36 @@ class FilterViewEvals extends Component {
       course_id,
       professor_id; //= currently selected values
     switch (currentField) {
-      case 'quarter':
-        quarter_id = newValue;
-        course_id = course;
-        professor_id = professor;
-        break;
-      case 'course':
-        quarter_id = quarter;
-        course_id = newValue;
-        professor_id = professor;
-        break;
-      case 'professor':
-        quarter_id = quarter;
-        course_id = course;
-        professor_id = newValue;
-        break;
+    case 'quarter':
+      quarter_id = newValue;
+      course_id = course;
+      professor_id = professor;
+      break;
+    case 'course':
+      quarter_id = quarter;
+      course_id = newValue;
+      professor_id = professor;
+      break;
+    case 'professor':
+      quarter_id = quarter;
+      course_id = course;
+      professor_id = newValue;
+      break;
     }
     const client = new API();
     if (selectionOrder.includes(currentField)) {
       for (let i = selectionOrder.length - 1; i > 0; i--) { // clear values ahead of currentField. If at index 0, do nothing, so only loop while i > 0
         storeWithMiddleware.dispatch(change('filterViewEvals', selectionOrder[i], ''));
         switch (selectionOrder[i]) {
-          case 'quarter':
-            quarter_id = null;
-            break;
-          case 'course':
-            course_id = null;
-            break;
-          case 'professor':
-            professor_id = null;
-            break;
+        case 'quarter':
+          quarter_id = null;
+          break;
+        case 'course':
+          course_id = null;
+          break;
+        case 'professor':
+          professor_id = null;
+          break;
         }
         selectionOrder.pop();
       }
@@ -286,63 +291,63 @@ class FilterViewEvals extends Component {
 
   getField(field, client, quarter_id, course_id, professor_id, departmentsList) {
     switch (field) {
-      case 'quarter':
-        this.setState({ localQuartersList: null }, () => client.get('/quarters', (quarters) => {
-          if (this.filterViewEvals) {
-            CustomSort('quarter', quarters);
-            quarters.map(quarter => quarter.label = `${quarter.name} ${quarter.year}`);
-            this.setState({ localQuartersList: quarters });
-          }
-        }, { quarter_id, course_id, professor_id }));
-        break;
-      case 'course':
-        this.setState({ localCoursesList: null }, () => client.get('/courses', (courses) => {
-          if (this.filterViewEvals) {
-            CustomSort('course', courses);
-            courses.map(course => course.label = `${departmentsList.object[course.department_id].abbr} ${course.number}: ${course.title}`);
+    case 'quarter':
+      this.setState({ localQuartersList: null }, () => client.get('/quarters', (quarters) => {
+        if (this.filterViewEvals) {
+          CustomSort('quarter', quarters);
+          quarters.map(quarter => quarter.label = `${quarter.name} ${quarter.year}`);
+          this.setState({ localQuartersList: quarters });
+        }
+      }, { quarter_id, course_id, professor_id }));
+      break;
+    case 'course':
+      this.setState({ localCoursesList: null }, () => client.get('/courses', (courses) => {
+        if (this.filterViewEvals) {
+          CustomSort('course', courses);
+          courses.map(course => course.label = `${departmentsList.object[course.department_id].abbr} ${course.number}: ${course.title}`);
 
-            this.setState({ localCoursesList: courses });
-          }
-        }, { quarter_id, course_id, professor_id }));
-        break;
-      case 'professor':
-        this.setState({ localProfessorsList: null }, () => client.get('/professors', (professors) => {
-          if (this.filterViewEvals) {
-            professors.map(professor => professor.label = `${professor.last_name}, ${professor.first_name}`);
-            CustomSort('professor', professors);
-            this.setState({ localProfessorsList: professors });
-          }
-        }, { quarter_id, course_id, professor_id }));
-        break;
+          this.setState({ localCoursesList: courses });
+        }
+      }, { quarter_id, course_id, professor_id }));
+      break;
+    case 'professor':
+      this.setState({ localProfessorsList: null }, () => client.get('/professors', (professors) => {
+        if (this.filterViewEvals) {
+          professors.map(professor => professor.label = `${professor.last_name}, ${professor.first_name}`);
+          CustomSort('professor', professors);
+          this.setState({ localProfessorsList: professors });
+        }
+      }, { quarter_id, course_id, professor_id }));
+      break;
     }
   }
 
   getEvals(type, newVal) {
-      this.setState({ evaluations: undefined }, () => {
-        const client = new API();
-        const { quarter, course, professor } = this.props;
-        let params;
-        switch (type) {
-        case 'quarter':
-          if (!newVal && !course && !professor) return;
-          params = { quarter_id: newVal, course_id: course, professor_id: professor };
-          break;
+    this.setState({ evaluations: undefined }, () => {
+      const client = new API();
+      const { quarter, course, professor } = this.props;
+      let params;
+      switch (type) {
+      case 'quarter':
+        if (!newVal && !course && !professor) return;
+        params = { quarter_id: newVal, course_id: course, professor_id: professor };
+        break;
 
-        case 'course':
-          if (!quarter && !newVal && !professor) return;
-          params = { quarter_id: quarter, course_id: newVal, professor_id: professor };
-          break;
+      case 'course':
+        if (!quarter && !newVal && !professor) return;
+        params = { quarter_id: quarter, course_id: newVal, professor_id: professor };
+        break;
 
-        case 'professor':
-          if (!quarter && !course && !newVal) return;
-          params = { quarter_id: quarter, course_id: course, professor_id: newVal };
-          break;
-        }
-        // parameters directly in URL instead of passed in params as {embed: ['professor, 'course']} because axios converts params differently than API expects (contains []'s, back end doesn't process it)
-        client.get('/evaluations?embed=course&embed=professor', (evaluations) => {
-          CustomSort('quarter', evaluations);
-          if (this.filterViewEvals) this.setState({ evaluations });
-        }, params);
+      case 'professor':
+        if (!quarter && !course && !newVal) return;
+        params = { quarter_id: quarter, course_id: course, professor_id: newVal };
+        break;
+      }
+      // parameters directly in URL instead of passed in params as {embed: ['professor, 'course']} because axios converts params differently than API expects (contains []'s, back end doesn't process it)
+      client.get('/evaluations?embed=course&embed=professor', (evaluations) => {
+        CustomSort('quarter', evaluations);
+        if (this.filterViewEvals) this.setState({ evaluations });
+      }, params);
     });
   }
 
@@ -350,12 +355,14 @@ class FilterViewEvals extends Component {
     const sortOptions = [
       { value: 'quarter', label: 'Sort by Quarter' },
       { value: 'course', label: 'Sort by Course' },
-      { value: 'professor', label: 'Sort by Professor'},
+      { value: 'professor', label: 'Sort by Professor' },
       { value: 'votes_score', label: 'Sort by Votes Score' },
       { value: 'major', label: 'Sort By Major' },
       { value: 'grad_year', label: 'Sort By Graduation Year' },
     ];
-    const { userInfo, departmentsList, quartersList, coursesList, professorsList, majorsList, quarter, course, professor } = this.props;
+    const {
+      userInfo, departmentsList, quartersList, coursesList, professorsList, majorsList, quarter, course, professor,
+    } = this.props;
     const {
       localQuartersList, localCoursesList, localProfessorsList, evaluations, flagModal, deleteModal, sortValue,
     } = this.state;
@@ -379,10 +386,10 @@ class FilterViewEvals extends Component {
           deletePost={() => {
             const client = new API();
             client.delete(`/evaluations/${deleteModal.eval_id}`, () => ReactGA.event({ category: 'Evaluation', action: 'Deleted' }));
-            for (let i = 0; i < myEvalsList.length; i++) {
+            for (let i = 0; i < evaluations.length; i++) {
               if (evaluations[i].id === deleteModal.eval_id) {
                 const evals = evaluations.slice();
-                evals.splice(key, 1);
+                evals.splice(i, 1);
                 this.setState({ evaluations: evals });
                 break;
               }
@@ -391,8 +398,8 @@ class FilterViewEvals extends Component {
         />
         <form>
           <h4 className="banner">Browse Evaluations</h4>
-          <div className='row'>
-            <div className='col-md-4'>
+          <div className="row">
+            <div className="col-md-4">
               <Field
                 name="quarter" // responsible for object's key name for values
                 component={this.renderQuarters.bind(this)}
@@ -401,7 +408,7 @@ class FilterViewEvals extends Component {
                 filterViewEvals={this.filterViewEvals}
               />
             </div>
-            <div className='col-md-4'>
+            <div className="col-md-4">
               <Field
                 name="course" // responsible for object's key name for values
                 component={this.renderCourses.bind(this)}
@@ -410,7 +417,7 @@ class FilterViewEvals extends Component {
                 filterViewEvals={this.filterViewEvals}
               />
             </div>
-            <div className='col-md-4'>
+            <div className="col-md-4">
               <Field
                 name="professor" // responsible for object's key name for values
                 component={this.renderProfessors.bind(this)}
@@ -424,98 +431,98 @@ class FilterViewEvals extends Component {
 
         {evaluations ?
           evaluations.length === 0 ?
-          <h5>No evaluations posted yet.</h5>
-          :
-          <Fragment>
-            <Averages evaluations={evaluations} />
-            {evaluations && evaluations.length < 0 && (<hr />)}
-            <div className="sort-wrapper">
-              <Select
-                value={sortValue}
-                isLoading={!departmentsList || !professorsList || !majorsList}
-                disabled={!departmentsList || !professorsList || !majorsList}
-                simpleValue
-                options={sortOptions}
-                placeholder="Sort"
-                onChange={(newSortValue) => {
-                  const evals = evaluations.slice();
-                  CustomSort(newSortValue, evals, 'quarter');
-                  this.setState({ evaluations: evals, sortValue: newSortValue });
-                  this.sortArrows.className = 'fa fa-sort';
-                }}
-              />
-              <i
-                ref={obj => this.sortArrows = obj}
-                tabIndex="0"
-                className="fa fa-sort"
-                onClick={(e) => {
-                  const evals = evaluations.slice().reverse();
-                  this.setState({ evaluations: evals });
-                  if (e.target.className === 'fa fa-sort' || e.target.className === 'fa fa-sort-asc') { e.target.className = 'fa fa-sort-desc'; } else e.target.className = 'fa fa-sort-asc';
-                }}
-                onKeyPress={(event) => {
-                  if (event.key === 'Enter') event.target.click();
-                }}
+            <h5>No evaluations posted yet.</h5>
+            :
+            <Fragment>
+              <Averages evaluations={evaluations} />
+              {evaluations && evaluations.length < 0 && (<hr />)}
+              <div className="sort-wrapper">
+                <Select
+                  value={sortValue}
+                  isLoading={!departmentsList || !professorsList || !majorsList}
+                  disabled={!departmentsList || !professorsList || !majorsList}
+                  simpleValue
+                  options={sortOptions}
+                  placeholder="Sort"
+                  onChange={(newSortValue) => {
+                    const evals = evaluations.slice();
+                    CustomSort(newSortValue, evals, 'quarter');
+                    this.setState({ evaluations: evals, sortValue: newSortValue });
+                    this.sortArrows.className = 'fa fa-sort';
+                  }}
+                />
+                <i
+                  ref={obj => this.sortArrows = obj}
+                  tabIndex="0"
+                  className="fa fa-sort"
+                  onClick={(e) => {
+                    const evals = evaluations.slice().reverse();
+                    this.setState({ evaluations: evals });
+                    if (e.target.className === 'fa fa-sort' || e.target.className === 'fa fa-sort-asc') { e.target.className = 'fa fa-sort-desc'; } else e.target.className = 'fa fa-sort-asc';
+                  }}
+                  onKeyPress={(event) => {
+                    if (event.key === 'Enter') event.target.click();
+                  }}
 
-              />
+                />
+              </div>
+              {evaluations.map((evaluation, index) => {
+                let userString = '';
+                if (evaluation.author && evaluation.author.majors && majorsList) {
+                  const authorMajors = evaluation.author.majors.slice();
+                  // alphabetically sort majors if multiple
+                  authorMajors.sort((a, b) => (majorsList.object[a].name > majorsList.object[b].name ? 1 : -1));
+                  for (const i of authorMajors) userString += `${majorsList.object[i].name}, `;
+                }
+                if (userString && !evaluation.author.graduation_year) userString = userString.substring(0, userString.length - 2); // cut off last comma and space
+                else if (evaluation.author && evaluation.author.graduation_year) userString += `Class of ${evaluation.author.graduation_year}`;
+                return (
+                  <Eval
+                    key={evaluation.id}
+                    evaluation={evaluation}
+                    department={departmentsList && evaluation.course ?
+                      `${departmentsList.object[evaluation.course.department_id].abbr} ${evaluation.course.number}: ${evaluation.course.title}`
+                      : null}
+                    quarter={quartersList ?
+                      `${quartersList.object[evaluation.quarter_id].name} ${quartersList.object[evaluation.quarter_id].year}`
+                      : null}
+                    openDeleteModal={() => {
+                      this.setState({
+                        deleteModal: {
+                          open: true,
+                          quarter_id: evaluation.quarter_id,
+                          course_id: evaluation.course.id,
+                          professor_id: evaluation.professor.id,
+                          eval_id: evaluation.id,
+                        },
+                      });
+                    }}
+                    openFlagModal={(comment, eval_id, user_flagged, set_user_flagged) => this.setState({
+                      flagModal: {
+                        open: true,
+                        comment,
+                        eval_id,
+                        user_flagged,
+                        set_user_flagged,
+                      },
+                    })}
+                    vote_access={userInfo.permissions.includes(VOTE_EVALUATIONS)}
+                    quarter={quartersList ? `${quartersList.object[evaluation.quarter_id].name} ${quartersList.object[evaluation.quarter_id].year}` : null}
+                    userString={userString}
+                    updateScore={(newScore) => { // score must be updated in evaluations array so sorting works with new values (or else could just update in local state inside Eval)
+                      const evals = evaluations.slice();
+                      evals[index].votes_score = newScore;
+                      this.setState({ evaluations: evals });
+                    }}
+                  />
+                );
+              })}
+            </Fragment>
+          : evaluations === undefined && (quarter || course || professor) && (
+            <div styleName="loadingWrapper">
+              <i className="fa fa-spinner fa-spin fa-3x fa-fw" />
             </div>
-            {evaluations.map((evaluation, index) => {
-            let userString = '';
-            if (evaluation.author && evaluation.author.majors && majorsList) {
-              const authorMajors = evaluation.author.majors.slice();
-              // alphabetically sort majors if multiple
-              authorMajors.sort((a, b) => (majorsList.object[a].name > majorsList.object[b].name ? 1 : -1));
-              for (const i of authorMajors) userString += `${majorsList.object[i].name}, `;
-            }
-            if (userString && !evaluation.author.graduation_year) userString = userString.substring(0, userString.length - 2); // cut off last comma and space
-            else if (evaluation.author && evaluation.author.graduation_year) userString += `Class of ${evaluation.author.graduation_year}`;
-            return (
-              <Eval
-                key={evaluation.id}
-                evaluation={evaluation}
-                department={departmentsList && evaluation.course ?
-                  `${departmentsList.object[evaluation.course.department_id].abbr} ${evaluation.course.number}: ${evaluation.course.title}`
-                  : null}
-                quarter={quartersList ?
-                  `${quartersList.object[evaluation.quarter_id].name} ${quartersList.object[evaluation.quarter_id].year}`
-                  : null}
-                openDeleteModal={() => {
-                  this.setState({
-                    deleteModal: {
-                      open: true,
-                      quarter_id: evaluation.quarter_id,
-                      course_id: evaluation.course.id,
-                      professor_id: evaluation.professor.id,
-                      eval_id: evaluation.id,
-                    },
-                  });
-                }}
-                openFlagModal={(comment, eval_id, user_flagged, set_user_flagged) => this.setState({
-                  flagModal: {
-                    open: true,
-                    comment,
-                    eval_id,
-                    user_flagged,
-                    set_user_flagged,
-                  },
-                })}
-                vote_access={userInfo.permissions.includes(VOTE_EVALUATIONS)}
-                quarter={quartersList ? `${quartersList.object[evaluation.quarter_id].name} ${quartersList.object[evaluation.quarter_id].year}` : null}
-                userString={userString}
-                updateScore={(newScore) => { // score must be updated in evaluations array so sorting works with new values (or else could just update in local state inside Eval)
-                  const evals = evaluations.slice();
-                  evals[index].votes_score = newScore;
-                  this.setState({ evaluations: evals });
-                }}
-              />
-            );
-          })}
-          </Fragment>
-        : evaluations === undefined && (quarter || course || professor) && (
-          <div styleName="loadingWrapper">
-            <i className="fa fa-spinner fa-spin fa-3x fa-fw" />
-          </div>
-        )}
+          )}
       </div>
     );
   }
@@ -541,6 +548,11 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps, {
-  setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList,
-})(FilterViewEvalsWithReduxForm);
+const mapDispatchToProps = {
+  setDepartmentsList: setDepartmentsListAction,
+  setQuartersList: setQuartersListAction,
+  setCoursesList: setCoursesListAction,
+  setProfessorsList: setProfessorsListAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FilterViewEvalsWithReduxForm);

@@ -65,7 +65,7 @@ class About extends Component {
                   </a> framework. <a
                                                                 href="http://sass-lang.com/"
                                                               >SCSS
-                                                              </a> is implemented for consistent,
+                                                                              </a> is implemented for consistent,
                   compressed, and programmatic creation of CSS.
                 </p>
                 <h6>Check it out at the <a href="https://github.com/SCUEvals/scuevals"> GitHub repository.</a></h6>
@@ -104,10 +104,8 @@ class About extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    userInfo: state.userInfo,
-  };
-}
+const mapStateToProps = state => ({
+  userInfo: state.userInfo,
+});
 
 export default connect(mapStateToProps, null)(About);

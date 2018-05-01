@@ -5,7 +5,6 @@ import TextOptions from '../components/textOptions';
 import '../styles/averages.scss';
 
 class Averages extends Component {
-
   renderAverage(name, value, tooltipName) {
     const avgClass = this.calculateAverageColor(value);
     return (
@@ -14,7 +13,7 @@ class Averages extends Component {
           {name}
         </div>
         <svg className={`score ${avgClass}`}>
-          <circle cx="18" cy="18" r="16" style={{ strokeDashoffset: this.calculatePath(value)}} />
+          <circle cx="18" cy="18" r="16" style={{ strokeDashoffset: this.calculatePath(value) }} />
           <text x="50%" y="50%">
             {value}
           </text>
@@ -63,34 +62,34 @@ class Averages extends Component {
         recommended = 0,
         resourcefulness = 0,
         workload = 0;
-        const divideNum = evaluations.length;
-        evaluations.map((evaluation) => {
-          const { data } = evaluation;
-          attitude += data.attitude;
-          availability += data.availability;
-          clarity += data.clarity;
-          easiness += data.easiness;
-          grading_speed += data.grading_speed;
-          recommended += data.recommended;
-          resourcefulness += data.resourcefulness;
-          workload += data.workload;
-          courseAverage += (data.easiness + data.workload) / 2;
-          professorAverage += (data.attitude + data.availability + data.clarity + data.grading_speed + data.resourcefulness) / 5;
-        });
-        attitude = (attitude / divideNum).toFixed(1);
-        availability = (availability / divideNum).toFixed(1);
-        clarity = (clarity / divideNum).toFixed(1);
-        easiness = (easiness / divideNum).toFixed(1);
-        grading_speed = (grading_speed / divideNum).toFixed(1);
-        recommended /= divideNum;
-        resourcefulness = (resourcefulness / divideNum).toFixed(1);
-        workload = (workload / divideNum).toFixed(1);
-        courseAverage /= divideNum;
-        professorAverage /= divideNum;
-        average = (((courseAverage + professorAverage) / 2) * 0.8 + recommended * 0.2).toFixed(1);
-        recommended = recommended.toFixed(1);
-        courseAverage = courseAverage.toFixed(1);
-        professorAverage = professorAverage.toFixed(1);
+      const divideNum = evaluations.length;
+      evaluations.map((evaluation) => {
+        const { data } = evaluation;
+        attitude += data.attitude;
+        availability += data.availability;
+        clarity += data.clarity;
+        easiness += data.easiness;
+        grading_speed += data.grading_speed;
+        recommended += data.recommended;
+        resourcefulness += data.resourcefulness;
+        workload += data.workload;
+        courseAverage += (data.easiness + data.workload) / 2;
+        professorAverage += (data.attitude + data.availability + data.clarity + data.grading_speed + data.resourcefulness) / 5;
+      });
+      attitude = (attitude / divideNum).toFixed(1);
+      availability = (availability / divideNum).toFixed(1);
+      clarity = (clarity / divideNum).toFixed(1);
+      easiness = (easiness / divideNum).toFixed(1);
+      grading_speed = (grading_speed / divideNum).toFixed(1);
+      recommended /= divideNum;
+      resourcefulness = (resourcefulness / divideNum).toFixed(1);
+      workload = (workload / divideNum).toFixed(1);
+      courseAverage /= divideNum;
+      professorAverage /= divideNum;
+      average = (((courseAverage + professorAverage) / 2) * 0.8 + recommended * 0.2).toFixed(1);
+      recommended = recommended.toFixed(1);
+      courseAverage = courseAverage.toFixed(1);
+      professorAverage = professorAverage.toFixed(1);
 
       return (
         <section styleName="averages">
@@ -127,7 +126,7 @@ class Averages extends Component {
         </section>
       );
     }
-    else return null;
+    return null;
   }
 }
 

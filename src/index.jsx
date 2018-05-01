@@ -26,7 +26,7 @@ import ViewMyEvals from './containers/viewMyEvals';
 import requireAuth from './components/requireAuth';
 import history from './components/history';
 import API from './services/api';
-import { setUserInfo } from './actions';
+import { setUserInfoAction } from './actions';
 
 import './styles/global.scss?global';
 
@@ -88,7 +88,7 @@ if (localStorage.getItem('jwt')) {
   if (new Date().getTime() / 1000 > decodedJwt.exp) { // if token expired, delete it
     localStorage.removeItem('jwt');
     // userInfo decoded from expired token, so delete it
-    storeWithMiddleware.dispatch(setUserInfo(null));
+    storeWithMiddleware.dispatch(setUserInfoAction(null));
     renderDOM();
   } else { // else verify with back end
     const client = new API();
@@ -102,7 +102,7 @@ if (localStorage.getItem('jwt')) {
       renderDOM();
     }).catch(() => { // decodeable JWT, but not authorized on back-end
       localStorage.removeItem('jwt');
-      storeWithMiddleware.dispatch(setUserInfo(null));
+      storeWithMiddleware.dispatch(setUserInfoAction(null));
       renderDOM();
     });
   }

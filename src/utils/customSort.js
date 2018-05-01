@@ -12,7 +12,7 @@ export default function customSort(sortValue, arr, defaultSort, obj) {
     break;
 
   case 'professor':
-    sortByProfessor(arr, defaultSort, obj);
+    sortByProfessor(arr, defaultSort);
     break;
 
   case 'votes_score':
@@ -81,17 +81,16 @@ function sortByCourse(arr, defaultSort) {
   });
 }
 
-function sortByProfessor(arr, defaultSort, obj) {
-  const professorsListObj = obj || storeWithMiddleware.getState().professorsList.object;
-  if (professorsListObj) {
-    arr.sort((a, b) => {
-      const aProfID = a.professor ? a.professor.id : a.id;
-      const bProfID = b.professor ? b.professor.id : b.id;
-      return professorsListObj[aProfID].label > professorsListObj[bProfID].label ? 1
-        : professorsListObj[aProfID].label < professorsListObj[bProfID].label ? -1
-        : orderByDefault(a, b, defaultSort);
-    });
-  }
+function sortByProfessor(arr, defaultSort) {
+  arr.sort((a, b) => {
+    const aProfString = a.professor ? a.professor.last_name + a.professor.first_name
+      : a.last_name + a.first_name;
+    const bProfString = b.professor ? b.professor.last_name + b.professor.first_name
+      : b.last_name + b.first_name;
+    return aProfString > bProfString ? 1
+      : aProfString < bProfString ? -1
+      : orderByDefault(a, b, defaultSort);
+  });
 }
 
 function sortByMajor(arr, defaultSort, obj) {

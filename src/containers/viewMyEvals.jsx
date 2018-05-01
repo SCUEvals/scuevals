@@ -10,7 +10,7 @@ import Eval from '../components/eval';
 import API from '../services/api';
 import '../styles/viewEvals.scss';
 import { READ_EVALUATIONS } from '../index';
-import { setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList } from '../actions';
+import { setDepartmentsListAction, setProfessorsListAction, setQuartersListAction, setCoursesListAction } from '../actions';
 import CustomSort from '../utils/customSort';
 
 
@@ -183,16 +183,20 @@ class ViewMyEvals extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    userInfo: state.userInfo,
-    departmentsList: state.departmentsList,
-    quartersList: state.quartersList,
-    coursesList: state.coursesList,
-    professorsList: state.professorsList,
-  };
-}
+const mapStateToProps = state => ({
+  userInfo: state.userInfo,
+  departmentsList: state.departmentsList,
+  quartersList: state.quartersList,
+  coursesList: state.coursesList,
+  professorsList: state.professorsList,
+});
 
-export default connect(mapStateToProps, {
-  setDepartmentsList, setQuartersList, setCoursesList, setProfessorsList,
-})(ViewMyEvals);
+const mapDispatchToProps = {
+  setDepartmentsList: setDepartmentsListAction,
+  setQuartersList: setQuartersListAction,
+  setCoursesList: setCoursesListAction,
+  setProfessorsList: setProfessorsListAction,
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ViewMyEvals);

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 import API from '../services/api';
 import '../styles/home.scss';
-import { setUserInfo } from '../actions';
+import { setUserInfoAction } from '../actions';
 import RecentEvalsWidget from './recentEvalsWidget';
 import TopsWidget from './topsWidget';
 import NonStudentModal from '../components/nonStudentModal';
@@ -66,7 +66,7 @@ class Home extends Component {
         // if (decodedJwt.sub.type === 's') {
         if (referrer) {
           if (decodedJwt.sub.permissions.includes(INCOMPLETE)) this.props.history.push('/profile', { referrer });
-          else this.props.history.push(referrer);
+          else this.props.history.push(referrer, { referrer });
         } else if (decodedJwt.sub.permissions.includes(INCOMPLETE)) this.props.history.push('/profile');
         // }
       });
@@ -166,7 +166,8 @@ class Home extends Component {
           clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
           buttonText=""
           onSuccess={info => this.setState({ loading: true }, this.authWithBackEnd(info.tokenObj.id_token, referrer))}
-          onFailure={err => /* eslint-disable no-console */ console.error('Google Login Error: ', err) /* eslint-enable no-console */}
+          // eslint-disable-next-line no-console
+          onFailure={err =>  console.error('Google Login Error: ', err)}
           className="btn"
           styleName="loginBtn"
         >
@@ -178,10 +179,12 @@ class Home extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    userInfo: state.userInfo,
-  };
-}
+const mapStateToProps = state => ({
+  userInfo: state.userInfo,
+});
 
-export default connect(mapStateToProps, { setUserInfo })(Home);
+const mapDispatchToProps = {
+  setUserInfo: setUserInfoAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
