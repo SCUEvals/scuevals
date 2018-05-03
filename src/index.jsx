@@ -59,7 +59,7 @@ function renderDOM() {
             <div className="container">
               <Switch>
                 <Route exact path="/search/:search" component={requireAuth(SearchContent, null, [READ_EVALUATIONS])} />
-                <Route exact path="/post/:quarter_id(\d+)/:course_id(\d+)/:professor_id(\d+)" component={requireAuth(PostEval, null, [WRITE_EVALUATIONS])} />
+                <Route exact path="/post/:quarterID(\d+)/:courseID(\d+)/:professorID(\d+)" component={requireAuth(PostEval, null, [WRITE_EVALUATIONS])} />
                 <Route exact path="/professors/:id(\d+)/post" component={requireAuth(PostSearch, { type: 'professors' }, [WRITE_EVALUATIONS])} />
                 <Route exact path="/courses/:id(\d+)/post" component={requireAuth(PostSearch, { type: 'courses' }, [WRITE_EVALUATIONS])} />
                 <Route exact path="/professors/:id(\d+)" component={requireAuth(ViewEvals, { type: 'professors' }, [READ_EVALUATIONS])} />

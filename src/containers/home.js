@@ -167,7 +167,7 @@ class Home extends Component {
           buttonText=""
           onSuccess={info => this.setState({ loading: true }, this.authWithBackEnd(info.tokenObj.id_token, referrer))}
           // eslint-disable-next-line no-console
-          onFailure={err =>  console.error('Google Login Error: ', err)}
+          onFailure={err => console.error('Google Login Error: ', err)}
           className="btn"
           styleName="loginBtn"
         >

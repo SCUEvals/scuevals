@@ -13,7 +13,13 @@ import TextOptions from '../components/textOptions';
 import '../../node_modules/rc-slider/dist/rc-slider.min.css?global';
 import '../styles/postEval.scss';
 import RedirectModal from '../components/redirectModal';
-import { setUserInfoAction, setDepartmentsListAction, setProfessorsListAction, setQuartersListAction, setCoursesListAction } from '../actions';
+import {
+  setUserInfoAction,
+  setDepartmentsListAction,
+  setProfessorsListAction,
+  setQuartersListAction,
+  setCoursesListAction
+} from '../actions';
 import { READ_EVALUATIONS } from '../index';
 import Checkbox from '../components/checkbox';
 
@@ -41,9 +47,14 @@ class PostEval extends Component {
     super(props);
     this.state = {
       term: '',
-      classInfo: props.location.state ? {
-        quarter_id: props.location.state.quarter_id, course_id: props.location.state.course_id, professor_id: props.location.state.professor_id, user_posted: false,
-      } : undefined,
+      classInfo: props.location.state ?
+        {
+          quarterID: props.location.state.quarterID,
+          courseID: props.location.state.courseID,
+          professorID: props.location.state.professorID,
+          user_posted: false,
+        }
+      : undefined,
       submitted: false,
       initial_read_access: props.userInfo.permissions.includes(READ_EVALUATIONS),
     };
@@ -51,7 +62,7 @@ class PostEval extends Component {
     if (!props.location.state) {
       const client = new API();
       // course and professor swapped because API currently has different order than site
-      client.get(`/classes/${props.match.params.quarter_id}/${props.match.params.professor_id}/${props.match.params.course_id}`, classInfo => this.setState({
+      client.get(`/classes/${props.match.params.quarterID}/${props.match.params.professorID}/${props.match.params.courseID}`, classInfo => this.setState({
         classInfo: {
           quarter_id: classInfo.quarter.id, course_id: classInfo.course.id, professor_id: classInfo.professor.id, user_posted: classInfo.user_posted,
         },
@@ -96,11 +107,16 @@ class PostEval extends Component {
   }
 
   onSubmit(values) {
-    const { quarter_id, course_id, professor_id } = this.props.match.params;
+    const { quarterID, courseID, professorID } = this.props.match.params;
     const { display_majors, display_grad_year } = values;
     const evaluation = { ...values };
     const sendingObj = {
-      quarter_id, course_id, professor_id, display_majors, display_grad_year, evaluation,
+      quarter_id: quarterID,
+      course_id: courseID,
+      professor_id: professorID,
+      display_majors,
+      display_grad_year,
+      evaluation,
     };
     const client = new API();
     return client.post('/evaluations', sendingObj, (responseData) => {
@@ -287,13 +303,13 @@ class PostEval extends Component {
       professor;
     if (quartersList && coursesList && coursesList.departmentsListLoaded && professorsList) {
       if (classInfo) {
-        quarter = quartersList.object[classInfo.quarter_id].label;
-        course = coursesList.object[classInfo.course_id].label;
-        professor = professorsList.object[classInfo.professor_id].label;
+        quarter = quartersList.object[classInfo.quarterID].label;
+        course = coursesList.object[classInfo.courseID].label;
+        professor = professorsList.object[classInfo.professorID].label;
       } else if (location.state) {
-        quarter = quartersList.object[location.state.quarter_id].label;
-        course = coursesList.object[location.state.course_id].label;
-        professor = professorsList.object[location.state.professor_id].label;
+        quarter = quartersList.object[location.state.quarterID].label;
+        course = coursesList.object[location.state.courseID].label;
+        professor = professorsList.object[location.state.professorID].label;
       }
     }
     if (location.state || classInfo !== undefined) { // passed values from postSearch

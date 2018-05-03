@@ -10,7 +10,12 @@ import Eval from '../components/eval';
 import API from '../services/api';
 import '../styles/viewEvals.scss';
 import { READ_EVALUATIONS } from '../index';
-import { setDepartmentsListAction, setProfessorsListAction, setQuartersListAction, setCoursesListAction } from '../actions';
+import {
+  setDepartmentsListAction,
+  setProfessorsListAction,
+  setQuartersListAction,
+  setCoursesListAction
+} from '../actions';
 import CustomSort from '../utils/customSort';
 
 

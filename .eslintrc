@@ -26,6 +26,7 @@
       "specialLink": [ "to" ]
     }],
     react/require-default-props: 0,
+    react/no-did-update-set-state: 0,
   },
   "globals": {
     "$": true
