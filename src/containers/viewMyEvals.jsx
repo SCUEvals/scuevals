@@ -78,7 +78,7 @@ class ViewMyEvals extends Component {
     const {
       userInfo, quartersList, coursesList, departmentsList, professorsList,
     } = this.props;
-    const readAccess = userInfo && userInfo.permissions.includes(READ_EVALUATIONS);
+    const readAccess = userInfo.permissions.includes(READ_EVALUATIONS);
     const sortOptions = [
       { value: 'recent', label: 'Sort by Most Recent' },
       { value: 'quarter', label: 'Sort by Quarter' },

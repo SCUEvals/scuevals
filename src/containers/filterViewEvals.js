@@ -6,16 +6,14 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ReactGA from 'react-ga';
 
-import { storeWithMiddleware } from '../index';
+import { storeWithMiddleware, READ_EVALUATIONS, VOTE_EVALUATIONS } from '../index';
 import API from '../services/api';
-import { READ_EVALUATIONS } from '../index';
 import { setDepartmentsListAction, setQuartersListAction, setCoursesListAction, setProfessorsListAction } from '../actions';
 import CustomSort from '../utils/customSort';
 import Averages from '../components/averages';
 import Eval from '../components/eval';
 import FlagModal from '../components/flagModal';
 import DeleteModal from '../components/deleteModal';
-import { VOTE_EVALUATIONS } from '../index';
 import '../styles/filterViewEvals.scss';
 
 class FilterViewEvals extends Component {
@@ -435,7 +433,6 @@ class FilterViewEvals extends Component {
             :
             <Fragment>
               <Averages evaluations={evaluations} />
-              {evaluations && evaluations.length < 0 && (<hr />)}
               <div className="sort-wrapper">
                 <Select
                   value={sortValue}

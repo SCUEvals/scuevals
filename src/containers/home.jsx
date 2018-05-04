@@ -14,14 +14,21 @@ import TopsWidget from './topsWidget';
 import NonStudentModal from '../components/nonStudentModal';
 import WriteOnly from '../components/writeOnly';
 import { INCOMPLETE, READ_EVALUATIONS, WRITE_EVALUATIONS } from '../index';
+import { userInfoPT, locationPT, historyPT } from '../utils/propTypes';
 
 class Home extends Component {
   static propTypes = {
-    userInfo: PropTypes.object,
+    userInfo: userInfoPT,
     setUserInfo: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
+    history: historyPT,
+    location: locationPT,
   };
+
+  static signOut(props) {
+    props.location.signOut = false; // eslint-disable-line no-param-reassign
+    props.setUserInfo(null);
+    ReactGA.set({ userId: undefined });
+  }
 
   constructor(props) {
     super(props);
@@ -33,20 +40,14 @@ class Home extends Component {
 
   componentDidMount() {
     if (this.props.location.signOut) {
-      this.signOut(this.props);
+      Home.signOut(this.props);
     }
   }
 
   componentWillReceiveProps(props) {
     if (props.location.signOut) {
-      this.signOut(props);
+      Home.signOut(props);
     }
-  }
-
-  signOut(props) {
-    props.location.signOut = false;
-    props.setUserInfo(null);
-    ReactGA.set({ userId: undefined });
   }
 
   authWithBackEnd(token, referrer) {
@@ -83,44 +84,51 @@ class Home extends Component {
   render() {
     const { userInfo, setUserInfo, location } = this.props;
     const referrer = location.state ? location.state.referrer : null;
-    const read_access = userInfo && userInfo.permissions.includes(READ_EVALUATIONS);
-    const write_access = userInfo && userInfo.permissions.includes(WRITE_EVALUATIONS);
+    const readAccess = userInfo && userInfo.permissions.includes(READ_EVALUATIONS);
+    const writeAccess = userInfo && userInfo.permissions.includes(WRITE_EVALUATIONS);
 
-    if (!userInfo && this.state.loading) { // if Google login succeeded, and in process of sending to backend
+    // if Google login succeeded, and in process of sending to backend
+    if (!userInfo && this.state.loading) {
       return (
         <div className="loadingWrapper">
           <i className="fa fa-spinner fa-spin fa-3x fa-fw" />
         </div>
       );
-    } else if (read_access) {
+    } else if (readAccess) {
       return (
         <div styleName="home" className="content">
           {this.state.nonStudentModalOpen && ( // don't want rendered in DOM at all unless true
-            <NonStudentModal nonStudentModalOpen closeNonStudentModal={() => this.setState({ nonStudentModalOpen: false })} />
+            <NonStudentModal
+              nonStudentModalOpen
+              closeNonStudentModal={() => this.setState({ nonStudentModalOpen: false })}
+            />
           )}
           <section>
             <h3 styleName="title">SCU Evals</h3>
             <p>
-              Welcome to the best platform for writing and reading evaluations for professors and courses
-              at Santa Clara University!
+              Welcome to the best platform for writing and reading evaluations for professors and
+              courses at Santa Clara University!
             </p>
-            {write_access && ( // && userInfo.type === 's'
+            {writeAccess && ( // && userInfo.type === 's'
               <p>
-                You are probably here because you are wondering whether a professor or course will be a good choice for next quarter,
-                or maybe because you want to share your thoughts on that awesome class you just finished. Either way, you have come to
-                the right place. We are here to make it simpler for you to find classes that you
-                would not only learn something useful from, but also enjoy.
+                You are probably here because you are wondering whether a professor or course will
+                be a good choice for next quarter, or maybe because you want to share your thoughts
+                on that awesome class you just finished. Either way, you have come to the right
+                place. We are here to make it simpler for you to find classes that you would not
+                only learn something useful from, but also enjoy.
               </p>
             )}
             <p>
-              This platform aims to solve all of the issues where other platforms failed. For example, only verified
-              SCU students are able to post evaluations here. In fact, only people affiliated with SCU can even use
-              the website. Think of it as an extension of the SCU community with the goal to make your life easier.
+              This platform aims to solve all of the issues where other platforms failed. For
+              example, only verified SCU students are able to post evaluations here. In fact, only
+              people affiliated with SCU can even use the website. Think of it as an extension of
+              the SCU community with the goal to make your life easier.
             </p>
-            {write_access ?
+            {writeAccess ?
               <p>
-              Use the search bar above to look for a specific course or professor, or, why not post an evaluation
-              for a class {'you\'ve'} taken? In that case, hit the {'"Post Evaluation"'} button below and {'we\'ll'} get you started!
+              Use the search bar above to look for a specific course or professor, or, why not post
+              an evaluation for a class {'you\'ve'} taken? In that case, hit the{'"Post Evaluation"'}
+              button below and {'we\'ll'} get you started!
               </p>
               :
               <p>
@@ -131,13 +139,13 @@ class Home extends Component {
           </section>
           <hr />
           <div styleName="linkBtns">
-            {write_access && (
+            {writeAccess && (
               <Link to="/post" className="btn">Post Evaluation</Link>
             )}
             <Link to="/evaluations" className="btn">Browse Evaluations</Link>
           </div>
 
-          {write_access && (
+          {writeAccess && (
             <hr />
           )}
           {!location.signOut && (
@@ -165,7 +173,12 @@ class Home extends Component {
           hostedDomain="scu.edu"
           clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
           buttonText=""
-          onSuccess={info => this.setState({ loading: true }, this.authWithBackEnd(info.tokenObj.id_token, referrer))}
+          onSuccess={(info) => {
+            this.setState(
+              { loading: true },
+              this.authWithBackEnd(info.tokenObj.id_token, referrer),
+            );
+          }}
           // eslint-disable-next-line no-console
           onFailure={err => console.error('Google Login Error: ', err)}
           className="btn"
