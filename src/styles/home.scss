@@ -1,49 +1,59 @@
-@import "theme";
+@import 'theme';
 
-.login {
-  width: 258px; //270px when font-weight is bold
-}
+.home {
+  &.login {
+    width: 258px; //270px when font-weight is bold
 
-.loginBtn {
-  padding: 0;
-  border: 0;
-  color: white;
-  border-radius: $defaultBorderRadius;
-  background: $SCUred;
-  width: 100%;
-  font-weight: 600;
-  height: 51px;
+    .logo {
+      border-radius: $defaultBorderRadius;
+      background: $SCUred;
+      color: white;
+      font-size: 3rem;
+    }
 
-  &:hover {
-    background: $SCUdarkred;
+    .loginBtn {
+      padding: 0;
+      border: 0;
+      color: white;
+      border-radius: $defaultBorderRadius;
+      background: $SCUred;
+      width: 100%;
+      font-weight: 600;
+      height: 51px;
+
+      &:hover {
+        background: $SCUdarkred;
+      }
+
+      img {
+        cursor: pointer;
+        height: 100%;
+        padding: 2px;
+        border-radius: $defaultBorderRadius;
+        width: 47px; //width set for alt text to have container
+      }
+
+      span {
+        cursor: pointer;
+        font-size: 19px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        height: 100%;
+      }
+    }
   }
 
-  img {
-    cursor: pointer;
-    height: 100%;
-    padding: 2px;
-    border-radius: $defaultBorderRadius;
-    width: 47px; //width set for alt text to have container
+  .title {
+    font-weight: bold;
+    color: $SCUred;
   }
 
-  span {
-    cursor: pointer;
-    font-size: 19px;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    height: 100%;
+  .linkBtns {
+    margin: 0 -7.5px;
+
+    a {
+      margin: 7.5px;
+    }
   }
-}
-
-h1 {
-  border-radius: $defaultBorderRadius;
-  background: $SCUred;
-  color: white;
-  font-size: 3rem;
-}
-
-.title {
-  font-weight: bold;
-  color: $SCUred;
 }

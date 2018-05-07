@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import {reducer as formReducer} from 'redux-form';
+import { reducer as formReducer } from 'redux-form';
 import userInfoReducer from './reducer_userInfo';
 import searchResultsReducer from './reducer_searchResults';
 import majorsListReducer from './reducer_majorsList';
@@ -16,7 +16,7 @@ const rootReducer = combineReducers({
   quartersList: quartersListReducer,
   departmentsList: departmentsListReducer,
   professorsList: professorsListReducer,
-  coursesList: coursesListReducer
+  coursesList: coursesListReducer,
 });
 
 export default rootReducer;

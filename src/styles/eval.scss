@@ -1,4 +1,10 @@
-@import "theme";
+@import 'theme';
+//breakpoints for scores
+$xlBP: 5;
+$lgBP: 5;
+$mdBP: 5;
+$smBP: 3;
+$xsBP: 2;
 
 $voteWidth: 50px;
 
@@ -62,17 +68,21 @@ $voteWidth: 50px;
   }
 
   :global(.slick-dots) {
+    background: $sandColor;
+    border-bottom: 1px solid $backgroundColor;
     margin: 0;
-    padding: 0;
     position: static;
-    background: white;
+    padding: 5px 0;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
 
     li {
-      display: inline;
-      padding: 3px;
+      display: inline-block;
+      padding: 0 3px;
 
       button {
-        display: inline-block;
+        display: block;
         width: 15px;
         height: 15px;
         cursor: pointer;
@@ -80,8 +90,8 @@ $voteWidth: 50px;
         border-radius: 50%;
         color: transparent;
         font-size: 0;
-        background: $backgroundColor;
-        border: 2px solid white;
+        background: white;
+        border: 2px solid $backgroundColor;
 
         &:hover {
           background: $SCUdarkred;
@@ -94,17 +104,23 @@ $voteWidth: 50px;
     }
   }
 
-  .scoreBlock {
-    padding: 5px 0;
+  .scoreBlock,
+  :global(.slick-track) {
+    height: 100%;
+    vertical-align: middle;
+  }
 
-    .scoreTitle {
-      margin-bottom: 5px;
-      font-size: 15px;
+  .scoreBlock {
+    min-width: 100px;
+
+    &:not(:first-of-type) {
+      border-left: 1px solid $backgroundColor;
     }
   }
 
   :global(.slick-list) {
     height: 74px;
+    padding: 5px 0;
     background: $sandColor;
     border-bottom: 1px solid $backgroundColor;
     cursor: grab;
@@ -114,17 +130,47 @@ $voteWidth: 50px;
     }
   }
 
-  :global(.slick-initialized .slick-slide) {
-    padding-bottom: 0;
-  }
-
   :global(.slider.regular:not(.slick-initialized)) {
+    padding: 5px 0;
     border-bottom: 1px solid $backgroundColor;
     background: $sandColor;
+    height: 74px;
+  }
 
-    .scoreBlock {
-      display: inline-block;
-      width: percentage(1 / $xlBP);
+  .scoreBlock:not(.totalScore) {
+    .scoreWrapper {
+      height: 50%;
+      display: flex;
+      align-items: center;
+      position: relative;
+      max-width: 205px;
+      margin: auto;
+
+      .scoreTitle {
+        margin-left: 10px;
+        font-size: 14px;
+      }
+
+      :global(svg.score) {
+        transform: scale(0.66);
+        position: absolute;
+        right: 5px;
+      }
+    }
+  }
+
+  :global(.slider.regular:not(.slick-initialized)) .scoreBlock {
+    display: inline-block;
+    width: percentage(1 / $xlBP);
+  }
+
+  .scoreBlock.totalScore {
+    span {
+      display: block;
+    }
+
+    .scoreWrapper {
+      height: 100%;
     }
   }
 
@@ -139,6 +185,7 @@ $voteWidth: 50px;
       display: flex;
       justify-content: center;
       align-items: center;
+      padding-bottom: 0;
     }
 
     @media (min-width: $sm) {
@@ -170,8 +217,8 @@ $voteWidth: 50px;
 
     .commentQuote {
       text-align: center;
-      margin: 15px;
       position: relative;
+      margin: 15px;
 
       .truncate {
         overflow: hidden;

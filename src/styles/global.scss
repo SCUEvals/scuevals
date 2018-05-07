@@ -1,22 +1,19 @@
-@import "theme";
-
-html {
-  position: relative;
-  height: 100%;
-}
+@import 'theme';
 
 body {
   background: white;
   text-align: center;
-  height: 100%;
-  min-height: 100vh;
   color: $overlayBackground;
   text-overflow: ellipsis;
   font-family: 'Roboto', sans-serif;
+
+  &.ReactModal__Body--open #app {
+    filter: blur(3px);
+  }
 }
 
 body::after {
-  content: "";
+  content: '';
   background-image: url('/images/background.jpg');
   background-repeat: no-repeat;
   background-position: center;
@@ -33,6 +30,15 @@ body::after {
 
 ::selection {
   background: $focusColor;
+}
+
+#push-footer {
+  min-height: calc(100vh - #{$footerHeight});
+  position: relative;
+  padding-right: 0;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 button {
@@ -153,6 +159,10 @@ label:not(:first-child) input[type='radio'] {
   table {
     margin-bottom: 0;
 
+    @media (max-width: $xs) {
+      table-layout: initial;
+    }
+
     td {
       padding: 0;
       vertical-align: middle;
@@ -165,10 +175,6 @@ label:not(:first-child) input[type='radio'] {
     td a,
     th {
       padding: 10px;
-    }
-
-    @media (max-width: $xs) {
-      table-layout: initial;
     }
   }
 }
@@ -190,24 +196,9 @@ label:not(:first-child) input[type='radio'] {
 }
 
 .Select {
-  margin: auto auto 50px;
+  margin: 0 auto;
   max-width: 350px;
   text-align: left;
-
-  &.sort {
-    margin-bottom: 15px;
-    display: inline-block;
-    width: calc(100% - 16px - 4px - 15px); //16px + 2px*2 for border from focusable i + 15px margin-left
-
-    + i {
-      width: 16px;
-      font-size: 24px;
-      margin-left: 15px;
-      margin-top: 5px;
-      vertical-align: top;
-      display: inline-block;
-    }
-  }
 
   &-option {
     border-bottom: 1px solid $backgroundColor;
@@ -262,11 +253,32 @@ label:not(:first-child) input[type='radio'] {
 
     .Select-menu {
       max-height: 205px;
+      overflow-x: hidden;
     }
   }
 
   &.select-error .Select-control {
     border-color: $SCUred !important;
+  }
+}
+
+.sort-wrapper {
+  max-width: 300px;
+  margin: 0 auto 15px auto;
+
+  .Select {
+    margin-bottom: 0;
+    display: inline-block;
+    width: calc(100% - 31px);
+
+    + i {
+      width: 16px;
+      font-size: 24px;
+      margin-left: 15px;
+      margin-top: 5px;
+      vertical-align: top;
+      display: inline-block;
+    }
   }
 }
 
@@ -320,10 +332,6 @@ label:not(:first-child) input[type='radio'] {
       }
     }
   }
-}
-
-#app {
-  height: 100%;
 }
 
 .Select--single > .Select-control .Select-value,
@@ -523,11 +531,11 @@ img {
   border: solid $SCUred;
 }
 
-.popper[data-placement="top"] {
+.popper[data-placement='top'] {
   margin-bottom: 5px;
 }
 
-.popper[data-placement="top"] .popper__arrow {
+.popper[data-placement='top'] .popper__arrow {
   border-width: 5px 5px 0 5px;
   border-left-color: transparent;
   border-right-color: transparent;
@@ -538,11 +546,11 @@ img {
   margin-bottom: 0;
 }
 
-.popper[data-placement="bottom"] {
+.popper[data-placement='bottom'] {
   margin-top: 5px;
 }
 
-.popper[data-placement="bottom"] .popper__arrow {
+.popper[data-placement='bottom'] .popper__arrow {
   border-width: 0 5px 5px 5px;
   border-left-color: transparent;
   border-right-color: transparent;
@@ -553,11 +561,11 @@ img {
   margin-bottom: 0;
 }
 
-.popper[data-placement="right"] {
+.popper[data-placement='right'] {
   margin-left: 5px;
 }
 
-.popper[data-placement="right"] .popper__arrow {
+.popper[data-placement='right'] .popper__arrow {
   border-width: 5px 5px 5px 0;
   border-left-color: transparent;
   border-top-color: transparent;
@@ -568,11 +576,11 @@ img {
   margin-right: 0;
 }
 
-.popper[data-placement="left"] {
+.popper[data-placement='left'] {
   margin-right: 5px;
 }
 
-.popper[data-placement="left"] .popper__arrow {
+.popper[data-placement='left'] .popper__arrow {
   border-width: 5px 0 5px 5px;
   border-top-color: transparent;
   border-right-color: transparent;
@@ -589,6 +597,7 @@ img {
   border-radius: 50%;
   background-color: $SCUred;
   border: 2px solid white !important;
+  cursor: pointer;
 
   &:hover {
     background-color: $SCUdarkred;
@@ -660,8 +669,9 @@ svg.score {
     transform-origin: center;
     animation: score 1s;
     stroke-dasharray: 100.531;
-    stroke: black;
+    stroke: $overlayBackground;
     stroke-width: 3;
+    transition: stroke-dashoffset 1s ease-in-out;
 
     &.score1 {
       stroke-dashoffset: 75.398; // == * -3/4 circumference
@@ -725,17 +735,32 @@ svg.score {
   }
 }
 
-.widget {
-  max-width: 750px;
-  margin: 0 auto;
-  overflow: auto;
-}
-
 .widgetWrapper {
   overflow: auto;
+  margin: 30px 0 15px 0;
 
   .widget {
-    min-width: 478px;
+    min-width: 400px;
+    max-width: 524px;
+    margin-left: auto;
+    margin-right: auto;
+
+    :global(.list-group-item) {
+      padding: 5px 0;
+
+      :global(.flex) {
+        font-size: 14px;
+        margin-top: 6px;
+      }
+
+      circle {
+        transform: rotate(-90deg) scaleY(-1) scale(0.8) !important;
+      }
+
+      text {
+        font-size: 12px !important;
+      }
+    }
   }
 }
 
@@ -751,4 +776,41 @@ svg.score {
 
 .comment-error {
   border: 2px solid $SCUred !important;
+}
+
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 4px dashed;
+  border-top: 4px solid \9;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+
+.dropup .caret,
+.navbar-fixed-bottom .dropdown .caret {
+  border-top: 0;
+  border-bottom: 4px dashed;
+  border-bottom: 4px solid \9;
+  content: '';
+}
+
+.ReactModal__Overlay.ReactModal__Overlay--after-open {
+  z-index: 9999;
+}
+
+.checkbox-group {
+  display: inline-block;
+  text-align: left;
+}
+
+button[aria-expanded=true] .fa-chevron-down {
+  display: none;
+}
+
+button[aria-expanded=false] .fa-chevron-up {
+  display: none;
 }

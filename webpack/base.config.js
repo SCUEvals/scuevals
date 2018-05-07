@@ -47,12 +47,12 @@ const postCSSLoaderOptions = {
 
 
 module.exports = {
-  entry: './src/index.js',
+  entry: ['babel-polyfill', './src/index.jsx'],
 
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
@@ -105,6 +105,10 @@ module.exports = {
         }]
       }
     ]
+  },
+
+  resolve: {
+    extensions: ['.js', '.jsx'],
   },
 
   output: {

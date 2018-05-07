@@ -1,7 +1,17 @@
-@import "theme";
+@import 'theme';
 
-.form-container {
-  max-width: 350px;
-  margin-right: auto !important;
-  margin-left: auto !important;
+.profile {
+  :global(.Select) {
+    margin-bottom: 40px;
+  }
+
+  button[type='submit'] {
+    margin-top: 35px;
+  }
+
+  .form-container {
+    max-width: 350px;
+    margin-right: auto !important;
+    margin-left: auto !important;
+  }
 }

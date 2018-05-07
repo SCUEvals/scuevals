@@ -4,11 +4,10 @@ import ReactGA from 'react-ga';
 import { withRouter } from 'react-router';
 
 class GAListener extends Component {
-
   static propTypes = {
     location: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
-    children: PropTypes.array
+    children: PropTypes.array,
   };
 
   componentDidMount() {
