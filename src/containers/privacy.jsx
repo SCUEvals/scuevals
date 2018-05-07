@@ -36,8 +36,8 @@ const Privacy = (props) => {
       <p>We do not store nor have access to your personal passwords.</p>
       <p>
         Google Analytics collects information anonymously. It reports website trends
-        without identifying individual visitors.  To learn more about Google Analytics
-         and how it uses your data, please visit  <a href="https://google.com/analytics/learn/privacy.html">https://google.com/analytics/learn/privacy.html</a>.
+        without identifying individual visitors. To learn more about Google Analytics
+         and how it uses your data, please visit <a href="https://google.com/analytics/learn/privacy.html">https://google.com/analytics/learn/privacy.html</a>.
       </p>
       <p>
         You can opt out of Google Analytics without affecting how you visit our site –

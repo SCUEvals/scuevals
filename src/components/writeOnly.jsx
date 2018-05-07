@@ -12,13 +12,16 @@ const WriteOnly = (props) => {
       <section>
         <h3 styleName="title">SCU Evals</h3>
         <p>
-          Welcome to the best platform for writing and reading evaluations for professors and courses
-          at Santa Clara University!
+          Welcome to the best platform for writing and reading evaluations for professors and
+          courses at Santa Clara University!
         </p>
         <p>
-          Congratulations on completing that last quarter! In order for us to stay relevant, we always need new evaluations.<br />
-          Therefore, {'we\'re'} asking users to <strong><u>write at least one evaluation per quarter</u></strong> to maintain continued
-          unlimited access to the site. We promise it {'won\'t'} take long!
+          Congratulations on completing that last quarter! In order for us to stay relevant, we
+          always need new evaluations.<br />
+          Therefore, {'we\'re'} asking users {'to '}
+          <strong><u>write at least one evaluation per quarter</u></strong>
+          {' to'} maintain continued unlimited access to the site. We promise it {'won\'t'} take
+          long!
         </p>
         <Link to="/profile">Go to profile</Link>
         <br />
@@ -26,7 +29,8 @@ const WriteOnly = (props) => {
           type="button"
           className="signOutBtn"
           onClick={() => setUserInfo(null)}
-          // no need to push history to '/' since this component part of container Home with route path already '/'
+          /* no need to push history to '/' since this component part of container Home with route
+          path already */
         >
             Sign Out
         </button>

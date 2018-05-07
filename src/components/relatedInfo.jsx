@@ -2,15 +2,40 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import BootstrapTable from 'react-bootstrap-table-next';
+import { departmentsListPT } from '../utils/propTypes';
 
 class RelatedInfo extends Component {
   static propTypes = {
-    departmentsList: PropTypes.object.isRequired,
-    info: PropTypes.array.isRequired,
+    departmentsList: departmentsListPT.isRequired,
+    info: PropTypes.arrayOf(PropTypes.oneOfType([
+      PropTypes.shape({
+        // courses
+        department_id: PropTypes.number,
+        course: PropTypes.string,
+        title: PropTypes.title,
+      }),
+      PropTypes.shape({
+        // professors
+        last_name: PropTypes.string,
+        first_name: PropTypes.string,
+      }),
+    ])),
     type: PropTypes.string.isRequired,
   }
 
-  sortCourseTitles(a, b, order) {
+  static courseFormatter(cell, row) {
+    return <Link to={`/courses/${row.id}`}>{row.course}</Link>;
+  }
+
+  static courseTitleFormatter(cell, row) {
+    return <Link to={`/courses/${row.id}`}>{row.title}</Link>;
+  }
+
+  static nameFormatter(cell, row) {
+    return <Link to={`/professors/${row.id}`}>{row.name}</Link>;
+  }
+
+  static sortCourseTitles(a, b, order) {
     const splitA = a.split(' ');
     const splitB = b.split(' ');
     const aDepartment = splitA[0];
@@ -38,25 +63,13 @@ class RelatedInfo extends Component {
     return aDepartment > bDepartment ? -1 : aDepartment < bDepartment ? 1 : 0;
   }
 
-  courseFormatter(cell, row) {
-    return <Link to={`/courses/${row.id}`}>{row.course}</Link>;
-  }
-
-  courseTitleFormatter(cell, row) {
-    return <Link to={`/courses/${row.id}`}>{row.title}</Link>;
-  }
-
-  nameFormatter(cell, row) {
-    return <Link to={`/professors/${row.id}`}>{row.name}</Link>;
-  }
-
   render() {
     const { type, info, departmentsList } = this.props;
     const coursesColumns = [
       {
         dataField: 'course',
         text: 'Course',
-        formatter: this.courseFormatter,
+        formatter: RelatedInfo.courseFormatter,
         sort: true,
         sortFunc: this.sortCourseTitles,
         dataAlign: 'center',
@@ -64,7 +77,7 @@ class RelatedInfo extends Component {
       {
         dataField: 'title',
         text: 'Title',
-        formatter: this.courseTitleFormatter,
+        formatter: RelatedInfo.courseTitleFormatter,
         sort: true,
         dataAlign: 'center',
       },
@@ -74,14 +87,15 @@ class RelatedInfo extends Component {
       {
         dataField: 'name',
         text: 'Name',
-        formatter: this.nameFormatter,
+        formatter: RelatedInfo.nameFormatter,
         sort: true,
         dataAlign: 'center',
       },
     ];
 
     const labeledInfo = info.slice();
-    labeledInfo.map((obj) => {
+    /* eslint-disable no-param-reassign */
+    labeledInfo.forEach((obj) => {
       if (type === 'professors') {
         obj.course = `${departmentsList.object[obj.department_id].abbr} ${obj.number}`;
         obj.key = obj.course + obj.title;
@@ -89,12 +103,13 @@ class RelatedInfo extends Component {
         obj.name = `${obj.last_name}, ${obj.first_name}`;
       }
     });
+    /* eslint-enable no-param-reassign */
 
     return (
       type === 'professors' ?
         <div className="widget">
           <BootstrapTable
-            ref={node => this.table = node}
+            ref={node => (this.table = node)}
             data={labeledInfo}
             columns={coursesColumns}
             keyField="key"
@@ -104,9 +119,10 @@ class RelatedInfo extends Component {
             hover
           />
         </div>
-        : <div className="widget">
+        :
+        <div className="widget">
           <BootstrapTable
-            ref={node => this.table = node}
+            ref={node => (this.table = node)}
             data={labeledInfo}
             columns={professorsColumns}
             keyField="name"

@@ -60,7 +60,6 @@ class SearchContent extends Component {
   }
 
   componentDidMount() {
-    console.log('history', this.props.history);
     /* if loading this component straight from GET request (rather than being routed with
        React Router (action would be PUSH)) */
     if (

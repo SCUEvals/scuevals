@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import { Link } from 'react-router-dom';
+import { historyPT } from '../utils/propTypes';
 
 class RedirectModal extends Component {
   static propTypes = {
-    history: PropTypes.object.isRequired,
+    history: historyPT,
     redirectModalOpen: PropTypes.bool.isRequired,
     submitted: PropTypes.bool,
     classInfoExists: PropTypes.bool,
@@ -22,7 +23,11 @@ class RedirectModal extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.seconds !== this.state.seconds) {
       if (this.state.seconds === 0) this.props.history.replace('/');
-      else setTimeout(() => { if (this.redirectModal) this.setState({ seconds: this.state.seconds - 1 }); }, 1000); // note debounce not appropriate here, new updates shouldn't cancel old debounced function
+      else {
+        setTimeout(() => {
+          if (this.redirectModal) this.setState({ seconds: this.state.seconds - 1 });
+        }, 1000);
+      }
     }
   }
 
@@ -33,9 +38,11 @@ class RedirectModal extends Component {
     const { seconds } = this.state;
     return (
       <ReactModal
-        ref={node => this.redirectModal = node}
+        ref={node => (this.redirectModal = node)}
         isOpen={redirectModalOpen}
-        onAfterOpen={() => setTimeout(() => { if (this.redirectModal) this.setState({ seconds: seconds - 1 }); }, 1000)}
+        onAfterOpen={() => setTimeout(() => {
+          if (this.redirectModal) this.setState({ seconds: seconds - 1 });
+        }, 1000)}
         className="reactModal container"
         appElement={document.getElementById('app')}
       >

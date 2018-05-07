@@ -25,7 +25,7 @@ class TopsWidget extends Component {
     this.state = {
       topProfessors: undefined,
       topCourses: undefined,
-      deptID: props.majorsList ?
+      deptID: props.majorsList && props.userInfo.majors ?
         props.majorsList.object[props.userInfo.majors[0]].departments[0]
         : undefined,
     };
@@ -36,7 +36,7 @@ class TopsWidget extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.majorsList && this.props.majorsList) {
+    if (!prevProps.majorsList && this.props.majorsList && this.props.userInfo.majors) {
       const deptID = this.props.majorsList.object[this.props.userInfo.majors[0]].departments[0];
       this.setState({ deptID }); // eslint-disable-line react/no-did-update-set-state
       this.getDepartmentTops(deptID);

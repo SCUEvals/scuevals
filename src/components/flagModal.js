@@ -11,7 +11,7 @@ class FlagModal extends Component {
   static propTypes = {
     flagModalOpen: PropTypes.bool.isRequired,
     closeFlagModal: PropTypes.func.isRequired,
-    evalId: PropTypes.number,
+    evalID: PropTypes.number,
     handleSubmit: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     submitFailed: PropTypes.bool.isRequired,
@@ -35,7 +35,7 @@ class FlagModal extends Component {
     const {
       OTHER, SPAM, OFFENSIVE, SENSITIVE_INFO,
     } = this.constructor;
-    const { setUserFlagged, closeFlagModal, evalId } = this.props;
+    const { setUserFlagged, closeFlagModal, evalID } = this.props;
     const client = new API();
     const arr = [];
     if (values[OTHER]) arr.push(parseInt(OTHER));
@@ -43,7 +43,7 @@ class FlagModal extends Component {
     if (values[OFFENSIVE]) arr.push(parseInt(OFFENSIVE));
     if (values[SENSITIVE_INFO]) arr.push(parseInt(SENSITIVE_INFO));
     const sendingObj = { reason_ids: arr, comment: values.comment };
-    return client.post(`/evaluations/${evalId}/flag`, sendingObj, () => {
+    return client.post(`/evaluations/${evalID}/flag`, sendingObj, () => {
       setUserFlagged();
       closeFlagModal();
     });
