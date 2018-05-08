@@ -36,10 +36,12 @@ class TopsWidget extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.majorsList && this.props.majorsList && this.props.userInfo.majors) {
-      const deptID = this.props.majorsList.object[this.props.userInfo.majors[0]].departments[0];
-      this.setState({ deptID }); // eslint-disable-line react/no-did-update-set-state
-      this.getDepartmentTops(deptID);
+    if (!prevProps.majorsList && this.props.majorsList) {
+      const deptID = this.props.userInfo.majors ?
+        this.props.majorsList.object[this.props.userInfo.majors[0]].departments[0]
+        : undefined;
+        if (deptID) this.setState({ deptID }); // eslint-disable-line react/no-did-update-set-state
+        this.getDepartmentTops(deptID);
     }
   }
 
