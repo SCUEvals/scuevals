@@ -149,6 +149,7 @@ $voteWidth: 50px;
         margin-left: 10px;
         font-size: 14px;
       }
+      
       /* SCU computers use Firefox v52.7.0 ESR as of 08 Mar 18, which has a bug with positioning.
          Interacting with browser (resizing, disabling and re-enabling CSS features in inspector,
          etc.) fixes this issue, so create animation that mimics this as a fix */

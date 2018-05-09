@@ -8,10 +8,9 @@ export const SET_DEPARTMENTS_LIST = 'set_departments_list';
 export const SET_PROFESSORS_LIST = 'set_professors_list';
 export const SET_COURSES_LIST = 'set_courses_list';
 
-/* Note: May store both object and sorted array since sorting a big array once and storing is more efficient than converting object to array and sorting each render
-  Storing as object to use dot notation for O(1) lookup instead of looking through entire array O(n)
-*/
-
+/* Note: May store both object and sorted array since sorting a big array once and storing is more
+   efficient than converting object to array and sorting each render. Storing as object to use dot
+   notation for O(1) lookup instead of looking through entire array O(n) */
 export function setUserInfoAction(jwt) {
   if (!jwt) localStorage.removeItem('jwt');
   else {
@@ -81,9 +80,13 @@ export function setProfessorsListAction(professorsList) {
 
 export function setCoursesListAction(coursesList, departmentsList) {
   let returnedObj;
-  const coursesListObj = coursesList ? coursesList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
+  const coursesListObj = coursesList ?
+    // eslint-disable-next-line no-param-reassign
+    coursesList.reduce((obj, item) => (obj[item.id] = item, obj), {})
+    : null;
   if (departmentsList) {
     CustomSort('course', coursesList, null, coursesListObj);
+    // eslint-disable-next-line no-param-reassign
     coursesList.map((course) => { course.label = `${departmentsList.object[course.department_id].abbr} ${course.number}: ${course.title}`; return course; });
     returnedObj = { object: coursesListObj, array: coursesList, departmentsListLoaded: true };
   } else returnedObj = { object: coursesListObj, array: coursesList, departmentsListLoaded: false };

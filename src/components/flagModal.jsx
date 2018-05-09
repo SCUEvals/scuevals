@@ -21,35 +21,14 @@ class FlagModal extends Component {
     userFlagged: PropTypes.bool,
   }
 
-  componentDidUpdate(prevProps) {
-    if (!prevProps.flagModalOpen && this.props.flagModalOpen) $('#flagModal input[type="checkbox"]').first().focus();
-  }
-
-  // inputs with only numbers as strings breaks redux form, so add '_val' at end (removed when using parseInt)
+  /* inputs with only numbers as strings breaks redux form, so add '_val' at end (removed when using
+     parseInt) */
   static OTHER = '0_val';
   static SPAM = '1_val';
   static OFFENSIVE = '2_val';
   static SENSITIVE_INFO = '3_val';
 
-  onSubmit(values) {
-    const {
-      OTHER, SPAM, OFFENSIVE, SENSITIVE_INFO,
-    } = this.constructor;
-    const { setUserFlagged, closeFlagModal, evalID } = this.props;
-    const client = new API();
-    const arr = [];
-    if (values[OTHER]) arr.push(parseInt(OTHER));
-    if (values[SPAM]) arr.push(parseInt(SPAM));
-    if (values[OFFENSIVE]) arr.push(parseInt(OFFENSIVE));
-    if (values[SENSITIVE_INFO]) arr.push(parseInt(SENSITIVE_INFO));
-    const sendingObj = { reason_ids: arr, comment: values.comment };
-    return client.post(`/evaluations/${evalID}/flag`, sendingObj, () => {
-      setUserFlagged();
-      closeFlagModal();
-    });
-  }
-
-  renderTextArea(field) {
+  static renderTextArea(field) {
     const { meta: { submitFailed, error } } = field;
     return (
       <TextareaAutoSize
@@ -62,7 +41,7 @@ class FlagModal extends Component {
     );
   }
 
-  renderCheckbox(field) {
+  static renderCheckbox(field) {
     const onKeyDown = (event) => {
       switch (event.keyCode) {
       case 38: { // up
@@ -89,6 +68,8 @@ class FlagModal extends Component {
         }
         break;
       }
+      default:
+        break;
       }
     };
     return (
@@ -96,19 +77,55 @@ class FlagModal extends Component {
     );
   }
 
+  componentDidUpdate(prevProps) {
+    if (!prevProps.flagModalOpen && this.props.flagModalOpen) {
+      $('#flagModal input[type="checkbox"]').first().focus();
+    }
+  }
+
+  onSubmit(values) {
+    const {
+      OTHER, SPAM, OFFENSIVE, SENSITIVE_INFO,
+    } = this.constructor;
+    const { setUserFlagged, closeFlagModal, evalID } = this.props;
+    const client = new API();
+    const arr = [];
+    if (values[OTHER]) arr.push(parseInt(OTHER, 10));
+    if (values[SPAM]) arr.push(parseInt(SPAM, 10));
+    if (values[OFFENSIVE]) arr.push(parseInt(OFFENSIVE, 10));
+    if (values[SENSITIVE_INFO]) arr.push(parseInt(SENSITIVE_INFO, 10));
+    const sendingObj = { reason_ids: arr, comment: values.comment };
+    return client.post(`/evaluations/${evalID}/flag`, sendingObj, () => {
+      setUserFlagged();
+      closeFlagModal();
+    });
+  }
+
   render() {
     const {
-      flagModalOpen, closeFlagModal, handleSubmit, submitting, submitFailed, comment, error, userFlagged,
+      flagModalOpen,
+      closeFlagModal,
+      handleSubmit,
+      submitting,
+      submitFailed,
+      comment,
+      error,
+      userFlagged,
     } = this.props;
     const {
       OTHER, SPAM, OFFENSIVE, SENSITIVE_INFO,
     } = this.constructor;
     return (
-      <ReactModal isOpen={flagModalOpen} className="reactModal container" appElement={document.getElementById('app')}>
+      <ReactModal
+        isOpen={flagModalOpen}
+        className="reactModal container"
+        appElement={document.getElementById('app')}
+      >
         <div id="flagModal" className="modalWrapper">
           <div className="modalHeader">
             <h5>Flag comment</h5>
             <i
+              role="button"
               tabIndex="0"
               className="fa fa-times"
               onClick={closeFlagModal}
@@ -118,40 +135,55 @@ class FlagModal extends Component {
             />
           </div>
           <div className="modalBlock">
-            <p style={{
-              fontStyle: 'italic', maxHeight: '53px', overflow: 'auto', padding: '0 15px',
-            }}
-            >{comment}
+            <p
+              style={{
+                fontStyle: 'italic',
+                maxHeight: '53px',
+                overflow: 'auto',
+                padding: '0 15px',
+              }}
+            >
+              {comment}
             </p>
             <hr />
             {userFlagged ?
               'You have already flagged this evaluation.'
               :
               <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-                <p>To flag an evaluation, please fill the form below and we will do our best to take appropriate action if deemed necessary.</p>
+                <p>
+                  To flag an evaluation, please fill the form below and we will do our best to take
+                  appropriate action if deemed necessary.
+                </p>
                 <hr />
                 <div style={{ marginBottom: '15px' }}>
-                  <span style={{ fontSize: '1.1rem', padding: '5px', marginBottom: '5px' }} className={error && submitFailed ? 'error' : 'no-error'}>
+                  <span
+                    style={{ fontSize: '1.1rem', padding: '5px', marginBottom: '5px' }}
+                    className={error && submitFailed ? 'error' : 'no-error'}
+                  >
                     Check all boxes that apply
                   </span>
                 </div>
                 <div className="checkbox-group">
-                  <Field name={SPAM} component={this.renderCheckbox} text="Spam" />
+                  <Field name={SPAM} component={FlagModal.renderCheckbox} text="Spam" />
                   <br />
-                  <Field name={OFFENSIVE} component={this.renderCheckbox} text="Offensive" />
+                  <Field name={OFFENSIVE} component={FlagModal.renderCheckbox} text="Offensive" />
                   <br />
-                  <Field name={SENSITIVE_INFO} component={this.renderCheckbox} text="Sensitive Info" />
+                  <Field name={SENSITIVE_INFO} component={FlagModal.renderCheckbox} text="Sensitive Info" />
                   <br />
-                  <Field name={OTHER} component={this.renderCheckbox} text="Other" />
+                  <Field name={OTHER} component={FlagModal.renderCheckbox} text="Other" />
                 </div>
                 <br />
-                <Field name="comment" onChange={e => this.setState({ term: e.target.value })} component={this.renderTextArea} />
+                <Field
+                  name="comment"
+                  component={FlagModal.renderTextArea}
+                />
                 <button
                   disabled={submitting}
                   type="submit"
                   className="btn"
                   onKeyDown={(event) => {
-                    if (event.keyCode === 38) /* up */ $('#flagModal textarea').focus();
+                    // up
+                    if (event.keyCode === 38) $('#flagModal textarea').focus();
                   }}
                 >
                   {submitting ? 'Submitting...' : 'Submit'}
@@ -167,7 +199,13 @@ class FlagModal extends Component {
 
 const validate = (values) => {
   const errors = {};
-  if (!values[FlagModal.OTHER] && !values[FlagModal.SPAM] && !values[FlagModal.OFFENSIVE] && !values[FlagModal.SENSITIVE_INFO]) errors._error = 'Must select at least one'; // must be _error (supported in redux form API)
+  if (
+    !values[FlagModal.OTHER]
+    && !values[FlagModal.SPAM]
+    && !values[FlagModal.OFFENSIVE]
+    && !values[FlagModal.SENSITIVE_INFO]
+    // eslint-disable-next-line no-underscore-dangle
+  ) errors._error = 'Must select at least one'; // must be _error (supported in redux form API)
   else if (values[FlagModal.OTHER] && !values.comment) errors.comment = 'Must describe other reason';
   return errors;
 };
