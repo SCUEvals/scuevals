@@ -40,8 +40,8 @@ class TopsWidget extends Component {
       const deptID = this.props.userInfo.majors ?
         this.props.majorsList.object[this.props.userInfo.majors[0]].departments[0]
         : undefined;
-        if (deptID) this.setState({ deptID }); // eslint-disable-line react/no-did-update-set-state
-        this.getDepartmentTops(deptID);
+      if (deptID) this.setState({ deptID }); // eslint-disable-line react/no-did-update-set-state
+      this.getDepartmentTops(deptID);
     }
   }
 
@@ -84,8 +84,28 @@ class TopsWidget extends Component {
             />
             <nav>
               <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                <a className="nav-item nav-link active" id="nav-professors-tab" data-toggle="tab" href="#nav-professors" role="tab" aria-controls="nav-professors" aria-selected="true">Professors</a>
-                <a className="nav-item nav-link" id="nav-courses-tab" data-toggle="tab" href="#nav-courses" role="tab" aria-controls="nav-courses" aria-selected="false">Courses</a>
+                <a
+                  className="nav-item nav-link active"
+                  id="nav-professors-tab"
+                  data-toggle="tab"
+                  href="#nav-professors"
+                  role="tab"
+                  aria-controls="nav-professors"
+                  aria-selected="true"
+                >
+                  Professors
+                </a>
+                <a
+                  className="nav-item nav-link"
+                  id="nav-courses-tab"
+                  data-toggle="tab"
+                  href="#nav-courses"
+                  role="tab"
+                  aria-controls="nav-courses"
+                  aria-selected="false"
+                >
+                  Courses
+                </a>
               </div>
               <small>Scale is 1-4</small>
             </nav>
@@ -96,19 +116,44 @@ class TopsWidget extends Component {
                 </div>
                 :
                 <Fragment>
-                  <ul className="list-group tab-pane fade show active" id="nav-professors" role="tabpanel" aria-labelledby="nav-professors-tab">
+                  <ul
+                    className="list-group tab-pane fade show active"
+                    id="nav-professors"
+                    role="tabpanel"
+                    aria-labelledby="nav-professors-tab"
+                  >
                     {topProfessors.map((obj) => {
                       const totalScore = obj.avg_score.toFixed(1);
-                      const totalScoreStyle = { strokeDashoffset: TopsWidget.calculatePath(totalScore) };
-                      const totalScoreClass = `score${totalScore < 1.75 ? '1' : totalScore < 2.5 ? '2' : totalScore < 3.25 ? '3' : '4'}`;
+                      const totalScoreStyle = {
+                        strokeDashoffset: TopsWidget.calculatePath(totalScore),
+                      };
+                      const totalScoreClass = `score${totalScore < 1.75 ?
+                        '1'
+                        : totalScore < 2.5 ?
+                          '2'
+                          : totalScore < 3.25 ?
+                            '3'
+                            : '4'
+                      }`;
                       return (
-                        <li key={obj.professor.id} className="list-group-item d-flex justify-content-between align-items-center">
+                        <li
+                          key={obj.professor.id}
+                          className="list-group-item d-flex justify-content-between align-items-center"
+                        >
                           <div className="flex col-10">
-                            <Link to={`/professors/${obj.professor.id}`} >{obj.professor.last_name}, {obj.professor.first_name}</Link>
+                            <Link to={`/professors/${obj.professor.id}`} >
+                              {obj.professor.last_name}, {obj.professor.first_name}
+                            </Link>
                           </div>
                           <div className="flex col-2">
                             <svg className="score">
-                              <circle style={totalScoreStyle} cx="18" cy="18" r="16" className={totalScoreClass} />
+                              <circle
+                                style={totalScoreStyle}
+                                cx="18"
+                                cy="18"
+                                r="16"
+                                className={totalScoreClass}
+                              />
                               <text x="50%" y="50%">
                                 {totalScore}
                               </text>
@@ -119,11 +164,25 @@ class TopsWidget extends Component {
                     })}
                     {topProfessors.length === 0 && (<small>Not enough data</small>)}
                   </ul>
-                  <ul className="list-group tab-pane fade" id="nav-courses" role="tabpanel" aria-labelledby="nav-courses-tab">
+                  <ul
+                    className="list-group tab-pane fade"
+                    id="nav-courses"
+                    role="tabpanel"
+                    aria-labelledby="nav-courses-tab"
+                  >
                     {topCourses.map((obj) => {
                       const totalScore = obj.avg_score.toFixed(1);
-                      const totalScoreStyle = { strokeDashoffset: TopsWidget.calculatePath(totalScore) };
-                      const totalScoreClass = `score${totalScore < 1.75 ? '1' : totalScore < 2.5 ? '2' : totalScore < 3.25 ? '3' : '4'}`;
+                      const totalScoreStyle = {
+                        strokeDashoffset: TopsWidget.calculatePath(totalScore),
+                      };
+                      const totalScoreClass = `score${totalScore < 1.75 ?
+                        '1'
+                        : totalScore < 2.5 ?
+                          '2'
+                          : totalScore < 3.25 ?
+                            '3'
+                            : '4'
+                      }`;
                       return (
                         <li key={obj.course.id} className="list-group-item d-flex justify-content-between align-items-center">
                           <div className="flex col-10">

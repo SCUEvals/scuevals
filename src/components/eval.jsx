@@ -69,8 +69,8 @@ class Eval extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userVote: this.props.evaluation.userVote,
-      userFlagged: this.props.evaluation.userFlagged,
+      userVote: this.props.evaluation.user_vote,
+      userFlagged: this.props.evaluation.user_flagged,
       expanded: false,
       truncated: false,
     };
@@ -130,7 +130,7 @@ class Eval extends Component {
     const {
       userVote, userFlagged, expanded, truncated,
     } = this.state;
-    const { votesScore } = evaluation;
+    const votesScore = evaluation.votes_score;
     const {
       attitude,
       availability,
@@ -402,9 +402,7 @@ class Eval extends Component {
                       () => this.setState({ userFlagged: true }),
                     )}
                     onKeyPress={(event) => {
-                      if (event.key === 'Enter') {
-                        openFlagModal(evaluation.data.comment, null, evaluation.id);
-                      }
+                      if (event.key === 'Enter') event.target.click();
                     }}
                   />
                 }

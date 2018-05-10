@@ -20,7 +20,11 @@ class SearchContent extends Component {
   }
 
   static courseNumberFormatter(cell, row, departmentsList) {
-    return <Link to={`/courses/${row.id}`}>{departmentsList.object[row.department_id].abbr} {row.number}</Link>;
+    return (
+      <Link to={`/courses/${row.id}`}>
+        {departmentsList.object[row.department_id].abbr} {row.number}
+      </Link>
+    );
   }
 
   static courseTitleFormatter(cell, row) {
@@ -204,7 +208,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   setSearchResults: setSearchResultsAction,
-}
+};
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchContent);

@@ -32,7 +32,7 @@ Checkbox.propTypes = {
   field: PropTypes.shape({
     text: PropTypes.string.isRequired,
     input: PropTypes.shape({
-        name: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
     }).isRequired,
   }),
   onKeyDown: PropTypes.func,

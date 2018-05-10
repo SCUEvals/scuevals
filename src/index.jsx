@@ -28,7 +28,7 @@ import history from './components/history';
 import API from './services/api';
 import { setUserInfoAction } from './actions';
 
-import './styles/global.scss?global';
+import './styles/global.scss?global'; // eslint-disable-line import/no-unresolved
 
 export const INCOMPLETE = 0;
 export const READ_EVALUATIONS = 1;

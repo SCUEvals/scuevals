@@ -38,7 +38,14 @@ const About = (props) => {
       <hr />
       <div className="row">
         <div className="col-sm-6">
-          <button className="btn" type="button" data-toggle="collapse" data-target="#webAppDesc" aria-expanded="false" aria-controls="webAppDesc">
+          <button
+            className="btn"
+            type="button"
+            data-toggle="collapse"
+            data-target="#webAppDesc"
+            aria-expanded="false"
+            aria-controls="webAppDesc"
+          >
             Front-End Info <i className="fa fa-chevron-down" /><i className="fa fa-chevron-up" />
             <br />
           </button>
@@ -70,7 +77,14 @@ const About = (props) => {
           </div>
         </div>
         <div className="col-sm-6">
-          <button className="btn" type="button" data-toggle="collapse" data-target="#databaseDesc" aria-expanded="false" aria-controls="databaseDesc">
+          <button
+            className="btn"
+            type="button"
+            data-toggle="collapse"
+            data-target="#databaseDesc"
+            aria-expanded="false"
+            aria-controls="databaseDesc"
+          >
             Back-End Info <i className="fa fa-chevron-down" /><i className="fa fa-chevron-up" />
             <br />
           </button>

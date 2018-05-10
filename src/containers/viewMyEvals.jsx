@@ -14,18 +14,24 @@ import {
   setDepartmentsListAction,
   setProfessorsListAction,
   setQuartersListAction,
-  setCoursesListAction
+  setCoursesListAction,
 } from '../actions';
 import CustomSort from '../utils/customSort';
-
+import {
+  quartersListPT,
+  coursesListPT,
+  departmentsListPT,
+  professorsListPT,
+  userInfoPT,
+} from '../utils/propTypes';
 
 class ViewMyEvals extends Component {
   static propTypes = {
-    userInfo: PropTypes.object.isRequired,
-    quartersList: PropTypes.object,
-    coursesList: PropTypes.object,
-    departmentsList: PropTypes.object,
-    professorsList: PropTypes.object,
+    userInfo: userInfoPT.isRequired,
+    quartersList: quartersListPT,
+    coursesList: coursesListPT,
+    departmentsList: departmentsListPT,
+    professorsList: professorsListPT,
     setDepartmentsList: PropTypes.func.isRequired,
     setQuartersList: PropTypes.func.isRequired,
     setCoursesList: PropTypes.func.isRequired,
@@ -76,8 +82,8 @@ class ViewMyEvals extends Component {
     }
   }
 
- /* if coursesList fetched before departmentsList, then need to retroactively search for
-  department name from id and sort */
+  /* if coursesList fetched before departmentsList, then need to retroactively search for
+     department name from id and sort */
   componentDidUpdate() {
     if (this.props.coursesList
       && !this.props.coursesList.departmentsListLoaded
@@ -127,7 +133,7 @@ class ViewMyEvals extends Component {
             const client = new API();
             client.delete(
               `/evaluations/${deleteModal.eval_id}`,
-              () => ReactGA.event({ category: 'Evaluation', action: 'Deleted' })
+              () => ReactGA.event({ category: 'Evaluation', action: 'Deleted' }),
             );
             for (let i = 0; i < myEvalsList.length; i++) {
               if (myEvalsList[i].id === deleteModal.eval_id) {
