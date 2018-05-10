@@ -120,7 +120,7 @@ class SearchBar extends Component {
       const client = new API();
       client.get(
         '/search', (responseData) => {
-          responseData.term = searchVal; // eslint-disable-line no-param-reassign
+          responseData.term = searchVal;
           CustomSort('professor', responseData.professors);
           CustomSort('course', responseData.courses);
           setSearchResultsFunc(responseData);
@@ -296,7 +296,7 @@ class SearchBar extends Component {
         setSearchResults(tempResponse);
         SearchBar.getResponse(values.search, (response) => {
           response.forceUpdate = true;
-          response.term = values.search; // eslint-disable-line no-param-reassign
+          response.term = values.search;
           setSearchResults(response);
         });
       }
@@ -311,7 +311,7 @@ class SearchBar extends Component {
         this.setState({ loading: true }, () => client.get(
           '/search', (responseData) => {
             if (this.form) {
-              responseData.term = searchVal; // eslint-disable-line no-param-reassign
+              responseData.term = searchVal;
               CustomSort('professor', responseData.professors);
               CustomSort('course', responseData.courses);
               setSearchResultsFunc(responseData);

@@ -55,3 +55,14 @@ export const searchResultsPT = PropTypes.shape({
   courses: PropTypes.array,
   professors: PropTypes.array,
 });
+
+export const evaluationPT = PropTypes.shape({
+  author: PropTypes.object,
+  data: PropTypes.object,
+  id: PropTypes.number,
+  post_time: PropTypes.string,
+  quarter_id: PropTypes.number,
+  user_flagged: PropTypes.bool,
+  version: PropTypes.number,
+  votes_score: PropTypes.number,
+});

@@ -36,7 +36,9 @@ export function setSearchResultsAction(results) {
 }
 
 export function setMajorsListAction(majorsList) {
-  const majorsListObj = majorsList ? majorsList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
+  const majorsListObj = majorsList ?
+    convertArrToObj(majorsList)
+    : null;
   CustomSort('major', majorsList, null, majorsListObj);
   const returnedObj = { object: majorsListObj, array: majorsList };
   return {
@@ -47,8 +49,12 @@ export function setMajorsListAction(majorsList) {
 
 
 export function setQuartersListAction(quartersList) {
-  quartersList.map((quarter) => { quarter.label = `${quarter.name} ${quarter.year}`; return quarter; });
-  const quartersListObj = quartersList ? quartersList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
+  quartersList.forEach((quarter) => {
+    quarter.label = `${quarter.name} ${quarter.year}`;
+  });
+  const quartersListObj = quartersList ?
+    convertArrToObj(quartersList)
+    : null;
   CustomSort('quarter', quartersList);
   const returnedObj = { object: quartersListObj, array: quartersList };
   return {
@@ -58,7 +64,9 @@ export function setQuartersListAction(quartersList) {
 }
 
 export function setDepartmentsListAction(departmentsList) {
-  const departmentsListObj = departmentsList ? departmentsList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
+  const departmentsListObj = departmentsList ?
+    convertArrToObj(departmentsList)
+    : null;
   CustomSort('department', departmentsList, null, departmentsListObj);
   const returnedObj = { object: departmentsListObj, array: departmentsList };
   return {
@@ -68,8 +76,12 @@ export function setDepartmentsListAction(departmentsList) {
 }
 
 export function setProfessorsListAction(professorsList) {
-  professorsList.map((professor) => { professor.label = `${professor.last_name}, ${professor.first_name}`; });
-  const professorsListObj = professorsList ? professorsList.reduce((obj, item) => (obj[item.id] = item, obj), {}) : null;
+  professorsList.forEach((professor) => {
+    professor.label = `${professor.last_name}, ${professor.first_name}`;
+  });
+  const professorsListObj = professorsList ?
+    convertArrToObj(professorsList)
+    : null;
   CustomSort('professor', professorsList);
   const returnedObj = { object: professorsListObj, array: professorsList };
   return {
@@ -81,17 +93,24 @@ export function setProfessorsListAction(professorsList) {
 export function setCoursesListAction(coursesList, departmentsList) {
   let returnedObj;
   const coursesListObj = coursesList ?
-    // eslint-disable-next-line no-param-reassign
-    coursesList.reduce((obj, item) => (obj[item.id] = item, obj), {})
+    convertArrToObj(coursesList)
     : null;
   if (departmentsList) {
     CustomSort('course', coursesList, null, coursesListObj);
-    // eslint-disable-next-line no-param-reassign
-    coursesList.map((course) => { course.label = `${departmentsList.object[course.department_id].abbr} ${course.number}: ${course.title}`; return course; });
+    coursesList.forEach((course) => {
+      course.label = `${departmentsList.object[course.department_id].abbr} ${course.number}: ${course.title}`;
+    });
     returnedObj = { object: coursesListObj, array: coursesList, departmentsListLoaded: true };
   } else returnedObj = { object: coursesListObj, array: coursesList, departmentsListLoaded: false };
   return {
     type: SET_COURSES_LIST,
     payload: returnedObj,
   };
+}
+
+function convertArrToObj(arr) {
+  return arr.reduce((obj, item) => {
+    obj[item.id] = item;
+    return obj;
+  }, {});
 }

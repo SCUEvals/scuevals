@@ -136,12 +136,10 @@ class SearchContent extends Component {
     ];
     const labeledSearchResults = searchResults ? Object.assign({}, searchResults) : null;
     if (searchResults && departmentsList) {
-      /* eslint-disable no-param-reassign */
       labeledSearchResults.courses.forEach((obj) => {
         obj.course = `${departmentsList.object[obj.department_id].abbr} ${obj.number}`;
       });
       labeledSearchResults.professors.forEach(obj => (obj.name = `${obj.last_name}, ${obj.first_name}`));
-      /* eslint-enable no-params-reassign */
     }
 
     $('#searchBarResults').hide();

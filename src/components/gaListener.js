@@ -18,7 +18,7 @@ class GAListener extends Component {
 
   componentDidMount() {
     GAListener.sendPageView(this.props.location);
-    this.props.history.listen(this.sendPageView);
+    this.props.history.listen(GAListener.sendPageView);
   }
 
   render() {

@@ -303,7 +303,6 @@ class FilterViewEvals extends Component {
       this.setState({ localQuartersList: null }, () => client.get('/quarters', (quarters) => {
         if (this.filterViewEvals) {
           CustomSort('quarter', quarters);
-          // eslint-disable-next-line no-param-reassign
           quarters.map(quarter => (quarter.label = `${quarter.name} ${quarter.year}`));
           this.setState({ localQuartersList: quarters });
         }
@@ -313,7 +312,6 @@ class FilterViewEvals extends Component {
       this.setState({ localCoursesList: null }, () => client.get('/courses', (courses) => {
         if (this.filterViewEvals) {
           CustomSort('course', courses);
-          // eslint-disable-next-line no-param-reassign
           courses.map(course => (course.label = `${departmentsList.object[course.department_id].abbr} ${course.number}: ${course.title}`));
 
           this.setState({ localCoursesList: courses });
@@ -323,7 +321,6 @@ class FilterViewEvals extends Component {
     case 'professor':
       this.setState({ localProfessorsList: null }, () => client.get('/professors', (professors) => {
         if (this.filterViewEvals) {
-          // eslint-disable-next-line no-param-reassign
           professors.map(professor => (professor.label = `${professor.last_name}, ${professor.first_name}`));
           CustomSort('professor', professors);
           this.setState({ localProfessorsList: professors });
