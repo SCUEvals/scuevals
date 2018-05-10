@@ -8,20 +8,22 @@ import Truncate from 'react-truncate';
 import API from '../services/api';
 import '../styles/eval.scss';
 import calcTotalScore from '../utils/calcTotalScore';
+import { evaluationPT } from '../utils/propTypes';
+
 
 class Eval extends Component {
   static propTypes = {
     openDeleteModal: PropTypes.func.isRequired,
     openFlagModal: PropTypes.func,
-    evaluation: PropTypes.object.isRequired,
+    evaluation: evaluationPT.isRequired,
     updateScore: PropTypes.func,
     userString: PropTypes.string,
     quarter: PropTypes.string,
     department: PropTypes.string,
-    lines: PropTypes.number.isRequired,
-    more: PropTypes.string.isRequired,
-    less: PropTypes.string.isRequired,
-    vote_access: PropTypes.bool,
+    lines: PropTypes.number,
+    more: PropTypes.string,
+    less: PropTypes.string,
+    voteAccess: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -30,11 +32,45 @@ class Eval extends Component {
     less: 'Show less',
   }
 
+  static calculatePath(n) { // circumference = 100.53
+    return 100.53 - ((n / 4) * 100.53);
+  }
+
+  static calculateAverageColor(value) { // returns classNames that define colors of svg circles
+    return value < 1.75 ? 'score1'
+      : value < 2.5 ? 'score2'
+      : value < 3.25 ? 'score3'
+      : 'score4';
+  }
+
+  static renderScore(name, value) {
+    const avgClass = Eval.calculateAverageColor(value);
+    let style;
+    if (name === 'Score') style = { strokeDashoffset: Eval.calculatePath(value) };
+    return (
+      <div styleName="scoreWrapper">
+        <span key="scoreTitle" styleName="scoreTitle">{name}</span>
+        <svg key="score" className="score">
+          <circle
+            style={style}
+            cx="18"
+            cy="18"
+            r="16"
+            className={avgClass}
+          />
+          <text x="50%" y="50%">
+            {value}
+          </text>
+        </svg>
+      </div>
+    );
+  }
+
   constructor(props) {
     super(props);
     this.state = {
-      user_vote: this.props.evaluation.user_vote,
-      user_flagged: this.props.evaluation.user_flagged,
+      userVote: this.props.evaluation.user_vote,
+      userFlagged: this.props.evaluation.user_flagged,
       expanded: false,
       truncated: false,
     };
@@ -45,33 +81,14 @@ class Eval extends Component {
     if (this.state.truncated !== truncated) this.setState({ truncated });
   }
 
-  calculatePath(n) { // circumference = 100.53
-    return 100.53 - (n / 4 * 100.53);
-  }
-
-  renderScore(name, value) {
-    let style;
-    if (name === 'Score') style = { strokeDashoffset: this.calculatePath(value) };
-    return (
-      <div styleName="scoreWrapper">
-        <span key="scoreTitle" styleName="scoreTitle">{name}</span>
-        <svg key="score" className="score">
-          <circle style={style} cx="18" cy="18" r="16" className={`score${value < 1.75 ? '1' : value < 2.5 ? '2' : value < 3.25 ? '3' : '4'}`} />
-          <text x="50%" y="50%">
-            {value}
-          </text>
-        </svg>
-      </div>
-    );
-  }
-
   collapseComment(element) {
     // set height to get ready for transition
     element.style.height = `${element.getBoundingClientRect().height}px`;
     requestAnimationFrame(() => {
       element.style.height = '72px';
     });
-    // no need to add event listener to remove height after transition, won't affect anything to have height still in-line
+    /* no need to add event listener to remove height after transition, won't affect anything to
+       have height still in-line */
     this.setState({ expanded: false });
   }
 
@@ -98,14 +115,31 @@ class Eval extends Component {
 
   render() {
     const {
-      vote_access, evaluation, openDeleteModal, openFlagModal, quarter, department, updateScore, userString, more, less, lines,
+      voteAccess,
+      evaluation,
+      openDeleteModal,
+      openFlagModal,
+      quarter,
+      department,
+      updateScore,
+      userString,
+      more,
+      less,
+      lines,
     } = this.props;
     const {
-      user_vote, user_flagged, expanded, truncated,
+      userVote, userFlagged, expanded, truncated,
     } = this.state;
-    const { votes_score } = evaluation;
+    const votesScore = evaluation.votes_score;
     const {
-      attitude, availability, clarity, easiness, grading_speed, recommended, resourcefulness, workload,
+      attitude,
+      availability,
+      clarity,
+      easiness,
+      grading_speed, // eslint-disable-line camelcase
+      recommended,
+      resourcefulness,
+      workload,
     } = evaluation.data;
     const totalScore = calcTotalScore(evaluation.data);
     const settings = { // set speed = slidesToShow * 75
@@ -149,49 +183,56 @@ class Eval extends Component {
           },
         },
         {
-          breakpoint: 999999999, // anything bigger than 1200 (no way to set default behavior for unslick)
+          // anything bigger than 1200 (no way to set default behavior for unslick)
+          breakpoint: 999999999,
           settings: 'unslick',
         },
       ],
     };
-    const votesFontSize = votes_score > 999 ? // make score smaller to prevent overflow
-      votes_score > 9999 ?
-        votes_score > 99999 ?
+    const votesFontSize = votesScore > 999 ? // make score smaller to prevent overflow
+      votesScore > 9999 ?
+        votesScore > 99999 ?
           9
           : 11
         : 15
       : 18;
     const showBtnStyle = !truncated && !expanded ? { display: 'none' } : {};
-
     return (
       <div styleName="eval">
         <div styleName="vote">
-          {vote_access && evaluation.author && !evaluation.author.self && (
+          {voteAccess && evaluation.author && !evaluation.author.self && (
             <i
+              role="button"
               tabIndex="0"
-              styleName={user_vote === 'u' ? 'active' : ''}
+              styleName={userVote === 'u' ? 'active' : ''}
               className="fa fa-thumbs-up"
-              onClick={user_vote === 'u' ?
+              onClick={userVote === 'u' ?
                 () => {
                   const client = new API();
-                  client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({ category: 'Vote', action: 'Deleted' }));
-                  updateScore(votes_score - 1);
+                  client.delete(
+                    `/evaluations/${evaluation.id}/vote`,
+                    () => ReactGA.event({ category: 'Vote', action: 'Deleted' }),
+                  );
+                  updateScore(votesScore - 1);
                   this.setState({
-                    user_vote: null,
+                    userVote: null,
                   });
                 }
-                : () => { // user_vote 'd' or not voted
+                : () => { // userVote 'd' or not voted
                   const client = new API();
-                  client.put(`/evaluations/${evaluation.id}/vote`, 'u', () => ReactGA.event({ category: 'Vote', action: 'Added' }));
-                  if (user_vote == 'd') {
-                    updateScore(votes_score + 2);
+                  client.put(
+                    `/evaluations/${evaluation.id}/vote`, 'u',
+                    () => ReactGA.event({ category: 'Vote', action: 'Added' }),
+                  );
+                  if (userVote === 'd') {
+                    updateScore(votesScore + 2);
                     this.setState({
-                      user_vote: 'u',
+                      userVote: 'u',
                     });
                   } else {
-                    updateScore(votes_score + 1);
+                    updateScore(votesScore + 1);
                     this.setState({
-                      user_vote: 'u',
+                      userVote: 'u',
                     });
                   }
                 }}
@@ -201,33 +242,40 @@ class Eval extends Component {
 
             />
           )}
-          <span style={{ fontSize: `${votesFontSize}px` }} styleName="voteScore">{votes_score}</span>
-          {vote_access && evaluation.author && !evaluation.author.self ?
+          <span style={{ fontSize: `${votesFontSize}px` }} styleName="voteScore">{votesScore}</span>
+          {voteAccess && evaluation.author && !evaluation.author.self ?
             <i
+              role="button"
               tabIndex="0"
-              styleName={user_vote === 'd' ? 'active' : ''}
+              styleName={userVote === 'd' ? 'active' : ''}
               className="fa fa-thumbs-down"
-              onClick={user_vote === 'd' ?
+              onClick={userVote === 'd' ?
                 () => {
                   const client = new API();
-                  client.delete(`/evaluations/${evaluation.id}/vote`, () => ReactGA.event({ category: 'Vote', action: 'Deleted' }));
-                  updateScore(votes_score + 1);
+                  client.delete(
+                    `/evaluations/${evaluation.id}/vote`,
+                    () => ReactGA.event({ category: 'Vote', action: 'Deleted' }),
+                  );
+                  updateScore(votesScore + 1);
                   this.setState({
-                    user_vote: null,
+                    userVote: null,
                   });
                 }
-                : () => { // user_vote 1 or null
+                : () => { // userVote 1 or null
                   const client = new API();
-                  client.put(`/evaluations/${evaluation.id}/vote`, 'd', () => ReactGA.event({ category: 'Vote', action: 'Added' }));
-                  if (user_vote === 'u') {
-                    updateScore(votes_score - 2);
+                  client.put(
+                    `/evaluations/${evaluation.id}/vote`, 'd',
+                    () => ReactGA.event({ category: 'Vote', action: 'Added' }),
+                  );
+                  if (userVote === 'u') {
+                    updateScore(votesScore - 2);
                     this.setState({
-                      user_vote: 'd',
+                      userVote: 'd',
                     });
                   } else {
-                    updateScore(votes_score - 1);
-                    this.setState({ // /user_vote null
-                      user_vote: 'd',
+                    updateScore(votesScore - 1);
+                    this.setState({ // /userVote null
+                      userVote: 'd',
                     });
                   }
                 }}
@@ -238,7 +286,7 @@ class Eval extends Component {
             : ''}
         </div>
         <div styleName="evalContent">
-          {evaluation.course && evaluation.professor ? // for viewing own evals on viewMyEvals, both sent
+          {evaluation.course && evaluation.professor ? // for viewing own evals on viewMyEvals
             <div styleName="evalInfo" className="row">
               <div styleName="col-sm-custom" className="col-12 col-md-2">
                 {quarter}
@@ -268,28 +316,28 @@ class Eval extends Component {
           }
           <Slider {...settings}>
             <div styleName="scoreBlock totalScore">
-              {this.renderScore('Score', totalScore)}
+              {Eval.renderScore('Score', totalScore)}
             </div>
             <div styleName="scoreBlock">
-              {this.renderScore('Recommend?', recommended)}
-              {this.renderScore('Easiness', easiness)}
+              {Eval.renderScore('Recommend?', recommended)}
+              {Eval.renderScore('Easiness', easiness)}
             </div>
             <div styleName="scoreBlock">
-              {this.renderScore('Workload', workload)}
-              {this.renderScore('Attitude', attitude)}
+              {Eval.renderScore('Workload', workload)}
+              {Eval.renderScore('Attitude', attitude)}
             </div>
             <div styleName="scoreBlock">
-              {this.renderScore('Availability', availability)}
-              {this.renderScore('Grading Speed', grading_speed)}
+              {Eval.renderScore('Availability', availability)}
+              {Eval.renderScore('Grading Speed', grading_speed)}
             </div>
             <div styleName="scoreBlock">
-              {this.renderScore('Clarity', clarity)}
-              {this.renderScore('Resourcefulness', resourcefulness)}
+              {Eval.renderScore('Clarity', clarity)}
+              {Eval.renderScore('Resourcefulness', resourcefulness)}
             </div>
           </Slider>
           <div styleName="comment">
             <div styleName="commentQuote">
-              <div styleName="truncate" ref={node => this.truncate = node}>
+              <div styleName="truncate" ref={node => (this.truncate = node)}>
                 <Truncate
                   lines={!expanded && lines}
                   onTruncate={this.handleTruncate}
@@ -299,7 +347,9 @@ class Eval extends Component {
                 </Truncate>
               </div>
               {truncated && (<hr styleName="fadeBar" />)}
-              {/* button has display none style if not expandable (not conditionally rendered because if so, then new node created each re-render and unfocuses the button each new render) */}
+              {/* button has display none style if not expandable (not conditionally rendered
+                  because if so, then new node created each re-render and unfocuses the button each
+                  new render) */}
               <button
                 style={showBtnStyle}
                 styleName="showBtn"
@@ -317,21 +367,42 @@ class Eval extends Component {
               <div className="col-xs-12 col-sm-2" styleName="triggerModal">
                 {!evaluation.author || evaluation.author.self ?
                   <i
+                    role="button"
                     className="fa fa-trash"
                     tabIndex="0"
-                    onClick={() => openDeleteModal(evaluation.quarter_id, evaluation.professor ? evaluation.professor.id : evaluation.course.id, evaluation.id)}
+                    onClick={() => openDeleteModal(
+                      evaluation.quarter_id,
+                      evaluation.professor ?
+                        evaluation.professor.id
+                        : evaluation.course.id,
+                      evaluation.id,
+                    )}
                     onKeyPress={(event) => {
-                      if (event.key === 'Enter') openDeleteModal(evaluation.quarter_id, evaluation.professor ? evaluation.professor.id : evaluation.course.id, evaluation.id);
+                      if (event.key === 'Enter') {
+                        openDeleteModal(
+                          evaluation.quarter_id,
+                          evaluation.professor ?
+                            evaluation.professor.id
+                            : evaluation.course.id,
+                          evaluation.id,
+                        );
+                      }
                     }}
                   />
                   :
                   <i
+                    role="button"
                     className="fa fa-flag"
-                    styleName={user_flagged ? 'flagged' : ''}
+                    styleName={userFlagged ? 'flagged' : ''}
                     tabIndex="0"
-                    onClick={() => openFlagModal(evaluation.data.comment, evaluation.id, user_flagged, () => this.setState({ user_flagged: true }))}
+                    onClick={() => openFlagModal(
+                      evaluation.data.comment,
+                      evaluation.id,
+                      userFlagged,
+                      () => this.setState({ userFlagged: true }),
+                    )}
                     onKeyPress={(event) => {
-                      if (event.key === 'Enter') openFlagModal(evaluation.data.comment, null, evaluation.id);
+                      if (event.key === 'Enter') event.target.click();
                     }}
                   />
                 }

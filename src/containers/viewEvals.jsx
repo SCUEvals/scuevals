@@ -31,7 +31,7 @@ class ViewEvals extends Component {
     type: PropTypes.string.isRequired,
     userInfo: userInfoPT,
     majorsList: majorsListPT,
-    quartersList:  quartersListPT,
+    quartersList: quartersListPT,
     coursesList: coursesListPT,
     departmentsList: departmentsListPT,
     professorsList: professorsListPT,
@@ -93,8 +93,9 @@ class ViewEvals extends Component {
 
     const sortOptions = [
       { value: 'quarter', label: 'Sort by Quarter' },
-      { value: type === 'professors' ? 'course' : 'professor',
-        label: `Sort by ${type === 'professors' ? 'Course' : 'Professor'}`
+      {
+        value: type === 'professors' ? 'course' : 'professor',
+        label: `Sort by ${type === 'professors' ? 'Course' : 'Professor'}`,
       },
       { value: 'votes_score', label: 'Sort by Votes Score' },
       { value: 'major', label: 'Sort By Major' },
@@ -107,7 +108,7 @@ class ViewEvals extends Component {
           flagModalOpen={flagModal.open}
           comment={flagModal.comment}
           closeFlagModal={() => this.setState({ flagModal: { open: false } })}
-          evalId={flagModal.evalID}
+          evalID={flagModal.evalID}
           userFlagged={flagModal.userFlagged}
           setUserFlagged={flagModal.setUserFlagged}
 
@@ -128,7 +129,10 @@ class ViewEvals extends Component {
           }
           deletePost={() => {
             const client = new API();
-            client.delete(`/evaluations/${deleteModal.evalID}`, () => ReactGA.event({ category: 'Evaluation', action: 'Deleted' }));
+            client.delete(
+              `/evaluations/${deleteModal.evalID}`,
+              () => ReactGA.event({ category: 'Evaluation', action: 'Deleted' }),
+            );
             for (let i = 0; i < info.evaluations.length; i++) {
               if (info.evaluations[i].id === deleteModal.evalID) {
                 /* multiple shallow copies best way to handle nested state change while respecting
@@ -176,7 +180,8 @@ class ViewEvals extends Component {
                   type={type}
                   match={match}
                   info={type === 'professors' ? info.courses : info.professors}
-                  desc={type === 'professors' ? `${info.first_name} ${info.last_name}`
+                  desc={type === 'professors' ?
+                    `${info.first_name} ${info.last_name}`
                     : `${departmentsList.object[info.department_id].abbr} ${info.number}`}
                 />
               </div>
@@ -186,10 +191,12 @@ class ViewEvals extends Component {
         {info && info.evaluations.length > 0 && (
           <div className="sort-wrapper">
             <Select
-              isLoading={type === 'professors' ? !departmentsList || !majorsList
+              isLoading={type === 'professors' ?
+                !departmentsList || !majorsList
                 : !professorsList || !majorsList
               }
-              disabled={type === 'professors' ? !departmentsList || !majorsList
+              disabled={type === 'professors' ?
+                !departmentsList || !majorsList
                 : !professorsList || !majorsList
               }
               value={sortValue}
@@ -252,9 +259,15 @@ class ViewEvals extends Component {
               return (
                 <Eval
                   key={evaluation.id}
-                  quarter={quartersList ? `${quartersList.object[evaluation.quarter_id].name} ${quartersList.object[evaluation.quarter_id].year}` : null}
-                  vote_access={userInfo.permissions.includes(VOTE_EVALUATIONS)}
-                  department={departmentsList && evaluation.course ? `${departmentsList.object[evaluation.course.department_id].abbr} ${evaluation.course.number}: ${evaluation.course.title}` : null}
+                  quarter={quartersList ?
+                    `${quartersList.object[evaluation.quarter_id].name} ${quartersList.object[evaluation.quarter_id].year}`
+                    : null
+                  }
+                  voteAccess={userInfo.permissions.includes(VOTE_EVALUATIONS)}
+                  department={departmentsList && evaluation.course ?
+                    `${departmentsList.object[evaluation.course.department_id].abbr} ${evaluation.course.number}: ${evaluation.course.title}`
+                    : null
+                  }
                   evaluation={evaluation}
                   userString={userString}
                   /* score must be updated in info array so sorting works with new values (or else

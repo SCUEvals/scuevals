@@ -18,7 +18,7 @@ module.exports = merge(baseConfig, {
     rules: [
       {
         enforce: 'pre',
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: 'eslint-loader',

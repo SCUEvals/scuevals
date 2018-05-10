@@ -163,11 +163,15 @@ class FilterViewEvals extends Component {
           placeholder="Select your professor"
           onOpen={() => {
             if (!filterViewEvals) return;
-            if (filterViewEvals.clientHeight <= 193 || window.innerHeight < 768) filterViewEvals.style.marginBottom = '175px';
+            if (filterViewEvals.clientHeight <= 193 || window.innerHeight < 768) {
+              filterViewEvals.style.marginBottom = '175px';
+            }
           }}
           onClose={() => {
             if (!filterViewEvals) return;
-            if (document.getElementsByClassName('is-open').length === 0) filterViewEvals.style.marginBottom = '';
+            if (document.getElementsByClassName('is-open').length === 0) {
+              filterViewEvals.style.marginBottom = '';
+            }
           }}
         />
       </div>
@@ -303,8 +307,7 @@ class FilterViewEvals extends Component {
       this.setState({ localQuartersList: null }, () => client.get('/quarters', (quarters) => {
         if (this.filterViewEvals) {
           CustomSort('quarter', quarters);
-          // eslint-disable-next-line no-param-reassign
-          quarters.map(quarter => (quarter.label = `${quarter.name} ${quarter.year}`));
+          quarters.forEach(quarter => (quarter.label = `${quarter.name} ${quarter.year}`));
           this.setState({ localQuartersList: quarters });
         }
       }, { quarter_id, course_id, professor_id }));
@@ -313,8 +316,9 @@ class FilterViewEvals extends Component {
       this.setState({ localCoursesList: null }, () => client.get('/courses', (courses) => {
         if (this.filterViewEvals) {
           CustomSort('course', courses);
-          // eslint-disable-next-line no-param-reassign
-          courses.map(course => (course.label = `${departmentsList.object[course.department_id].abbr} ${course.number}: ${course.title}`));
+          courses.forEach(course => (
+            course.label = `${departmentsList.object[course.department_id].abbr} ${course.number}: ${course.title}`
+          ));
 
           this.setState({ localCoursesList: courses });
         }
@@ -323,8 +327,9 @@ class FilterViewEvals extends Component {
     case 'professor':
       this.setState({ localProfessorsList: null }, () => client.get('/professors', (professors) => {
         if (this.filterViewEvals) {
-          // eslint-disable-next-line no-param-reassign
-          professors.map(professor => (professor.label = `${professor.last_name}, ${professor.first_name}`));
+          professors.forEach(professor => (
+            professor.label = `${professor.last_name}, ${professor.first_name}`
+          ));
           CustomSort('professor', professors);
           this.setState({ localProfessorsList: professors });
         }
@@ -604,7 +609,7 @@ class FilterViewEvals extends Component {
                   // alphabetically sort majors if multiple
                   authorMajors.sort((a, b) =>
                     (majorsList.object[a].name > majorsList.object[b].name ? 1 : -1));
-                  authorMajors.map(i => (userString += `${majorsList.object[i].name}, `));
+                  authorMajors.forEach(i => (userString += `${majorsList.object[i].name}, `));
                 }
                 if (userString && !evaluation.author.graduation_year) {
                   // cut off last comma and space
@@ -642,7 +647,7 @@ class FilterViewEvals extends Component {
                         setUserFlagged,
                       },
                     })}
-                    vote_access={userInfo.permissions.includes(VOTE_EVALUATIONS)}
+                    voteAccess={userInfo.permissions.includes(VOTE_EVALUATIONS)}
                     userString={userString}
                     // score must be updated in evaluations array so sorting works with new values
                     updateScore={(newScore) => {

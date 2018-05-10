@@ -20,7 +20,11 @@ class SearchContent extends Component {
   }
 
   static courseNumberFormatter(cell, row, departmentsList) {
-    return <Link to={`/courses/${row.id}`}>{departmentsList.object[row.department_id].abbr} {row.number}</Link>;
+    return (
+      <Link to={`/courses/${row.id}`}>
+        {departmentsList.object[row.department_id].abbr} {row.number}
+      </Link>
+    );
   }
 
   static courseTitleFormatter(cell, row) {
@@ -136,12 +140,10 @@ class SearchContent extends Component {
     ];
     const labeledSearchResults = searchResults ? Object.assign({}, searchResults) : null;
     if (searchResults && departmentsList) {
-      /* eslint-disable no-param-reassign */
       labeledSearchResults.courses.forEach((obj) => {
         obj.course = `${departmentsList.object[obj.department_id].abbr} ${obj.number}`;
       });
       labeledSearchResults.professors.forEach(obj => (obj.name = `${obj.last_name}, ${obj.first_name}`));
-      /* eslint-enable no-params-reassign */
     }
 
     $('#searchBarResults').hide();
@@ -206,7 +208,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   setSearchResults: setSearchResultsAction,
-}
+};
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchContent);

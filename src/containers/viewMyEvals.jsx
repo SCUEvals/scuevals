@@ -14,18 +14,24 @@ import {
   setDepartmentsListAction,
   setProfessorsListAction,
   setQuartersListAction,
-  setCoursesListAction
+  setCoursesListAction,
 } from '../actions';
 import CustomSort from '../utils/customSort';
-
+import {
+  quartersListPT,
+  coursesListPT,
+  departmentsListPT,
+  professorsListPT,
+  userInfoPT,
+} from '../utils/propTypes';
 
 class ViewMyEvals extends Component {
   static propTypes = {
-    userInfo: PropTypes.object.isRequired,
-    quartersList: PropTypes.object,
-    coursesList: PropTypes.object,
-    departmentsList: PropTypes.object,
-    professorsList: PropTypes.object,
+    userInfo: userInfoPT.isRequired,
+    quartersList: quartersListPT,
+    coursesList: coursesListPT,
+    departmentsList: departmentsListPT,
+    professorsList: professorsListPT,
     setDepartmentsList: PropTypes.func.isRequired,
     setQuartersList: PropTypes.func.isRequired,
     setCoursesList: PropTypes.func.isRequired,
@@ -36,7 +42,11 @@ class ViewMyEvals extends Component {
     super(props);
     this.state = {
       deleteModal: {
-        open: false, quarter_id: undefined, course_id: undefined, professor_id: undefined, eval_id: undefined,
+        open: false,
+        quarter_id: undefined,
+        course_id: undefined,
+        professor_id: undefined,
+        eval_id: undefined,
       },
       myEvalsList: null,
       sortValue: null,
@@ -45,10 +55,20 @@ class ViewMyEvals extends Component {
 
   componentDidMount() {
     const {
-      userInfo, departmentsList, quartersList, coursesList, professorsList, setDepartmentsList, setProfessorsList, setQuartersList, setCoursesList,
+      userInfo,
+      departmentsList,
+      quartersList,
+      coursesList,
+      professorsList,
+      setDepartmentsList,
+      setProfessorsList,
+      setQuartersList,
+      setCoursesList,
     } = this.props;
     const client = new API();
-    // parameters directly in URL instead of passed in params as {embed: ['professor, 'course']} because axios converts params differently than API expects (contains []'s, back end doesn't process it)
+    /* parameters directly in URL instead of passed in params as {embed: ['professor, 'course']}
+       because axios converts params differently than API expects (contains []'s, back end doesn't
+       process it) */
     client.get(`/students/${userInfo.id}/evaluations?embed=course&embed=professor`, (myEvalsList) => {
       CustomSort('recent', myEvalsList);
       this.setState({ myEvalsList });
@@ -62,8 +82,8 @@ class ViewMyEvals extends Component {
     }
   }
 
- /* if coursesList fetched before departmentsList, then need to retroactively search for
-  department name from id and sort */
+  /* if coursesList fetched before departmentsList, then need to retroactively search for
+     department name from id and sort */
   componentDidUpdate() {
     if (this.props.coursesList
       && !this.props.coursesList.departmentsListLoaded
@@ -111,7 +131,10 @@ class ViewMyEvals extends Component {
           eval_id={deleteModal.eval_id}
           deletePost={() => {
             const client = new API();
-            client.delete(`/evaluations/${deleteModal.eval_id}`, () => ReactGA.event({ category: 'Evaluation', action: 'Deleted' }));
+            client.delete(
+              `/evaluations/${deleteModal.eval_id}`,
+              () => ReactGA.event({ category: 'Evaluation', action: 'Deleted' }),
+            );
             for (let i = 0; i < myEvalsList.length; i++) {
               if (myEvalsList[i].id === deleteModal.eval_id) {
                 const newList = myEvalsList.slice();
@@ -152,7 +175,10 @@ class ViewMyEvals extends Component {
                     const myEvalsListCopy = myEvalsList.slice();
                     myEvalsListCopy.reverse();
                     this.setState({ myEvalsList: myEvalsListCopy });
-                    if (e.target.className === 'fa fa-sort' || e.target.className === 'fa fa-sort-asc') e.target.className = 'fa fa-sort-desc';
+                    if (
+                      e.target.className === 'fa fa-sort'
+                      || e.target.className === 'fa fa-sort-asc'
+                    ) e.target.className = 'fa fa-sort-desc';
                     else e.target.className = 'fa fa-sort-asc';
                   }}
                   onKeyPress={(event) => {
