@@ -170,7 +170,6 @@ class Home extends Component {
       <div styleName="home login">
         <h1 styleName="logo">SCU Evals</h1>
         <GoogleLogin
-          hostedDomain="scu.edu"
           clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
           buttonText=""
           onSuccess={(info) => {
