@@ -12,6 +12,7 @@ import { setUserInfoAction } from '../actions';
 import RecentEvalsWidget from './recentEvalsWidget';
 import TopsWidget from './topsWidget';
 import NonStudentModal from '../components/nonStudentModal';
+import ErrorModal from '../components/errorModal';
 import WriteOnly from '../components/writeOnly';
 import { INCOMPLETE, READ_EVALUATIONS, WRITE_EVALUATIONS } from '../index';
 import { userInfoPT, locationPT, historyPT } from '../utils/propTypes';
@@ -35,7 +36,10 @@ class Home extends Component {
     this.state = {
       loading: false,
       nonStudentModalOpen: false,
+      error: null,
     };
+    this.closeNonStudentModal = this.closeNonStudentModal.bind(this);
+    this.closeErrorModal = this.closeErrorModal.bind(this);
   }
 
   componentDidMount() {
@@ -57,9 +61,10 @@ class Home extends Component {
       ReactGA.set({ userId: decodedJwt.sub.id });
 
       if (responseData.status === 'new') {
+        const { sub: { type, id: userId, alumni } } = decodedJwt;
         ReactGA.event({ category: 'User', action: 'Signed Up' });
-        ReactGA.set({ userId: decodedJwt.sub.id });
-        if (decodedJwt.sub.type === 'u') this.setState({ nonStudentModalOpen: true });
+        ReactGA.set({ userId });
+        if (type === 'u' || alumni) this.setState({ nonStudentModalOpen: true });
       }
 
       this.setState({ loading: false }, () => {
@@ -73,12 +78,16 @@ class Home extends Component {
       });
     })
       .catch((e) => {
-        if (e.status === 'suspended') {
-          this.setState({ loading: false }, () => {
-            // Show modal for suspended message
-          });
-        }
+        this.setState({ loading: false, error: e });
       });
+  }
+
+  closeNonStudentModal() {
+    this.setState({ nonStudentModalOpen: false });
+  }
+
+  closeErrorModal() {
+    this.setState({ error: null });
   }
 
   render() {
@@ -100,7 +109,8 @@ class Home extends Component {
           {this.state.nonStudentModalOpen && ( // don't want rendered in DOM at all unless true
             <NonStudentModal
               nonStudentModalOpen
-              closeNonStudentModal={() => this.setState({ nonStudentModalOpen: false })}
+              closeNonStudentModal={this.closeNonStudentModal}
+              alumni
             />
           )}
           <section>
@@ -168,6 +178,12 @@ class Home extends Component {
     // if not logged in
     return (
       <div styleName="home login">
+        {this.state.error && ( // don't want rendered in DOM at all unless true
+          <ErrorModal
+            error={this.state.error}
+            closeErrorModal={this.closeErrorModal}
+          />
+        )}
         <h1 styleName="logo">SCU Evals</h1>
         <GoogleLogin
           clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
