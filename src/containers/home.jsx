@@ -187,6 +187,7 @@ class Home extends Component {
         <h1 styleName="logo">SCU Evals</h1>
         <GoogleLogin
           clientId="471296732031-0hqhs9au11ro6mt87cpv1gog7kbdruer.apps.googleusercontent.com"
+          prompt="consent"
           buttonText=""
           onSuccess={(info) => {
             this.setState(
